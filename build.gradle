@@ -27,11 +27,17 @@ dependencies {
     runtimeOnly 'mysql:mysql-connector-java'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
     //swagger
     implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
     implementation group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
     //스프링 크롤링
     implementation group: 'org.jsoup', name: 'jsoup', version: '1.13.1'
+
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    //자동 컴파일
+    runtimeOnly 'org.springframework.boot:spring-boot-devtools'
+    implementation 'io.jsonwebtoken:jjwt:0.9.1'
 
 }
 
