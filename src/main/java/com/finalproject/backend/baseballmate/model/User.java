@@ -33,10 +33,10 @@ public class User {
     @Column(nullable = true, name = "PICTURE")
     private String picture;
 
-    @Column(nullable = true, name = "EMAIL")
-    private String email;
-
-//    @Column(nullable = false, name = "NICKNAME")
+//    @Column(nullable = true, name = "EMAIL")
+//    private String email;
+//
+//    @Column(nullable = true, name = "NICKNAME")
 //    private String nickname;
 
     public User(String userid, String username, String password){
@@ -46,9 +46,9 @@ public class User {
     }
     // 카카오 로그인에 필요한 생성자
     @Builder
-    public User( String email, String picture, String password, Long kakaoId){
-//        this.nickname = nickname;
-        this.email = email;
+    public User(String username ,String userid, String picture, String password, Long kakaoId){
+        this.username = username;
+        this.userid = userid;
         this.picture = picture;
         this.password = password;
         this.kakaoId = kakaoId;
