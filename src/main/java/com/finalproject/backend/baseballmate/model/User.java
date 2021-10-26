@@ -1,5 +1,6 @@
 package com.finalproject.backend.baseballmate.model;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -26,12 +27,32 @@ public class User {
 //    @OneToMany(mappedBy = "user")
 //    private List<Group> groupList = new ArrayList<Group>();
 
+    @Column(nullable = true)
+    private Long kakaoId;
+
+    @Column(nullable = true, name = "PICTURE")
+    private String picture;
+
+    @Column(nullable = true, name = "EMAIL")
+    private String email;
+
+//    @Column(nullable = false, name = "NICKNAME")
+//    private String nickname;
+
     public User(String userid, String username, String password){
         this.userid = userid;
         this.username = username;
         this.password = password;
     }
-
+    // 카카오 로그인에 필요한 생성자
+    @Builder
+    public User( String email, String picture, String password, Long kakaoId){
+//        this.nickname = nickname;
+        this.email = email;
+        this.picture = picture;
+        this.password = password;
+        this.kakaoId = kakaoId;
+    }
 
 
 }

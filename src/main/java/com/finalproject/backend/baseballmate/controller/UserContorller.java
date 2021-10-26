@@ -2,15 +2,14 @@ package com.finalproject.backend.baseballmate.controller;
 
 import com.finalproject.backend.baseballmate.model.User;
 import com.finalproject.backend.baseballmate.repository.UserRepository;
+import com.finalproject.backend.baseballmate.requestDto.HeaderDto;
 import com.finalproject.backend.baseballmate.requestDto.UserRequestDto;
 import com.finalproject.backend.baseballmate.responseDto.UserResponseDto;
 import com.finalproject.backend.baseballmate.security.JwtTokenProvider;
 import com.finalproject.backend.baseballmate.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
@@ -38,6 +37,14 @@ public class UserContorller {
 
         return jwtTokenProvider.createToken(user.getUsername(), user.getId(),user.getUserid());
     }
+
+    //카카오 로그인 api로 코드를 받아옴
+    @GetMapping("/user/kakao/callback")
+    @ResponseBody
+    public HeaderDto kakaoLogin(@RequestParam(value = "code", required = false) String code) {
+        return userService.kakaoLogin(code);
+    }
+
 
 
 }
