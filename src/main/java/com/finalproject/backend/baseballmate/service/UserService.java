@@ -15,6 +15,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -54,7 +55,7 @@ public class UserService {
 
 
         Long kakaoId = userInfo.getId();
-//        String nickname = userInfo.getNickname();
+        String nickname = userInfo.getNickname();
         String password = kakaoId + Pass_Salt;
 
         //nullable = true
@@ -67,7 +68,8 @@ public class UserService {
             userRepository.save(kakaoUser);
         } else { // 새 유저
             kakaoUser = User.builder()
-                    .email(email)
+                    .userid(email)
+                    .username(nickname)
                     .picture(picture)
                     .kakaoId(kakaoId)
                     .password(password)
@@ -76,8 +78,13 @@ public class UserService {
 
         }
         Authentication kakaoUsernamePassword = new UsernamePasswordAuthenticationToken(email, password);
-        Authentication authentication = authenticationManager.authenticate(kakaoUsernamePassword);
+
+        UserDetails userDetails = new UserDetailsImpl(kakaoUser);
+        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
+//
+//        Authentication authentication = authenticationManager.authenticate(kakaoUsernamePassword);
+//        SecurityContextHolder.getContext().setAuthentication(authentication);
         HeaderDto headerDto = new HeaderDto();
 
         // 로그인 처리 후 해당 유저 정보를 바탕으로 JWT토큰을 발급하고 해당 토큰을 Dto에 담아서 넘김
