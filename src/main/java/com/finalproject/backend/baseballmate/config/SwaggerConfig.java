@@ -1,4 +1,4 @@
-package com.finalproject.backend.baseballmate.swagger;
+package com.finalproject.backend.baseballmate.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
