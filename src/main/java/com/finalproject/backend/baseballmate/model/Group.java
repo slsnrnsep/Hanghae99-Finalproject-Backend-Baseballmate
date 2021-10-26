@@ -13,15 +13,11 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = "Group_table")
-public class Group {
+public class Group extends Timestamped{
 
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
     private Long groupId; // 모임 고유번호, pk
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "userIndex")
-    private User userIndex; // user테이블의 id값
 
     @Column
     private String userid; // 모임 작성자의 유저네임
@@ -38,6 +34,10 @@ public class Group {
     @Column
     private String groupDate; // 모임 날짜
 
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "userIndex")
+//    private User user; // user테이블의 id값
+
 //    @Column
 //    private List<GroupComment> groupCommentList; // 모임에 달린 댓글 리스트
 
@@ -53,4 +53,12 @@ public class Group {
         this.groupDate = requestDto.getGroupDate();
         this.userid = userid;
     }
+
+//    public Group(GroupRequestDto requestDto, User user) {
+//        this.title = requestDto.getTitle();
+//        this.content = requestDto.getContent();
+//        this.peopleLimit = requestDto.getPeopleLimit();
+//        this.groupDate = requestDto.getGroupDate();
+//        this.user = user;
+//    }
 }

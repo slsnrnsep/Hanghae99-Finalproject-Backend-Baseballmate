@@ -12,7 +12,8 @@ import java.util.List;
 @NoArgsConstructor
 public class User {
 
-    @Id @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id
     @Column(name = "user_id")
     private Long id;
 
@@ -22,8 +23,8 @@ public class User {
 
     private String password;
 
-    @OneToMany(mappedBy = "userIndex")
-    private List<Group> groupList = new ArrayList<>();
+//    @OneToMany(mappedBy = "user")
+//    private List<Group> groupList = new ArrayList<Group>();
 
     public User(String userid, String username, String password){
         this.userid = userid;

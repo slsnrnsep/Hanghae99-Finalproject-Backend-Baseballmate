@@ -19,11 +19,12 @@ public class GroupController {
 
     private final GroupService groupService;
 
-    // 모임페이지 생성된 전체 조회
-//    @GetMapping("/page/group")
-//    public AllGroupResponseDto getAllGroups() {
-//
-//    }
+    // 모임페이지 전체 조회
+    @GetMapping("/page/group")
+    public AllGroupResponseDto getAllGroups() {
+        AllGroupResponseDto GroupList = groupService.getAllGroups();
+        return GroupList;
+    }
 
     // 모임 생성
     @PostMapping("/page/group")
