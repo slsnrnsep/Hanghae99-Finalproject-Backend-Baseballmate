@@ -72,6 +72,7 @@ public class JwtTokenProvider {
     public boolean validateToken(String jwtToken) {
         try {
             Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtToken);
+            System.out.print("클라이언트로부터 들어온 토큰:");
             System.out.println(claims); // JWT 토큰(클라이언트에서 보낸)이 잘 들어오는지 검증하는 부분 -> 서버 콘솔에 token 찍힘.
             return !claims.getBody().getExpiration().before(new Date()); // expire시간이 되지 않았다면 True!
         } catch (Exception e) {
