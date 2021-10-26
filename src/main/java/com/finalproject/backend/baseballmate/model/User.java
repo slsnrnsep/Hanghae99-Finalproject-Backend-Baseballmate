@@ -3,10 +3,9 @@ package com.finalproject.backend.baseballmate.model;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -22,6 +21,9 @@ public class User {
     private String username;
 
     private String password;
+
+    @OneToMany(mappedBy = "userIndex")
+    private List<Group> groupList = new ArrayList<>();
 
     public User(String userid, String username, String password){
         this.userid = userid;

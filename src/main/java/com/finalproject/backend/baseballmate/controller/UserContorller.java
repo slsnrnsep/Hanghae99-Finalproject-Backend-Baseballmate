@@ -30,7 +30,7 @@ public class UserContorller {
 
     @PostMapping("/user/login")
     public String login(@RequestBody UserRequestDto userRequestDto) {
-        User user = userRepository.findByUsername(userRequestDto.getUsername())
+        User user = userRepository.findByUsername(userRequestDto.getUserid())
                 .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 유저입니다."));
         if (!passwordEncoder.matches(userRequestDto.getPassword(), user.getPassword())) {
             throw new IllegalArgumentException("잘못된 비밀번호입니다.");

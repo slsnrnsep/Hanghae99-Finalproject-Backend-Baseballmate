@@ -2,11 +2,13 @@ package com.finalproject.backend.baseballmate.model;
 
 import com.finalproject.backend.baseballmate.requestDto.GroupRequestDto;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
 
+@NoArgsConstructor
 @Getter
 @Setter
 @Entity
@@ -16,10 +18,12 @@ public class Group {
     @Id
     private Long groupId; // 모임 고유번호, pk
 
-
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "username")
-    private String username;
+    @JoinColumn(name = "userIndex")
+    private User userIndex; // user테이블의 id값
+
+    @Column
+    private String username; // 모임 작성자의 유저네임
 
     @Column
     private String title; // 모임글의 제목
@@ -33,11 +37,12 @@ public class Group {
     @Column
     private String groupDate; // 모임 날짜
 
-    @Column
-    private List<GroupComment> groupCommentList; // 모임에 달린 댓글 리스트
+//    @Column
+//    private List<GroupComment> groupCommentList; // 모임에 달린 댓글 리스트
 
 //    @Column
 //    private String baseballTeam; // 구단 이름
+
 
     // 모임글 등록 생성자
     public Group(GroupRequestDto requestDto, String username) {
