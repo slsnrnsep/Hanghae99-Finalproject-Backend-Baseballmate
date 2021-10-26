@@ -24,6 +24,7 @@ public class User {
 
     private String password;
 
+//    private test test;
 //    @OneToMany(mappedBy = "user")
 //    private List<Group> groupList = new ArrayList<Group>();
 
