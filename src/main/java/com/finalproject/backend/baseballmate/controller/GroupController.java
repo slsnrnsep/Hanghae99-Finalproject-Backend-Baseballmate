@@ -28,11 +28,11 @@ public class GroupController {
     // 모임 생성
     @PostMapping("/page/group")
     public MsgResponseDto createGroup(@RequestBody GroupRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        String loginedUsername = userDetails.getUsername();
-        if (loginedUsername == null) {
+        String loginedUserid = userDetails.getUser().getUserid();
+        if (loginedUserid == null) {
             throw new IllegalArgumentException("로그인 한 이용자만 모임을 생성할 수 있습니다.");
         }
-        groupService.createGroup(requestDto, loginedUsername);
+        groupService.createGroup(requestDto, loginedUserid);
         MsgResponseDto msgResponseDto = new MsgResponseDto("success", "모임 등록 성공");
 
         return msgResponseDto;

@@ -15,8 +15,8 @@ public class GroupService {
     private final GroupRepository groupRepository;
 
     @Transactional
-    public Group createGroup(GroupRequestDto requestDto, String username) {
-        Group Group = new Group(requestDto, username);
+    public Group createGroup(GroupRequestDto requestDto, String userid) {
+        Group Group = new Group(requestDto, userid);
         groupRepository.save(Group);
         return Group;
     }

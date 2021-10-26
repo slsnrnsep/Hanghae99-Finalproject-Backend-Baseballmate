@@ -12,6 +12,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+@Table(name = "Group_table")
 public class Group {
 
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -23,7 +24,7 @@ public class Group {
     private User userIndex; // user테이블의 id값
 
     @Column
-    private String username; // 모임 작성자의 유저네임
+    private String userid; // 모임 작성자의 유저네임
 
     @Column
     private String title; // 모임글의 제목
@@ -45,11 +46,11 @@ public class Group {
 
 
     // 모임글 등록 생성자
-    public Group(GroupRequestDto requestDto, String username) {
+    public Group(GroupRequestDto requestDto, String userid) {
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
         this.peopleLimit = requestDto.getPeopleLimit();
         this.groupDate = requestDto.getGroupDate();
-        this.username = username;
+        this.userid = userid;
     }
 }
