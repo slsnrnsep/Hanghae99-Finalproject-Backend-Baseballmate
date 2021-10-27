@@ -53,12 +53,12 @@ public class JwtTokenProvider {
     }
     // 토큰에서 회원 정보 추출
     public String getUserPk(String token) {
-        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
+        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("username")+"";
     } // 추출하면 username, email등 유저의 정보가 나오게 됨.
 
     // JWT 토큰에서 인증 정보 조회
     public Authentication getAuthentication(String token) {
-/*        System.out.println(this.getUserPk(token));*/
+        System.out.println(this.getUserPk(token));
         UserDetails userDetails = userDetailsService.loadUserByUsername(this.getUserPk(token));
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     } // (?) 아마 인증과정을 거치는 부분이 아닐까 싶음..
