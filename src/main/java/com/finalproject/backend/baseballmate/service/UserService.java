@@ -20,6 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor
@@ -47,6 +48,27 @@ public class UserService {
         User user = new User(userid, username, password);
         userRepository.save(user);
 
+    }
+
+    public void passwordCheck(String password) {
+        final int MIN = 8;
+        final int MAX = 16;
+        final String pattern = "(?=.*\\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&*()'/_=+{}-])[0-9a-zA-Z!@#$%^&*()'/_=+{}-]{"+MIN+","+MAX+"}$";
+        if (!Pattern.matches(pattern, password)) {
+            throw new IllegalArgumentException("비밀번호 입력 오류");
+        }
+    }
+
+    //username으로 들어오는 email 체크
+    public void useridCheck(String userid) {
+        final String pattern = "^[_a-z0-9-]+(.[_a-z0-9-]+)*@(?:\\w+\\.)+\\w+$";
+        if (!Pattern.matches(pattern, userid)) {
+            throw new IllegalArgumentException("올바른 이메일 형식이 아닙니다.");
+        }
+        User found = userRepository.findByUserid(userid).orElse(null);
+        if (found != null) {
+            throw new IllegalArgumentException("중복된 이메일이 존재합니다.");
+        }
     }
 
     public HeaderDto kakaoLogin(String authorizedCode) {
@@ -96,13 +118,3 @@ public class UserService {
     }
 
 }
-
-//    public UserResponseDto UsernameChk(String username){
-//        boolean isExist = userRepository.existByUsername(username);
-//
-//        if (isExist) {
-//            return new UserResponseDto(false, "중복된 ID가 존재합니다", 200);
-//        } else {
-//            return new UserResponseDto(true, "사용 가능한 ID 입니다.", 200);
-//        }
-//    }
