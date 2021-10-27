@@ -3,14 +3,13 @@ package com.finalproject.backend.baseballmate.model;
 import com.finalproject.backend.baseballmate.requestDto.GroupRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
 @Getter
-@Setter
 @Entity
 @Table(name = "Group_table")
 public class Group extends Timestamped{
@@ -19,8 +18,13 @@ public class Group extends Timestamped{
     @Id
     private Long groupId; // 모임 고유번호, pk
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "createdUser")
+    private User createdUser;
+    // 유저에서 유저아이디 빼오기
+
     @Column
-    private String madeUser; // 모임 작성자의 유저네임
+    private String createdUsername; // 모임 작성자의 유저네임
 
     @Column
     private String title; // 모임글의 제목
@@ -31,11 +35,17 @@ public class Group extends Timestamped{
     @Column
     private int peopleLimit; // 모임 최대 제한인원
 
-    @Column
-    private int nowApplyNum; // 현재 참여신청한 인원 -> get으로 가져오기
+    // 참가 신청한 유저의 유저네임
+    @OneToMany(mappedBy = "applicatedUser")
+//    private List<User> applicatedUsernames = new ArrayList<>();
+    private List<GroupApplication> applicatedUsernames = new ArrayList<>();
+    // groupapplication에서 유저 정보 빼오기
 
-    @Column
-    private int canApplyNum; // 현재 참여 가능 인원
+//    @Column
+//    private int nowApplyNum; // 현재 참여신청한 인원 -> get으로 가져오기
+//
+//    @Column
+//    private int canApplyNum; // 현재 참여 가능 인원
 
     @Column
     private String stadium; // 경기장 이름
@@ -55,13 +65,16 @@ public class Group extends Timestamped{
 
 
     // 모임글 등록 생성자
-    public Group(GroupRequestDto requestDto, String madeUser) {
+    public Group(GroupRequestDto requestDto, String createdUsername) {
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
         this.peopleLimit = requestDto.getPeopleLimit();
         this.groupDate = requestDto.getGroupDate();
-        this.madeUser = madeUser;
+        this.createdUsername = createdUsername;
     }
+
+
+
 
 //    public Group(GroupRequestDto requestDto, User user) {
 //        this.title = requestDto.getTitle();
