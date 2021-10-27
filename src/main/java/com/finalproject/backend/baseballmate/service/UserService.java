@@ -112,7 +112,10 @@ public class UserService {
         // 로그인 처리 후 해당 유저 정보를 바탕으로 JWT토큰을 발급하고 해당 토큰을 Dto에 담아서 넘김
         User member = userRepository.findByKakaoId(kakaoId).orElseThrow(()
                 -> new IllegalArgumentException("존재하지 않는 유저입니다."));
-        headerDto.setTOKEN(jwtTokenProvider.createToken(email, member.getId(), member.getUsername()));
+
+        headerDto.setTOKEN(jwtTokenProvider.createToken(member.getUserid(), member.getId(), member.getUsername()));
+//      headerDto.setTOKEN(jwtTokenProvider.createToken(email, member.getId(), member.getUsername()));
+//        System.out.println(test);
         return headerDto;
 
     }

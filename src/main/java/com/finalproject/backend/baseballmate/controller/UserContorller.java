@@ -19,6 +19,11 @@ public class UserContorller {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
 
+//    @PostMapping("user/myteam")
+//    public void registerMyteam(@RequestBody ){
+//
+//    }
+
     @PostMapping("/user/signup")
     public void registerUser(@RequestBody UserRequestDto userRequestDto){
         userService.passwordCheck(userRequestDto.getPassword());
@@ -35,7 +40,7 @@ public class UserContorller {
             throw new IllegalArgumentException("잘못된 비밀번호입니다.");
         }
 
-        return jwtTokenProvider.createToken(user.getUsername(), user.getId(),user.getUserid());
+        return jwtTokenProvider.createToken(user.getUserid(), user.getId(),user.getUsername());
     }
 
     //카카오 로그인 api로 코드를 받아옴
