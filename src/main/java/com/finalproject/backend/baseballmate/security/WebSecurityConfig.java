@@ -48,7 +48,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);  // jwt token 사용
         http
                 .authorizeRequests() // 권한 요청 설정
-                .antMatchers("/user").anonymous() // 로그인, 회원가입 관련은 비인증 유저만 접근 가능
+                .antMatchers("/user/**").anonymous() // 로그인, 회원가입 관련은 비인증 유저만 접근 가능
                 .anyRequest().permitAll() // 나머지 요청은 누구나 접근 가능
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
