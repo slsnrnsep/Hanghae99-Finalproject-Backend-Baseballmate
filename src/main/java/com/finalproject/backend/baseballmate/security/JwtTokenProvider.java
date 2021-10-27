@@ -58,6 +58,7 @@ public class JwtTokenProvider {
 
     // JWT 토큰에서 인증 정보 조회
     public Authentication getAuthentication(String token) {
+/*        System.out.println(this.getUserPk(token));*/
         UserDetails userDetails = userDetailsService.loadUserByUsername(this.getUserPk(token));
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     } // (?) 아마 인증과정을 거치는 부분이 아닐까 싶음..
