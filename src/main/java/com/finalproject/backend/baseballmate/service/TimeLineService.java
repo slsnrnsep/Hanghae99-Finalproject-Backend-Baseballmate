@@ -3,16 +3,14 @@ package com.finalproject.backend.baseballmate.service;
 import com.finalproject.backend.baseballmate.model.TimeLine;
 import com.finalproject.backend.baseballmate.repository.TimeLineRepository;
 import com.finalproject.backend.baseballmate.requestDto.TimeLineRequestDto;
-import com.finalproject.backend.baseballmate.responseDto.TimeLineResponseDto;
-import com.finalproject.backend.baseballmate.security.UserDetailsImpl;
+import com.finalproject.backend.baseballmate.responseDto.AllTimeLineResponseDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.sql.Time;
 import java.text.ParseException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -23,9 +21,25 @@ public class TimeLineService {
     private final TimeLineRepository timeLineRepository;
 
     @Transactional
-    public List<TimeLine> getTimeLine() {
+    public List<AllTimeLineResponseDto> getTimeLine() throws ParseException {
         List<TimeLine> timeLineList = timeLineRepository.findAllByOrderByCreatedAtDesc();
-        return timeLineList;
+
+        List<AllTimeLineResponseDto> data = new ArrayList<>();
+
+        for(int i=0; i<timeLineList.size(); i++) {
+            TimeLine timeLine = timeLineList.get(i);
+
+
+            String userName = timeLine.getUserName();
+            String content = timeLine.getContent();
+            String dayBefore = getDayBefore(timeLine);
+            int likeCount = timeLine.getLikeCount();
+
+            AllTimeLineResponseDto responseDto =
+                    new AllTimeLineResponseDto(userName, content, dayBefore, likeCount);
+            data.add(responseDto);
+        }
+        return data;
     }
 
     @Transactional

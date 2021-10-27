@@ -43,14 +43,14 @@ public class User {
 //    private String nickname;
 
     @OneToMany(mappedBy = "user")
-    private final List<TimeLineLikes> hearts = new ArrayList<>();
+    private final List<TimeLineLikes> likes = new ArrayList<>();
 
     public void addLikes(TimeLineLikes likes) {
-        this.hearts.add(likes);
+        this.likes.add(likes);
     }
 
     public void deleteLikes(TimeLineLikes likes) {
-        this.hearts.remove(likes);
+        this.likes.remove(likes);
     }
 
     public User(String userid, String username, String password){
