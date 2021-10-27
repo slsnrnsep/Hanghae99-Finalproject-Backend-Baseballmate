@@ -21,9 +21,9 @@ public class UserContorller {
 
     @PostMapping("/user/signup")
     public void registerUser(@RequestBody UserRequestDto userRequestDto){
-
+        userService.passwordCheck(userRequestDto.getPassword());
 //        userService.UsernameChk(userRequestDto.getUsername());
-
+        userService.useridCheck(userRequestDto.getUserid());
         userService.registerUser(userRequestDto);
     }
 
