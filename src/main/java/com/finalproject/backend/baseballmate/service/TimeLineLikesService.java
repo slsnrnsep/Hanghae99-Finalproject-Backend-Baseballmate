@@ -14,13 +14,15 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
-@RequiredArgsConstructor
+
 @Service
+@RequiredArgsConstructor
 public class TimeLineLikesService {
 
+    private final TimeLineLikesRepository timeLineLikesRepository;
     private final UserRepository userRepository;
     private final TimeLineRepository timeLineRepository;
-    private final TimeLineLikesRepository timeLineLikesRepository;
+
 
 
     @Transactional

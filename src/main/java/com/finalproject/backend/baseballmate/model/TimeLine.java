@@ -15,7 +15,7 @@ public class TimeLine extends Timestamped
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
     @Column()
-    private Long Id; // 게시글 고유 번호
+    private Long id; // 게시글 고유 번호
 
     @Column(nullable = false)
     private String userName; // 게시글 작성자의 닉네임, 중복 허용X

@@ -40,7 +40,7 @@ public class UserService {
         String password = userRequestDto.getPassword();
         String userid = userRequestDto.getUserid();
 
-        Optional<User> check = userRepository.findByUsername(username);
+//        Optional<User> check = userRepository.findByUsername(username);
         String pattern = "^[a-zA-Z0-9]*$";
 
         password = passwordEncoder.encode(userRequestDto.getPassword());

@@ -20,6 +20,7 @@ public class User {
 
     @Column(nullable = false, unique = true)
     private String userid;
+
     @Column(nullable = false, unique = false)
     private String username;
 
