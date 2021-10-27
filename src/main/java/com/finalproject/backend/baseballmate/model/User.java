@@ -23,8 +23,11 @@ public class User {
 
     private String password;
 
-//    @OneToMany(mappedBy = "user")
+//    @OneToMany(mappedBy = "userIndex")
 //    private List<Group> groupList = new ArrayList<Group>();
+//
+//    @OneToMany(mappedBy = "participatedUserId")
+//    private
 
     public User(String userid, String username, String password){
         this.userid = userid;

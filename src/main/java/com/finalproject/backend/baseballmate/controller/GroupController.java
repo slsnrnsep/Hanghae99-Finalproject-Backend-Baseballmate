@@ -29,13 +29,17 @@ public class GroupController {
     // 모임 생성
     @PostMapping("/page/group")
     public MsgResponseDto createGroup(@RequestBody GroupRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        String loginedUserid = userDetails.getUser().getUserid();
-        if (loginedUserid == null) {
+        // 로그인한 유저의 유저네임 가져오기
+        String loginedUsername = userDetails.getUser().getUsername();
+        if (loginedUsername == null) {
             throw new IllegalArgumentException("로그인 한 이용자만 모임을 생성할 수 있습니다.");
         }
-        groupService.createGroup(requestDto, loginedUserid);
+        groupService.createGroup(requestDto, loginedUsername);
         MsgResponseDto msgResponseDto = new MsgResponseDto("success", "모임 등록 성공");
 
         return msgResponseDto;
     }
+
+    // 모임페이지 상세 조회
+
 }
