@@ -19,7 +19,6 @@ public class MatchDataService {
     private static String KBO_URL = "https://sports.news.naver.com/kbaseball/schedule/index";
     String savedate = "";
 
-    @PostConstruct
     public List<MatchInfomation> getKBODatas() throws IOException {
         List<MatchInfomation> matchInfomationList = new ArrayList<>();
 
@@ -38,10 +37,15 @@ public class MatchDataService {
 //            System.out.println("=======111111==========================");
 //            System.out.println(tdContents.get(1).select("img").attr("src"));
 //            System.out.println("===========222222======================");
-            if(!tdContents.select("span[class=td_none]").isEmpty()){
-                //프로 야구 경기가 없을때는 포문 탈출
+            if(tdContents.select("a").text().contains("홈으로")){
+                //마지막에 도달했다면 끝내주는 함수
                 break;
             }
+            if(!tdContents.select("span[class=td_none]").isEmpty()){
+                //프로 야구 경기가 없을때는 포문 탈출
+                continue;
+            }
+//            if(!tdContents.select("a"))
             if (!tdContents.select("span[class=td_date]").isEmpty()) {
                 int count = tdContents.size();
                 String hometeam = tdContents.get(2).text().split(" ")[0];
@@ -62,6 +66,7 @@ public class MatchDataService {
                 int count = tdContents.size();
                 String hometeam = tdContents.get(1).text().split(" ")[0];
                 String awayteam = tdContents.get(1).text().split(" ")[2];
+
                 MatchInfomation MatchStats = MatchInfomation.builder()
                         .date(savedate)
                         .time(tdContents.get(0).text())

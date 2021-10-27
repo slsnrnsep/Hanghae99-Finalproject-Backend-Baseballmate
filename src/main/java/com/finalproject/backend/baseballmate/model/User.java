@@ -40,6 +40,17 @@ public class User {
 //    @Column(nullable = true, name = "NICKNAME")
 //    private String nickname;
 
+    @OneToMany(mappedBy = "user")
+    private final List<TimeLineLikes> hearts = new ArrayList<>();
+
+    public void addLikes(TimeLineLikes likes) {
+        this.hearts.add(likes);
+    }
+
+    public void deleteLikes(TimeLineLikes likes) {
+        this.hearts.remove(likes);
+    }
+
     public User(String userid, String username, String password){
         this.userid = userid;
         this.username = username;
