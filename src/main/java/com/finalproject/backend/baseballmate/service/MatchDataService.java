@@ -10,6 +10,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ public class MatchDataService {
     String savedate = "";
 
     @Transactional
+//    @PostConstruct
     public void createKBODatas() throws IOException {
         List<MatchInfomation> matchInfomationList = new ArrayList<>();
 
@@ -171,7 +173,7 @@ public class MatchDataService {
             MatchInfomation updateinfomation = matchInfomation.get(i);
 
             updateinfomation.update(requestDto.get(i).getDate(), requestDto.get(i).getTime(),
-                    requestDto.get(i).getMatch(), requestDto.get(i).getLocation(),
+                    requestDto.get(i).getMatches(), requestDto.get(i).getLocation(),
                     requestDto.get(i).getHomeImage(), requestDto.get(i).getAwayImage());
 
 
@@ -192,7 +194,7 @@ public class MatchDataService {
             //홈팀에 내 팀이 있거나 , 어웨이팀에 내팀이 있으면
             //KT
             // true -> kt
-            switch (matchInfomationList.get(i).getMatch().split(" ")[0]) {
+            switch (matchInfomationList.get(i).getMatches().split(" ")[0]) {
                 case "NC":
                     myteamMatch = matchInfomationList.get(i);
                     break;
@@ -231,7 +233,7 @@ public class MatchDataService {
             }
 
             //롯데
-            switch (matchInfomationList.get(i).getMatch().split(" ")[2]) {
+            switch (matchInfomationList.get(i).getMatches().split(" ")[2]) {
                 case "NC":
                     myteamMatch = matchInfomationList.get(i);
                     break;

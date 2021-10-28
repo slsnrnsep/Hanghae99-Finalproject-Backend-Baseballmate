@@ -7,11 +7,13 @@ import com.finalproject.backend.baseballmate.repository.MatchRepository;
 import com.finalproject.backend.baseballmate.repository.TimeLineRepository;
 import com.finalproject.backend.baseballmate.responseDto.AllGoodsResponseDto;
 import com.finalproject.backend.baseballmate.responseDto.AllTimeLineResponseDto;
+import com.finalproject.backend.baseballmate.responseDto.HotGroupResponseDto;
 import com.finalproject.backend.baseballmate.service.GoodsService;
 import com.finalproject.backend.baseballmate.service.GroupService;
 import com.finalproject.backend.baseballmate.service.MatchDataService;
 import com.finalproject.backend.baseballmate.service.TimeLineService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -38,7 +40,9 @@ public class MainController {
         return matchDataService.myteamselect(myteam);
     }
 
-    //관리자만 사용가능해야합니다 (서버관리자가 지정해서 스케쥴러 돌릴예정)
+    //관리자만 사용가능해야합니다(강제로 KBODATA를 DB에 쌓음)
+    //현재 서버가 가동될 때마다 저장하도록 기능구현 되어있음
+    //하지만 테스트 조건이기에 주석처리 해둠 @PostConstruct
     @GetMapping("/make/kbodata")
     public String  createkbodata() throws IOException {
         matchDataService.createKBODatas();
@@ -52,19 +56,23 @@ public class MainController {
         return matchInfomationList;
     }
 
+
     @GetMapping("/update/kbodata")
+    @Scheduled(cron = "0 30 * * * *")
     public String updatekbodata() throws IOException {
         List<MatchInfomation> matchInfomationList = matchDataService.crawlingKBODatas();
         matchDataService.updateKBODatas(matchInfomationList);
+        System.out.println("업데이트가 실행되었습니다.매 시각 30분마다 한번");
         return "업데이트에 성공하였습니다. 데이터를 다시 조회해보세요";
     }
 
     //지금 핫한 모임 목록 조회(내가 응원하는 구단의 모임 + 잔여인원 적은 순으로 정렬)
-    @GetMapping("/main/hotGroup")
-    public void gethotGroup()
-    {
-
-    }
+//    @GetMapping("/main/hotGroup")
+//    public HotGroupResponseDto gethotGroup()
+//    {
+//        groupService
+//        return ;
+//    }
     //타임라인 조회(최신 등록 순)
     @GetMapping("/main/nowTimeline/{number}")
     public List<AllTimeLineResponseDto> getnowTimeLine(@PathVariable("number") int number) throws ParseException {
