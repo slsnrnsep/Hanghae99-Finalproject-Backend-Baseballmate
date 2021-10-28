@@ -3,11 +3,14 @@ package com.finalproject.backend.baseballmate.controller;
 import com.finalproject.backend.baseballmate.model.User;
 import com.finalproject.backend.baseballmate.repository.UserRepository;
 import com.finalproject.backend.baseballmate.requestDto.HeaderDto;
+import com.finalproject.backend.baseballmate.requestDto.MyteamRequestDto;
 import com.finalproject.backend.baseballmate.requestDto.UserRequestDto;
 import com.finalproject.backend.baseballmate.responseDto.UserResponseDto;
 import com.finalproject.backend.baseballmate.security.JwtTokenProvider;
+import com.finalproject.backend.baseballmate.security.UserDetailsImpl;
 import com.finalproject.backend.baseballmate.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,10 +22,6 @@ public class UserContorller {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
 
-//    @PostMapping("user/myteam")
-//    public void registerMyteam(@RequestBody ){
-//
-//    }
 
     @PostMapping("/user/signup")
     public void registerUser(@RequestBody UserRequestDto userRequestDto){
@@ -41,6 +40,24 @@ public class UserContorller {
         }
 
         return jwtTokenProvider.createToken(user.getUserid(), user.getId(),user.getUsername());
+    }
+
+    @PostMapping("/user/myteam")
+    public void selectMyteam(@RequestBody MyteamRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails)
+    {
+        if(userDetails == null)
+        {
+            throw new IllegalArgumentException("로그인 한 사용자만 사용 가능합니다");
+        }
+
+        User user = userRepository.findByUsername(userDetails.getUser().getUsername())
+                .orElseThrow(()-> new IllegalArgumentException("로그인 정보를 찾을 수 없습니다."));
+
+        user.setMyselectTeam(requestDto.getMyteam());
+
+        userRepository.save(user);
+
+//        return "구단 등록에 성공하였습니다";
     }
 
     //카카오 로그인 api로 코드를 받아옴
