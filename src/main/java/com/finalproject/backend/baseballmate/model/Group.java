@@ -39,9 +39,9 @@ public class Group extends Timestamped{
     private int peopleLimit; // 모임 최대 제한인원
 
     // 참가 신청한 유저의 유저네임
-    @OneToMany(mappedBy = "applicatedUser")
-//    private List<User> applicatedUsernames = new ArrayList<>();
-    private List<GroupApplication> applicatedUsernames = new ArrayList<>();
+    @JsonManagedReference
+    @OneToMany(mappedBy = "appliedUser")
+    private List<GroupApplication> groupApplications = new ArrayList<>();
     // groupapplication에서 유저 정보 빼오기
 
 //    @Column
