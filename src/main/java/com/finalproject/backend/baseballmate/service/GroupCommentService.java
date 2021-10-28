@@ -6,6 +6,7 @@ import com.finalproject.backend.baseballmate.model.User;
 import com.finalproject.backend.baseballmate.repository.GroupCommentRepository;
 import com.finalproject.backend.baseballmate.repository.GroupRepository;
 import com.finalproject.backend.baseballmate.requestDto.GroupCommentRequestDto;
+import com.finalproject.backend.baseballmate.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -35,4 +36,46 @@ public class GroupCommentService {
         // 연관관계가 있는 group 테이블의 댓글 리스트에 생성한 댓글 인스턴스 추가
         group.getGroupCommentList().add(groupComment);
    }
+
+   @Transactional
+    public void updateGroupComment(Long id, GroupCommentRequestDto requestDto, UserDetailsImpl userDetails) {
+        String loginedUsername = userDetails.getUsername();
+        String commentUsername = "";
+
+        GroupComment groupComment = groupCommentRepository.findByGroupCommentId(id);
+        if(groupComment!=null)
+        {
+            commentUsername = groupComment.getCommentUsername();
+
+            if(!loginedUsername.equals(commentUsername)) {
+                throw new IllegalArgumentException("수정 권한이 없습니다.");
+            }
+            groupComment.updateGroupComment(requestDto);
+            groupCommentRepository.save(groupComment);
+        }
+        else {
+            throw new NullPointerException("해당 댓글이 존재하지 않습니다.");
+        }
+
+    }
+    @Transactional
+    public void deleteGroupComment(Long id, UserDetailsImpl userDetails) {
+        String loginedUsername = userDetails.getUsername();
+        String commentUsername = "";
+
+        GroupComment groupComment = groupCommentRepository.findByGroupCommentId(id);
+        if(groupComment!=null)
+        {
+            commentUsername = groupComment.getCommentUsername();
+
+            if(!loginedUsername.equals(commentUsername)) {
+                throw new IllegalArgumentException("수정 권한이 없습니다.");
+            }
+            groupCommentRepository.deleteById(id);
+        }
+        else {
+            throw new NullPointerException("해당 댓글이 존재하지 않습니다.");
+        }
+
+    }
 }

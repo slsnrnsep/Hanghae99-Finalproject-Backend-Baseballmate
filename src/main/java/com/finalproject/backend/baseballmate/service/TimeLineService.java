@@ -29,14 +29,14 @@ public class TimeLineService {
         for(int i=0; i<timeLineList.size(); i++) {
             TimeLine timeLine = timeLineList.get(i);
 
-
+            Long id = timeLine.getId();
             String userName = timeLine.getUserName();
             String content = timeLine.getContent();
             String dayBefore = getDayBefore(timeLine);
             int likeCount = timeLine.getLikeCount();
 
             AllTimeLineResponseDto responseDto =
-                    new AllTimeLineResponseDto(userName, content, dayBefore, likeCount);
+                    new AllTimeLineResponseDto(id,userName, content, dayBefore, likeCount);
             data.add(responseDto);
         }
         return data;
@@ -55,14 +55,14 @@ public class TimeLineService {
         for(int i=0; i<number; i++) {
             TimeLine timeLine = timeLineList.get(i);
 
-
+            Long id = timeLine.getId();
             String userName = timeLine.getUserName();
             String content = timeLine.getContent();
             String dayBefore = getDayBefore(timeLine);
             int likeCount = timeLine.getLikeCount();
 
             AllTimeLineResponseDto responseDto =
-                    new AllTimeLineResponseDto(userName, content, dayBefore, likeCount);
+                    new AllTimeLineResponseDto(id, userName, content, dayBefore, likeCount);
             data.add(responseDto);
         }
         return data;
