@@ -1,14 +1,17 @@
 package com.finalproject.backend.baseballmate.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.finalproject.backend.baseballmate.requestDto.GroupRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
+@Setter
 @Getter
 @Entity
 @Table(name = "Group_table")
@@ -58,11 +61,11 @@ public class Group extends Timestamped{
 //    private User userIndex; // user테이블의 id값
 
 //    @Column
-//    private List<GroupComment> groupCommentList; // 모임에 달린 댓글 리스트
-
-//    @Column
 //    private String baseballTeam; // 구단 이름
 
+    @JsonManagedReference
+    @OneToMany(mappedBy = "group")
+    private List<GroupComment> groupCommentList = new ArrayList<>();
 
     // 모임글 등록 생성자
     public Group(GroupRequestDto requestDto, String createdUsername) {

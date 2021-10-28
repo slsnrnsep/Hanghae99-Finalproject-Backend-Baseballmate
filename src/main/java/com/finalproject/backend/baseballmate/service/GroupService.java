@@ -56,9 +56,10 @@ public class GroupService {
         int peopleLimit = group.getPeopleLimit();
         String stadium = group.getStadium();
         String groupDate = group.getGroupDate();
+        List<GroupComment> groupcommentList = group.getGroupCommentList();
 
         GroupDetailResponseDto detailResponseDto =
-                new GroupDetailResponseDto(createdUserName, title, content, peopleLimit, stadium, groupDate);
+                new GroupDetailResponseDto(createdUserName, title, content, peopleLimit, stadium, groupDate, groupcommentList);
 
         return detailResponseDto;
     }

@@ -2,10 +2,12 @@ package com.finalproject.backend.baseballmate.model;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
 @NoArgsConstructor
+@Setter
 @Getter
 @Entity
 public class GroupApplication {
