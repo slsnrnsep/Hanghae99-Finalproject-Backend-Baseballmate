@@ -61,4 +61,26 @@ public class GroupController {
         MsgResponseDto msgResponseDto = new MsgResponseDto("success", "모임 신청 완료");
         return msgResponseDto;
     }
+
+    // 모임 수정하기 - 모임을 생성한 사람만 수정할 수 있게
+    @PutMapping("/page/group/detail/{groupId}")
+    public MsgResponseDto updateGroup(@PathVariable Long groupId, @RequestBody GroupRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        if(userDetails == null) {
+            throw new IllegalArgumentException("로그인 하신 후 이용해주세요.");
+        }
+        groupService.updateGroup(groupId, requestDto, userDetails);
+        MsgResponseDto msgResponseDto = new MsgResponseDto("success", "수정 완료");
+        return msgResponseDto;
+    }
+
+    // 모임 삭제하기 - 모임을 생성한 사람만 삭제할 수 있게
+    @DeleteMapping("/page/group/detail/{groupId}")
+    public MsgResponseDto deleteGroup(@PathVariable Long groupId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        if(userDetails == null) {
+            throw new IllegalArgumentException("로그인 하신 후 이용해주세요.");
+        }
+        groupService.deleteGroup(groupId, userDetails);
+        MsgResponseDto msgResponseDto = new MsgResponseDto("success", "삭제 성공");
+        return msgResponseDto;
+    }
 }

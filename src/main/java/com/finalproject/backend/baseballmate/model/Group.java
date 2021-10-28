@@ -76,14 +76,11 @@ public class Group extends Timestamped{
         this.createdUsername = createdUsername;
     }
 
-
-
-
-//    public Group(GroupRequestDto requestDto, User user) {
-//        this.title = requestDto.getTitle();
-//        this.content = requestDto.getContent();
-//        this.peopleLimit = requestDto.getPeopleLimit();
-//        this.groupDate = requestDto.getGroupDate();
-//        this.user = user;
-//    }
+    // 모임글 수정 메소드
+    public void updateGroup(GroupRequestDto requestDto) {
+        this.title = requestDto.getTitle();
+        this.content = requestDto.getContent();
+        this.peopleLimit = requestDto.getPeopleLimit();
+        this.groupDate = requestDto.getGroupDate();
+    }
 }
