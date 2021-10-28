@@ -38,6 +38,7 @@ public class GoodsController {
         List<AllGoodsResponseDto> allGoods = goodsService.getGoods();
         return allGoods;
     }
+
     @DeleteMapping("/page/goods/{goodsId}")
     public GoodsResponseDto deleteGoods(@PathVariable("goodsId") Long id, @AuthenticationPrincipal UserDetailsImpl userDetails){
         if(userDetails == null){

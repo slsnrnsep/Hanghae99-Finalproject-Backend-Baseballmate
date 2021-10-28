@@ -41,6 +41,7 @@ public class TimeLineService {
         }
         return data;
     }
+
     @Transactional
     public List<AllTimeLineResponseDto> getnowTimeLine(int number) throws ParseException {
         List<TimeLine> timeLineList = timeLineRepository.findAllByOrderByCreatedAtDesc();

@@ -13,9 +13,9 @@ public class AllGoodsResponseDto {
     private String userName;
     private String goodsName;
     private int goodsPrice;
-    private String goodsContent;
     private String goodsImg;
     private String dayBefore;
-//    private int likecount;
+//  private int likecount;
+//  private int commentcount;
 
 }
