@@ -4,6 +4,7 @@ import com.finalproject.backend.baseballmate.model.Group;
 import com.finalproject.backend.baseballmate.model.GroupApplication;
 import com.finalproject.backend.baseballmate.model.GroupComment;
 import com.finalproject.backend.baseballmate.model.User;
+import com.finalproject.backend.baseballmate.repository.GroupApplicationRepository;
 import com.finalproject.backend.baseballmate.repository.GroupRepository;
 import com.finalproject.backend.baseballmate.requestDto.GroupRequestDto;
 import com.finalproject.backend.baseballmate.responseDto.AllGroupResponseDto;
@@ -20,6 +21,7 @@ import java.util.List;
 public class GroupService {
 
     private final GroupRepository groupRepository;
+    private final GroupApplicationRepository groupApplicationRepository;
 
     // 모임 전체 조회
     public AllGroupResponseDto getAllGroups() {
@@ -35,14 +37,6 @@ public class GroupService {
         Group Group = new Group(requestDto, loginedUsername);
         groupRepository.save(Group);
         return Group;
-    }
-
-    // 모임 참여하기
-    @Transactional
-    public void applyGroup(User user, Group group) {
-        GroupApplication groupApplication = new GroupApplication(user, group);
-        groupApplication.setApplication(user, group);
-
     }
 
     // 모임 상세 조회
@@ -62,5 +56,12 @@ public class GroupService {
                 new GroupDetailResponseDto(createdUserName, title, content, peopleLimit, stadium, groupDate, groupcommentList);
 
         return detailResponseDto;
+    }
+
+    // 모임 참여하기
+    @Transactional
+    public void applyGroup(User appliedUser, Group appliedGroup) {
+        GroupApplication groupApplication = new GroupApplication(appliedUser, appliedGroup);
+        groupApplicationRepository.save(groupApplication);
     }
 }

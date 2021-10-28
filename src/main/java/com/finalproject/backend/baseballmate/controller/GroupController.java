@@ -1,10 +1,12 @@
 package com.finalproject.backend.baseballmate.controller;
 
+import com.finalproject.backend.baseballmate.model.Group;
+import com.finalproject.backend.baseballmate.model.User;
+import com.finalproject.backend.baseballmate.repository.GroupRepository;
 import com.finalproject.backend.baseballmate.requestDto.GroupRequestDto;
 import com.finalproject.backend.baseballmate.responseDto.AllGroupResponseDto;
 import com.finalproject.backend.baseballmate.responseDto.GroupDetailResponseDto;
 import com.finalproject.backend.baseballmate.responseDto.MsgResponseDto;
-import com.finalproject.backend.baseballmate.responseDto.ResultResponseDto;
 import com.finalproject.backend.baseballmate.security.UserDetailsImpl;
 import com.finalproject.backend.baseballmate.service.GroupService;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 public class GroupController {
 
     private final GroupService groupService;
+    private final GroupRepository groupRepository;
 
     // 모임페이지 전체 조회 :
     @GetMapping("/page/group")
@@ -47,5 +50,15 @@ public class GroupController {
         }
         GroupDetailResponseDto detailResponseDto = groupService.getGroupDetail(groupId);
         return detailResponseDto;
+    }
+
+    // 모임 참여신청하기
+    @PostMapping("/page/group/detail/apply/{groupId}")
+    public MsgResponseDto applyGroup(@PathVariable Long groupId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        User appliedUser = userDetails.getUser();
+        Group appliedGroup = groupRepository.findByGroupId(groupId);
+        groupService.applyGroup(appliedUser, appliedGroup);
+        MsgResponseDto msgResponseDto = new MsgResponseDto("success", "모임 신청 완료");
+        return msgResponseDto;
     }
 }
