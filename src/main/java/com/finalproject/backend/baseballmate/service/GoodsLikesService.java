@@ -29,7 +29,7 @@ public class GoodsLikesService {
         Goods goods = goodsRepository.findById(goodsId).orElseThrow(
                 () -> new IllegalArgumentException("상품이 존재하지 않습니다.")
         );
-        if(goodsLikesReqeustDto.getIsliked().equals("true")){
+        if(goodsLikesReqeustDto.getIsLiked().equals("true")){
             GoodsLikes goodsLikes = goodsLikesRepository.findByGoodsIdAndUserId(goods.getId(), user.getId()).orElseThrow(
                     () ->new IllegalArgumentException("해당 굿즈의 좋아요 이력이 없습니다.")
             );
