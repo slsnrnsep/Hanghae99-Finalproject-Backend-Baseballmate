@@ -38,4 +38,11 @@ public class Goods {
         this.goodsImg = requestDto.getGoodsImg();
     }
 
+
+    public void update(GoodsRequestDto requestDto) {
+        this.goodsName = requestDto.getGoodsName();
+        this.goodsPrice = requestDto.getGoodsPrice();
+        this.goodsContent = requestDto.getGoodsContent();
+        this.goodsImg = requestDto.getGoodsImg();
+    }
 }

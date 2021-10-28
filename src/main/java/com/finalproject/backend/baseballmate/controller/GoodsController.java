@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.util.List;
 
 @RestController
@@ -34,9 +35,24 @@ public class GoodsController {
         }
     }
     @GetMapping("/page/goods")
-    public List<AllGoodsResponseDto> getGoods(){
+    public List<AllGoodsResponseDto> getGoods() throws ParseException {
         List<AllGoodsResponseDto> allGoods = goodsService.getGoods();
         return allGoods;
+    }
+
+    @PutMapping("/page/goods/{goodsId}")
+    public GoodsResponseDto updateGoods(@PathVariable("goodsId") Long id, @AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody GoodsRequestDto requestDto){
+        if(userDetails == null){
+            throw new IllegalArgumentException("로그인 사용자만이 수정할 수 있습니다");
+        }
+        try {
+            goodsService.updateGoods(id, requestDto);
+            GoodsResponseDto goodsResponseDto = new GoodsResponseDto("success","변경완료");
+            return goodsResponseDto;
+        } catch (Exception e) {
+            GoodsResponseDto goodsResponseDto = new GoodsResponseDto("","에러발생");
+            return goodsResponseDto;
+        }
     }
 
     @DeleteMapping("/page/goods/{goodsId}")
