@@ -25,6 +25,7 @@ public class TimeLineController {
         List<AllTimeLineResponseDto> allTimeLine = timeLineService.getTimeLine();
         return allTimeLine;
     }
+
     @PostMapping("/page/timeLine")
     public MsgResponseDto postTimeLine(@RequestBody TimeLineRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails)
     {
@@ -45,6 +46,7 @@ public class TimeLineController {
         }
 
     }
+
 
 
     @DeleteMapping("/page/timeLine/{timeLineId}")
