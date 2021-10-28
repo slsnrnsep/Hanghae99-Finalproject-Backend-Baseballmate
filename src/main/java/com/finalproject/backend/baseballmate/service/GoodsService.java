@@ -24,4 +24,13 @@ public class GoodsService {
         List<Goods> goodsList = goodsRepository.findAll();
         return goodsList;
     }
+    @Transactional
+    public void updateGoods(Long id, GoodsRequestDto requestDto) {
+        Goods goods = goodsRepository.findById(id).orElseThrow(
+                () -> new NullPointerException("존재하지 않는 굿즈입니다.")
+        );
+        goods.update(requestDto);
+
+        goodsRepository.save(goods);
+    }
 }
