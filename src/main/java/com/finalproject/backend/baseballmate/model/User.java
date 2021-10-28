@@ -34,6 +34,17 @@ public class User {
 //    @OneToMany(mappedBy = "user")
 //    private List<Group> groupList = new ArrayList<Group>();
 
+    // 참여 신청한 모임
+    @OneToMany(mappedBy = "applicatedGroup") // groupapplication을 역참조하여 내가 참여 신청한 모임들 리스트 가져오기
+//    private List<Group> applicatedGroups = new ArrayList<>();
+    private List<GroupApplication> applicatedGroups = new ArrayList<>();
+
+
+    // 최종 타입이 groupapplication이 아니고 group이어야 할텐데 함수를 써서 가져오기
+
+    @OneToMany(mappedBy = "createdUser")
+    private List<Group> createdGroupList = new ArrayList<>();
+
     @Column(nullable = true)
     private Long kakaoId;
 
