@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
@@ -28,6 +29,9 @@ public class Goods {
 
     @Column
     private String goodsImg;
+
+    @OneToMany(mappedBy = "goods")
+    private List<GoodsLikes> likesList;
 
     // 굿즈 등록 생성자
     public Goods(String userName, GoodsRequestDto requestDto){

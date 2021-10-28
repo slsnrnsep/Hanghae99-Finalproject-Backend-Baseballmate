@@ -64,6 +64,19 @@ public class User {
         this.likes.remove(likes);
     }
 
+    // goods 좋아요 생성자
+    @OneToMany(mappedBy = "user")
+    private final List<GoodsLikes> likesList = new ArrayList<>();
+
+//    public void addGoodsLikes(GoodsLikes likesList){
+//        this.likes.add(likes);
+//    }
+
+    public void deleteGoodsLikes(GoodsLikes likes){
+        this.likes.remove(likes);
+    }
+
+
     public User(String userid, String username, String password){
         this.userid = userid;
         this.username = username;
