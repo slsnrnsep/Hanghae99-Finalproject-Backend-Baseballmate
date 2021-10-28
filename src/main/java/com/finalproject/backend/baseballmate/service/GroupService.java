@@ -44,18 +44,42 @@ public class GroupService {
         // 모임 entity에서 해당 모임에 대한 모든 정보 빼오기
         Group group = groupRepository.findByGroupId(groupId);
 
+
         String createdUserName = group.getCreatedUsername();
         String title = group.getTitle();
         String content = group.getContent();
         int peopleLimit = group.getPeopleLimit();
+        int nowAppliedNum = getNowAppliedNum(groupId);
+        int canApplyNum = (peopleLimit - nowAppliedNum);
         String stadium = group.getStadium();
         String groupDate = group.getGroupDate();
         List<GroupComment> groupcommentList = group.getGroupCommentList();
 
         GroupDetailResponseDto detailResponseDto =
-                new GroupDetailResponseDto(createdUserName, title, content, peopleLimit, stadium, groupDate, groupcommentList);
+                new GroupDetailResponseDto(createdUserName, title, content, peopleLimit, nowAppliedNum, canApplyNum, stadium , groupDate, groupcommentList);
 
         return detailResponseDto;
+    }
+
+    // 모임 ID별로 현재 참여신청 인원 구하기
+    public int getNowAppliedNum(Long groupId) {
+        List<GroupApplication> groupApplications = groupApplicationRepository.findAll();
+
+        List<Long> appliedGroupIdList = new ArrayList<>();
+        for (int i=0; i<groupApplications.size(); i++) {
+            GroupApplication groupApplication = groupApplications.get(i);
+            Long appliedGroupId = groupApplication.getAppliedGroup().getGroupId();
+            appliedGroupIdList.add(appliedGroupId);
+        }
+
+        int nowAppliedNum = 0;
+        for (int l=0; l<appliedGroupIdList.size(); l++) {
+            Long appliedGroupId = appliedGroupIdList.get(l);
+            if (groupId == appliedGroupId) {
+                nowAppliedNum = nowAppliedNum + 1;
+            }
+        }
+        return nowAppliedNum;
     }
 
     // 모임 참여하기

@@ -41,7 +41,7 @@ public class Group extends Timestamped{
     // 참가 신청한 유저의 유저네임
     @JsonManagedReference
     @OneToMany(mappedBy = "appliedUser")
-    private List<GroupApplication> appliedUserList = new ArrayList<>();
+    private List<GroupApplication> groupApplications = new ArrayList<>();
     // groupapplication에서 유저 정보 빼오기
 
 //    @Column
