@@ -9,6 +9,9 @@ import com.finalproject.backend.baseballmate.repository.GroupRepository;
 import com.finalproject.backend.baseballmate.requestDto.GroupRequestDto;
 import com.finalproject.backend.baseballmate.responseDto.AllGroupResponseDto;
 import com.finalproject.backend.baseballmate.responseDto.GroupDetailResponseDto;
+import com.finalproject.backend.baseballmate.responseDto.HotGroupReponseDto;
+import com.finalproject.backend.baseballmate.responseDto.MsgResponseDto;
+import com.finalproject.backend.baseballmate.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -82,10 +85,48 @@ public class GroupService {
         return nowAppliedNum;
     }
 
+    // 모임 게시글 수정하기
+    public void updateGroup(Long groupId, GroupRequestDto requestDto, UserDetailsImpl userDetails) {
+        String loginedUsername = userDetails.getUsername();
+        String createdUsername = "";
+
+        Group group = groupRepository.findByGroupId(groupId);
+        if(group != null) {
+            createdUsername = group.getCreatedUsername();
+
+            if(!loginedUsername.equals(createdUsername)) {
+                throw new IllegalArgumentException("수정 권한이 없습니다.");
+            }
+            group.updateGroup(requestDto);
+        } else {
+            throw new NullPointerException("해당 게시글이 존재하지 않습니다.");
+        }
+    }
+
+    //모임 게시글 삭제하기
+    public void deleteGroup(Long groupId, UserDetailsImpl userDetails) {
+        String loginedUsername = userDetails.getUsername();
+        String createdUsername = "";
+
+        Group group = groupRepository.findByGroupId(groupId);
+        if(group != null) {
+            createdUsername = group.getCreatedUsername();
+
+            if(!loginedUsername.equals(createdUsername)) {
+                throw new IllegalArgumentException("삭제 권한이 없습니다.");
+            }
+            groupRepository.deleteById(groupId);
+        } else {
+            throw new NullPointerException("해당 게시글이 존재하지 않습니다.");
+        }
+    }
+
     // 모임 참여하기
     @Transactional
     public void applyGroup(User appliedUser, Group appliedGroup) {
         GroupApplication groupApplication = new GroupApplication(appliedUser, appliedGroup);
         groupApplicationRepository.save(groupApplication);
     }
+
+
 }
