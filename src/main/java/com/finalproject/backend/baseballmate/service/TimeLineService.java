@@ -43,6 +43,32 @@ public class TimeLineService {
     }
 
     @Transactional
+    public List<AllTimeLineResponseDto> getnowTimeLine(int number) throws ParseException {
+        List<TimeLine> timeLineList = timeLineRepository.findAllByOrderByCreatedAtDesc();
+
+        List<AllTimeLineResponseDto> data = new ArrayList<>();
+
+        if(timeLineList.size()<=number) {
+            number = timeLineList.size();
+        }
+
+        for(int i=0; i<number; i++) {
+            TimeLine timeLine = timeLineList.get(i);
+
+
+            String userName = timeLine.getUserName();
+            String content = timeLine.getContent();
+            String dayBefore = getDayBefore(timeLine);
+            int likeCount = timeLine.getLikeCount();
+
+            AllTimeLineResponseDto responseDto =
+                    new AllTimeLineResponseDto(userName, content, dayBefore, likeCount);
+            data.add(responseDto);
+        }
+        return data;
+    }
+
+    @Transactional
     public void createTimeLine(String userName,TimeLineRequestDto requestDto) {
         TimeLine timeLine = new TimeLine(userName,requestDto);
         timeLineRepository.save(timeLine);

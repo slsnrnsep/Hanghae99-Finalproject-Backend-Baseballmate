@@ -35,7 +35,7 @@ public class TimeLineLikesService {
         );
 
         if (requestDto.getIsLiked().equals("true")) {
-            TimeLineLikes likes = timeLineLikesRepository.findByTimeLineIdAndUserId(timeLine.getId(), user.getUserid()).orElseThrow(
+            TimeLineLikes likes = timeLineLikesRepository.findByTimeLineIdAndUserId(timeLine.getId(), user.getId()).orElseThrow(
                     () -> new IllegalArgumentException("해당 게시물의 좋아요 이력이 없습니다.")
             );
 

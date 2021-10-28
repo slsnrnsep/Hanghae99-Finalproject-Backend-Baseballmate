@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.stereotype.Service;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -11,6 +13,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 public class User {
 
@@ -27,6 +30,7 @@ public class User {
 
     private String password;
 
+    private String myselectTeam;
 //    private test test;
 //    @OneToMany(mappedBy = "user")
 //    private List<Group> groupList = new ArrayList<Group>();
@@ -54,21 +58,39 @@ public class User {
 //    private String nickname;
 
     @OneToMany(mappedBy = "user")
-    private final List<TimeLineLikes> likes = new ArrayList<>();
+    private final List<TimeLineLikes> timeLineLikeslikes = new ArrayList<>();
 
     public void addLikes(TimeLineLikes likes) {
-        this.likes.add(likes);
+        this.timeLineLikeslikes.add(likes);
     }
 
     public void deleteLikes(TimeLineLikes likes) {
-        this.likes.remove(likes);
+        this.timeLineLikeslikes.remove(likes);
     }
+
+    // goods 좋아요 생성자
+    @OneToMany(mappedBy = "user")
+    private final List<GoodsLikes> groupLikes = new ArrayList<>();
+
+//    public void addGoodsLikes(GoodsLikes likes){
+//        this.likes.add(likes);
+//    }
+
+    public void addGoodsLikes(GoodsLikes likes){
+        this.groupLikes.add(likes);
+    }
+
+    public void deleteGoodsLikes(GoodsLikes likes){
+        this.groupLikes.remove(likes);
+    }
+
 
     public User(String userid, String username, String password){
         this.userid = userid;
         this.username = username;
         this.password = password;
     }
+
     // 카카오 로그인에 필요한 생성자
     @Builder
     public User(String username ,String userid, String picture, String password, Long kakaoId){

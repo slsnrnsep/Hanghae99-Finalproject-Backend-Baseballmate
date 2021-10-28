@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface TimeLineLikesRepository extends JpaRepository<TimeLineLikes,Long> {
-    Optional<TimeLineLikes> findByTimeLineIdAndUserId(Long timeLineId, String UserId);
+    Optional<TimeLineLikes> findByTimeLineIdAndUserId(Long timeLineId, Long UserId);
 }
