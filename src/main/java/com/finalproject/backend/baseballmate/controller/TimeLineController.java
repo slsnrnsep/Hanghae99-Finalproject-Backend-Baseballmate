@@ -56,17 +56,11 @@ public class TimeLineController {
         {
             throw new IllegalArgumentException("로그인 한 사용자만 사용 가능합니다");
         }
-        try
-        {
-            timeLineRepository.deleteById(id);
+
+            timeLineService.deletetimeLine(id,userDetails);
             MsgResponseDto timeLineResponseDto = new MsgResponseDto("success","삭제 완료");
             return timeLineResponseDto;
-        }
-        catch (Exception e)
-        {
-            MsgResponseDto timeLineResponseDto = new MsgResponseDto(e.toString(),"에러가 발생하였습니다.");
-            return timeLineResponseDto;
-        }
+
 
     }
 

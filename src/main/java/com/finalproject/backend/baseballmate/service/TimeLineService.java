@@ -1,9 +1,11 @@
 package com.finalproject.backend.baseballmate.service;
 
+import com.finalproject.backend.baseballmate.model.GroupComment;
 import com.finalproject.backend.baseballmate.model.TimeLine;
 import com.finalproject.backend.baseballmate.repository.TimeLineRepository;
 import com.finalproject.backend.baseballmate.requestDto.TimeLineRequestDto;
 import com.finalproject.backend.baseballmate.responseDto.AllTimeLineResponseDto;
+import com.finalproject.backend.baseballmate.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -115,5 +117,28 @@ public class TimeLineService {
             dayBefore = format2.toString();
         }
         return dayBefore;
+    }
+
+    @Transactional
+    public void deletetimeLine(Long id, UserDetailsImpl userDetails) {
+        String loginedUsername = userDetails.getUsername();
+        String commentUsername = "";
+
+        TimeLine timeLine = timeLineRepository.findById(id).orElseThrow(
+                ()->new IllegalArgumentException("타임라인을 찾을 수 없습니다.")
+        );
+        if(timeLine!=null)
+        {
+            commentUsername = timeLine.getUserName();
+
+            if(!loginedUsername.equals(commentUsername)) {
+                throw new IllegalArgumentException("수정 권한이 없습니다.");
+            }
+            timeLineRepository.deleteById(id);
+        }
+        else {
+            throw new NullPointerException("해당 댓글이 존재하지 않습니다.");
+        }
+
     }
 }
