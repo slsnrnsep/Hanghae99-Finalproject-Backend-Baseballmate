@@ -23,7 +23,7 @@ public class MatchInfomation {
 
     private String date;
     private String time;
-    private String match;
+    private String matches;
     private String hometeam;
     private String awayteam;
     private String location;
@@ -34,7 +34,7 @@ public class MatchInfomation {
     public MatchInfomation(String date ,String time, String match, String hometeam, String awayteam, String location, String homeImage,String awayImage){
         this.date = date;
         this.time = time;
-        this.match = match;
+        this.matches = match;
         this.hometeam = hometeam;
         this.awayteam = awayteam;
         this.location = location;
@@ -45,7 +45,7 @@ public class MatchInfomation {
     public void update(String date ,String time, String match, String location, String homeImage,String awayImage) {
         this.date = date;
         this.time = time;
-        this.match = match;
+        this.matches = match;
         this.location = location;
         this.homeImage = homeImage;
         this.awayImage = awayImage;
