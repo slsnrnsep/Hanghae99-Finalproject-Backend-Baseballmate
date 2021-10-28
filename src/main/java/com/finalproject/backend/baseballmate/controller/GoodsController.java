@@ -3,6 +3,7 @@ package com.finalproject.backend.baseballmate.controller;
 import com.finalproject.backend.baseballmate.model.Goods;
 import com.finalproject.backend.baseballmate.repository.GoodsRepository;
 import com.finalproject.backend.baseballmate.requestDto.GoodsRequestDto;
+import com.finalproject.backend.baseballmate.responseDto.AllGoodsResponseDto;
 import com.finalproject.backend.baseballmate.responseDto.GoodsResponseDto;
 import com.finalproject.backend.baseballmate.security.UserDetailsImpl;
 import com.finalproject.backend.baseballmate.service.GoodsService;
@@ -33,8 +34,8 @@ public class GoodsController {
         }
     }
     @GetMapping("/page/goods")
-    public List<Goods> getGoods(){
-        List<Goods> allGoods = goodsService.getGoods();
+    public List<AllGoodsResponseDto> getGoods(){
+        List<AllGoodsResponseDto> allGoods = goodsService.getGoods();
         return allGoods;
     }
     @DeleteMapping("/page/goods/{goodsId}")

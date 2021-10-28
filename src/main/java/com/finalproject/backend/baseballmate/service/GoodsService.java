@@ -24,4 +24,5 @@ public class GoodsService {
         List<Goods> goodsList = goodsRepository.findAll();
         return goodsList;
     }
+
 }

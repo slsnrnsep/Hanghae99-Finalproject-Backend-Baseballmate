@@ -5,6 +5,7 @@ import com.finalproject.backend.baseballmate.repository.UserRepository;
 import com.finalproject.backend.baseballmate.requestDto.HeaderDto;
 import com.finalproject.backend.baseballmate.requestDto.MyteamRequestDto;
 import com.finalproject.backend.baseballmate.requestDto.UserRequestDto;
+import com.finalproject.backend.baseballmate.responseDto.LoginCheckResponseDto;
 import com.finalproject.backend.baseballmate.responseDto.UserResponseDto;
 import com.finalproject.backend.baseballmate.security.JwtTokenProvider;
 import com.finalproject.backend.baseballmate.security.UserDetailsImpl;
@@ -43,7 +44,7 @@ public class UserContorller {
     }
 
     @PostMapping("/user/myteam")
-    public void selectMyteam(@RequestBody MyteamRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails)
+    public String selectMyteam(@RequestBody MyteamRequestDto myteam, @AuthenticationPrincipal UserDetailsImpl userDetails)
     {
         if(userDetails == null)
         {
@@ -53,11 +54,31 @@ public class UserContorller {
         User user = userRepository.findByUsername(userDetails.getUser().getUsername())
                 .orElseThrow(()-> new IllegalArgumentException("로그인 정보를 찾을 수 없습니다."));
 
-        user.setMyselectTeam(requestDto.getMyteam());
+        if(myteam.getMyteam() == "")
+        {
+           return "구단 정보가 빈 값입니다." ;
+        }
+
+        user.setMyselectTeam(myteam.getMyteam());
 
         userRepository.save(user);
 
-//        return "구단 등록에 성공하였습니다";
+        return "구단 등록에 성공하였습니다";
+    }
+
+    @PostMapping("/user/logincheck")
+    public LoginCheckResponseDto loginCheck(@AuthenticationPrincipal UserDetailsImpl userDetails)
+    {
+        if(userDetails == null)
+        {
+            throw new IllegalArgumentException("로그인 정보를 찾을 수 없습니다");
+        }
+        User user = userRepository.findByUsername(userDetails.getUser().getUsername())
+                .orElseThrow(()-> new IllegalArgumentException("로그인 유저를 찾을 수 없습니다."));
+
+        LoginCheckResponseDto loginCheckResponseDto = new LoginCheckResponseDto(user.getUsername(),user.getMyselectTeam());
+
+        return loginCheckResponseDto;
     }
 
     //카카오 로그인 api로 코드를 받아옴
