@@ -3,6 +3,8 @@ package com.finalproject.backend.baseballmate.model;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.stereotype.Service;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -10,6 +12,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 public class User {
 
@@ -26,6 +29,7 @@ public class User {
 
     private String password;
 
+    private String myselectTeam;
 //    private test test;
 //    @OneToMany(mappedBy = "user")
 //    private List<Group> groupList = new ArrayList<Group>();
@@ -69,6 +73,7 @@ public class User {
         this.username = username;
         this.password = password;
     }
+
     // 카카오 로그인에 필요한 생성자
     @Builder
     public User(String username ,String userid, String picture, String password, Long kakaoId){
