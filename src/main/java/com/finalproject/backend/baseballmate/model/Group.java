@@ -21,10 +21,10 @@ public class Group extends Timestamped{
     @Id
     private Long groupId; // 모임 고유번호, pk
 
+    // 유저 아이디값이 들어감
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "createdUser")
     private User createdUser;
-    // 유저에서 유저아이디 빼오기
 
     @Column
     private String createdUsername; // 모임 작성자의 유저네임
@@ -67,6 +67,8 @@ public class Group extends Timestamped{
     @OneToMany(mappedBy = "group")
     private List<GroupComment> groupCommentList = new ArrayList<>();
 
+    // 게시글 전체 조회 생성자
+
     // 모임글 등록 생성자
     public Group(GroupRequestDto requestDto, String createdUsername) {
         this.title = requestDto.getTitle();
@@ -74,6 +76,7 @@ public class Group extends Timestamped{
         this.peopleLimit = requestDto.getPeopleLimit();
         this.groupDate = requestDto.getGroupDate();
         this.createdUsername = createdUsername;
+        this.
     }
 
     // 모임글 수정 메소드

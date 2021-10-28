@@ -9,8 +9,6 @@ import com.finalproject.backend.baseballmate.repository.GroupRepository;
 import com.finalproject.backend.baseballmate.requestDto.GroupRequestDto;
 import com.finalproject.backend.baseballmate.responseDto.AllGroupResponseDto;
 import com.finalproject.backend.baseballmate.responseDto.GroupDetailResponseDto;
-import com.finalproject.backend.baseballmate.responseDto.HotGroupReponseDto;
-import com.finalproject.backend.baseballmate.responseDto.MsgResponseDto;
 import com.finalproject.backend.baseballmate.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -83,6 +81,12 @@ public class GroupService {
             }
         }
         return nowAppliedNum;
+    }
+
+    // 핫한 모임 구하기
+    public void getHotGroup() {
+        // (현재 신청 인원수/모임 최대 인원수) * 100 퍼센트 구하기
+        //
     }
 
     // 모임 게시글 수정하기
