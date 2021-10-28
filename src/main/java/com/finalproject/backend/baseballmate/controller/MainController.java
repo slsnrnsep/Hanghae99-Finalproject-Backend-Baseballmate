@@ -4,6 +4,7 @@ import com.finalproject.backend.baseballmate.model.TimeLine;
 import com.finalproject.backend.baseballmate.repository.GoodsRepository;
 import com.finalproject.backend.baseballmate.repository.GroupRepository;
 import com.finalproject.backend.baseballmate.repository.TimeLineRepository;
+import com.finalproject.backend.baseballmate.responseDto.AllGoodsResponseDto;
 import com.finalproject.backend.baseballmate.responseDto.AllTimeLineResponseDto;
 import com.finalproject.backend.baseballmate.service.GoodsService;
 import com.finalproject.backend.baseballmate.service.GroupService;
@@ -49,9 +50,10 @@ public class MainController {
     }
     //굿즈 조회(최신 등록 순)
     @GetMapping("/main/nowGoods/{number}")
-    public void getnowGoods(@PathVariable("number") int number) throws ParseException
+    public List<AllGoodsResponseDto> getnowGoods(@PathVariable("number") int number) throws ParseException
     {
-        List<All>
+        List<AllGoodsResponseDto> nowGoods = goodsService.getnowGoods(number);
+        return nowGoods;
     }
 
 }
