@@ -46,7 +46,7 @@ public class GoodsController {
             throw new IllegalArgumentException("로그인 사용자만이 수정할 수 있습니다");
         }
         try {
-            goodsService.updateGoods(id, requestDto);
+            goodsService.updateGoods(id, requestDto,userDetails);
             GoodsResponseDto goodsResponseDto = new GoodsResponseDto("success","변경완료");
             return goodsResponseDto;
         } catch (Exception e) {
@@ -60,13 +60,18 @@ public class GoodsController {
         if(userDetails == null){
             throw new IllegalArgumentException("로그인 사용자만이 삭제할 수 있습니다");
         }
-        try {
-            goodsRepository.deleteById(id);
+            goodsService.deleteGoods(id,userDetails);
             GoodsResponseDto goodsResponseDto = new GoodsResponseDto("success","삭제완료");
             return goodsResponseDto;
-        } catch (Exception e) {
-            GoodsResponseDto goodsResponseDto = new GoodsResponseDto("","에러발생");
-            return goodsResponseDto;
-        }
+
+
+//        try {
+//            goodsRepository.deleteById(id);
+//            GoodsResponseDto goodsResponseDto = new GoodsResponseDto("success","삭제완료");
+//            return goodsResponseDto;
+//        } catch (Exception e) {
+//            GoodsResponseDto goodsResponseDto = new GoodsResponseDto("","에러발생");
+//            return goodsResponseDto;
+//        }
     }
 }

@@ -4,6 +4,7 @@ import com.finalproject.backend.baseballmate.model.Goods;
 import com.finalproject.backend.baseballmate.repository.GoodsRepository;
 import com.finalproject.backend.baseballmate.requestDto.GoodsRequestDto;
 import com.finalproject.backend.baseballmate.responseDto.AllGoodsResponseDto;
+import com.finalproject.backend.baseballmate.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +34,7 @@ public class GoodsService {
         for(int i=0; i<goodsList.size(); i++) {
             Goods goods = goodsList.get(i);
 
-
+            Long id = goods.getId();
             String userName = goods.getUserName();
             String goodsName = goods.getGoodsName();
             int goodsPrice = goods.getGoodsPrice();
@@ -43,7 +44,7 @@ public class GoodsService {
 //            int likeCount = goods.getLikeCount();
 
             AllGoodsResponseDto responseDto =
-                    new AllGoodsResponseDto(userName, goodsName,goodsPrice,goodsImg,dayBefore);
+                    new AllGoodsResponseDto(id,userName, goodsName,goodsPrice,goodsImg,dayBefore);
             data.add(responseDto);
         }
         return data;
@@ -62,7 +63,7 @@ public class GoodsService {
         for(int i=0; i<number; i++) {
             Goods goods = goodsList.get(i);
 
-
+            Long id = goods.getId();
             String userName = goods.getUserName();
             String goodsName = goods.getGoodsName();
             int goodsPrice = goods.getGoodsPrice();
@@ -72,20 +73,31 @@ public class GoodsService {
 //            int likeCount = goods.getLikeCount();
 
             AllGoodsResponseDto responseDto =
-                    new AllGoodsResponseDto(userName, goodsName,goodsPrice,goodsImg,dayBefore);
+                    new AllGoodsResponseDto(id, userName, goodsName,goodsPrice,goodsImg,dayBefore);
             data.add(responseDto);
         }
         return data;
     }
 
     @Transactional
-    public void updateGoods(Long id, GoodsRequestDto requestDto) {
+    public void updateGoods(Long id, GoodsRequestDto requestDto,UserDetailsImpl userDetails) {
         Goods goods = goodsRepository.findById(id).orElseThrow(
                 () -> new NullPointerException("존재하지 않는 굿즈입니다.")
         );
-        goods.update(requestDto);
+        String loginUser = userDetails.getUsername();
+        String writer = "";
 
-        goodsRepository.save(goods);
+        if(goods != null){
+            writer = goods.getUserName();
+            if(!loginUser.equals(writer)){
+                throw new IllegalArgumentException("수정 권한이 없습니다");
+            }
+            goods.update(requestDto);
+            goodsRepository.save(goods);
+        }else{
+            throw new NullPointerException("해당 굿즈가 존재하지 않습니다");
+        }
+
     }
 
     public String getDayBefore(Goods goods) throws ParseException {
@@ -129,5 +141,25 @@ public class GoodsService {
             dayBefore = format2.toString();
         }
         return dayBefore;
+    }
+
+    public void deleteGoods(Long id, UserDetailsImpl userDetails) {
+        String loginUser = userDetails.getUsername();
+        String writer = "";
+
+        Goods goods = goodsRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("상품을 찾을 수 없습니다")
+        );
+        if(goods != null){
+            writer = goods.getUserName();
+
+            if(!loginUser.equals(writer)){
+                throw new IllegalArgumentException("삭제권한이 없습니다");
+            }
+            goodsRepository.deleteById(id);
+        }
+        else{
+            throw new NullPointerException("해당 굿즈가 존재하지 않습니다");
+        }
     }
 }
