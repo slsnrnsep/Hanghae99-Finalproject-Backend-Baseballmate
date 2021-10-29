@@ -4,6 +4,7 @@ import com.finalproject.backend.baseballmate.model.Goods;
 import com.finalproject.backend.baseballmate.repository.GoodsRepository;
 import com.finalproject.backend.baseballmate.requestDto.GoodsRequestDto;
 import com.finalproject.backend.baseballmate.responseDto.AllGoodsResponseDto;
+import com.finalproject.backend.baseballmate.responseDto.GoodsDetailResponseDto;
 import com.finalproject.backend.baseballmate.responseDto.GoodsResponseDto;
 import com.finalproject.backend.baseballmate.security.UserDetailsImpl;
 import com.finalproject.backend.baseballmate.service.GoodsService;
@@ -20,6 +21,7 @@ public class GoodsController {
     private final GoodsRepository goodsRepository;
     private final GoodsService goodsService;
 
+    // 굿즈생성
     @PostMapping("/page/goods")
     public GoodsResponseDto postGoods(@RequestBody GoodsRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
         if(userDetails == null){
@@ -34,12 +36,22 @@ public class GoodsController {
             return goodsResponseDto;
         }
     }
+
+    // 굿즈 전체조회
     @GetMapping("/page/goods")
     public List<AllGoodsResponseDto> getGoods() throws ParseException {
         List<AllGoodsResponseDto> allGoods = goodsService.getGoods();
         return allGoods;
     }
 
+    // 굿즈페이지 상세조회
+    @GetMapping("/page/goods/detail/{goodsId}")
+    public GoodsDetailResponseDto getGoodsDetail(@PathVariable("goodsId") Long goodsId){
+        GoodsDetailResponseDto goodsDetailResponseDto = goodsService.getGoodsDetail(goodsId);
+        return goodsDetailResponseDto;
+    }
+
+    // 긋즈 수정
     @PutMapping("/page/goods/{goodsId}")
     public GoodsResponseDto updateGoods(@PathVariable("goodsId") Long id, @AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody GoodsRequestDto requestDto){
         if(userDetails == null){
@@ -54,7 +66,7 @@ public class GoodsController {
             return goodsResponseDto;
         }
     }
-
+    // 굿즈 삭제
     @DeleteMapping("/page/goods/{goodsId}")
     public GoodsResponseDto deleteGoods(@PathVariable("goodsId") Long id, @AuthenticationPrincipal UserDetailsImpl userDetails){
         if(userDetails == null){

@@ -1,9 +1,12 @@
 package com.finalproject.backend.baseballmate.service;
 
 import com.finalproject.backend.baseballmate.model.Goods;
+import com.finalproject.backend.baseballmate.model.GoodsComment;
+import com.finalproject.backend.baseballmate.repository.GoodsCommentRepository;
 import com.finalproject.backend.baseballmate.repository.GoodsRepository;
 import com.finalproject.backend.baseballmate.requestDto.GoodsRequestDto;
 import com.finalproject.backend.baseballmate.responseDto.AllGoodsResponseDto;
+import com.finalproject.backend.baseballmate.responseDto.GoodsDetailResponseDto;
 import com.finalproject.backend.baseballmate.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,6 +22,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class GoodsService {
     private final GoodsRepository goodsRepository;
+    private final GoodsCommentRepository goodsCommentRepository;
 
     @Transactional
     public void createGoods(String username, GoodsRequestDto requestDto) {
@@ -79,10 +83,29 @@ public class GoodsService {
         return data;
     }
 
+    public GoodsDetailResponseDto getGoodsDetail(Long goodsId) {
+        Goods goods = goodsRepository.findById(goodsId).orElseThrow(
+                () -> new NullPointerException("존재하지 않는 아이디입니다.")
+        );
+        List<String> goodsCommentList = new ArrayList<>();
+        String userName = goods.getUserName();
+        String goodsName = goods.getGoodsName();
+        int goodsPrice = goods.getGoodsPrice();
+        String goodsContent = goods.getGoodsContent();
+        String goodsImg = goods.getGoodsImg();
+        List<GoodsComment> goodsComments = goodsCommentRepository.findAllById(goodsId);
+        for (int i = 0; i < goodsComments.size(); i++ ) {
+            goodsCommentList.add(goodsComments.get(i).getComment());
+        }
+        GoodsDetailResponseDto goodsDetailResponseDto =
+                new GoodsDetailResponseDto(userName, goodsName, goodsPrice, goodsContent, goodsImg, goodsCommentList);
+        return goodsDetailResponseDto;
+    }
+
     @Transactional
     public void updateGoods(Long id, GoodsRequestDto requestDto,UserDetailsImpl userDetails) {
         Goods goods = goodsRepository.findById(id).orElseThrow(
-                () -> new NullPointerException("존재하지 않는 굿즈입니다.")
+                () -> new NullPointerException("존재하지 않는 아이디입니다.")
         );
         String loginUser = userDetails.getUsername();
         String writer = "";
@@ -162,4 +185,6 @@ public class GoodsService {
             throw new NullPointerException("해당 굿즈가 존재하지 않습니다");
         }
     }
+
+
 }
