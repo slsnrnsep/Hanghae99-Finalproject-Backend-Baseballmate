@@ -13,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @RestController
 public class GroupController {
@@ -22,9 +24,9 @@ public class GroupController {
 
     // 모임페이지 전체 조회 :
     @GetMapping("/page/group")
-    public AllGroupResponseDto getAllGroups() {
-        AllGroupResponseDto GroupList = groupService.getAllGroups();
-        return GroupList;
+    public List<AllGroupResponseDto> getAllGroups() {
+        List<AllGroupResponseDto> groupList = groupService.getAllGroups();
+        return groupList;
     }
 
     // 모임 생성

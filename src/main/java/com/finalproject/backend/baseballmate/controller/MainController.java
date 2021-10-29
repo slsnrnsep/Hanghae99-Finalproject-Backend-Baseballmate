@@ -67,12 +67,12 @@ public class MainController {
     }
 
     //지금 핫한 모임 목록 조회(내가 응원하는 구단의 모임 + 잔여인원 적은 순으로 정렬)
-//    @GetMapping("/main/hotGroup")
-//    public HotGroupResponseDto gethotGroup()
-//    {
-//        groupService
-//        return ;
-//    }
+    @GetMapping("/main/hotGroup")
+    public List<HotGroupResponseDto> getHotGroupList() {
+        List<HotGroupResponseDto> hotGroupResponseDtoList = groupService.getHotGroups();
+        return hotGroupResponseDtoList;
+    }
+
     //타임라인 조회(최신 등록 순)
     @GetMapping("/main/nowTimeline/{number}")
     public List<AllTimeLineResponseDto> getnowTimeLine(@PathVariable("number") int number) throws ParseException {
