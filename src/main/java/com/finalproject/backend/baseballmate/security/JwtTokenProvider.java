@@ -53,7 +53,7 @@ public class JwtTokenProvider {
     }
     // 토큰에서 회원 정보 추출
     public String getUserPk(String token) {
-        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("username")+"";
+        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
     } // 추출하면 username, email등 유저의 정보가 나오게 됨.
 
     // JWT 토큰에서 인증 정보 조회

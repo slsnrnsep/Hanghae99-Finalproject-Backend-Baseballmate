@@ -51,10 +51,15 @@ public class GroupService {
     }
 
     // 핫한 모임 조회(hotPercent순) - 메인 페이지용
-    public List<HotGroupResponseDto> getHotGroups() {
+    public List<HotGroupResponseDto> getHotGroups(int number) {
         List<Group> hotGroupList = groupRepository.findAllByOrderByHotPercentDesc();
         List<HotGroupResponseDto> hotGroupResponseDtoList = new ArrayList<>();
-        for(int i=0; i<hotGroupList.size(); i++) {
+
+        if(hotGroupList.size()<=number) {
+            number = hotGroupList.size();
+        }
+
+        for(int i=0; i<number; i++) {
             Group group = hotGroupList.get(i);
 
             Long groupId = group.getGroupId();
