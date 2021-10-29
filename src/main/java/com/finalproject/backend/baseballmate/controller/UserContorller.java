@@ -13,6 +13,7 @@ import com.finalproject.backend.baseballmate.responseDto.LoginCheckResponseDto;
 import com.finalproject.backend.baseballmate.responseDto.UserResponseDto;
 import com.finalproject.backend.baseballmate.security.JwtTokenProvider;
 import com.finalproject.backend.baseballmate.security.UserDetailsImpl;
+import com.finalproject.backend.baseballmate.service.LoginResponseDto;
 import com.finalproject.backend.baseballmate.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -41,37 +42,38 @@ public class UserContorller {
     }
 
     @PostMapping("/user/login")
-    public String login(@RequestBody UserRequestDto userRequestDto) {
+    public LoginResponseDto login(@RequestBody UserRequestDto userRequestDto) {
         User user = userRepository.findByUserid(userRequestDto.getUserid())
                 .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 유저입니다."));
         if (!passwordEncoder.matches(userRequestDto.getPassword(), user.getPassword())) {
             throw new IllegalArgumentException("잘못된 비밀번호입니다.");
         }
-
-        return jwtTokenProvider.createToken(user.getUserid(), user.getId(),user.getUsername());
+        LoginResponseDto loginResponseDto = new LoginResponseDto(jwtTokenProvider.createToken(user.getUserid(), user.getId(),user.getUsername()),user.getMyselectTeam());
+        return loginResponseDto;
     }
 
     @PostMapping("/user/myteam")
-    public String selectMyteam(@RequestBody MyteamRequestDto myteam, @AuthenticationPrincipal UserDetailsImpl userDetails)
+    public MyteamRequestDto selectMyteam(@RequestBody MyteamRequestDto myteam, @AuthenticationPrincipal UserDetailsImpl userDetails)
     {
         if(userDetails == null)
         {
             throw new IllegalArgumentException("로그인 한 사용자만 사용 가능합니다");
         }
 
-        User user = userRepository.findByUsername(userDetails.getUser().getUsername())
+        User user = userRepository.findByUserid(userDetails.getUser().getUserid())
                 .orElseThrow(()-> new IllegalArgumentException("로그인 정보를 찾을 수 없습니다."));
 
-        if(myteam.getMyteam() == "")
+        if(myteam.getMyteam() == null)
         {
-           return "구단 정보가 빈 값입니다." ;
+            throw new IllegalArgumentException("구단선택을 null로 했습니다");
         }
 
         user.setMyselectTeam(myteam.getMyteam());
 
         userRepository.save(user);
 
-        return "구단 등록에 성공하였습니다";
+        MyteamRequestDto myteamRequestDto = new MyteamRequestDto(user.getMyselectTeam());
+        return myteamRequestDto;
     }
 
     @PostMapping("/user/logincheck")
