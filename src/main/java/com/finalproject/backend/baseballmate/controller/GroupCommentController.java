@@ -1,5 +1,6 @@
 package com.finalproject.backend.baseballmate.controller;
 
+import com.finalproject.backend.baseballmate.model.GroupComment;
 import com.finalproject.backend.baseballmate.model.User;
 import com.finalproject.backend.baseballmate.repository.GroupCommentRepository;
 import com.finalproject.backend.baseballmate.requestDto.GroupCommentRequestDto;
@@ -10,10 +11,37 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @RestController
 public class GroupCommentController {
+
     private final GroupCommentService commentService;
+    private final GroupCommentRepository groupCommentRepository;
+
+    // 모임 게시글 내 댓글 수정하기
+    @PutMapping("/page/group/detail/{commentId}/comment")
+    public MsgResponseDto updateGroupComment(@PathVariable("commentId") Long id,@RequestBody GroupCommentRequestDto requestDto,@AuthenticationPrincipal UserDetailsImpl userDetails)
+    {
+        if(userDetails == null) {
+            throw new IllegalArgumentException("로그인 하신 후 이용해주세요.");
+        }
+        commentService.updateGroupComment(id,requestDto,userDetails);
+        MsgResponseDto msgResponseDto = new MsgResponseDto("success", "수정 완료");
+        return msgResponseDto;
+    }
+    // 모임 게시글 내 댓글 삭제하기
+    @DeleteMapping("/page/group/detail/{commentId}/comment")
+    public MsgResponseDto delteGroupComment(@PathVariable("commentId") Long id,@AuthenticationPrincipal UserDetailsImpl userDetails)
+    {
+        if(userDetails == null) {
+            throw new IllegalArgumentException("로그인 하신 후 이용해주세요.");
+        }
+        commentService.deleteGroupComment(id,userDetails);
+        MsgResponseDto msgResponseDto = new MsgResponseDto("success", "삭제 성공");
+        return msgResponseDto;
+    }
 
     // 모임 게시글 내 댓글 생성하기
     @PostMapping("/page/group/detail/{groupId}/comment")
@@ -23,4 +51,6 @@ public class GroupCommentController {
         MsgResponseDto msgResponseDto = new MsgResponseDto("success", "댓글 등록 완료");
         return msgResponseDto;
     }
+
+
 }

@@ -25,6 +25,7 @@ public class TimeLineController {
         List<AllTimeLineResponseDto> allTimeLine = timeLineService.getTimeLine();
         return allTimeLine;
     }
+
     @PostMapping("/page/timeLine")
     public MsgResponseDto postTimeLine(@RequestBody TimeLineRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails)
     {
@@ -47,6 +48,7 @@ public class TimeLineController {
     }
 
 
+
     @DeleteMapping("/page/timeLine/{timeLineId}")
     public MsgResponseDto deleteTimeLine(@PathVariable("timeLineId") Long id, @AuthenticationPrincipal UserDetailsImpl userDetails)
     {
@@ -54,17 +56,11 @@ public class TimeLineController {
         {
             throw new IllegalArgumentException("로그인 한 사용자만 사용 가능합니다");
         }
-        try
-        {
-            timeLineRepository.deleteById(id);
+
+            timeLineService.deletetimeLine(id,userDetails);
             MsgResponseDto timeLineResponseDto = new MsgResponseDto("success","삭제 완료");
             return timeLineResponseDto;
-        }
-        catch (Exception e)
-        {
-            MsgResponseDto timeLineResponseDto = new MsgResponseDto(e.toString(),"에러가 발생하였습니다.");
-            return timeLineResponseDto;
-        }
+
 
     }
 

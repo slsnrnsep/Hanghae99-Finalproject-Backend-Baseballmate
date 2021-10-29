@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @Getter
 public class AllTimeLineResponseDto
 {
+    private Long id;
     private String userName;
     private String content;
     private String dayBefore;

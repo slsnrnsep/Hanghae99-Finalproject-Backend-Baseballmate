@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -36,6 +37,10 @@ public class Goods extends Timestamped {
 
     @Column(columnDefinition = "integer default 0")
     private int likeCount;
+
+    // comment와 연관관계
+    @OneToMany(mappedBy = "goods")
+    private List<GoodsComment> goodsCommentList = new ArrayList<>();
 
     // 굿즈 등록 생성자
     public Goods(String userName, GoodsRequestDto requestDto){
