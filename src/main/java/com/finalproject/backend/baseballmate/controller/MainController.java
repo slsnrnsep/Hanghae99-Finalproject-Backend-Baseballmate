@@ -68,9 +68,9 @@ public class MainController {
     }
 
     //지금 핫한 모임 목록 조회(내가 응원하는 구단의 모임 + 잔여인원 적은 순으로 정렬)
-    @GetMapping("/main/hotGroup")
-    public List<HotGroupResponseDto> getHotGroupList() {
-        List<HotGroupResponseDto> hotGroupResponseDtoList = groupService.getHotGroups();
+    @GetMapping("/main/hotGroup/{number}")
+    public List<HotGroupResponseDto> getHotGroupList(@PathVariable("number") int number) {
+        List<HotGroupResponseDto> hotGroupResponseDtoList = groupService.getHotGroups(number);
         return hotGroupResponseDtoList;
     }
 
