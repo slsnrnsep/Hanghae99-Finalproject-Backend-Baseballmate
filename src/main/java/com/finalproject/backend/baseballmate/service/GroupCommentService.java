@@ -25,12 +25,13 @@ public class GroupCommentService {
    public void createComment(GroupCommentRequestDto groupCommentRequestDto, Long groupId, User logineduser) {
         // loginuser의 유저네임 빼기
         String loginedUsername = logineduser.getUsername();
-        // loginuser의 유저id 뽑기
-        Long loginedUserId = logineduser.getId();
+        String loginedUserId = logineduser.getUserid();
+        // loginuser의 유저index 뽑기
+        Long loginedUserIndex = logineduser.getId();
         // groupentity에서 groupid에 맞는 모임 가져오기
         Group group = groupRepository.findByGroupId(groupId);
         // 파라미터들로 groupcomment를 추가하기 위한 인스턴스 생성
-        GroupComment groupComment = new GroupComment(groupCommentRequestDto, group, loginedUsername, loginedUserId);
+        GroupComment groupComment = new GroupComment(groupCommentRequestDto, group, loginedUsername, loginedUserIndex, loginedUserId);
         // groupcomment 테이블에 데이터 저장
         groupCommentRepository.save(groupComment);
         // 연관관계가 있는 group 테이블의 댓글 리스트에 생성한 댓글 인스턴스 추가
@@ -39,15 +40,15 @@ public class GroupCommentService {
 
    @Transactional
     public void updateGroupComment(Long id, GroupCommentRequestDto requestDto, UserDetailsImpl userDetails) {
-        String loginedUsername = userDetails.getUsername();
-        String commentUsername = "";
+        String loginedUserId = userDetails.getUser().getUserid();
+        String commentUserId = "";
 
         GroupComment groupComment = groupCommentRepository.findByGroupCommentId(id);
         if(groupComment!=null)
         {
-            commentUsername = groupComment.getCommentUsername();
+            commentUserId = groupComment.getCommentUserId();
 
-            if(!loginedUsername.equals(commentUsername)) {
+            if(!loginedUserId.equals(commentUserId)) {
                 throw new IllegalArgumentException("수정 권한이 없습니다.");
             }
             groupComment.updateGroupComment(requestDto);
@@ -60,15 +61,15 @@ public class GroupCommentService {
     }
     @Transactional
     public void deleteGroupComment(Long id, UserDetailsImpl userDetails) {
-        String loginedUsername = userDetails.getUsername();
-        String commentUsername = "";
+        String loginedUserId = userDetails.getUser().getUserid();
+        String commentUserId = "";
 
         GroupComment groupComment = groupCommentRepository.findByGroupCommentId(id);
         if(groupComment!=null)
         {
-            commentUsername = groupComment.getCommentUsername();
+            commentUserId = groupComment.getCommentUserId();
 
-            if(!loginedUsername.equals(commentUsername)) {
+            if(!loginedUserId.equals(commentUserId)) {
                 throw new IllegalArgumentException("수정 권한이 없습니다.");
             }
             groupCommentRepository.deleteById(id);

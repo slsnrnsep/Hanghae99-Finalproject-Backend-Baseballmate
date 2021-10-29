@@ -10,6 +10,7 @@ import com.finalproject.backend.baseballmate.requestDto.GroupRequestDto;
 import com.finalproject.backend.baseballmate.responseDto.AllGroupResponseDto;
 import com.finalproject.backend.baseballmate.responseDto.GroupDetailResponseDto;
 //import com.finalproject.backend.baseballmate.responseDto.HotGroupReponseDto;
+import com.finalproject.backend.baseballmate.responseDto.HotGroupResponseDto;
 import com.finalproject.backend.baseballmate.responseDto.MsgResponseDto;
 import com.finalproject.backend.baseballmate.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
@@ -26,75 +27,95 @@ public class GroupService {
     private final GroupRepository groupRepository;
     private final GroupApplicationRepository groupApplicationRepository;
 
-    // 모임 전체 조회
-    public AllGroupResponseDto getAllGroups() {
+    // 모임 전체 조회(등록 순)
+    public List<AllGroupResponseDto> getAllGroups() {
         List<Group> groupList = groupRepository.findAllByOrderByCreatedAtDesc();
-        AllGroupResponseDto allGroupResponseDto = new AllGroupResponseDto("success", groupList);
-        System.out.println(allGroupResponseDto);
-        return allGroupResponseDto;
+        List<AllGroupResponseDto> allGroupResponseDtoList = new ArrayList<>();
+        for (int i=0; i<groupList.size(); i++) {
+            Group group = groupList.get(i);
+
+            Long groupId = group.getGroupId();
+            String title = group.getTitle();
+            int peopleLimit = group.getPeopleLimit();
+            int canApplyNum = group.getCanApplyNum();
+            double hotPercent = group.getHotPercent();
+            String stadium = group.getStadium();
+            String groupDate = group.getGroupDate();
+
+            AllGroupResponseDto allGroupResponseDto =
+                    new AllGroupResponseDto(groupId,title, peopleLimit, canApplyNum, hotPercent, stadium, groupDate);
+
+            allGroupResponseDtoList.add(allGroupResponseDto);
+        }
+        return allGroupResponseDtoList;
     }
 
-    // 모임 형성
+    // 핫한 모임 조회(hotPercent순) - 메인 페이지용
+    public List<HotGroupResponseDto> getHotGroups() {
+        List<Group> hotGroupList = groupRepository.findAllByOrderByHotPercentDesc();
+        List<HotGroupResponseDto> hotGroupResponseDtoList = new ArrayList<>();
+        for(int i=0; i<hotGroupList.size(); i++) {
+            Group group = hotGroupList.get(i);
+
+            Long groupId = group.getGroupId();
+            String createdUsername = group.getCreatedUsername();
+            String title = group.getTitle();
+            int peopleLimit = group.getPeopleLimit();
+            int canApplyNum = group.getCanApplyNum();
+            double hotPercent = group.getHotPercent();
+            String stadium = group.getStadium();
+            String groupDate = group.getGroupDate();
+
+            HotGroupResponseDto hotGroupResponseDto =
+                    new HotGroupResponseDto(groupId, createdUsername, title, peopleLimit, canApplyNum, hotPercent, stadium, groupDate);
+
+            hotGroupResponseDtoList.add(hotGroupResponseDto);
+        }
+        return hotGroupResponseDtoList;
+    }
+
+    // 모임 생성
     @Transactional
-    public Group createGroup(GroupRequestDto requestDto, String loginedUsername) {
-        Group Group = new Group(requestDto, loginedUsername);
+    public Group createGroup(GroupRequestDto requestDto, User loginedUser) {
+        Group Group = new Group(requestDto, loginedUser);
         groupRepository.save(Group);
         return Group;
     }
 
     // 모임 상세 조회
-    public GroupDetailResponseDto getGroupDetail(Long groupId) {
+    public GroupDetailResponseDto getGroupDetail(Long id) {
         // 모임 entity에서 해당 모임에 대한 모든 정보 빼오기
-        Group group = groupRepository.findByGroupId(groupId);
+        Group group = groupRepository.findByGroupId(id);
 
-
+        Long groupId = group.getGroupId();
         String createdUserName = group.getCreatedUsername();
         String title = group.getTitle();
         String content = group.getContent();
         int peopleLimit = group.getPeopleLimit();
-        int nowAppliedNum = getNowAppliedNum(groupId);
-        int canApplyNum = (peopleLimit - nowAppliedNum);
+        int nowAppliedNum = group.getNowAppliedNum();
+        int canApplyNum = group.getCanApplyNum();
+        double hotPercent = group.getHotPercent();
         String stadium = group.getStadium();
         String groupDate = group.getGroupDate();
         List<GroupComment> groupcommentList = group.getGroupCommentList();
 
-        GroupDetailResponseDto detailResponseDto =
-                new GroupDetailResponseDto(createdUserName, title, content, peopleLimit, nowAppliedNum, canApplyNum, stadium , groupDate, groupcommentList);
+        GroupDetailResponseDto groupdetailResponseDto =
+                new GroupDetailResponseDto(groupId, createdUserName, title, content, peopleLimit, nowAppliedNum, canApplyNum, hotPercent, stadium , groupDate, groupcommentList);
 
-        return detailResponseDto;
+        return groupdetailResponseDto;
     }
 
-    // 모임 ID별로 현재 참여신청 인원 구하기
-    public int getNowAppliedNum(Long groupId) {
-        List<GroupApplication> groupApplications = groupApplicationRepository.findAll();
-
-        List<Long> appliedGroupIdList = new ArrayList<>();
-        for (int i=0; i<groupApplications.size(); i++) {
-            GroupApplication groupApplication = groupApplications.get(i);
-            Long appliedGroupId = groupApplication.getAppliedGroup().getGroupId();
-            appliedGroupIdList.add(appliedGroupId);
-        }
-
-        int nowAppliedNum = 0;
-        for (int l=0; l<appliedGroupIdList.size(); l++) {
-            Long appliedGroupId = appliedGroupIdList.get(l);
-            if (groupId == appliedGroupId) {
-                nowAppliedNum = nowAppliedNum + 1;
-            }
-        }
-        return nowAppliedNum;
-    }
 
     // 모임 게시글 수정하기
     public void updateGroup(Long groupId, GroupRequestDto requestDto, UserDetailsImpl userDetails) {
-        String loginedUsername = userDetails.getUsername();
-        String createdUsername = "";
+        String loginedUserId = userDetails.getUser().getUserid();
+        String createdUserId = "";
 
         Group group = groupRepository.findByGroupId(groupId);
         if(group != null) {
-            createdUsername = group.getCreatedUsername();
+            createdUserId = group.getCreatedUser().getUserid();
 
-            if(!loginedUsername.equals(createdUsername)) {
+            if(!loginedUserId.equals(createdUserId)) {
                 throw new IllegalArgumentException("수정 권한이 없습니다.");
             }
             group.updateGroup(requestDto);
@@ -106,14 +127,14 @@ public class GroupService {
 
     //모임 게시글 삭제하기
     public void deleteGroup(Long groupId, UserDetailsImpl userDetails) {
-        String loginedUsername = userDetails.getUsername();
-        String createdUsername = "";
+        String loginedUserId = userDetails.getUser().getUserid();
+        String createdUserId = "";
 
         Group group = groupRepository.findByGroupId(groupId);
         if(group != null) {
-            createdUsername = group.getCreatedUsername();
+            createdUserId = group.getCreatedUser().getUserid();
 
-            if(!loginedUsername.equals(createdUsername)) {
+            if(!loginedUserId.equals(createdUserId)) {
                 throw new IllegalArgumentException("삭제 권한이 없습니다.");
             }
             groupRepository.deleteById(groupId);
@@ -127,7 +148,108 @@ public class GroupService {
     public void applyGroup(User appliedUser, Group appliedGroup) {
         GroupApplication groupApplication = new GroupApplication(appliedUser, appliedGroup);
         groupApplicationRepository.save(groupApplication);
+
+        // 참여 신청과 동시에 해당 group의 nowappliednum, hotpercent 수정
+        // 현재 참여 신청한 인원 1 증가
+        int nowAppliedNum = groupApplication.getAppliedGroup().getNowAppliedNum();
+        int updatedAppliedNum = nowAppliedNum + 1;
+        groupApplication.getAppliedGroup().setNowAppliedNum(updatedAppliedNum);
+
+        // 현재 참여 신청 가능한 인원 1 감소
+        int nowCanApplyNum = groupApplication.getAppliedGroup().getCanApplyNum();
+        int updatedCanApplyNum = nowCanApplyNum -1;
+        groupApplication.getAppliedGroup().setCanApplyNum(updatedCanApplyNum);
+
+        // 인기도 값 수정
+        int peopleLimit = groupApplication.getAppliedGroup().getPeopleLimit();
+        double updatedHotPercent = ((double) updatedAppliedNum / (double) peopleLimit * 100.0);
+        groupApplication.getAppliedGroup().setHotPercent(updatedHotPercent);
     }
 
 
 }
+
+// 모임 전체 조회(등록 순)
+//    public AllGroupResponseDto getAllGroups() {
+//        List<Group> groupList = groupRepository.findAllByOrderByCreatedAtDesc();
+//        AllGroupResponseDto allGroupResponseDto = new AllGroupResponseDto("success", groupList);
+//        System.out.println(allGroupResponseDto);
+//        return allGroupResponseDto;
+//    }
+
+// 모임 상세 조회
+//    public GroupDetailResponseDto getGroupDetail(Long groupId) {
+//        // 모임 entity에서 해당 모임에 대한 모든 정보 빼오기
+//        Group group = groupRepository.findByGroupId(groupId);
+//
+//
+//        String createdUserName = group.getCreatedUsername();
+//        String title = group.getTitle();
+//        String content = group.getContent();
+//        int peopleLimit = group.getPeopleLimit();
+//        int nowAppliedNum = getNowAppliedNum(groupId);
+//        int canApplyNum = (peopleLimit - nowAppliedNum);
+//        double hotPercent = getUpdatedHotPercent(groupId);
+//        String stadium = group.getStadium();
+//        String groupDate = group.getGroupDate();
+//        List<GroupComment> groupcommentList = group.getGroupCommentList();
+//
+//        GroupDetailResponseDto groupdetailResponseDto =
+//                new GroupDetailResponseDto(createdUserName, title, content, peopleLimit, nowAppliedNum, canApplyNum, hotPercent, stadium , groupDate, groupcommentList);
+//
+//        return groupdetailResponseDto;
+//    }
+
+// 어떤 모임의 핫한 정도 업데이트하기
+// 나중에 주기적으로 알아서 update 하도록 구현하기(몇 시간마다 업데이트 한다던가)
+//    public double getUpdatedHotPercent(Long groupId) {
+//        // (현재 신청 인원수/모임 최대 인원수) * 100 퍼센트 구하기
+//        Group group = groupRepository.findByGroupId(groupId);
+//        int peopleLimit = group.getPeopleLimit();
+//        int nowAppliedNum = getNowAppliedNum(groupId);
+////        int canApplyNum = (peopleLimit - nowAppliedNum);
+//        // 현재 hotPercent 구하기
+//        double hotPercent = ((double) nowAppliedNum / (double) peopleLimit * 100.0);
+//        group.updateHotPercent(hotPercent);
+//        Group updatedGroup = groupRepository.save(group);
+//        return updatedGroup.getHotPercent();
+//    }
+
+// 어떤 모임의 핫한 정도 수정하기
+//    public double updateHotPercent(Long groupId) {
+//        Group group = groupRepository.findByGroupId(groupId);
+//        double groupHotPercent = getHotPercent(groupId);
+//        double updatedHotPercent = group.setHotPercent(groupHotPercent);
+//        return updatedHotPercent;
+//    }
+
+// 모임 ID별로 현재 참여신청 인원 구하기
+//    public int getNowAppliedNum(Long groupId) {
+//        List<GroupApplication> groupApplications = groupApplicationRepository.findAll();
+//
+//        List<Long> appliedGroupIdList = new ArrayList<>();
+//        for (int i=0; i<groupApplications.size(); i++) {
+//            GroupApplication groupApplication = groupApplications.get(i);
+//            Long appliedGroupId = groupApplication.getAppliedGroup().getGroupId();
+//            appliedGroupIdList.add(appliedGroupId);
+//        }
+//
+//        int nowAppliedNum = 0;
+//        for (int l=0; l<appliedGroupIdList.size(); l++) {
+//            Long appliedGroupId = appliedGroupIdList.get(l);
+//            if (groupId == appliedGroupId) {
+//                nowAppliedNum = nowAppliedNum + 1;
+//            }
+//        }
+//        return nowAppliedNum;
+//    }
+
+
+// hotPercent 구하기
+//    public double newHotPercent() {
+//        Group group = new Group();
+//        int peopleLimit = group.getPeopleLimit();
+//        int nowAppliedNum = group.getNowAppliedNum();
+//        double nowHotPercent = ((double) nowAppliedNum / (double) peopleLimit * 100.0);
+//        group.setHotPercent(nowHotPercent);
+//    }

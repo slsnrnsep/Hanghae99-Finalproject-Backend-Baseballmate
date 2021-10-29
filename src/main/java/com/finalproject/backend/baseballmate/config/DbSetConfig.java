@@ -34,7 +34,7 @@ public class DbSetConfig {
 
     public void dbset2(){
         timelineSet();
-        groupSet();
+//        groupSet();
         goodsSet();
     }
 
@@ -101,34 +101,34 @@ public class DbSetConfig {
         timeLineService.createTimeLine("bbb",reqdto);
     }
 
-    @Transactional
-    public void groupSet()
-    {
-        GroupRequestDto requestDto = new GroupRequestDto();
-        requestDto.setTitle("aaa작성,그룹제목1");
-        requestDto.setContent("삼성응원가즈아ㅏㅏ");
-        requestDto.setGroupDate("11월7일");
-        requestDto.setPeopleLimit(3);
-        groupService.createGroup(requestDto,"aaa");
-
-        requestDto.setTitle("bbb작성,그룹제목1");
-        requestDto.setContent("롯데응원가실분");
-        requestDto.setGroupDate("11월25일");
-        requestDto.setPeopleLimit(5);
-        groupService.createGroup(requestDto,"bbb");
-
-        requestDto.setTitle("ccc작성,그룹제목1");
-        requestDto.setContent("ccccc11월25일 멍청이 ㄴㄴ");
-        requestDto.setGroupDate("11월25일");
-        requestDto.setPeopleLimit(9);
-        groupService.createGroup(requestDto,"ccc");
-
-        requestDto.setTitle("bbb작성,단둘이가자");
-        requestDto.setContent("선착순 1명");
-        requestDto.setGroupDate("12월25일");
-        requestDto.setPeopleLimit(2);
-        groupService.createGroup(requestDto,"bbb");
-    }
+//    @Transactional
+//    public void groupSet()
+//    {
+//        GroupRequestDto requestDto = new GroupRequestDto();
+//        requestDto.setTitle("aaa작성,그룹제목1");
+//        requestDto.setContent("삼성응원가즈아ㅏㅏ");
+//        requestDto.setGroupDate("11월7일");
+//        requestDto.setPeopleLimit(3);
+//        groupService.createGroup(requestDto,"aaa");
+//
+//        requestDto.setTitle("bbb작성,그룹제목1");
+//        requestDto.setContent("롯데응원가실분");
+//        requestDto.setGroupDate("11월25일");
+//        requestDto.setPeopleLimit(5);
+//        groupService.createGroup(requestDto,"bbb");
+//
+//        requestDto.setTitle("ccc작성,그룹제목1");
+//        requestDto.setContent("ccccc11월25일 멍청이 ㄴㄴ");
+//        requestDto.setGroupDate("11월25일");
+//        requestDto.setPeopleLimit(9);
+//        groupService.createGroup(requestDto,"ccc");
+//
+//        requestDto.setTitle("bbb작성,단둘이가자");
+//        requestDto.setContent("선착순 1명");
+//        requestDto.setGroupDate("12월25일");
+//        requestDto.setPeopleLimit(2);
+//        groupService.createGroup(requestDto,"ddd");
+//    }
     @Transactional
     public void goodsSet(){
         GoodsRequestDto requestDto = new GoodsRequestDto();
