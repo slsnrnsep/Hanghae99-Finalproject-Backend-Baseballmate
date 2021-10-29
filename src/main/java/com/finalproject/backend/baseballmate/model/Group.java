@@ -21,10 +21,10 @@ public class Group extends Timestamped{
     @Id
     private Long groupId; // 모임 고유번호, pk
 
+    // 유저 아이디값이 들어감
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "createdUser")
     private User createdUser;
-    // 유저에서 유저아이디 빼오기
 
     @Column
     private String createdUsername; // 모임 작성자의 유저네임
@@ -44,11 +44,14 @@ public class Group extends Timestamped{
     private List<GroupApplication> groupApplications = new ArrayList<>();
     // groupapplication에서 유저 정보 빼오기
 
-//    @Column
-//    private int nowApplyNum; // 현재 참여신청한 인원 -> get으로 가져오기
+    @Column
+    private int nowAppliedNum; // 현재 참여신청한 인원 -> get으로 가져오기
 //
-//    @Column
-//    private int canApplyNum; // 현재 참여 가능 인원
+    @Column
+    private int canApplyNum; // 현재 참여 가능 인원
+
+    @Column
+    private double hotPercent; // 모임의 핫한 정도, 기본값 0
 
     @Column
     private String stadium; // 경기장 이름
@@ -67,11 +70,16 @@ public class Group extends Timestamped{
     @OneToMany(mappedBy = "group")
     private List<GroupComment> groupCommentList = new ArrayList<>();
 
+    // 게시글 전체 조회 생성자
+
     // 모임글 등록 생성자
     public Group(GroupRequestDto requestDto, String createdUsername) {
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
         this.peopleLimit = requestDto.getPeopleLimit();
+        this.nowAppliedNum = 0;
+        this.canApplyNum = requestDto.getPeopleLimit();
+        this.hotPercent = 0;
         this.groupDate = requestDto.getGroupDate();
         this.createdUsername = createdUsername;
     }
@@ -82,5 +90,10 @@ public class Group extends Timestamped{
         this.content = requestDto.getContent();
         this.peopleLimit = requestDto.getPeopleLimit();
         this.groupDate = requestDto.getGroupDate();
+    }
+
+    // hotPercent 수정 메소드
+    public void updateHotPercent(double newHotPercent) {
+        this.hotPercent = newHotPercent;
     }
 }
