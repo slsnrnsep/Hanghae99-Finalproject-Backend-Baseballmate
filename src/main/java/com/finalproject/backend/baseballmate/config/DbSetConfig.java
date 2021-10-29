@@ -148,31 +148,45 @@ public class DbSetConfig {
         requestDto.setGoodsContent("팜");
         requestDto.setGoodsImg("sample.png");
         requestDto.setGoodsPrice(30000);
-        goodsService.createGoods("aaa",requestDto);
-
+        User loginuser=userRepository.findByUsername("aaa").orElseThrow(
+                ()->new IllegalArgumentException("유저못찾음")
+        );
+        goodsService.createGoods(loginuser, requestDto);
         requestDto.setGoodsName("박찬호 사인볼");
         requestDto.setGoodsContent("팜");
         requestDto.setGoodsImg("sample.png");
         requestDto.setGoodsPrice(100000);
-        goodsService.createGoods("bbb",requestDto);
+        loginuser = userRepository.findByUsername("bbb").orElseThrow(
+                () -> new IllegalArgumentException("유저못찾음")
+        );
+        goodsService.createGoods(loginuser, requestDto);
 
         requestDto.setGoodsName("롯데유니폼싸게구함");
         requestDto.setGoodsContent("구함");
         requestDto.setGoodsImg("sample.png");
         requestDto.setGoodsPrice(2300);
-        goodsService.createGoods("ccc",requestDto);
+        loginuser = userRepository.findByUsername("ccc").orElseThrow(
+                () -> new IllegalArgumentException("유저못찾음")
+        );
+        goodsService.createGoods(loginuser, requestDto);
 
         requestDto.setGoodsName("야구장예약");
         requestDto.setGoodsContent("양도 또는 팜");
         requestDto.setGoodsImg("sample.png");
         requestDto.setGoodsPrice(57000);
-        goodsService.createGoods("aaa",requestDto);
+        loginuser = userRepository.findByUsername("aaa").orElseThrow(
+                () -> new IllegalArgumentException("유저못찾음")
+        );
+        goodsService.createGoods(loginuser, requestDto);
 
         requestDto.setGoodsName("11월25일 경기장 표팔아요");
         requestDto.setGoodsContent("s급 석 2명");
         requestDto.setGoodsImg("sample.png");
         requestDto.setGoodsPrice(90000);
-        goodsService.createGoods("bbb",requestDto);
+        loginuser = userRepository.findByUsername("bbb").orElseThrow(
+                () -> new IllegalArgumentException("유저못찾음")
+        );
+        goodsService.createGoods(loginuser, requestDto);
     }
 
     @Transactional

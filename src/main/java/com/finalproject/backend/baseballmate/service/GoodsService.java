@@ -2,8 +2,10 @@ package com.finalproject.backend.baseballmate.service;
 
 import com.finalproject.backend.baseballmate.model.Goods;
 import com.finalproject.backend.baseballmate.model.GoodsComment;
+import com.finalproject.backend.baseballmate.model.User;
 import com.finalproject.backend.baseballmate.repository.GoodsCommentRepository;
 import com.finalproject.backend.baseballmate.repository.GoodsRepository;
+import com.finalproject.backend.baseballmate.requestDto.GoodsDetailRequestDto;
 import com.finalproject.backend.baseballmate.requestDto.GoodsRequestDto;
 import com.finalproject.backend.baseballmate.responseDto.AllGoodsResponseDto;
 import com.finalproject.backend.baseballmate.responseDto.GoodsDetailResponseDto;
@@ -25,9 +27,10 @@ public class GoodsService {
     private final GoodsCommentRepository goodsCommentRepository;
 
     @Transactional
-    public void createGoods(String username, GoodsRequestDto requestDto) {
-        Goods goods = new Goods(username, requestDto);
+    public Goods createGoods(User loginUser, GoodsRequestDto requestDto) {
+        Goods goods = new Goods(loginUser, requestDto);
         goodsRepository.save(goods);
+        return goods;
     }
 
     @Transactional
@@ -87,15 +90,19 @@ public class GoodsService {
         Goods goods = goodsRepository.findById(goodsId).orElseThrow(
                 () -> new NullPointerException("존재하지 않는 아이디입니다.")
         );
-        List<String> goodsCommentList = new ArrayList<>();
+        List<GoodsDetailRequestDto> goodsCommentList = new ArrayList<>();
+        GoodsDetailRequestDto goodsDetailRequestDto = new GoodsDetailRequestDto();
         String userName = goods.getUserName();
         String goodsName = goods.getGoodsName();
         int goodsPrice = goods.getGoodsPrice();
         String goodsContent = goods.getGoodsContent();
         String goodsImg = goods.getGoodsImg();
-        List<GoodsComment> goodsComments = goodsCommentRepository.findAllById(goodsId);
+        List<GoodsComment> goodsComments = goodsCommentRepository.findAllByGoodsId(goodsId);
         for (int i = 0; i < goodsComments.size(); i++ ) {
-            goodsCommentList.add(goodsComments.get(i).getComment());
+            goodsDetailRequestDto.setId(goodsComments.get(i).getId());
+            goodsDetailRequestDto.setUserName(goodsComments.get(i).getUserName());
+            goodsDetailRequestDto.setComment(goodsComments.get(i).getComment());
+            goodsCommentList.add(goodsDetailRequestDto);
         }
         GoodsDetailResponseDto goodsDetailResponseDto =
                 new GoodsDetailResponseDto(userName, goodsName, goodsPrice, goodsContent, goodsImg, goodsCommentList);
@@ -107,11 +114,11 @@ public class GoodsService {
         Goods goods = goodsRepository.findById(id).orElseThrow(
                 () -> new NullPointerException("존재하지 않는 아이디입니다.")
         );
-        String loginUser = userDetails.getUsername();
+        String loginUser = userDetails.getUser().getUserid();
         String writer = "";
 
         if(goods != null){
-            writer = goods.getUserName();
+            writer = goods.getCreatedUser().getUserid();
             if(!loginUser.equals(writer)){
                 throw new IllegalArgumentException("수정 권한이 없습니다");
             }
@@ -121,6 +128,26 @@ public class GoodsService {
             throw new NullPointerException("해당 굿즈가 존재하지 않습니다");
         }
 
+    }
+
+    public void deleteGoods(Long id, UserDetailsImpl userDetails) {
+        String loginUser = userDetails.getUser().getUserid();
+        String writer = "";
+
+        Goods goods = goodsRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("상품을 찾을 수 없습니다")
+        );
+        if(goods != null){
+            writer = goods.getCreatedUser().getUserid();
+
+            if(!loginUser.equals(writer)){
+                throw new IllegalArgumentException("삭제권한이 없습니다");
+            }
+            goodsRepository.deleteById(id);
+        }
+        else{
+            throw new NullPointerException("해당 굿즈가 존재하지 않습니다");
+        }
     }
 
     public String getDayBefore(Goods goods) throws ParseException {
@@ -166,25 +193,7 @@ public class GoodsService {
         return dayBefore;
     }
 
-    public void deleteGoods(Long id, UserDetailsImpl userDetails) {
-        String loginUser = userDetails.getUsername();
-        String writer = "";
 
-        Goods goods = goodsRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("상품을 찾을 수 없습니다")
-        );
-        if(goods != null){
-            writer = goods.getUserName();
-
-            if(!loginUser.equals(writer)){
-                throw new IllegalArgumentException("삭제권한이 없습니다");
-            }
-            goodsRepository.deleteById(id);
-        }
-        else{
-            throw new NullPointerException("해당 굿즈가 존재하지 않습니다");
-        }
-    }
 
 
 }

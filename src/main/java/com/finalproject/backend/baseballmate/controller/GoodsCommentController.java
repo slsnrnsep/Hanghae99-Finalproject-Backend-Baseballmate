@@ -1,5 +1,6 @@
 package com.finalproject.backend.baseballmate.controller;
 
+import com.finalproject.backend.baseballmate.model.User;
 import com.finalproject.backend.baseballmate.requestDto.GoodsCommentRequestDto;
 import com.finalproject.backend.baseballmate.responseDto.GoodsCommentResponseDto;
 import com.finalproject.backend.baseballmate.responseDto.GoodsResponseDto;
@@ -22,6 +23,7 @@ public class GoodsCommentController {
             throw new IllegalArgumentException("로그인 사용자만 가능한 기능입니다");
         }
         try {
+            User loginUser = userDetails.getUser();
             goodsCommentService.createComment(userDetails.getUser().getUsername(), requestDto, goodsid);
             GoodsCommentResponseDto goodsCommentResponseDto = new GoodsCommentResponseDto("success", "등록완료");
             return goodsCommentResponseDto;

@@ -1,6 +1,7 @@
 package com.finalproject.backend.baseballmate.controller;
 
 import com.finalproject.backend.baseballmate.model.Goods;
+import com.finalproject.backend.baseballmate.model.User;
 import com.finalproject.backend.baseballmate.repository.GoodsRepository;
 import com.finalproject.backend.baseballmate.requestDto.GoodsRequestDto;
 import com.finalproject.backend.baseballmate.responseDto.AllGoodsResponseDto;
@@ -28,7 +29,9 @@ public class GoodsController {
             throw new IllegalArgumentException("로그인 한 사용자만 등록 가능합니다");
         }
         try {
-            goodsService.createGoods(userDetails.getUser().getUsername(), requestDto);
+            User loginUser = userDetails.getUser();
+            String loginedUsername = userDetails.getUser().getUsername();
+            goodsService.createGoods(loginUser, requestDto);
             GoodsResponseDto goodsResponseDto = new GoodsResponseDto("success","등록완료");
             return goodsResponseDto;
         } catch (Exception e) {
