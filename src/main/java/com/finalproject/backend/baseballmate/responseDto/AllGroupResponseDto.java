@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 public class AllGroupResponseDto {
+    private Long groupId;
     private String title;
     private int peopleLimit;
     private int canApplyNum;

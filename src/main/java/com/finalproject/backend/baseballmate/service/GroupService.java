@@ -34,6 +34,7 @@ public class GroupService {
         for (int i=0; i<groupList.size(); i++) {
             Group group = groupList.get(i);
 
+            Long groupId = group.getGroupId();
             String title = group.getTitle();
             int peopleLimit = group.getPeopleLimit();
             int canApplyNum = group.getCanApplyNum();
@@ -42,7 +43,7 @@ public class GroupService {
             String groupDate = group.getGroupDate();
 
             AllGroupResponseDto allGroupResponseDto =
-                    new AllGroupResponseDto(title, peopleLimit, canApplyNum, hotPercent, stadium, groupDate);
+                    new AllGroupResponseDto(groupId,title, peopleLimit, canApplyNum, hotPercent, stadium, groupDate);
 
             allGroupResponseDtoList.add(allGroupResponseDto);
         }
@@ -51,11 +52,12 @@ public class GroupService {
 
     // 핫한 모임 조회(hotPercent순) - 메인 페이지용
     public List<HotGroupResponseDto> getHotGroups() {
-        List<Group> hotGroupList = groupRepository.findAllByOrderByHotPercentAsc();
+        List<Group> hotGroupList = groupRepository.findAllByOrderByHotPercentDesc();
         List<HotGroupResponseDto> hotGroupResponseDtoList = new ArrayList<>();
         for(int i=0; i<hotGroupList.size(); i++) {
             Group group = hotGroupList.get(i);
 
+            Long groupId = group.getGroupId();
             String createdUsername = group.getCreatedUsername();
             String title = group.getTitle();
             int peopleLimit = group.getPeopleLimit();
@@ -65,7 +67,7 @@ public class GroupService {
             String groupDate = group.getGroupDate();
 
             HotGroupResponseDto hotGroupResponseDto =
-                    new HotGroupResponseDto(createdUsername, title, peopleLimit, canApplyNum, hotPercent, stadium, groupDate);
+                    new HotGroupResponseDto(groupId, createdUsername, title, peopleLimit, canApplyNum, hotPercent, stadium, groupDate);
 
             hotGroupResponseDtoList.add(hotGroupResponseDto);
         }
@@ -81,10 +83,11 @@ public class GroupService {
     }
 
     // 모임 상세 조회
-    public GroupDetailResponseDto getGroupDetail(Long groupId) {
+    public GroupDetailResponseDto getGroupDetail(Long id) {
         // 모임 entity에서 해당 모임에 대한 모든 정보 빼오기
-        Group group = groupRepository.findByGroupId(groupId);
+        Group group = groupRepository.findByGroupId(id);
 
+        Long groupId = group.getGroupId();
         String createdUserName = group.getCreatedUsername();
         String title = group.getTitle();
         String content = group.getContent();
@@ -97,7 +100,7 @@ public class GroupService {
         List<GroupComment> groupcommentList = group.getGroupCommentList();
 
         GroupDetailResponseDto groupdetailResponseDto =
-                new GroupDetailResponseDto(createdUserName, title, content, peopleLimit, nowAppliedNum, canApplyNum, hotPercent, stadium , groupDate, groupcommentList);
+                new GroupDetailResponseDto(groupId, createdUserName, title, content, peopleLimit, nowAppliedNum, canApplyNum, hotPercent, stadium , groupDate, groupcommentList);
 
         return groupdetailResponseDto;
     }

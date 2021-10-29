@@ -11,6 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 public class GroupDetailResponseDto {
+    private Long groupId;
     private String createdUserName; // 모임 형성한 유저의 유저네임
     private String title; // 모임 게시글의 제목
     private String content; // 모임 게시글의 내용

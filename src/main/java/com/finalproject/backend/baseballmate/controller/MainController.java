@@ -32,6 +32,7 @@ public class MainController {
     private final GoodsService goodsService;
     private final MatchRepository matchRepository;
     private final MatchDataService matchDataService;
+
     //내가 응원하는 구단의 가장 최근 경기 일정 조회
     //@PathVariable("myteam") String myteam, @AuthenticationPrincipal UserDetailsImpl userDetails
     @GetMapping("/main/myteamSchedule/{myteam}")

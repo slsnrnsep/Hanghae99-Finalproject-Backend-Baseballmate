@@ -9,6 +9,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 public class HotGroupResponseDto {
+    private Long groupId;
     private String createdUsername; // 모임 형성한 유저의 유저네임
     private String title; // 모임 게시글의 제목
     private int peopleLimit; // 모임 최대 제한 인원 수
