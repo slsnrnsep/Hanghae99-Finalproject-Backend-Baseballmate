@@ -36,6 +36,7 @@ public class GroupService {
 
             Long groupId = group.getGroupId();
             String title = group.getTitle();
+            String createdUsername = group.getCreatedUsername();
             int peopleLimit = group.getPeopleLimit();
             int canApplyNum = group.getCanApplyNum();
             double hotPercent = group.getHotPercent();
@@ -43,7 +44,7 @@ public class GroupService {
             String groupDate = group.getGroupDate();
 
             AllGroupResponseDto allGroupResponseDto =
-                    new AllGroupResponseDto(groupId,title, peopleLimit, canApplyNum, hotPercent, stadium, groupDate);
+                    new AllGroupResponseDto(groupId, title, createdUsername, peopleLimit, canApplyNum, hotPercent, stadium, groupDate);
 
             allGroupResponseDtoList.add(allGroupResponseDto);
         }

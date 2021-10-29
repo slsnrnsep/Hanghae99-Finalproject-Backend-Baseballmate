@@ -35,6 +35,7 @@ public class GoodsCommentService {
         GoodsComment goodsComment = goodsCommentRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 아아디입니다")
         );
+
         if(goodsComment != null){
             writer = goodsComment.getUserName();
 

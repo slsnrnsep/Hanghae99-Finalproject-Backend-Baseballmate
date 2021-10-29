@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 public class AllGroupResponseDto {
     private Long groupId;
     private String title;
+    private String createdUsername;
     private int peopleLimit;
     private int canApplyNum;
     private double hotPercent;
