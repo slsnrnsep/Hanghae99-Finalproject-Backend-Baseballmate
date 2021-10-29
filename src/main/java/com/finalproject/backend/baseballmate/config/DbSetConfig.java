@@ -109,25 +109,37 @@ public class DbSetConfig {
         requestDto.setContent("삼성응원가즈아ㅏㅏ");
         requestDto.setGroupDate("11월7일");
         requestDto.setPeopleLimit(3);
-        groupService.createGroup(requestDto,"aaa");
+        User loginuser=userRepository.findByUsername("aaa").orElseThrow(
+                ()->new IllegalArgumentException("유저못찾음")
+        );
+        groupService.createGroup(requestDto,loginuser);
 
         requestDto.setTitle("bbb작성,그룹제목1");
         requestDto.setContent("롯데응원가실분");
         requestDto.setGroupDate("11월25일");
         requestDto.setPeopleLimit(5);
-        groupService.createGroup(requestDto,"bbb");
+        loginuser = userRepository.findByUsername("bbb").orElseThrow(
+                () -> new IllegalArgumentException("유저못찾음")
+        );
+        groupService.createGroup(requestDto,loginuser);
 
         requestDto.setTitle("ccc작성,그룹제목1");
         requestDto.setContent("ccccc11월25일 멍청이 ㄴㄴ");
         requestDto.setGroupDate("11월25일");
         requestDto.setPeopleLimit(9);
-        groupService.createGroup(requestDto,"ccc");
+        loginuser = userRepository.findByUsername("ccc").orElseThrow(
+                () -> new IllegalArgumentException("유저못찾음")
+        );
+        groupService.createGroup(requestDto,loginuser);
 
         requestDto.setTitle("bbb작성,단둘이가자");
         requestDto.setContent("선착순 1명");
         requestDto.setGroupDate("12월25일");
         requestDto.setPeopleLimit(2);
-        groupService.createGroup(requestDto,"bbb");
+        loginuser = userRepository.findByUsername("bbb").orElseThrow(
+                () -> new IllegalArgumentException("유저못찾음")
+        );
+        groupService.createGroup(requestDto,loginuser);
     }
     @Transactional
     public void goodsSet(){

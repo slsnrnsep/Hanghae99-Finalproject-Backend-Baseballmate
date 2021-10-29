@@ -4,10 +4,12 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.finalproject.backend.baseballmate.requestDto.GroupCommentRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
 @NoArgsConstructor
+@Setter
 @Getter
 @Entity
 public class GroupComment {
@@ -23,7 +25,10 @@ public class GroupComment {
     private String comment;
 
     @Column
-    private Long commentUserId;
+    private Long commentUserIndex;
+
+    @Column
+    private String commentUserId;
 
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
@@ -32,13 +37,14 @@ public class GroupComment {
 
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "commentUserId")
-//    private User commentuser;
+//    private User commentUser;
 
-    public GroupComment(GroupCommentRequestDto groupCommentRequestDto, Group group, String commentUsername, Long commentUserId) {
+    public GroupComment(GroupCommentRequestDto groupCommentRequestDto, Group group, String commentUsername, Long loginedUserIndex, String loginedUserId) {
         this.commentUsername = commentUsername;
         this.comment = groupCommentRequestDto.getComment();
         this.group = group;
-        this.commentUserId = commentUserId;
+        this.commentUserIndex = loginedUserIndex;
+        this.commentUserId = loginedUserId;
     }
 
     public void updateGroupComment(GroupCommentRequestDto requestDto)

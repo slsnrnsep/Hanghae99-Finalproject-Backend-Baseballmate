@@ -1,6 +1,10 @@
 package com.finalproject.backend.baseballmate.controller;
 
+import com.finalproject.backend.baseballmate.model.GoodsLikes;
+import com.finalproject.backend.baseballmate.model.TimeLineLikes;
 import com.finalproject.backend.baseballmate.model.User;
+import com.finalproject.backend.baseballmate.repository.GoodsLikesRepository;
+import com.finalproject.backend.baseballmate.repository.TimeLineLikesRepository;
 import com.finalproject.backend.baseballmate.repository.UserRepository;
 import com.finalproject.backend.baseballmate.requestDto.HeaderDto;
 import com.finalproject.backend.baseballmate.requestDto.MyteamRequestDto;
@@ -15,6 +19,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RequiredArgsConstructor
 @RestController
 public class UserContorller {
@@ -22,7 +29,8 @@ public class UserContorller {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
-
+    private final TimeLineLikesRepository timeLineLikesRepository;
+    private final GoodsLikesRepository goodsLikesRepository;
 
     @PostMapping("/user/signup")
     public void registerUser(@RequestBody UserRequestDto userRequestDto){
@@ -76,7 +84,20 @@ public class UserContorller {
         User user = userRepository.findByUsername(userDetails.getUser().getUsername())
                 .orElseThrow(()-> new IllegalArgumentException("로그인 유저를 찾을 수 없습니다."));
 
-        LoginCheckResponseDto loginCheckResponseDto = new LoginCheckResponseDto(user.getUsername(),user.getMyselectTeam());
+        //프론트엔드 진식님 요청사항
+        List<TimeLineLikes> TimeLineLikesList=timeLineLikesRepository.findAllByUserId(user.getId());
+        List<Long> myTimeLineLikesList = new ArrayList<>();
+        for(int i=0; i<TimeLineLikesList.size();i++) {
+            myTimeLineLikesList.add(TimeLineLikesList.get(i).getId());
+        }
+
+        List<GoodsLikes> GoodsLikesList = goodsLikesRepository.findAllByUserId(user.getId());
+        List<Long> myGoodsLikesList = new ArrayList<>();
+        for(int i=0; i<GoodsLikesList.size();i++) {
+            myGoodsLikesList.add(GoodsLikesList.get(i).getId());
+        }
+
+        LoginCheckResponseDto loginCheckResponseDto = new LoginCheckResponseDto(user.getUsername(),user.getMyselectTeam(),myTimeLineLikesList,myGoodsLikesList);
 
         return loginCheckResponseDto;
     }

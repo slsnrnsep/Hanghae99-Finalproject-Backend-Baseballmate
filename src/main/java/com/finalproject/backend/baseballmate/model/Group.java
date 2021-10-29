@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.finalproject.backend.baseballmate.requestDto.GroupRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -38,7 +39,7 @@ public class Group extends Timestamped{
     @Column
     private int peopleLimit; // 모임 최대 제한인원
 
-    // 참가 신청한 유저의 유저네임
+    // 참가 신청한 유저와 해당 모임 정보
     @JsonManagedReference
     @OneToMany(mappedBy = "appliedUser")
     private List<GroupApplication> groupApplications = new ArrayList<>();
@@ -46,7 +47,7 @@ public class Group extends Timestamped{
 
     @Column
     private int nowAppliedNum; // 현재 참여신청한 인원 -> get으로 가져오기
-//
+
     @Column
     private int canApplyNum; // 현재 참여 가능 인원
 
@@ -67,13 +68,13 @@ public class Group extends Timestamped{
 //    private String baseballTeam; // 구단 이름
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "group")
+    @OneToMany(mappedBy = "group",cascade = CascadeType.ALL)
     private List<GroupComment> groupCommentList = new ArrayList<>();
 
     // 게시글 전체 조회 생성자
 
     // 모임글 등록 생성자
-    public Group(GroupRequestDto requestDto, String createdUsername) {
+    public Group(GroupRequestDto requestDto, User loginedUser) {
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
         this.peopleLimit = requestDto.getPeopleLimit();
@@ -81,7 +82,8 @@ public class Group extends Timestamped{
         this.canApplyNum = requestDto.getPeopleLimit();
         this.hotPercent = 0;
         this.groupDate = requestDto.getGroupDate();
-        this.createdUsername = createdUsername;
+        this.createdUser = loginedUser;
+        this.createdUsername = loginedUser.getUsername();
     }
 
     // 모임글 수정 메소드
@@ -92,8 +94,4 @@ public class Group extends Timestamped{
         this.groupDate = requestDto.getGroupDate();
     }
 
-    // hotPercent 수정 메소드
-    public void updateHotPercent(double newHotPercent) {
-        this.hotPercent = newHotPercent;
-    }
 }

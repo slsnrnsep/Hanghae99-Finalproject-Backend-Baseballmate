@@ -38,6 +38,10 @@ public class GoodsLikesService {
             goodsLikesRepository.delete(goodsLikes);
             return false;
         }else{
+            if(goodsLikesRepository.findByGoodsIdAndUserId(goods.getId(), user.getId()).isPresent())
+            {
+                return true;
+            }
             GoodsLikes goodsLikes = goodsLikesRepository.save(new GoodsLikes(goods, user));
             user.addGoodsLikes(goodsLikes);
             goods.addGoodsLikes(goodsLikes);

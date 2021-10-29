@@ -74,10 +74,10 @@ public class GroupService {
         return hotGroupResponseDtoList;
     }
 
-    // 모임 형성
+    // 모임 생성
     @Transactional
-    public Group createGroup(GroupRequestDto requestDto, String loginedUsername) {
-        Group Group = new Group(requestDto, loginedUsername);
+    public Group createGroup(GroupRequestDto requestDto, User loginedUser) {
+        Group Group = new Group(requestDto, loginedUser);
         groupRepository.save(Group);
         return Group;
     }
@@ -108,14 +108,14 @@ public class GroupService {
 
     // 모임 게시글 수정하기
     public void updateGroup(Long groupId, GroupRequestDto requestDto, UserDetailsImpl userDetails) {
-        String loginedUsername = userDetails.getUsername();
-        String createdUsername = "";
+        String loginedUserId = userDetails.getUser().getUserid();
+        String createdUserId = "";
 
         Group group = groupRepository.findByGroupId(groupId);
         if(group != null) {
-            createdUsername = group.getCreatedUsername();
+            createdUserId = group.getCreatedUser().getUserid();
 
-            if(!loginedUsername.equals(createdUsername)) {
+            if(!loginedUserId.equals(createdUserId)) {
                 throw new IllegalArgumentException("수정 권한이 없습니다.");
             }
             group.updateGroup(requestDto);
@@ -127,14 +127,14 @@ public class GroupService {
 
     //모임 게시글 삭제하기
     public void deleteGroup(Long groupId, UserDetailsImpl userDetails) {
-        String loginedUsername = userDetails.getUsername();
-        String createdUsername = "";
+        String loginedUserId = userDetails.getUser().getUserid();
+        String createdUserId = "";
 
         Group group = groupRepository.findByGroupId(groupId);
         if(group != null) {
-            createdUsername = group.getCreatedUsername();
+            createdUserId = group.getCreatedUser().getUserid();
 
-            if(!loginedUsername.equals(createdUsername)) {
+            if(!loginedUserId.equals(createdUserId)) {
                 throw new IllegalArgumentException("삭제 권한이 없습니다.");
             }
             groupRepository.deleteById(groupId);

@@ -83,11 +83,11 @@
                 type: 'GET',
                 url: '/page/group',
                 success: function (response) {
-                    response = response.allGroup
+                    // response = response.allGroup
                     for (let i = 0; i < response.length; i++) {
                         let post = response[i];
-                        let comment = response[i].groupCommentList;
-                        let temphtml = getgrouphtml(post,comment);
+                        // let comment = response[i].groupCommentList;
+                        let temphtml = getgrouphtml(post);
                         $('#group-box').append(temphtml);
                         }
                     }
@@ -165,30 +165,28 @@
             // link, image, title, lprice, myprice 변수 활용하기
             return `<tr>
                 <td>${post.groupId}</td>
-                <td>${post.createdUsername}</td>
                 <td>${post.title}</td>
-                <td>${post.content}</td>
                 <td>${post.peopleLimit}</td>
+                <td>${post.canApplyNum}</td>
+                <td>${post.hotPercent}</td>
                 <td>${post.stadium}</td>
                 <td>${post.groupDate}</td>
-                <td>${post.groupCommentList}</td>
-                <td onclick = "groupdolikeorun(${post.groupId},'false')">좋아요</td>
-                <td onclick = "groupdolikeorun(${post.groupId},'true')">싫어요</td>
             </tr>`
         }
         function getgrouphtmlcomment(post,comment) {
       // link, image, title, lprice, myprice 변수 활용하기
+      //       <td>댓글ID: ${comment.groupCommentId}<br>작성자: ${comment.commentUsername}<br>내용: ${comment.comment}<br>작성자PK:
+      //           ${comment.commentUserId}</td>
+      //       <td onClick="groupdolikeorun(${post.groupId},'false')">좋아요</td>
+      //       <td onClick="groupdolikeorun(${post.groupId},'true')">싫어요</td>
       return `<tr>
                 <td>${post.groupId}</td>
-                <td>${post.createdUsername}</td>
                 <td>${post.title}</td>
-                <td>${post.content}</td>
                 <td>${post.peopleLimit}</td>
+                <td>${post.canApplyNum}</td>
+                <td>${post.hotPercent}</td>
                 <td>${post.stadium}</td>
                 <td>${post.groupDate}</td>
-                <td>댓글ID: ${comment.groupCommentId}<br>작성자: ${comment.commentUsername}<br>내용: ${comment.comment}<br>작성자PK: ${comment.commentUserId}</td>
-                <td onclick = "groupdolikeorun(${post.groupId},'false')">좋아요</td>
-                <td onclick = "groupdolikeorun(${post.groupId},'true')">싫어요</td>
             </tr>`
     }
         function getgoodshtml(post) {
@@ -318,15 +316,12 @@
     <thead>
     <tr>
         <th scope="col">모임ID</th>
-        <th scope="col">작성자명</th>
         <th scope="col">제목</th>
-        <th scope="col">내용</th>
         <th scope="col">최대인원</th>
+        <th scope="col">현재신청가능인원</th>
+        <th scope="col">마감임박(%)</th>
         <th scope="col">구장이름</th>
         <th scope="col">모임날짜</th>
-        <th scope="col">그룹댓글</th>
-        <th scope="col">좋아요(구현예정)</th>
-        <th scope="col">싫어요(구현예정)</th>
     </tr>
     </thead>
     <tbody id="group-box">

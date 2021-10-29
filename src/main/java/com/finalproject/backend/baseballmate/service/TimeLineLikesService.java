@@ -44,6 +44,10 @@ public class TimeLineLikesService {
             timeLineLikesRepository.delete(likes);
             return false;
         } else {
+            if(timeLineLikesRepository.findByTimeLineIdAndUserId(timeLine.getId(), user.getId()).isPresent())
+            {
+                return true;
+            }
             TimeLineLikes likes = timeLineLikesRepository.save(new TimeLineLikes(timeLine, user));
             user.addLikes(likes);
             timeLine.addLikes(likes);

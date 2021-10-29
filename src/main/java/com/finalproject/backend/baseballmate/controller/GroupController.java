@@ -33,11 +33,12 @@ public class GroupController {
     @PostMapping("/page/group")
     public MsgResponseDto createGroup(@RequestBody GroupRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         // 로그인한 유저의 유저네임 가져오기
-        String loginedUsername = userDetails.getUser().getUsername();
-        if (loginedUsername == null) {
+        if (userDetails == null) {
             throw new IllegalArgumentException("로그인 한 이용자만 모임을 생성할 수 있습니다.");
         }
-        groupService.createGroup(requestDto, loginedUsername);
+        User loginedUser = userDetails.getUser();
+        String loginedUsername = userDetails.getUser().getUsername();
+        groupService.createGroup(requestDto, loginedUser);
         MsgResponseDto msgResponseDto = new MsgResponseDto("success", "모임 등록 성공");
 
         return msgResponseDto;
@@ -46,10 +47,10 @@ public class GroupController {
     // 모임페이지 상세 조회
     @GetMapping("/page/group/detail/{groupId}")
     public GroupDetailResponseDto getGroupDetails(@PathVariable("groupId") Long groupId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        String loginedUserid = userDetails.getUser().getUserid();
-        if (loginedUserid == null) {
+        if (userDetails == null) {
             throw new IllegalArgumentException("로그인 한 사용자만 모임을 조회할 수 있습니다.");
         }
+//        String loginedUserid = userDetails.getUser().getUserid();
         GroupDetailResponseDto detailResponseDto = groupService.getGroupDetail(groupId);
         return detailResponseDto;
     }
@@ -57,6 +58,9 @@ public class GroupController {
     // 모임 참여신청하기
     @PostMapping("/page/group/detail/apply/{groupId}")
     public MsgResponseDto applyGroup(@PathVariable Long groupId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        if (userDetails == null) {
+            throw new IllegalArgumentException("로그인 한 사용자만 신청할 수 있습니다.");
+        }
         User appliedUser = userDetails.getUser();
         Group appliedGroup = groupRepository.findByGroupId(groupId);
         groupService.applyGroup(appliedUser, appliedGroup);

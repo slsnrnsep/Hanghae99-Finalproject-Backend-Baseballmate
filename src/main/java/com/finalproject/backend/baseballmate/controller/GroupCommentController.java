@@ -46,6 +46,9 @@ public class GroupCommentController {
     // 모임 게시글 내 댓글 생성하기
     @PostMapping("/page/group/detail/{groupId}/comment")
     public MsgResponseDto createGroupComment(@RequestBody GroupCommentRequestDto commentRequestDto, @PathVariable("groupId") Long groupId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        if(userDetails == null) {
+            throw new IllegalArgumentException("로그인 하신 후 이용해주세요.");
+        }
         User loginedUser = userDetails.getUser();
         commentService.createComment(commentRequestDto, groupId, loginedUser);
         MsgResponseDto msgResponseDto = new MsgResponseDto("success", "댓글 등록 완료");
