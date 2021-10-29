@@ -8,5 +8,4 @@ import java.util.List;
 
 public interface GoodsRepository extends JpaRepository <Goods, Long>{
     List<Goods> findAllByOrderByCreatedAtDesc();
-//    Goods findById(Long goodsId);
 }

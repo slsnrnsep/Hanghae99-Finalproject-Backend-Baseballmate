@@ -1,6 +1,7 @@
 package com.finalproject.backend.baseballmate.responseDto;
 
 import com.finalproject.backend.baseballmate.model.GoodsComment;
+import com.finalproject.backend.baseballmate.requestDto.GoodsDetailRequestDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,5 +17,6 @@ public class GoodsDetailResponseDto {
     private int goodsPrice;
     private String goodsContent;
     private String goodsImg;
-    List<String> goodsCommentList;
+    List<GoodsDetailRequestDto> goodsCommentList;
+
 }

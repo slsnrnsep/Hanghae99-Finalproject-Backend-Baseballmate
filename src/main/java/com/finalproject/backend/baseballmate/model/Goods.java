@@ -17,6 +17,10 @@ public class Goods extends Timestamped {
     @Column(name = "goods_id")
     private Long id;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "createdUser")
+    private User createdUser;
+
     @Column
     private String userName; // 굿즈 게시글 작성자의 닉네임
 
@@ -43,8 +47,9 @@ public class Goods extends Timestamped {
     private List<GoodsComment> goodsCommentList = new ArrayList<>();
 
     // 굿즈 등록 생성자
-    public Goods(String userName, GoodsRequestDto requestDto){
-        this.userName = userName;
+    public Goods(User loginUser, GoodsRequestDto requestDto){
+        this.createdUser = loginUser;
+        this.userName = loginUser.getUsername();
         this.goodsName = requestDto.getGoodsName();
         this.goodsPrice = requestDto.getGoodsPrice();
         this.goodsContent = requestDto.getGoodsContent();
