@@ -98,6 +98,7 @@ public class GroupService {
                 throw new IllegalArgumentException("수정 권한이 없습니다.");
             }
             group.updateGroup(requestDto);
+            groupRepository.save(group);
         } else {
             throw new NullPointerException("해당 게시글이 존재하지 않습니다.");
         }
