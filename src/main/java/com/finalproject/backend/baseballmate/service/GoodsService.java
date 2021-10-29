@@ -33,7 +33,7 @@ public class GoodsService {
         for(int i=0; i<goodsList.size(); i++) {
             Goods goods = goodsList.get(i);
 
-
+            Long id = goods.getId();
             String userName = goods.getUserName();
             String goodsName = goods.getGoodsName();
             int goodsPrice = goods.getGoodsPrice();
@@ -43,7 +43,7 @@ public class GoodsService {
 //            int likeCount = goods.getLikeCount();
 
             AllGoodsResponseDto responseDto =
-                    new AllGoodsResponseDto(userName, goodsName,goodsPrice,goodsImg,dayBefore);
+                    new AllGoodsResponseDto(id,userName, goodsName,goodsPrice,goodsImg,dayBefore);
             data.add(responseDto);
         }
         return data;
@@ -62,7 +62,7 @@ public class GoodsService {
         for(int i=0; i<number; i++) {
             Goods goods = goodsList.get(i);
 
-
+            Long id = goods.getId();
             String userName = goods.getUserName();
             String goodsName = goods.getGoodsName();
             int goodsPrice = goods.getGoodsPrice();
@@ -72,7 +72,7 @@ public class GoodsService {
 //            int likeCount = goods.getLikeCount();
 
             AllGoodsResponseDto responseDto =
-                    new AllGoodsResponseDto(userName, goodsName,goodsPrice,goodsImg,dayBefore);
+                    new AllGoodsResponseDto(id, userName, goodsName,goodsPrice,goodsImg,dayBefore);
             data.add(responseDto);
         }
         return data;
