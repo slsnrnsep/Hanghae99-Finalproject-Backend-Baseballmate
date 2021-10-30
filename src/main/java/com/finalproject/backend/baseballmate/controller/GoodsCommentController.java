@@ -24,7 +24,7 @@ public class GoodsCommentController {
         }
         try {
             User loginUser = userDetails.getUser();
-            goodsCommentService.createComment(userDetails.getUser().getUsername(), requestDto, goodsid);
+            goodsCommentService.createComment(loginUser, requestDto, goodsid);
             GoodsCommentResponseDto goodsCommentResponseDto = new GoodsCommentResponseDto("success", "등록완료");
             return goodsCommentResponseDto;
         } catch (Exception e) {
@@ -41,7 +41,7 @@ public class GoodsCommentController {
             throw new IllegalArgumentException("로그인 사용자만이 수정할 수 있습니다");
         }
         try {
-            goodsCommentService.updateGoodsComment(userDetails.getUser().getUsername(), id, requestDto);
+            goodsCommentService.updateGoodsComment(userDetails, id, requestDto);
             GoodsCommentResponseDto goodsCommentResponseDto = new GoodsCommentResponseDto("success","변경완료");
             return goodsCommentResponseDto;
         } catch (Exception e) {

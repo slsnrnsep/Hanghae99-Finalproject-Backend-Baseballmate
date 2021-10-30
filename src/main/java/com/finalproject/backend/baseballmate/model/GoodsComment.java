@@ -21,14 +21,22 @@ public class GoodsComment extends Timestamped {
     @Column
     private String comment;
 
+    @Column
+    private String commentUserId;
+
+    @Column
+    private Long commentUserIndex;
+
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "goodsId")
     private Goods goods;
 
-    public GoodsComment(String userName,GoodsCommentRequestDto requestDto, Goods goods){
+    public GoodsComment(String userName,GoodsCommentRequestDto requestDto, Goods goods,String loginedUserId,Long loginedUserIndex){
         this.userName = userName;
         this.comment = requestDto.getComment();
         this.goods = goods;
+        this.commentUserId = loginedUserId;
+        this.commentUserIndex = loginedUserIndex;
     }
 
     public void updateComment(GoodsCommentRequestDto requestDto) {

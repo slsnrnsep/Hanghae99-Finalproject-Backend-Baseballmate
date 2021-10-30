@@ -225,19 +225,29 @@ public class DbSetConfig {
         Goods goods = goodsRepository.findById(141L).orElseThrow(
                 ()->new IllegalArgumentException("굿즈정보못찾음")
         );
-        goodsCommentService.createComment("aaa",com2,goods.getId());
+        user = userRepository.findByUsername("ccc").orElseThrow(
+                () -> new IllegalArgumentException("유저못찾음")
+        );
+        goodsCommentService.createComment(user,com2,goods.getId());
+
 
         com2.setComment("bbb가 작성한 굿즈댓글내용");
         goods = goodsRepository.findById(141L).orElseThrow(
                 () -> new IllegalArgumentException("굿즈정보못찾음")
         );
-        goodsCommentService.createComment("bbb",com2,goods.getId());
+        user = userRepository.findByUsername("bbb").orElseThrow(
+                () -> new IllegalArgumentException("유저못찾음")
+        );
+        goodsCommentService.createComment(user,com2,goods.getId());
 
         com2.setComment("ccc가 작성한 굿즈댓글내용");
         goods = goodsRepository.findById(141L).orElseThrow(
                 () -> new IllegalArgumentException("굿즈정보못찾음")
         );
-        goodsCommentService.createComment("bbb",com2,goods.getId());
+        user = userRepository.findByUsername("bbb").orElseThrow(
+                () -> new IllegalArgumentException("유저못찾음")
+        );
+        goodsCommentService.createComment(user,com2,goods.getId());
 
     }
 }

@@ -2,6 +2,7 @@ package com.finalproject.backend.baseballmate.service;
 
 import com.finalproject.backend.baseballmate.model.Goods;
 import com.finalproject.backend.baseballmate.model.GoodsComment;
+import com.finalproject.backend.baseballmate.model.User;
 import com.finalproject.backend.baseballmate.repository.GoodsCommentRepository;
 import com.finalproject.backend.baseballmate.repository.GoodsRepository;
 import com.finalproject.backend.baseballmate.requestDto.GoodsCommentRequestDto;
@@ -18,18 +19,22 @@ public class GoodsCommentService {
     private final GoodsRepository goodsRepository;
 
     @Transactional
-    public void createComment(String username, GoodsCommentRequestDto requestDto, Long goodsid) {
+    public void createComment(User loginUser, GoodsCommentRequestDto requestDto, Long goodsid) {
 //        Goods goods = new Goods(username, requestDto);
 //        goodsRepository.save(goods);
+        String loginedUsername = loginUser.getUserid();
+        String loginUsered = loginUser.getUsername();
+        Long loginUserIndex = loginUser.getId();
         Goods goods = goodsRepository.findById(goodsid).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 아이디입니다")
         );
-        GoodsComment goodsComment = new GoodsComment(username,requestDto,goods);
+        GoodsComment goodsComment = new GoodsComment(loginUsered,requestDto,goods,loginedUsername,loginUserIndex);
         goodsCommentRepository.save(goodsComment);
 
     }
 
-    public void updateGoodsComment(String username, Long id, GoodsCommentRequestDto requestDto) {
+    public void updateGoodsComment(UserDetailsImpl userDetails, Long id, GoodsCommentRequestDto requestDto) {
+        String loginUser = userDetails.getUser().getUserid();
         String writer = "";
 
         GoodsComment goodsComment = goodsCommentRepository.findById(id).orElseThrow(
@@ -37,9 +42,9 @@ public class GoodsCommentService {
         );
 
         if(goodsComment != null){
-            writer = goodsComment.getUserName();
+            writer = goodsComment.getCommentUserId();
 
-            if(!username.equals(writer)){
+            if(!loginUser.equals(writer)){
                 throw new IllegalArgumentException("수정권한이 없습니다");
             }
             goodsComment.updateComment(requestDto);
@@ -50,14 +55,14 @@ public class GoodsCommentService {
     }
 
     public void deleteComment(Long id, UserDetailsImpl userDetails) {
-        String loginUser = userDetails.getUsername();
+        String loginUser = userDetails.getUser().getUserid();
         String writer = "";
 
         GoodsComment goodsComment = goodsCommentRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 아이디입니다")
         );
         if(goodsComment != null){
-            writer = goodsComment.getUserName();
+            writer = goodsComment.getCommentUserId();
 
             if(!loginUser.equals(writer)){
                 throw new IllegalArgumentException("삭제권한이 없습니다");
