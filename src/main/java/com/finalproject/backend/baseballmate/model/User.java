@@ -58,30 +58,29 @@ public class User {
 //    private String nickname;
 
     @OneToMany(mappedBy = "user")
-    private final List<TimeLineLikes> timeLineLikeslikes = new ArrayList<>();
+    private final List<TimeLineLikes> timeLineLikes = new ArrayList<>();
 
-    public void addLikes(TimeLineLikes likes) {
-        this.timeLineLikeslikes.add(likes);
+    public void addLikes(TimeLineLikes likes) {this.timeLineLikes.add(likes);
     }
 
     public void deleteLikes(TimeLineLikes likes) {
-        this.timeLineLikeslikes.remove(likes);
+        this.timeLineLikes.remove(likes);
     }
 
     // goods 좋아요 생성자
     @OneToMany(mappedBy = "user")
-    private final List<GoodsLikes> groupLikes = new ArrayList<>();
+    private final List<GoodsLikes> goodsLikes = new ArrayList<>();
 
 //    public void addGoodsLikes(GoodsLikes likes){
 //        this.likes.add(likes);
 //    }
 
     public void addGoodsLikes(GoodsLikes likes){
-        this.groupLikes.add(likes);
+        this.goodsLikes.add(likes);
     }
 
     public void deleteGoodsLikes(GoodsLikes likes){
-        this.groupLikes.remove(likes);
+        this.goodsLikes.remove(likes);
     }
 
 
