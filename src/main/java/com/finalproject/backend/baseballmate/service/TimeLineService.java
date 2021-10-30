@@ -2,6 +2,7 @@ package com.finalproject.backend.baseballmate.service;
 
 import com.finalproject.backend.baseballmate.model.GroupComment;
 import com.finalproject.backend.baseballmate.model.TimeLine;
+import com.finalproject.backend.baseballmate.model.User;
 import com.finalproject.backend.baseballmate.repository.TimeLineRepository;
 import com.finalproject.backend.baseballmate.requestDto.TimeLineRequestDto;
 import com.finalproject.backend.baseballmate.responseDto.AllTimeLineResponseDto;
@@ -71,8 +72,8 @@ public class TimeLineService {
     }
 
     @Transactional
-    public void createTimeLine(String userName,TimeLineRequestDto requestDto) {
-        TimeLine timeLine = new TimeLine(userName,requestDto);
+    public void createTimeLine(User loginedUser, TimeLineRequestDto requestDto) {
+        TimeLine timeLine = new TimeLine(loginedUser,requestDto);
         timeLineRepository.save(timeLine);
     }
 
@@ -121,7 +122,7 @@ public class TimeLineService {
 
     @Transactional
     public void deletetimeLine(Long id, UserDetailsImpl userDetails) {
-        String loginedUsername = userDetails.getUsername();
+        String loginedUsername = userDetails.getUser().getUserid();
         String commentUsername = "";
 
         TimeLine timeLine = timeLineRepository.findById(id).orElseThrow(
@@ -129,7 +130,8 @@ public class TimeLineService {
         );
         if(timeLine!=null)
         {
-            commentUsername = timeLine.getUserName();
+
+            commentUsername = timeLine.getCreatedUser().getUserid();
 
             if(!loginedUsername.equals(commentUsername)) {
                 throw new IllegalArgumentException("수정 권한이 없습니다.");

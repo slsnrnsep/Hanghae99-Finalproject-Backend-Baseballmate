@@ -35,7 +35,7 @@ public class TimeLineController {
         }
         try
         {
-            timeLineService.createTimeLine(userDetails.getUser().getUsername(), requestDto);
+            timeLineService.createTimeLine(userDetails.getUser(), requestDto);
             MsgResponseDto timeLineResponseDto = new MsgResponseDto("success","작성 완료");
             return timeLineResponseDto;
         }

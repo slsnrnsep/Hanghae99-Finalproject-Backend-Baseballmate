@@ -17,13 +17,17 @@ public class TimeLine extends Timestamped
     @Column()
     private Long id; // 게시글 고유 번호
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "createdUser")
+    private User createdUser;// 게시글 작성자의 아이디, 중복 허용X
+
     @Column(nullable = false)
-    private String userName; // 게시글 작성자의 닉네임, 중복 허용X
+    private String userName;
 
     @Column(nullable = false)
     private String content; // 게시글 내용
 
-    @OneToMany(mappedBy = "timeLine")
+    @OneToMany(mappedBy = "timeLine" ,cascade = CascadeType.ALL)
     private List<TimeLineLikes> likesList;
 
     @Column(columnDefinition = "integer default 0")
@@ -39,10 +43,11 @@ public class TimeLine extends Timestamped
         this.likeCount -= 1;
     }
 
-    public TimeLine(String userName,TimeLineRequestDto requestDto)
+    public TimeLine(User logineduser,TimeLineRequestDto requestDto)
     {
-        this.userName = userName;
+        this.userName = logineduser.getUsername();
         this.content = requestDto.getContent();
+        this.createdUser = logineduser;
     }
 
 }

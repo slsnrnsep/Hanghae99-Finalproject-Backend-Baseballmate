@@ -76,29 +76,52 @@ public class DbSetConfig {
     public void timelineSet()
     {
         TimeLineRequestDto reqdto = new TimeLineRequestDto();
-        reqdto.setContent("임시테스트데이터1");
-        timeLineService.createTimeLine("aaa",reqdto);
+        reqdto.setContent("aaa임시테스트데이터1");
+        User loginuser=userRepository.findByUsername("aaa").orElseThrow(
+                ()->new IllegalArgumentException("유저못찾음")
+        );
+        timeLineService.createTimeLine(loginuser,reqdto);
 
-        reqdto.setContent("임시테스트데이터2");
-        timeLineService.createTimeLine("bbb",reqdto);
+        reqdto.setContent("bbb임시테스트데이터2");
+        loginuser = userRepository.findByUsername("bbb").orElseThrow(
+                () -> new IllegalArgumentException("유저못찾음")
+        );
+        timeLineService.createTimeLine(loginuser,reqdto);
 
-        reqdto.setContent("임시테스트데이터3");
-        timeLineService.createTimeLine("ccc",reqdto);
+        reqdto.setContent("ccc임시테스트데이터3");
+        loginuser = userRepository.findByUsername("ccc").orElseThrow(
+                () -> new IllegalArgumentException("유저못찾음")
+        );
+        timeLineService.createTimeLine(loginuser,reqdto);
 
         reqdto.setContent("aaa작성,임시테스트");
-        timeLineService.createTimeLine("aaa",reqdto);
+        loginuser = userRepository.findByUsername("aaa").orElseThrow(
+                () -> new IllegalArgumentException("유저못찾음")
+        );
+        timeLineService.createTimeLine(loginuser,reqdto);
 
         reqdto.setContent("bbb작성,임시테스트");
-        timeLineService.createTimeLine("bbb",reqdto);
+        loginuser = userRepository.findByUsername("bbb").orElseThrow(
+                () -> new IllegalArgumentException("유저못찾음")
+        );
+        timeLineService.createTimeLine(loginuser,reqdto);
 
         reqdto.setContent("ccc작성,임시테스트");
-        timeLineService.createTimeLine("ccc",reqdto);
+        loginuser = userRepository.findByUsername("ccc").orElseThrow(
+                () -> new IllegalArgumentException("유저못찾음")
+        );
+        timeLineService.createTimeLine(loginuser,reqdto);
 
-        reqdto.setContent("aaa작성,좋아요테스트용");
-        timeLineService.createTimeLine("aaa",reqdto);
+        loginuser = userRepository.findByUsername("aaa").orElseThrow(
+                () -> new IllegalArgumentException("유저못찾음")
+        );
+        timeLineService.createTimeLine(loginuser,reqdto);
 
         reqdto.setContent("bbb작성,수정,삭제 테스트용");
-        timeLineService.createTimeLine("bbb",reqdto);
+        loginuser = userRepository.findByUsername("bbb").orElseThrow(
+                () -> new IllegalArgumentException("유저못찾음")
+        );
+        timeLineService.createTimeLine(loginuser,reqdto);
     }
 
     @Transactional

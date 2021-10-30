@@ -4,6 +4,7 @@ import com.finalproject.backend.baseballmate.config.DbSetConfig;
 import com.finalproject.backend.baseballmate.responseDto.MsgResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
@@ -12,6 +13,8 @@ import java.io.IOException;
 @RestController
 public class TestController {
     private final DbSetConfig dbSetConfig;
+
+
 
     @GetMapping("/dbSet1")
     public MsgResponseDto testDB1() throws IOException {

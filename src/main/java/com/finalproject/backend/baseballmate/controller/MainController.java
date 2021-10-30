@@ -38,6 +38,7 @@ public class MainController {
     @GetMapping("/main/myteamSchedule/{myteam}")
     public List<MatchInfomation> getmyteamSchedule(@PathVariable("myteam") String myteam)
     {
+
         return matchDataService.myteamselect(myteam);
     }
 
