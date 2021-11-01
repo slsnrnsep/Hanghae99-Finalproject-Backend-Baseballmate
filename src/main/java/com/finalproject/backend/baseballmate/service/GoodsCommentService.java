@@ -18,17 +18,17 @@ public class GoodsCommentService {
     private final GoodsCommentRepository goodsCommentRepository;
     private final GoodsRepository goodsRepository;
 
-    @Transactional
+    @Transactional // loginUsered , loginedUsername
     public void createComment(User loginUser, GoodsCommentRequestDto requestDto, Long goodsid) {
 //        Goods goods = new Goods(username, requestDto);
 //        goodsRepository.save(goods);
-        String loginedUsername = loginUser.getUserid();
-        String loginUsered = loginUser.getUsername();
+        String loginUsered = loginUser.getUserid();
+        String loginedUsername = loginUser.getUsername();
         Long loginUserIndex = loginUser.getId();
         Goods goods = goodsRepository.findById(goodsid).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 아이디입니다")
         );
-        GoodsComment goodsComment = new GoodsComment(loginUsered,requestDto,goods,loginedUsername,loginUserIndex);
+        GoodsComment goodsComment = new GoodsComment(loginedUsername,requestDto,goods,loginUsered,loginUserIndex);
         goodsCommentRepository.save(goodsComment);
 
     }
