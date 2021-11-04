@@ -21,5 +21,6 @@ public class GroupDetailResponseDto {
     private double hotPercent;
     private String stadium; // 경기장 이름
     private String groupDate; // 모임 날짜
-    List<GroupComment> groupCommentList; // 모임 게시글 내의 댓글 리스트
+    List<GroupComment> groupCommentList;
+    private String filePath;// 모임 게시글 내의 댓글 리스트
 }

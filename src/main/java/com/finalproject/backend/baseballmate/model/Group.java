@@ -39,6 +39,9 @@ public class Group extends Timestamped{
     @Column
     private int peopleLimit; // 모임 최대 제한인원
 
+    @Column
+    private String filePath;
+
     // 참가 신청한 유저와 해당 모임 정보
     @JsonManagedReference
     @OneToMany(mappedBy = "appliedUser")
@@ -84,6 +87,7 @@ public class Group extends Timestamped{
         this.groupDate = requestDto.getGroupDate();
         this.createdUser = loginedUser;
         this.createdUsername = loginedUser.getUsername();
+        this.filePath = requestDto.getFilePath();
     }
 
     // 모임글 수정 메소드

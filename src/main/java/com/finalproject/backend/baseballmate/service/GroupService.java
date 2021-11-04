@@ -103,10 +103,11 @@ public class GroupService {
         double hotPercent = group.getHotPercent();
         String stadium = group.getStadium();
         String groupDate = group.getGroupDate();
+        String filePath = group.getFilePath();
         List<GroupComment> groupcommentList = group.getGroupCommentList();
 
         GroupDetailResponseDto groupdetailResponseDto =
-                new GroupDetailResponseDto(groupId, createdUserName, title, content, peopleLimit, nowAppliedNum, canApplyNum, hotPercent, stadium , groupDate, groupcommentList);
+                new GroupDetailResponseDto(groupId, createdUserName, title, content, peopleLimit, nowAppliedNum, canApplyNum, hotPercent, stadium , groupDate,groupcommentList,filePath);
 
         return groupdetailResponseDto;
     }

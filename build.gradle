@@ -27,7 +27,7 @@ dependencies {
     runtimeOnly 'mysql:mysql-connector-java'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.12.3'
     //swagger
     implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
     implementation group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
@@ -39,6 +39,7 @@ dependencies {
     runtimeOnly 'org.springframework.boot:spring-boot-devtools'
     implementation 'io.jsonwebtoken:jjwt:0.9.1'
     implementation 'org.json:json:20210307'
+
 
 }
 

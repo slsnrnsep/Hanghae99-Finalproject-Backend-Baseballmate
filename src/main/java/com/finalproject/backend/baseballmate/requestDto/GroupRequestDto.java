@@ -9,5 +9,7 @@ public class GroupRequestDto {
     private String title;
     private String content;
     private int peopleLimit;
-    private String groupDate; // 타입 바뀔수도 있음
+    private String groupDate;
+    private String filePath;
+    // 타입 바뀔수도 있음
 }
