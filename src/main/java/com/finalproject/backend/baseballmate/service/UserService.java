@@ -9,6 +9,7 @@ import com.finalproject.backend.baseballmate.requestDto.UserRequestDto;
 import com.finalproject.backend.baseballmate.responseDto.UserResponseDto;
 import com.finalproject.backend.baseballmate.security.JwtTokenProvider;
 import com.finalproject.backend.baseballmate.security.UserDetailsImpl;
+import com.finalproject.backend.baseballmate.utils.StringUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,6 +20,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
@@ -69,6 +71,26 @@ public class UserService {
         if (found != null) {
             throw new IllegalArgumentException("중복된 이메일이 존재합니다.");
         }
+    }
+
+    // user정보 부분 변경
+    @Transactional
+    public UserResponseDto partialUpdate(long id, final UserRequestDto requestDto) {
+        Optional<User> oUser = userRepository.findById(id);
+//        if (!oUser.isPresent())
+//            return 0;
+        User user = oUser.get();
+        if (StringUtils.isNotBlank(requestDto.getUsername()))
+            user.setUsername(requestDto.getUsername());
+        if (StringUtils.isNotBlank(requestDto.getPassword()))
+            user.setPassword(requestDto.getPassword());
+        if (StringUtils.isNotBlank(requestDto.getMyteam()))
+            user.setMyselectTeam(requestDto.getMyteam());
+        User updatedUser = userRepository.save(user);
+
+        UserResponseDto userResponseDto =
+                new UserResponseDto(id, updatedUser.getUserid(), updatedUser.getUsername(), updatedUser.getPassword(), updatedUser.getMyselectTeam());
+        return userResponseDto;
     }
 
     public HeaderDto kakaoLogin(String authorizedCode) {

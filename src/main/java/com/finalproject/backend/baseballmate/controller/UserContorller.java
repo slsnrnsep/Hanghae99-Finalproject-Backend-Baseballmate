@@ -21,7 +21,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
@@ -51,6 +53,21 @@ public class UserContorller {
         LoginResponseDto loginResponseDto = new LoginResponseDto(jwtTokenProvider.createToken(user.getUserid(), user.getId(),user.getUsername()),user.getMyselectTeam());
         return loginResponseDto;
     }
+
+    // 유저의 구단정보 보내기
+    // 일단 myteam 정보만 보내주고 이후에 userresponsedto로 모든 정보를 보내줄 수 있음
+    @PatchMapping("/users/{id}")
+    public Map<String, String> updateUserInfo(@PathVariable Long id, @RequestBody UserRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        if (userDetails == null) {
+            throw new IllegalArgumentException("로그인 후에 이용하실 수 있습니다.");
+        }
+
+        UserResponseDto responseDto = userService.partialUpdate(id, requestDto);
+        Map<String, String> myTeamResponse = new HashMap<>();
+        myTeamResponse.put("myteam", responseDto.getMyteam());
+        return myTeamResponse;
+    }
+
 
     @PostMapping("/user/myteam")
     public MyteamRequestDto selectMyteam(@RequestBody MyteamRequestDto myteam, @AuthenticationPrincipal UserDetailsImpl userDetails)
