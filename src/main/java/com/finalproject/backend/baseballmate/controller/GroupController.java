@@ -41,11 +41,12 @@ public class GroupController {
     @PostMapping("/page/group")
     public MsgResponseDto createGroup(
             @RequestParam(value = "file",required = false) MultipartFile files,
-            GroupRequestDto requestDto) {
-        // 로그인한 유저의 유저네임 가져오기
-//        if (userDetails == null) {
-//            throw new IllegalArgumentException("로그인 한 이용자만 모임을 생성할 수 있습니다.");
-//        }
+            GroupRequestDto requestDto,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+//         로그인한 유저의 유저네임 가져오기
+        if (userDetails == null) {
+            throw new IllegalArgumentException("로그인 한 이용자만 모임을 생성할 수 있습니다.");
+        }
         try {
             String filename = "basic.jpg";
             if (files != null) {
@@ -67,11 +68,11 @@ public class GroupController {
                 files.transferTo(new File(filePath));
             }
             requestDto.setFilePath(filename);
-//            User loginedUser = userDetails.getUser();
-//            String loginedUsername = userDetails.getUser().getUsername();
-            User loginedUser = userRepository.findByUsername("aaa").orElseThrow(
-                    ()-> new IllegalArgumentException("유저찾을수 없슴")
-            );
+            User loginedUser = userDetails.getUser();
+            String loginedUsername = userDetails.getUser().getUsername();
+//            User loginedUser = userRepository.findByUsername("aaa").orElseThrow(
+//                    ()-> new IllegalArgumentException("유저찾을수 없슴")
+//            );
             groupService.createGroup(requestDto, loginedUser);
             MsgResponseDto msgResponseDto = new MsgResponseDto("success", "모임 등록 성공");
             return msgResponseDto;

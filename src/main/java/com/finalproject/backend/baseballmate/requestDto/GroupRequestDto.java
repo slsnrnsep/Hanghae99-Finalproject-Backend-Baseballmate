@@ -11,5 +11,6 @@ public class GroupRequestDto {
     private int peopleLimit;
     private String groupDate;
     private String filePath;
+    private String seleceTeam;
     // 타입 바뀔수도 있음
 }

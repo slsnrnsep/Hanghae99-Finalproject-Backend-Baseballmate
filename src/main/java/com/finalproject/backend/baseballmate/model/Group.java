@@ -63,6 +63,8 @@ public class Group extends Timestamped{
     @Column
     private String groupDate; // 모임 날짜
 
+    @Column
+    private String selectTeam;
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "userIndex")
 //    private User userIndex; // user테이블의 id값
@@ -88,6 +90,7 @@ public class Group extends Timestamped{
         this.createdUser = loginedUser;
         this.createdUsername = loginedUser.getUsername();
         this.filePath = requestDto.getFilePath();
+        this.selectTeam = requestDto.getSeleceTeam();
     }
 
     // 모임글 수정 메소드
