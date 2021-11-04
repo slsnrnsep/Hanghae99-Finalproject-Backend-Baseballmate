@@ -64,7 +64,7 @@ public class GroupController {
                         e.getStackTrace();
                     }
                 }
-                String filePath = savePath + "/" + filename;// 이경로는 우분투랑 윈도우랑 다르니까 주의해야댐 우분투 : / 윈도우 \\ 인것같음.
+                String filePath = savePath + "\\" + filename;// 이경로는 우분투랑 윈도우랑 다르니까 주의해야댐 우분투 : / 윈도우 \\ 인것같음.
                 files.transferTo(new File(filePath));
             }
             requestDto.setFilePath(filename);
@@ -85,11 +85,11 @@ public class GroupController {
 
     // 모임페이지 상세 조회
     @GetMapping("/page/group/detail/{groupId}")
-    public GroupDetailResponseDto getGroupDetails(@PathVariable("groupId") Long groupId,@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        if (userDetails == null) {
-            throw new IllegalArgumentException("로그인 한 사용자만 모임을 조회할 수 있습니다.");
-        }
-        String loginedUserid = userDetails.getUser().getUserid();
+    public GroupDetailResponseDto getGroupDetails(@PathVariable("groupId") Long groupId) {
+//        if (userDetails == null) {
+//            throw new IllegalArgumentException("로그인 한 사용자만 모임을 조회할 수 있습니다.");
+//        }
+//        String loginedUserid = userDetails.getUser().getUserid();
         GroupDetailResponseDto detailResponseDto = groupService.getGroupDetail(groupId);
         return detailResponseDto;
     }
