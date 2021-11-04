@@ -1,6 +1,8 @@
 package com.finalproject.backend.baseballmate.repository;
 
 import com.finalproject.backend.baseballmate.model.Group;
+import com.finalproject.backend.baseballmate.responseDto.AllGroupResponseDto;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,4 +13,6 @@ public interface GroupRepository extends JpaRepository<Group, Long> {
     List<Group> findAllByOrderByCreatedAtDesc();
     Group findByGroupId(Long groupId);
     List<Group> findTop5ByOrderByHotPercentDesc();
+    // 페이지네이션, 모임 생성 시 선택한 구단
+    List<AllGroupResponseDto> findAllBySelectTeamOrderByCreatedAtDesc(String type, Pageable pageable);
 }

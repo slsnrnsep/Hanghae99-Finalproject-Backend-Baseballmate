@@ -67,6 +67,9 @@ public class Group extends Timestamped{
 //    @Column
 //    private String baseballTeam; // 구단 이름
 
+    @Column
+    private String selectTeam; //모임 생성시 선택한 구단
+
     @JsonManagedReference
     @OneToMany(mappedBy = "group",cascade = CascadeType.ALL)
     private List<GroupComment> groupCommentList = new ArrayList<>();
@@ -84,6 +87,7 @@ public class Group extends Timestamped{
         this.groupDate = requestDto.getGroupDate();
         this.createdUser = loginedUser;
         this.createdUsername = loginedUser.getUsername();
+        this.selectTeam = requestDto.getSelectTeam();
     }
 
     // 모임글 수정 메소드

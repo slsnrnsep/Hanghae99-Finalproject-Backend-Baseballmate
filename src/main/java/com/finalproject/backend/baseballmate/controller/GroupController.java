@@ -10,6 +10,7 @@ import com.finalproject.backend.baseballmate.responseDto.MsgResponseDto;
 import com.finalproject.backend.baseballmate.security.UserDetailsImpl;
 import com.finalproject.backend.baseballmate.service.GroupService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,6 +28,19 @@ public class GroupController {
     public List<AllGroupResponseDto> getAllGroups() {
         List<AllGroupResponseDto> groupList = groupService.getAllGroups();
         return groupList;
+    }
+
+    // 구단별 모임 조회
+    @GetMapping("/groups/type/page")
+    public Page<AllGroupResponseDto> showGroupsByTeam (
+            @RequestParam("page") int page,
+            @RequestParam("size") int size,
+            @RequestParam("sortBy") String sortBy,
+            @RequestParam("isAsc") boolean isAsc,
+            @RequestParam("type") String type
+    ) {
+        page = page -1;
+        return
     }
 
     // 모임 생성

@@ -14,9 +14,13 @@ import com.finalproject.backend.baseballmate.responseDto.HotGroupResponseDto;
 import com.finalproject.backend.baseballmate.responseDto.MsgResponseDto;
 import com.finalproject.backend.baseballmate.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.awt.print.Pageable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,6 +53,14 @@ public class GroupService {
             allGroupResponseDtoList.add(allGroupResponseDto);
         }
         return allGroupResponseDtoList;
+    }
+
+    // 구단별 모임 조회(필터링)
+    public Page<AllGroupResponseDto> showGroupsByTeam(int page, int size, String sortBy, Boolean isAsc, String type) {
+        Sort sort = Sort.by(sortBy);
+        Pageable pageable = PageRequest.of(page,size,sort);
+
+        return
     }
 
     // 핫한 모임 조회(hotPercent순) - 메인 페이지용
