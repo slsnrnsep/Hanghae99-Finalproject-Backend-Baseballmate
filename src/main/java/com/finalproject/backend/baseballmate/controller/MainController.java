@@ -13,10 +13,18 @@ import com.finalproject.backend.baseballmate.service.GroupService;
 import com.finalproject.backend.baseballmate.service.MatchDataService;
 import com.finalproject.backend.baseballmate.service.TimeLineService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.ParseException;
 import java.util.List;
 
@@ -89,4 +97,23 @@ public class MainController {
         return nowGoods;
     }
 
+    @GetMapping("/groups/{file}")
+    public ResponseEntity<Resource> display(
+            @PathVariable("file") String file
+    ) {
+        String path = System.getProperty("user.dir")+"\\images\\"+file; // 이경로는 우분투랑 윈도우랑 다르니까 주의해야댐 우분투 : / 윈도우 \\ 인것같음.
+        String folder = "";
+        org.springframework.core.io.Resource resource = new FileSystemResource(path);
+        if (!resource.exists())
+            return new ResponseEntity<org.springframework.core.io.Resource>(HttpStatus.NOT_FOUND);
+        HttpHeaders header = new HttpHeaders();
+        Path filePath = null;
+        try {
+            filePath = Paths.get(path);
+            header.add("Content-Type", Files.probeContentType(filePath));
+        } catch (IOException e) {
+            return null;
+        }
+        return new ResponseEntity<Resource>(resource, header, HttpStatus.OK);
+    }
 }

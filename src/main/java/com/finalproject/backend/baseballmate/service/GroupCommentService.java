@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -40,12 +41,12 @@ public class GroupCommentService {
    }
 
    @Transactional
-    public void updateGroupComment(Long groupid,Long commentid, GroupCommentRequestDto requestDto, UserDetailsImpl userDetails) {
-        Optional<Group> optionalGroup = groupRepository.findById(groupid);
+    public void updateGroupComment(Long groupid, Long commentid, GroupCommentRequestDto requestDto, UserDetailsImpl userDetails) {
+        Group group = groupRepository.findByGroupId(groupid);
         String loginedUserId = userDetails.getUser().getUserid();
         String commentUserId = "";
 
-        GroupComment groupComment = optionalGroup
+        GroupComment groupComment = groupCommentRepository.findByGroupCommentId(commentid);
         if(groupComment!=null)
         {
             commentUserId = groupComment.getCommentUserId();
