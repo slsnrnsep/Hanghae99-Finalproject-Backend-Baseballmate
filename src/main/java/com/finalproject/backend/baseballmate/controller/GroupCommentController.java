@@ -21,18 +21,18 @@ public class GroupCommentController {
     private final GroupCommentRepository groupCommentRepository;
 
     // 모임 게시글 내 댓글 수정하기
-    @PutMapping("/page/group/detail/{commentId}/comment")
-    public MsgResponseDto updateGroupComment(@PathVariable("commentId") Long id,@RequestBody GroupCommentRequestDto requestDto,@AuthenticationPrincipal UserDetailsImpl userDetails)
+    @PutMapping("/groups/{groupId}/comment/{commentId}")
+    public MsgResponseDto updateGroupComment(@PathVariable("groupId") Long groupid,@PathVariable("commentId") Long commentid,@RequestBody GroupCommentRequestDto requestDto,@AuthenticationPrincipal UserDetailsImpl userDetails)
     {
         if(userDetails == null) {
             throw new IllegalArgumentException("로그인 하신 후 이용해주세요.");
         }
-        commentService.updateGroupComment(id,requestDto,userDetails);
+        commentService.updateGroupComment(groupid, commentid, requestDto, userDetails);
         MsgResponseDto msgResponseDto = new MsgResponseDto("success", "수정 완료");
         return msgResponseDto;
     }
     // 모임 게시글 내 댓글 삭제하기
-    @DeleteMapping("/page/group/detail/{commentId}/comment")
+    @DeleteMapping("/groups/{groupId}/comment/{commentId}")
     public MsgResponseDto delteGroupComment(@PathVariable("commentId") Long id,@AuthenticationPrincipal UserDetailsImpl userDetails)
     {
         if(userDetails == null) {
@@ -44,7 +44,7 @@ public class GroupCommentController {
     }
 
     // 모임 게시글 내 댓글 생성하기
-    @PostMapping("/page/group/detail/{groupId}/comment")
+    @PostMapping("/groups/{groupId}/comment")
     public MsgResponseDto createGroupComment(@RequestBody GroupCommentRequestDto commentRequestDto, @PathVariable("groupId") Long groupId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         if(userDetails == null) {
             throw new IllegalArgumentException("로그인 하신 후 이용해주세요.");

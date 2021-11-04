@@ -23,14 +23,14 @@ public class GroupController {
     private final GroupRepository groupRepository;
 
     // 모임페이지 전체 조회 :
-    @GetMapping("/page/group")
+    @GetMapping("/groups")
     public List<AllGroupResponseDto> getAllGroups() {
         List<AllGroupResponseDto> groupList = groupService.getAllGroups();
         return groupList;
     }
 
     // 모임 생성
-    @PostMapping("/page/group")
+    @PostMapping("/groups")
     public MsgResponseDto createGroup(@RequestBody GroupRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         // 로그인한 유저의 유저네임 가져오기
         if (userDetails == null) {
@@ -45,7 +45,7 @@ public class GroupController {
     }
 
     // 모임페이지 상세 조회
-    @GetMapping("/page/group/detail/{groupId}")
+    @GetMapping("/groups/{groupId}")
     public GroupDetailResponseDto getGroupDetails(@PathVariable("groupId") Long groupId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         if (userDetails == null) {
             throw new IllegalArgumentException("로그인 한 사용자만 모임을 조회할 수 있습니다.");
@@ -56,7 +56,7 @@ public class GroupController {
     }
 
     // 모임 참여신청하기
-    @PostMapping("/page/group/detail/apply/{groupId}")
+    @PostMapping("/groups/{groupId}/apply")
     public MsgResponseDto applyGroup(@PathVariable Long groupId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         if (userDetails == null) {
             throw new IllegalArgumentException("로그인 한 사용자만 신청할 수 있습니다.");
@@ -69,7 +69,7 @@ public class GroupController {
     }
 
     // 모임 수정하기 - 모임을 생성한 사람만 수정할 수 있게
-    @PutMapping("/page/group/detail/{groupId}")
+    @PutMapping("/groups/{groupId}")
     public MsgResponseDto updateGroup(@PathVariable Long groupId, @RequestBody GroupRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         if(userDetails == null) {
             throw new IllegalArgumentException("로그인 하신 후 이용해주세요.");
@@ -80,7 +80,7 @@ public class GroupController {
     }
 
     // 모임 삭제하기 - 모임을 생성한 사람만 삭제할 수 있게
-    @DeleteMapping("/page/group/detail/{groupId}")
+    @DeleteMapping("/groups/{groupId}")
     public MsgResponseDto deleteGroup(@PathVariable Long groupId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         if(userDetails == null) {
             throw new IllegalArgumentException("로그인 하신 후 이용해주세요.");

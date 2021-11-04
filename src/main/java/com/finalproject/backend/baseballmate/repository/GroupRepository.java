@@ -10,5 +10,5 @@ import java.util.List;
 public interface GroupRepository extends JpaRepository<Group, Long> {
     List<Group> findAllByOrderByCreatedAtDesc();
     Group findByGroupId(Long groupId);
-    List<Group> findAllByOrderByHotPercentDesc();
+    List<Group> findTop5ByOrderByHotPercentDesc();
 }
