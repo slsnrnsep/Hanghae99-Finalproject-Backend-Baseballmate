@@ -56,7 +56,12 @@ public class MainController {
 //        matchDataService.updateKBODatas(matchInfomationList);
         return matchInfomationList;
     }
-
+    @GetMapping(path = "/kbodatas",params = "date")
+    public List<MatchInfomation> kbodata(@RequestParam("date") String number){
+        List<MatchInfomation> matchInfomationList = matchDataService.getdateKBODatas(number);
+//        matchDataService.updateKBODatas(matchInfomationList);
+        return matchInfomationList;
+    }
     //내가 응원하는 구단의 가장 최근 경기 일정 조회
     @GetMapping(path="/kbodatas",params = "team")
     public List<MatchInfomation> getmyteamSchedule(@RequestParam("team") String myteam)

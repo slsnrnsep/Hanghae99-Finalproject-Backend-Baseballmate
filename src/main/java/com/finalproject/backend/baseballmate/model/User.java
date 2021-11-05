@@ -37,12 +37,12 @@ public class User {
 
     // 참여 신청한 모임
     @JsonManagedReference
-    @OneToMany(mappedBy = "appliedGroup",cascade = CascadeType.ALL) // groupapplication을 역참조하여 내가 참여 신청한 모임들 리스트 가져오기
+    @OneToMany(mappedBy = "appliedGroup") // groupapplication을 역참조하여 내가 참여 신청한 모임들 리스트 가져오기
     private List<GroupApplication> appliedGroup = new ArrayList<>();
     // 최종 타입이 groupapplication이 아니고 group이어야 할텐데 함수를 써서 가져오기
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "createdUser",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "createdUser")
     private List<Group> createdGroupList = new ArrayList<>();
 
     @Column(nullable = true)
@@ -57,7 +57,7 @@ public class User {
 //    @Column(nullable = true, name = "NICKNAME")
 //    private String nickname;
 
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user")
     private final List<TimeLineLikes> timeLineLikes = new ArrayList<>();
 
     public void addLikes(TimeLineLikes likes) {this.timeLineLikes.add(likes);
@@ -68,7 +68,7 @@ public class User {
     }
 
     // goods 좋아요 생성자
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user")
     private final List<GoodsLikes> goodsLikes = new ArrayList<>();
 
 //    public void addGoodsLikes(GoodsLikes likes){

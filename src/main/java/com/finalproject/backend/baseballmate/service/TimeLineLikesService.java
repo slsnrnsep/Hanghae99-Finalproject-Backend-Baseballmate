@@ -35,7 +35,7 @@ public class TimeLineLikesService {
         );
 
         if (requestDto.getIsLiked().equals("true")) {
-            TimeLineLikes likes = timeLineLikesRepository.findByTimeLineIdAndUserId(timeLine.getId(), user.getId()).orElseThrow(
+            TimeLineLikes likes = timeLineLikesRepository.findByidAndUserId(timeLine.getId(), user.getId()).orElseThrow(
                     () -> new IllegalArgumentException("해당 게시물의 좋아요 이력이 없습니다.")
             );
 
@@ -44,7 +44,7 @@ public class TimeLineLikesService {
             timeLineLikesRepository.delete(likes);
             return false;
         } else {
-            if(timeLineLikesRepository.findByTimeLineIdAndUserId(timeLine.getId(), user.getId()).isPresent())
+            if(timeLineLikesRepository.findByidAndUserId(timeLine.getId(), user.getId()).isPresent())
             {
                 return true;
             }

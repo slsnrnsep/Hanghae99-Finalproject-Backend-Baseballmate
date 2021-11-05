@@ -17,7 +17,7 @@ public class TimeLine extends Timestamped
     @Column()
     private Long id; // 게시글 고유 번호
 
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "createdUser")
     private User createdUser;// 게시글 작성자의 아이디, 중복 허용X
 
@@ -27,7 +27,7 @@ public class TimeLine extends Timestamped
     @Column(nullable = false)
     private String content; // 게시글 내용
 
-    @OneToMany(mappedBy = "timeLine" ,cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "timeLine")
     private List<TimeLineLikes> likesList;
 
     @Column(columnDefinition = "integer default 0")
