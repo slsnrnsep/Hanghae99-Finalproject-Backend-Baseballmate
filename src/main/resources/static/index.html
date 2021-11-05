@@ -20,7 +20,7 @@
             let postid = $('#asdasd').val()
             $.ajax({
                 type: 'GET',
-                url: `/page/group/detail/${postid}`,
+                url: `/groups/${postid}`,
                 success: function (response) {
                     let imgpath = response.filePath
                     let title = response.title
@@ -38,7 +38,7 @@
         function getonepost(imgpath,title,content,peoplelimit,groupdate) {
             // link, image, title, lprice, myprice 변수 활용하기
             $('#mycard').empty();
-            let tempimsi = `<img class="card-img-top" src="/groups/${imgpath}" alt="Card image cap">
+            let tempimsi = `<img class="card-img-top" src="/groups/images/${imgpath}" alt="Card image cap">
                         <div class="card-body">
                             <h5 class="card-title">${title}</h5>
                             <p class="card-text">${content}</p>
@@ -71,7 +71,7 @@
             $('#timeline-box').empty();
             $.ajax({
                 type: 'GET',
-                url: '/page/timeLine',
+                url: '/timelines',
                 success: function (response) {
                     for (let i = 0; i < response.length; i++) {
                         let post = response[i];
@@ -86,7 +86,7 @@
             $('#group-box').empty();
             $.ajax({
                 type: 'GET',
-                url: '/page/group',
+                url: '/groups',
                 success: function (response) {
                     // response = response.allGroup
                     for (let i = 0; i < response.length; i++) {
@@ -104,7 +104,7 @@
             $('#goods-box').empty();
             $.ajax({
                 type: 'GET',
-                url: '/page/goods',
+                url: '/goods',
                 success: function (response) {
                     for (let i = 0; i < response.length; i++) {
                         let post = response[i];
@@ -120,7 +120,7 @@
             console.log(id)
             $.ajax({
                 type: 'POST',
-                url: `/page/timeLine/${id}/like`,
+                url: `/timelines/${id}/like`,
                 contentType: "application/json",
                 data: JSON.stringify({"isLiked" : state}),
                 success: function (response) {
@@ -133,7 +133,7 @@
             console.log(id)
             $.ajax({
                 type: 'POST',
-                url: `/page/group/${id}/like`,
+                url: `/groups/${id}/like`,
                 contentType: "application/json",
                 data: JSON.stringify({"isLiked" : state}),
                 success: function (response) {
@@ -146,7 +146,7 @@
             console.log(id)
             $.ajax({
                 type: 'POST',
-                url: `/page/goods/${id}/like`,
+                url: `/goods/${id}/like`,
                 contentType: "application/json",
                 data: JSON.stringify({"isLiked" : state}),
                 success: function (response) {
@@ -157,7 +157,7 @@
         function gettimelinehtml(post) {
             // link, image, title, lprice, myprice 변수 활용하기
             return `<tr>
-                <td>${post.id}</td>
+                <td>${post.timelineId}</td>
                 <td>${post.userName}</td>
                 <td>${post.content}</td>
                 <td>${post.dayBefore}</td>
@@ -197,7 +197,7 @@
         function getgoodshtml(post) {
             // link, image, title, lprice, myprice 변수 활용하기
             return `<tr>
-                <td>${post.id}</td>
+                <td>${post.goodsId}</td>
                 <td>${post.userName}</td>
                 <td>${post.goodsName}</td>
                 <td>${post.dayBefore}</td>
