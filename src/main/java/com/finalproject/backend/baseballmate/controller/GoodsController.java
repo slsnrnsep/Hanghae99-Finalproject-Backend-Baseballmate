@@ -19,11 +19,12 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 public class GoodsController {
+
     private final GoodsRepository goodsRepository;
     private final GoodsService goodsService;
 
     // 굿즈생성
-    @PostMapping("/page/goods")
+    @PostMapping("/goods")
     public GoodsResponseDto postGoods(@RequestBody GoodsRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
         if(userDetails == null){
             throw new IllegalArgumentException("로그인 한 사용자만 등록 가능합니다");
@@ -41,7 +42,7 @@ public class GoodsController {
     }
 
     // 굿즈 전체조회
-    @GetMapping("/page/goods")
+    @GetMapping("/goods")
     public List<AllGoodsResponseDto> getGoods() throws ParseException {
         List<AllGoodsResponseDto> allGoods = goodsService.getGoods();
         return allGoods;
@@ -80,13 +81,5 @@ public class GoodsController {
             return goodsResponseDto;
 
 
-//        try {
-//            goodsRepository.deleteById(id);
-//            GoodsResponseDto goodsResponseDto = new GoodsResponseDto("success","삭제완료");
-//            return goodsResponseDto;
-//        } catch (Exception e) {
-//            GoodsResponseDto goodsResponseDto = new GoodsResponseDto("","에러발생");
-//            return goodsResponseDto;
-//        }
     }
 }

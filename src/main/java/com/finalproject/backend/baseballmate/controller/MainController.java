@@ -97,7 +97,7 @@ public class MainController {
         return nowGoods;
     }
 
-    @GetMapping("/groups/image/{file}")
+    @GetMapping("/groups")
     public ResponseEntity<Resource> display(
             @PathVariable("file") String file
     ) {
