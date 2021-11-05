@@ -23,7 +23,7 @@ public class Group extends Timestamped{
     private Long groupId; // 모임 고유번호, pk
 
     // 유저 아이디값이 들어감
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name = "createdUser")
     private User createdUser;
 
@@ -44,7 +44,7 @@ public class Group extends Timestamped{
 
     // 참가 신청한 유저와 해당 모임 정보
     @JsonManagedReference
-    @OneToMany(mappedBy = "appliedUser")
+    @OneToMany(mappedBy = "appliedUser",cascade = CascadeType.ALL)
     private List<GroupApplication> groupApplications = new ArrayList<>();
     // groupapplication에서 유저 정보 빼오기
 

@@ -12,6 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 public class LoginCheckResponseDto {
+    private Long useridx;
     private String username;
     private String myteam;
     private List<Long> myTimeLineLikesList;

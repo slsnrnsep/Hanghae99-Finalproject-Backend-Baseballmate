@@ -31,7 +31,7 @@ public class GroupComment {
     private String commentUserId;
 
     @JsonBackReference
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name = "groupId")
     private Group group;
 

@@ -14,8 +14,6 @@ import java.io.IOException;
 public class TestController {
     private final DbSetConfig dbSetConfig;
 
-
-
     @GetMapping("/dbSet1")
     public MsgResponseDto testDB1() throws IOException {
         dbSetConfig.dbset1();

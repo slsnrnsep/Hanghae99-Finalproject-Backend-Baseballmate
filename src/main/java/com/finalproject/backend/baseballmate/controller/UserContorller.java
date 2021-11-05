@@ -10,6 +10,7 @@ import com.finalproject.backend.baseballmate.requestDto.HeaderDto;
 import com.finalproject.backend.baseballmate.requestDto.MyteamRequestDto;
 import com.finalproject.backend.baseballmate.requestDto.UserRequestDto;
 import com.finalproject.backend.baseballmate.responseDto.LoginCheckResponseDto;
+import com.finalproject.backend.baseballmate.responseDto.MsgResponseDto;
 import com.finalproject.backend.baseballmate.responseDto.UserResponseDto;
 import com.finalproject.backend.baseballmate.security.JwtTokenProvider;
 import com.finalproject.backend.baseballmate.security.UserDetailsImpl;
@@ -28,6 +29,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 @RestController
 public class UserContorller {
+
     private final UserService userService;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -36,21 +38,34 @@ public class UserContorller {
     private final GoodsLikesRepository goodsLikesRepository;
 
     @PostMapping("/user/signup")
-    public void registerUser(@RequestBody UserRequestDto userRequestDto){
-        userService.passwordCheck(userRequestDto.getPassword());
-//        userService.UsernameChk(userRequestDto.getUsername());
-        userService.useridCheck(userRequestDto.getUserid());
-        userService.registerUser(userRequestDto);
-
+    public MsgResponseDto registerUser(@RequestBody UserRequestDto userRequestDto)
+    {
+        try
+        {
+            userService.passwordCheck(userRequestDto.getPassword());
+            userService.useridCheck(userRequestDto.getUserid());
+            userService.registerUser(userRequestDto);
+            MsgResponseDto msgResponseDto = new MsgResponseDto("Success","회원가입이 완료되었습니다.");
+            return msgResponseDto;
+        }
+        catch (Exception e)
+        {
+            MsgResponseDto msgResponseDto = new MsgResponseDto("Fail","중복된 이메일이 존재합니다.");
+            return msgResponseDto;
+        }
     }
 
     @PostMapping("/user/login")
-    public LoginResponseDto login(@RequestBody UserRequestDto userRequestDto) {
+    public LoginResponseDto login(@RequestBody UserRequestDto userRequestDto)
+    {
         User user = userRepository.findByUserid(userRequestDto.getUserid())
                 .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 유저입니다."));
-        if (!passwordEncoder.matches(userRequestDto.getPassword(), user.getPassword())) {
+
+        if (!passwordEncoder.matches(userRequestDto.getPassword(), user.getPassword()))
+        {
             throw new IllegalArgumentException("잘못된 비밀번호입니다.");
         }
+
         LoginResponseDto loginResponseDto = new LoginResponseDto(jwtTokenProvider.createToken(user.getUserid(), user.getId(),user.getUsername()),user.getMyselectTeam());
         return loginResponseDto;
     }
@@ -58,8 +73,13 @@ public class UserContorller {
     // 유저의 구단정보 보내기
     // 일단 myteam 정보만 보내주고 이후에 userresponsedto로 모든 정보를 보내줄 수 있음
     @PatchMapping("/users/{id}")
-    public Map<String, String> updateUserInfo(@PathVariable Long id, @RequestBody UserRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        if (userDetails == null) {
+    public Map<String, String> updateUserInfo(
+            @PathVariable Long id,
+            @RequestBody UserRequestDto requestDto,
+            @AuthenticationPrincipal UserDetailsImpl userDetails)
+    {
+        if (userDetails == null)
+        {
             throw new IllegalArgumentException("로그인 후에 이용하실 수 있습니다.");
         }
 
@@ -71,7 +91,9 @@ public class UserContorller {
 
 
     @PostMapping("/user/myteam")
-    public MyteamRequestDto selectMyteam(@RequestBody MyteamRequestDto myteam, @AuthenticationPrincipal UserDetailsImpl userDetails)
+    public MyteamRequestDto selectMyteam(
+            @RequestBody MyteamRequestDto myteam,
+            @AuthenticationPrincipal UserDetailsImpl userDetails)
     {
         if(userDetails == null)
         {
@@ -101,23 +123,26 @@ public class UserContorller {
         {
             throw new IllegalArgumentException("로그인 정보를 찾을 수 없습니다");
         }
+
         User user = userRepository.findByUsername(userDetails.getUser().getUsername())
                 .orElseThrow(()-> new IllegalArgumentException("로그인 유저를 찾을 수 없습니다."));
 
         //프론트엔드 진식님 요청사항
         List<TimeLineLikes> TimeLineLikesList=timeLineLikesRepository.findAllByUserId(user.getId());
         List<Long> myTimeLineLikesList = new ArrayList<>();
-        for(int i=0; i<TimeLineLikesList.size();i++) {
-            myTimeLineLikesList.add(TimeLineLikesList.get(i).getId());
+        for(int i=0; i<TimeLineLikesList.size();i++)
+        {
+            myTimeLineLikesList.add(TimeLineLikesList.get(i).getTimeLine().getId());
         }
 
         List<GoodsLikes> GoodsLikesList = goodsLikesRepository.findAllByUserId(user.getId());
         List<Long> myGoodsLikesList = new ArrayList<>();
-        for(int i=0; i<GoodsLikesList.size();i++) {
-            myGoodsLikesList.add(GoodsLikesList.get(i).getId());
+        for(int i=0; i<GoodsLikesList.size();i++)
+        {
+            myGoodsLikesList.add(GoodsLikesList.get(i).getGoods().getId());
         }
 
-        LoginCheckResponseDto loginCheckResponseDto = new LoginCheckResponseDto(user.getUsername(),user.getMyselectTeam(),myTimeLineLikesList,myGoodsLikesList);
+        LoginCheckResponseDto loginCheckResponseDto = new LoginCheckResponseDto(user.getId(),user.getUsername(),user.getMyselectTeam(),myTimeLineLikesList,myGoodsLikesList);
 
         return loginCheckResponseDto;
     }
@@ -125,10 +150,9 @@ public class UserContorller {
     //카카오 로그인 api로 코드를 받아옴
     @GetMapping("/user/kakao/callback")
     @ResponseBody
-    public HeaderDto kakaoLogin(@RequestParam(value = "code", required = false) String code) {
+    public HeaderDto kakaoLogin(@RequestParam(value = "code", required = false) String code)
+    {
         return userService.kakaoLogin(code);
     }
-
-
 
 }

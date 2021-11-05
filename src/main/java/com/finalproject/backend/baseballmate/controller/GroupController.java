@@ -36,15 +36,17 @@ public class GroupController {
 
     // 모임페이지 전체 조회 :
     @GetMapping("/groups")
-    public List<AllGroupResponseDto> getAllGroups() {
+    public List<AllGroupResponseDto> getAllGroups()
+    {
         List<AllGroupResponseDto> groupList = groupService.getAllGroups();
         return groupList;
     }
 
     // 구단별 모임 조회
     @GetMapping(path="/groups",params = "team")
-    public List<AllGroupResponseDto> showGroupsByTeam (@RequestParam("team") String selectTeam) {
-        PageRequest pageRequest = PageRequest.of(0,3, Sort.by(Sort.Direction.DESC,"createdAt"));
+    public List<AllGroupResponseDto> showGroupsByTeam (@RequestParam("team") String selectTeam)
+    {
+        PageRequest pageRequest = PageRequest.of(0,10, Sort.by(Sort.Direction.DESC,"createdAt"));
         List<AllGroupResponseDto> groupResponseDtos = groupService.showGroupsByTeam(selectTeam,pageRequest);
         return groupResponseDtos;
     }
@@ -56,10 +58,12 @@ public class GroupController {
             @RequestBody GroupRequestDto requestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
 //         로그인한 유저의 유저네임 가져오기
-        if (userDetails == null) {
+        if (userDetails == null)
+        {
             throw new IllegalArgumentException("로그인 한 이용자만 모임을 생성할 수 있습니다.");
         }
-        try {
+        try
+        {
             String filename = "basic.jpg";
             if (files != null) {
                 String origFilename = files.getOriginalFilename();
@@ -82,49 +86,56 @@ public class GroupController {
             requestDto.setFilePath(filename);
             User loginedUser = userDetails.getUser();
             String loginedUsername = userDetails.getUser().getUsername();
-//            User loginedUser = userRepository.findByUsername("aaa").orElseThrow(
-//                    ()-> new IllegalArgumentException("유저찾을수 없슴")
-//            );
             groupService.createGroup(requestDto, loginedUser);
             MsgResponseDto msgResponseDto = new MsgResponseDto("success", "모임 등록 성공");
             return msgResponseDto;
         }
-        catch (Exception e) {
+
+        catch (Exception e)
+        {
             MsgResponseDto msgResponseDto = new MsgResponseDto("success", "모임 등록 실패");
             return msgResponseDto;
         }
+
     }
 
     // 모임페이지 상세 조회
     @GetMapping("/groups/{groupId}")
-    public GroupDetailResponseDto getGroupDetails(@PathVariable("groupId") Long groupId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        if (userDetails == null) {
-            throw new IllegalArgumentException("로그인 한 사용자만 모임을 조회할 수 있습니다.");
-        }
-//        String loginedUserid = userDetails.getUser().getUserid();
+    public GroupDetailResponseDto getGroupDetails(@PathVariable("groupId") Long groupId)
+    {
         GroupDetailResponseDto detailResponseDto = groupService.getGroupDetail(groupId);
         return detailResponseDto;
     }
 
     // 모임 참여신청하기
-    @PostMapping("/groups/{groupId}/apply")
-    public MsgResponseDto applyGroup(@PathVariable Long groupId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        if (userDetails == null) {
+    @PostMapping("/groups/{groupId}/applications")
+    public MsgResponseDto applyGroup(@PathVariable Long groupId, @AuthenticationPrincipal UserDetailsImpl userDetails)
+    {
+        if (userDetails == null)
+        {
             throw new IllegalArgumentException("로그인 한 사용자만 신청할 수 있습니다.");
         }
+
         User appliedUser = userDetails.getUser();
         Group appliedGroup = groupRepository.findByGroupId(groupId);
         groupService.applyGroup(appliedUser, appliedGroup);
         MsgResponseDto msgResponseDto = new MsgResponseDto("success", "모임 신청 완료");
         return msgResponseDto;
+
     }
 
     // 모임 수정하기 - 모임을 생성한 사람만 수정할 수 있게
     @PutMapping("/groups/{groupId}")
-    public MsgResponseDto updateGroup(@PathVariable Long groupId, @RequestBody GroupRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        if(userDetails == null) {
+    public MsgResponseDto updateGroup(
+            @PathVariable Long groupId,
+            @RequestBody GroupRequestDto requestDto,
+            @AuthenticationPrincipal UserDetailsImpl userDetails)
+    {
+        if(userDetails == null)
+        {
             throw new IllegalArgumentException("로그인 하신 후 이용해주세요.");
         }
+
         groupService.updateGroup(groupId, requestDto, userDetails);
         MsgResponseDto msgResponseDto = new MsgResponseDto("success", "수정 완료");
         return msgResponseDto;
@@ -132,8 +143,12 @@ public class GroupController {
 
     // 모임 삭제하기 - 모임을 생성한 사람만 삭제할 수 있게
     @DeleteMapping("/groups/{groupId}")
-    public MsgResponseDto deleteGroup(@PathVariable Long groupId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        if(userDetails == null) {
+    public MsgResponseDto deleteGroup(
+            @PathVariable Long groupId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails)
+    {
+        if(userDetails == null)
+        {
             throw new IllegalArgumentException("로그인 하신 후 이용해주세요.");
         }
         groupService.deleteGroup(groupId, userDetails);

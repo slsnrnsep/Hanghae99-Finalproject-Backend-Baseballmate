@@ -45,10 +45,11 @@ public class GroupService {
             double hotPercent = group.getHotPercent();
             String stadium = group.getStadium();
             String groupDate = group.getGroupDate();
+            String filePath = group.getFilePath();
             String selectTeam = group.getSelectTeam();
 
             AllGroupResponseDto allGroupResponseDto =
-                    new AllGroupResponseDto(groupId, title, createdUsername, peopleLimit, canApplyNum, hotPercent, stadium, groupDate, selectTeam);
+                    new AllGroupResponseDto(groupId, title, createdUsername, peopleLimit, canApplyNum, hotPercent, stadium, groupDate, filePath,selectTeam);
 
             allGroupResponseDtoList.add(allGroupResponseDto);
         }
@@ -72,10 +73,11 @@ public class GroupService {
             double hotPercent = group.getHotPercent();
             String stadium = group.getStadium();
             String groupDate = group.getGroupDate();
+            String filePath = group.getFilePath();
             String selectTeam = group.getSelectTeam();
 
             AllGroupResponseDto allGroupResponseDto =
-                    new AllGroupResponseDto(groupId, title, createdUsername, peopleLimit, canApplyNum, hotPercent, stadium, groupDate, selectTeam);
+                    new AllGroupResponseDto(groupId, title, createdUsername, peopleLimit, canApplyNum, hotPercent, stadium, groupDate, filePath, selectTeam);
 
             allGroupResponseDtoList.add(allGroupResponseDto);
         }
@@ -99,9 +101,10 @@ public class GroupService {
             double hotPercent = group.getHotPercent();
             String stadium = group.getStadium();
             String groupDate = group.getGroupDate();
-
+            String filePath =group.getFilePath();
+            String selectTeam = group.getSelectTeam();
             HotGroupResponseDto hotGroupResponseDto =
-                    new HotGroupResponseDto(groupId, createdUsername, title, peopleLimit, canApplyNum, hotPercent, stadium, groupDate);
+                    new HotGroupResponseDto(groupId, createdUsername, title, peopleLimit, canApplyNum, hotPercent, stadium, groupDate,filePath,selectTeam);
 
             hotGroupResponseDtoList.add(hotGroupResponseDto);
         }

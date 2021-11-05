@@ -17,21 +17,25 @@ public class TimeLineLikesController {
     private final TimeLineLikesService timeLineLikesService;
 
     @PostMapping("/timelines/{timeLineId}/like")
-    public String likePost(@PathVariable("timeLineId") Long timeLineId, @RequestBody LikesRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        //id postid
-        //isliked 좋아요상태
+    public String likePost(
+            @PathVariable("timeLineId") Long timeLineId,
+            @RequestBody LikesRequestDto requestDto,
+            @AuthenticationPrincipal UserDetailsImpl userDetails)
+    {
         if(userDetails == null)
         {
             throw new IllegalArgumentException("로그인 한 사용자만 사용 가능합니다");
         }
 
         boolean liked = timeLineLikesService.liked(timeLineId, requestDto, userDetails);
-        if (liked) {
+
+        if (liked)
+        {
             return "true";
-        } else {
+        }
+        else
+        {
             return "false";
         }
-
     }
-
 }

@@ -73,7 +73,6 @@ public class GoodsCommentController {
         if(userDetails == null){
             throw new IllegalArgumentException("로그인 사용자만이 삭제할 수 있습니다");
         }
-
         goodsCommentService.deleteComment(id, userDetails);
         GoodsCommentResponseDto goodsCommentResponseDto = new GoodsCommentResponseDto("success","삭제완료");
         return goodsCommentResponseDto;

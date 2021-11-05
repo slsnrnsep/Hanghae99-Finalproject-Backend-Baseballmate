@@ -41,15 +41,6 @@ public class MainController {
     private final MatchRepository matchRepository;
     private final MatchDataService matchDataService;
 
-    //내가 응원하는 구단의 가장 최근 경기 일정 조회
-    //@PathVariable("myteam") String myteam, @AuthenticationPrincipal UserDetailsImpl userDetails
-    @GetMapping("/main/myteamSchedule/{myteam}")
-    public List<MatchInfomation> getmyteamSchedule(@PathVariable("myteam") String myteam)
-    {
-
-        return matchDataService.myteamselect(myteam);
-    }
-
     //관리자만 사용가능해야합니다(강제로 KBODATA를 DB에 쌓음)
     //현재 서버가 가동될 때마다 저장하도록 기능구현 되어있음
     //하지만 테스트 조건이기에 주석처리 해둠 @PostConstruct
@@ -59,13 +50,19 @@ public class MainController {
         return "서버DB에 KBODATA가 저장되었습니다.";
     }
 
-    @GetMapping("/api/kbodata")
+    @GetMapping("/kbodatas")
     public List<MatchInfomation> kbodata(){
         List<MatchInfomation> matchInfomationList = matchDataService.getKBODatas();
 //        matchDataService.updateKBODatas(matchInfomationList);
         return matchInfomationList;
     }
 
+    //내가 응원하는 구단의 가장 최근 경기 일정 조회
+    @GetMapping(path="/kbodatas",params = "team")
+    public List<MatchInfomation> getmyteamSchedule(@RequestParam("team") String myteam)
+    {
+        return matchDataService.myteamselect(myteam);
+    }
 
     @GetMapping("/update/kbodata")
     @Scheduled(cron = "0 30 * * * *")
@@ -84,20 +81,20 @@ public class MainController {
     }
 
     //타임라인 조회(최신 등록 순)
-    @GetMapping("/main/nowTimeline/{number}")
-    public List<AllTimeLineResponseDto> getnowTimeLine(@PathVariable("number") int number) throws ParseException {
+    @GetMapping(path="/timelines",params = "count")
+    public List<AllTimeLineResponseDto> getnowTimeLine(@RequestParam("count") int number) throws ParseException {
         List<AllTimeLineResponseDto> nowTimeLine = timeLineService.getnowTimeLine(number);
         return nowTimeLine;
     }
     //굿즈 조회(최신 등록 순)
-    @GetMapping("/main/nowGoods/{number}")
-    public List<AllGoodsResponseDto> getnowGoods(@PathVariable("number") int number) throws ParseException
+    @GetMapping(path="/goods",params = "count")
+    public List<AllGoodsResponseDto> getnowGoods(@RequestParam("count") int number) throws ParseException
     {
         List<AllGoodsResponseDto> nowGoods = goodsService.getnowGoods(number);
         return nowGoods;
     }
 
-    @GetMapping("/groups")
+    @GetMapping("/groups/{file}")
     public ResponseEntity<Resource> display(
             @PathVariable("file") String file
     ) {
