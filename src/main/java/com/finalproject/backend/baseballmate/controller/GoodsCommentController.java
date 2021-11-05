@@ -22,6 +22,7 @@ public class GoodsCommentController {
         if(userDetails == null){
             throw new IllegalArgumentException("로그인 사용자만 가능한 기능입니다");
         }
+
         try {
             User loginUser = userDetails.getUser();
             goodsCommentService.createComment(loginUser, requestDto, goodsid);

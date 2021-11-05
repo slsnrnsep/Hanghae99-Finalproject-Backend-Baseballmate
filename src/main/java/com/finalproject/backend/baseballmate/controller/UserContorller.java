@@ -41,6 +41,7 @@ public class UserContorller {
 //        userService.UsernameChk(userRequestDto.getUsername());
         userService.useridCheck(userRequestDto.getUserid());
         userService.registerUser(userRequestDto);
+
     }
 
     @PostMapping("/user/login")
