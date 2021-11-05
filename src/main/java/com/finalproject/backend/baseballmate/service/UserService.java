@@ -5,6 +5,7 @@ import com.finalproject.backend.baseballmate.OAuth2.KakaoUserInfo;
 import com.finalproject.backend.baseballmate.model.User;
 import com.finalproject.backend.baseballmate.repository.UserRepository;
 import com.finalproject.backend.baseballmate.requestDto.HeaderDto;
+import com.finalproject.backend.baseballmate.requestDto.PhoneRequstDto;
 import com.finalproject.backend.baseballmate.requestDto.UserRequestDto;
 import com.finalproject.backend.baseballmate.responseDto.UserResponseDto;
 import com.finalproject.backend.baseballmate.security.JwtTokenProvider;
@@ -29,6 +30,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final KakaoOAuth2 kakaoOAuth2;
     private final JwtTokenProvider jwtTokenProvider;
+//    private final PhoneService phoneService;
     private final AuthenticationManager authenticationManager;
     private static final String Pass_Salt = "AAABnv/xRVklrnYxKZ0aHgTBcXukeZygoC";
 
@@ -120,4 +122,19 @@ public class UserService {
 
     }
 
+//    public void confirmNumChk(UserDetailsImpl userDetails, PhoneRequstDto requstDto) {
+//
+//        User user = userRepository.findByUserid(userDetails.getUser().getUserid()).orElseThrow(
+//                () -> new IllegalArgumentException("사용자 정보가 일치하지 않습니다")
+//        );
+//
+//        String ranNumChk = phoneService.sendMessage(requstDto);
+//        if(requstDto.getRanNum() == (ranNumChk)){
+//
+//            user.setRanNum(requstDto.getRanNum());
+//            userRepository.save(user);
+//        }else{
+//            throw new IllegalArgumentException("인증번호가 일치하지 않습니다");
+//        }
+//    }
 }
