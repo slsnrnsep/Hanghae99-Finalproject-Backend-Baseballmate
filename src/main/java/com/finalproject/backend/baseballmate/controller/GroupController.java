@@ -97,10 +97,10 @@ public class GroupController {
 
     // 모임페이지 상세 조회
     @GetMapping("/groups/{groupId}")
-    public GroupDetailResponseDto getGroupDetails(@PathVariable("groupId") Long groupId) {
-//        if (userDetails == null) {
-//            throw new IllegalArgumentException("로그인 한 사용자만 모임을 조회할 수 있습니다.");
-//        }
+    public GroupDetailResponseDto getGroupDetails(@PathVariable("groupId") Long groupId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        if (userDetails == null) {
+            throw new IllegalArgumentException("로그인 한 사용자만 모임을 조회할 수 있습니다.");
+        }
 //        String loginedUserid = userDetails.getUser().getUserid();
         GroupDetailResponseDto detailResponseDto = groupService.getGroupDetail(groupId);
         return detailResponseDto;

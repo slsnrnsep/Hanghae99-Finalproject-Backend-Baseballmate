@@ -16,7 +16,7 @@ public class TimeLineLikesController {
 
     private final TimeLineLikesService timeLineLikesService;
 
-    @PostMapping("/page/timeLine/{timeLineId}/like")
+    @PostMapping("/timelines/{timeLineId}/like")
     public String likePost(@PathVariable("timeLineId") Long timeLineId, @RequestBody LikesRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         //id postid
         //isliked 좋아요상태

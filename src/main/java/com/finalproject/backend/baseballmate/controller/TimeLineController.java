@@ -20,13 +20,13 @@ public class TimeLineController {
     private final TimeLineRepository timeLineRepository;
     private final TimeLineService timeLineService;
 
-    @GetMapping("/page/timeLine")
+    @GetMapping("/timelines")
     public List<AllTimeLineResponseDto> getTimeLine() throws ParseException {
         List<AllTimeLineResponseDto> allTimeLine = timeLineService.getTimeLine();
         return allTimeLine;
     }
 
-    @PostMapping("/page/timeLine")
+    @PostMapping("/timelines")
     public MsgResponseDto postTimeLine(@RequestBody TimeLineRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails)
     {
         if(userDetails == null)
@@ -49,7 +49,7 @@ public class TimeLineController {
 
 
 
-    @DeleteMapping("/page/timeLine/{timeLineId}")
+    @DeleteMapping("/timelines/{timeLineId}")
     public MsgResponseDto deleteTimeLine(@PathVariable("timeLineId") Long id, @AuthenticationPrincipal UserDetailsImpl userDetails)
     {
         if(userDetails == null)

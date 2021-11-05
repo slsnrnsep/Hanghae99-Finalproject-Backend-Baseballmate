@@ -42,7 +42,6 @@ public class GroupCommentService {
 
    @Transactional
     public void updateGroupComment(Long groupid, Long commentid, GroupCommentRequestDto requestDto, UserDetailsImpl userDetails) {
-        Group group = groupRepository.findByGroupId(groupid);
         String loginedUserId = userDetails.getUser().getUserid();
         String commentUserId = "";
 

@@ -57,7 +57,7 @@ public class GroupService {
 
     // 구단별 모임 조회(필터링)
     public List<AllGroupResponseDto> showGroupsByTeam(String selectedTeam, Pageable pageable) {
-PageRequest
+//        PageRequest
         Page<Group> grouppage = groupRepository.findBySelectTeam(selectedTeam,pageable);
         List<AllGroupResponseDto> allGroupResponseDtoList = new ArrayList<>();
         List<Group> groupList=grouppage.getContent();
