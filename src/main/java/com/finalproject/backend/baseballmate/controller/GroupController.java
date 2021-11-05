@@ -14,7 +14,9 @@ import com.finalproject.backend.baseballmate.service.GroupService;
 import com.finalproject.backend.baseballmate.util.MD5Generator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -40,10 +42,11 @@ public class GroupController {
     }
 
     // 구단별 모임 조회
-    @GetMapping("/groups/page")
-    public List<AllGroupResponseDto> showGroupsByTeam (@RequestParam String selectTeam, Pageable pageable) {
-        List<AllGroupResponseDto> groupResponseDtoList = groupService.showGroupsByTeam(selectTeam, pageable);
-        return groupResponseDtoList;
+    @GetMapping(path="/groups",params = "team")
+    public List<AllGroupResponseDto> showGroupsByTeam (@RequestParam("team") String selectTeam) {
+        PageRequest pageRequest = PageRequest.of(0,3, Sort.by(Sort.Direction.DESC,"createdAt"));
+        List<AllGroupResponseDto> groupResponseDtos = groupService.showGroupsByTeam(selectTeam,pageRequest);
+        return groupResponseDtos;
     }
 
     // 모임 생성
