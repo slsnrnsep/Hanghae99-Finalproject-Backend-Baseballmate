@@ -15,11 +15,11 @@ public class TimeLineLikes {
     private Long id;
 
     @JoinColumn(name = "timeline_id")
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private TimeLine timeLine;
 
     @JoinColumn(name = "user_id")
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private User user;
 
     public TimeLineLikes(TimeLine timeLine,User user)
