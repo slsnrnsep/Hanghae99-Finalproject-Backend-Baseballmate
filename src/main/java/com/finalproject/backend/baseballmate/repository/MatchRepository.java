@@ -9,5 +9,8 @@ import java.util.List;
 @Repository
 public interface MatchRepository extends JpaRepository<MatchInfomation, Long> {
 
-    List<MatchInfomation> findAllByOrderByMatchIdAsc();
+    List<MatchInfomation> findAllByOrderByMatchIdDesc();
+    List<MatchInfomation> findAllByDatenum(String num);
+
+
 }

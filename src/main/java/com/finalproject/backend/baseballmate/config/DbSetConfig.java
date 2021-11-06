@@ -38,9 +38,9 @@ public class DbSetConfig {
         goodsSet();
     }
 
-    public void dbset3(){
-        commentSet();
-    }
+//    public void dbset3(){
+//        commentSet();
+//    }
 
     @Transactional
     public void kboSet() throws IOException {
