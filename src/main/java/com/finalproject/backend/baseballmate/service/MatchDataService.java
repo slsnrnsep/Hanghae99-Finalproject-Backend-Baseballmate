@@ -22,8 +22,8 @@ public class MatchDataService {
 
     private final MatchRepository matchRepository;
 
-//    private static String KBO_URL = "https://sports.news.naver.com/kbaseball/schedule/index";
-    private static String KBO_URL = "https://sports.news.naver.com/kbaseball/schedule/index?date=20211105&month=10&year=2021&teamCode=";
+    private static String KBO_URL = "https://sports.news.naver.com/kbaseball/schedule/index";
+//    private static String KBO_URL = "https://sports.news.naver.com/kbaseball/schedule/index?date=20211105&month=10&year=2021&teamCode=";
 
     String savedate = "";
 

@@ -50,8 +50,8 @@ public class UserContorller {
         }
         catch (Exception e)
         {
-            MsgResponseDto msgResponseDto = new MsgResponseDto("Fail","중복된 이메일이 존재합니다.");
-            return msgResponseDto;
+            throw new IllegalArgumentException("중복된 이메일이 존재합니다.");
+
         }
     }
 
