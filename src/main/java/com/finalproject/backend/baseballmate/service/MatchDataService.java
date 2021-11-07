@@ -23,6 +23,8 @@ public class MatchDataService {
     private final MatchRepository matchRepository;
 
     private static String KBO_URL = "https://sports.news.naver.com/kbaseball/schedule/index";
+//    private static String KBO_URL = "https://sports.news.naver.com/kbaseball/schedule/index?date=20211105&month=10&year=2021&teamCode=";
+
     String savedate = "";
 
     @Transactional
@@ -160,14 +162,19 @@ public class MatchDataService {
 
     @Transactional
     public List<MatchInfomation> getKBODatas() {
-        List<MatchInfomation> matchInfomationList = matchRepository.findAllByOrderByMatchIdAsc();
+        List<MatchInfomation> matchInfomationList = matchRepository.findAllByOrderByMatchIdDesc();
 
         return matchInfomationList;
     }
+    @Transactional
+    public List<MatchInfomation> getdateKBODatas(String number) {
+        List<MatchInfomation> matchInfomationList = matchRepository.findAllByDatenum(number);
 
+        return matchInfomationList;
+    }
     @Transactional
     public void updateKBODatas(List<MatchInfomation> requestDto) {
-        List<MatchInfomation> matchInfomation = matchRepository.findAllByOrderByMatchIdAsc();
+        List<MatchInfomation> matchInfomation = matchRepository.findAllByOrderByMatchIdDesc();
         for (int i = 0; i < requestDto.size(); i++) {
 
             MatchInfomation updateinfomation = matchInfomation.get(i);

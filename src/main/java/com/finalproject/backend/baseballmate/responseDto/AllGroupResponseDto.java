@@ -17,5 +17,7 @@ public class AllGroupResponseDto {
     private double hotPercent;
     private String stadium;
     private String groupDate;
+    private String filePath;
+    private String selectTeam;
     // private LocalDateTime createdAt;
 }

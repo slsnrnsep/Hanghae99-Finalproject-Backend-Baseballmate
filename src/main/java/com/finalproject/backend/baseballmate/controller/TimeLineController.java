@@ -20,14 +20,17 @@ public class TimeLineController {
     private final TimeLineRepository timeLineRepository;
     private final TimeLineService timeLineService;
 
-    @GetMapping("/page/timeLine")
-    public List<AllTimeLineResponseDto> getTimeLine() throws ParseException {
+    @GetMapping("/timelines")
+    public List<AllTimeLineResponseDto> getTimeLine() throws ParseException
+    {
         List<AllTimeLineResponseDto> allTimeLine = timeLineService.getTimeLine();
         return allTimeLine;
     }
 
-    @PostMapping("/page/timeLine")
-    public MsgResponseDto postTimeLine(@RequestBody TimeLineRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails)
+    @PostMapping("/timelines")
+    public MsgResponseDto postTimeLine(
+            @RequestBody TimeLineRequestDto requestDto,
+            @AuthenticationPrincipal UserDetailsImpl userDetails)
     {
         if(userDetails == null)
         {
@@ -49,18 +52,17 @@ public class TimeLineController {
 
 
 
-    @DeleteMapping("/page/timeLine/{timeLineId}")
-    public MsgResponseDto deleteTimeLine(@PathVariable("timeLineId") Long id, @AuthenticationPrincipal UserDetailsImpl userDetails)
-    {
-        if(userDetails == null)
-        {
+    @DeleteMapping("/timelines/{timeLineId}")
+    public MsgResponseDto deleteTimeLine(
+            @PathVariable("timeLineId") Long id,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        if (userDetails == null) {
             throw new IllegalArgumentException("로그인 한 사용자만 사용 가능합니다");
         }
 
-            timeLineService.deletetimeLine(id,userDetails);
-            MsgResponseDto timeLineResponseDto = new MsgResponseDto("success","삭제 완료");
-            return timeLineResponseDto;
-
+        timeLineService.deletetimeLine(id, userDetails);
+        MsgResponseDto timeLineResponseDto = new MsgResponseDto("success", "삭제 완료");
+        return timeLineResponseDto;
 
     }
 

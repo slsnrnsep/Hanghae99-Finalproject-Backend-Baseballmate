@@ -3,7 +3,6 @@ package com.finalproject.backend.baseballmate.responseDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,6 +16,8 @@ public class HotGroupResponseDto {
     private double hotPercent; // 현재 모임의 인기도
     private String stadium; // 경기장 이름
     private String groupDate; // 모임 날짜
+    private String filePath;
+    private String selectTeam;
 
     //프로필 사진
     //등급정보

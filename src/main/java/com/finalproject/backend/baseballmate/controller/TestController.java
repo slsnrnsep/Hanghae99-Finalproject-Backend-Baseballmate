@@ -14,8 +14,6 @@ import java.io.IOException;
 public class TestController {
     private final DbSetConfig dbSetConfig;
 
-
-
     @GetMapping("/dbSet1")
     public MsgResponseDto testDB1() throws IOException {
         dbSetConfig.dbset1();
@@ -34,7 +32,7 @@ public class TestController {
     @GetMapping("/dbSet3")
     public MsgResponseDto testDB3()
     {
-        dbSetConfig.dbset3();
+//        dbSetConfig.dbset3();
         MsgResponseDto msgResponseDto = new MsgResponseDto("OK","댓글DB셋업 성공");
         return msgResponseDto;
     }
@@ -43,7 +41,7 @@ public class TestController {
     public MsgResponseDto testDB4() throws IOException {
         dbSetConfig.dbset1();
         dbSetConfig.dbset2();
-        dbSetConfig.dbset3();
+//        dbSetConfig.dbset3();
         MsgResponseDto msgResponseDto = new MsgResponseDto("OK","모든 테스트DB셋업성공");
         return msgResponseDto;
     }

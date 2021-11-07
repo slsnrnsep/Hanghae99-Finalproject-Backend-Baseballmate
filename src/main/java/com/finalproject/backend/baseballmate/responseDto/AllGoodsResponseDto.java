@@ -10,7 +10,7 @@ import javax.persistence.Column;
 @NoArgsConstructor
 @Getter
 public class AllGoodsResponseDto {
-    private Long id;
+    private Long goodsId;
     private String userName;
     private String goodsName;
     private int goodsPrice;
