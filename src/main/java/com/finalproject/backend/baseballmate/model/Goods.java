@@ -36,14 +36,14 @@ public class Goods extends Timestamped {
     @Column
     private String goodsImg;
 
-    @OneToMany(mappedBy = "goods")
+    @OneToMany(mappedBy = "goods", cascade = CascadeType.ALL)
     private List<GoodsLikes> likesList;
 
     @Column(columnDefinition = "integer default 0")
     private int likeCount;
 
     // comment와 연관관계
-    @OneToMany(mappedBy = "goods")
+    @OneToMany(mappedBy = "goods", cascade = CascadeType.ALL)
     private List<GoodsComment> goodsCommentList = new ArrayList<>();
 
     // 굿즈 등록 생성자

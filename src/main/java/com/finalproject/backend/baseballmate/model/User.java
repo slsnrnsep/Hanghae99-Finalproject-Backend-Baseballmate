@@ -34,7 +34,9 @@ public class User {
 
     private int ranNum;
 
+    @Column
     private String phoneNumber;
+
 //    private test test;
 //    @OneToMany(mappedBy = "user")
 //    private List<Group> groupList = new ArrayList<Group>();
@@ -46,7 +48,7 @@ public class User {
     // 최종 타입이 groupapplication이 아니고 group이어야 할텐데 함수를 써서 가져오기
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "createdUser")
+    @OneToMany(mappedBy = "createdUser", cascade = CascadeType.ALL)
     private List<Group> createdGroupList = new ArrayList<>();
 
     @Column(nullable = true)
@@ -61,7 +63,7 @@ public class User {
 //    @Column(nullable = true, name = "NICKNAME")
 //    private String nickname;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private final List<TimeLineLikes> timeLineLikes = new ArrayList<>();
 
     public void addLikes(TimeLineLikes likes) {this.timeLineLikes.add(likes);
@@ -71,13 +73,23 @@ public class User {
         this.timeLineLikes.remove(likes);
     }
 
-    // goods 좋아요 생성자
     @OneToMany(mappedBy = "user")
-    private final List<GoodsLikes> goodsLikes = new ArrayList<>();
+    private final List<GroupLikes> groupLikes = new ArrayList<>();
 
-//    public void addGoodsLikes(GoodsLikes likes){
-//        this.likes.add(likes);
-//    }
+    public void addGroupLikes(GroupLikes likes) {this.groupLikes.add(likes);}
+
+    public void deleteGroupLikes(GroupLikes likes) {this.groupLikes.remove(likes);}
+
+    @OneToMany(mappedBy = "user")
+    private final List<GroupCommentLikes> groupCommentLikes = new ArrayList<>();
+
+    public void addGroupCommentLikes(GroupCommentLikes likes) {this.groupCommentLikes.add(likes);}
+
+    public void deleteGroupCommentLikes(GroupCommentLikes likes) {this.groupCommentLikes.remove(likes);}
+
+    // goods 좋아요 생성자
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private final List<GoodsLikes> goodsLikes = new ArrayList<>();
 
     public void addGoodsLikes(GoodsLikes likes){
         this.goodsLikes.add(likes);
@@ -88,12 +100,26 @@ public class User {
     }
 
 
-    public User(String userid, String username, String password){
+    public User(String userid, String username, String password,String phonenumber,int ranNum){
         this.userid = userid;
         this.username = username;
         this.password = password;
+        this.phoneNumber = phonenumber;
+        this.ranNum = ranNum;
     }
 
+    public User(String userid, String username, String password,String phonenumber){
+        this.userid = userid;
+        this.username = username;
+        this.password = password;
+        this.phoneNumber = phonenumber;
+    }
+
+    public User(String phonenumber,int ranNum)
+    {
+        this.phoneNumber = phonenumber;
+        this.ranNum = ranNum;
+    }
     // 카카오 로그인에 필요한 생성자
     @Builder
     public User(String username ,String userid, String picture, String password, Long kakaoId){
