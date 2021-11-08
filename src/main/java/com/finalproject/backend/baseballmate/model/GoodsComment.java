@@ -27,7 +27,7 @@ public class GoodsComment extends Timestamped {
     @Column
     private Long commentUserIndex;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "goodsId")
     private Goods goods;
 

@@ -48,7 +48,7 @@ public class User {
     // 최종 타입이 groupapplication이 아니고 group이어야 할텐데 함수를 써서 가져오기
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "createdUser")
+    @OneToMany(mappedBy = "createdUser", cascade = CascadeType.ALL)
     private List<Group> createdGroupList = new ArrayList<>();
 
     @Column(nullable = true)
@@ -63,7 +63,7 @@ public class User {
 //    @Column(nullable = true, name = "NICKNAME")
 //    private String nickname;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private final List<TimeLineLikes> timeLineLikes = new ArrayList<>();
 
     public void addLikes(TimeLineLikes likes) {this.timeLineLikes.add(likes);
@@ -88,7 +88,7 @@ public class User {
     public void deleteGroupCommentLikes(GroupCommentLikes likes) {this.groupCommentLikes.remove(likes);}
 
     // goods 좋아요 생성자
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private final List<GoodsLikes> goodsLikes = new ArrayList<>();
 
     public void addGoodsLikes(GoodsLikes likes){
