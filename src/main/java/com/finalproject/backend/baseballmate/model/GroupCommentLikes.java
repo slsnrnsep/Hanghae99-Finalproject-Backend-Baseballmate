@@ -6,28 +6,26 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Getter
-@Entity
 @NoArgsConstructor
-public class GroupLikes {
+@Entity
+public class GroupCommentLikes {
     @GeneratedValue
     @Id
-
     private Long id;
 
-    @JoinColumn(name = "group_id")
+    @JoinColumn(name = "groupcomment_id")
     @ManyToOne
-
-    private Group grouplikes;
-
+    private GroupComment groupComment;
 
     @JoinColumn(name = "user_id")
     @ManyToOne
     private User user;
 
 
-    public GroupLikes(Group group,User user)
+
+    public GroupCommentLikes(GroupComment groupComment,User user)
     {
-        this.grouplikes = group;
+        this.groupComment = groupComment;
         this.user = user;
     }
 

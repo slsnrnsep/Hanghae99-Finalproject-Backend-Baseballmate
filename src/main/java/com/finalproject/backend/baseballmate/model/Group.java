@@ -74,26 +74,30 @@ public class Group extends Timestamped{
 //    private String baseballTeam; // 구단 이름
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "group")
-    private List<GroupComment> groupCommentList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "group")
-    private List<GroupLikes> likesList;
-
-    @Column(columnDefinition = "integer default 0")
-    private int likeCount;
-
-    public void addGroupLikes(GroupLikes likes){
-        this.likesList.add(likes);
-        this.likeCount += 1;
-    }
-
-    public void deleteGroupLikes(GroupLikes likes){
-        this.likesList.remove(likes);
-        this.likeCount -= 1;
-    }
 
     // 게시글 전체 조회 생성자
+
+    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
+    private List<GroupComment> groupCommentList = new ArrayList<>();
+
+    // 좋아요
+    @OneToMany(mappedBy = "grouplikes",cascade = CascadeType.ALL)
+    private List<GroupLikes> grouplikesList;
+
+    @Column(columnDefinition = "integer default 0")
+    private int grouplikeCount;
+
+    public void addLikes(GroupLikes like) {
+        this.grouplikesList.add(like);
+        this.grouplikeCount += 1;
+    }
+
+    public void deleteLikes(GroupLikes like) {
+        this.grouplikesList.remove(like);
+        this.grouplikeCount -= 1;
+    }
+
 
     // 모임글 등록 생성자
     public Group(GroupRequestDto requestDto, User loginedUser) {
