@@ -130,12 +130,12 @@ public class GroupController {
 
     // 모임 참가신청 취소하기
     @DeleteMapping("/groups/{groupId}/applications")
-    public MsgResponseDto cancleApply(@PathVariable Long groupId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public MsgResponseDto cancelApply(@PathVariable Long groupId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         if (userDetails == null)
         {
             throw new IllegalArgumentException("로그인 한 사용자만 신청할 수 있습니다.");
         }
-        groupService.cancleApplication(groupId, userDetails);
+        groupService.cancelApplication(groupId, userDetails);
         MsgResponseDto msgResponseDto = new MsgResponseDto("success", "모임 신청 취소 완료");
         return msgResponseDto;
     }

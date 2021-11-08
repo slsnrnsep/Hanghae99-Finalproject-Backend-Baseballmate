@@ -206,7 +206,7 @@ public class GroupService {
 
     // 모임 취소하기
     @Transactional
-    public void cancleApplication(Long groupId, UserDetailsImpl userDetails) {
+    public void cancelApplication(Long groupId, UserDetailsImpl userDetails) {
         List<GroupApplication> groupApplicationList = groupApplicationRepository.findAllByAppliedGroupId(groupId);
         Long loginedUserIndex = userDetails.getUser().getId();
 
