@@ -10,13 +10,10 @@ import com.finalproject.backend.baseballmate.requestDto.GroupRequestDto;
 import com.finalproject.backend.baseballmate.responseDto.AllGroupResponseDto;
 import com.finalproject.backend.baseballmate.responseDto.GroupDetailResponseDto;
 import com.finalproject.backend.baseballmate.responseDto.HotGroupResponseDto;
-import com.finalproject.backend.baseballmate.responseDto.MsgResponseDto;
 import com.finalproject.backend.baseballmate.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -213,6 +210,9 @@ public class GroupService {
         int peopleLimit = groupApplication.getAppliedGroup().getPeopleLimit();
         double updatedHotPercent = ((double) updatedAppliedNum / (double) peopleLimit * 100.0);
         groupApplication.getAppliedGroup().setHotPercent(updatedHotPercent);
+
+
+
     }
 
     // 모임 취소하기
@@ -224,6 +224,8 @@ public class GroupService {
     @Transactional
     public void cancelApplication(Long groupId, UserDetailsImpl userDetails) {
         List<GroupApplication> groupApplicationList = groupRepository.findByGroupId(groupId).getGroupApplications();
+        System.out.println(groupApplicationList);
+        Group group222 = groupRepository.findByGroupId(groupId);
         Long loginedUserIndex = userDetails.getUser().getId();
 
         for(int i=0; i<groupApplicationList.size(); i++) {
@@ -253,9 +255,11 @@ public class GroupService {
                     ///////////// 여기에 group -> List<groupapplication> -> groupapplication 일케 타고 들어가서 groupapplication을 삭제하면 되는데
                     ///////////// 그 코드가 구현이 안되네요!!!!!! 영호님 도와주세요!!!!!!!
                     /// + 참가 취소했던 list<id>에 userinx 저장하기
+                    GroupApplication groupApplication2 =groupApplicationRepository.findByAppliedGroup_GroupIdAndAppliedUserId(groupId,loginedUserIndex);
+                    groupApplicationRepository.deleteById(groupApplication2.getId());
 
-                } else {
-                    throw new IllegalArgumentException("참가 신청을 한 유저가 아닙니다.");
+
+
                 }
             } else {
                 throw new NullPointerException("참가 신청 이력이 존재하지 않습니다.");

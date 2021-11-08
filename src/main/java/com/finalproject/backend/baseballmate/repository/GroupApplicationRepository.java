@@ -10,6 +10,7 @@ public interface GroupApplicationRepository extends JpaRepository<GroupApplicati
     // 모임 ID가 같은 행을 리스트로 추출
 //    Iterable<GroupApplication> findAllByAppliedGroup_GroupId (Long groupId);
     List<GroupApplication> findAll();
-    List<GroupApplication> findAllByAppliedGroupId(Long groupId);
-    GroupApplication deleteByAppliedGroupId(Long groupId);
+
+//    GroupApplication findByAppliedGroupGroupIdAAndAppliedUserId(Long appliedGroupId,Long userId);
+    GroupApplication findByAppliedGroup_GroupIdAndAppliedUserId(Long appliedGroupId,Long userId);
 }

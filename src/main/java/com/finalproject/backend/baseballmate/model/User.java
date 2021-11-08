@@ -98,13 +98,6 @@ public class User {
     }
 
     @OneToMany(mappedBy = "user")
-    private final List<GroupLikes> groupLikes = new ArrayList<>();
-
-    public void addGroupLikes(GroupLikes likes){this.groupLikes.add(likes);}
-
-    public void deleteGroupLiktes(GroupLikes likes){this.groupLikes.remove(likes);}
-
-    @OneToMany(mappedBy = "user")
     private final List<GoodsCommentLikes> goodsCommentLikes = new ArrayList<>();
 
     public void addGoodsCommentLikes(GoodsCommentLikes likes){this.goodsCommentLikes.add(likes);}
