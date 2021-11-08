@@ -205,9 +205,14 @@ public class GroupService {
     }
 
     // 모임 취소하기
+    // 1. 그룹에서 해당 그룹의 groupapplication list를 불러오기
+    // 2. 거기에서 유저 아이디를 찾고, 로그인 한 유저 아이디와 일치하는지 확인하기
+    // 3. 일치하면 해당 groupapplication을 삭제하기
+    // 4. 그룹 내의 취소 리스트에 id값 추가하기
+
     @Transactional
     public void cancelApplication(Long groupId, UserDetailsImpl userDetails) {
-        List<GroupApplication> groupApplicationList = groupApplicationRepository.findAllByAppliedGroupId(groupId);
+        List<GroupApplication> groupApplicationList = groupRepository.findByGroupId(groupId).getGroupApplications();
         Long loginedUserIndex = userDetails.getUser().getId();
 
         for(int i=0; i<groupApplicationList.size(); i++) {
@@ -234,7 +239,9 @@ public class GroupService {
                     groupApplication.getAppliedGroup().setHotPercent(updatedHotPercent);
 
                     // 참가 신청 이력 삭제
-                    groupApplicationRepository.deleteByAppliedGroupId(groupId);
+                    ///////////// 여기에 group -> List<groupapplication> -> groupapplication 일케 타고 들어가서 groupapplication을 삭제하면 되는데
+                    ///////////// 그 코드가 구현이 안되네요!!!!!! 영호님 도와주세요!!!!!!!
+                    /// + 참가 취소했던 list<id>에 userinx 저장하기
 
                 } else {
                     throw new IllegalArgumentException("참가 신청을 한 유저가 아닙니다.");

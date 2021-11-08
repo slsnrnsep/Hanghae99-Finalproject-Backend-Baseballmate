@@ -73,11 +73,10 @@ public class Group extends Timestamped{
 //    @Column
 //    private String baseballTeam; // 구단 이름
 
+//    @Column
+//    private List<Id> canceledUserInx;
+
     @JsonManagedReference
-
-
-    // 게시글 전체 조회 생성자
-
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
     private List<GroupComment> groupCommentList = new ArrayList<>();
 
