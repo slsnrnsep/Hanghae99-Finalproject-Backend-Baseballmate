@@ -1,5 +1,6 @@
 package com.finalproject.backend.baseballmate.service;
 
+
 import com.finalproject.backend.baseballmate.model.*;
 import com.finalproject.backend.baseballmate.repository.*;
 import com.finalproject.backend.baseballmate.requestDto.GoodsLikesReqeustDto;
@@ -13,7 +14,6 @@ import javax.transaction.Transactional;
 @Service
 @RequiredArgsConstructor
 public class GroupLikesService {
-
     private final GroupLikesRepository groupLikesRepository;
     private final UserRepository userRepository;
     private final GroupRepository groupRepository;
@@ -39,11 +39,13 @@ public class GroupLikesService {
             return false;
         } else {
             if(groupLikesRepository.findByGrouplikesGroupIdAndUserId(group.getGroupId(), user.getId()).isPresent())
+
             {
                 return true;
             }
             GroupLikes likes = groupLikesRepository.save(new GroupLikes(group, user));
             user.addGroupLikes(likes);
+
             group.addLikes(likes);
             return true;
         }

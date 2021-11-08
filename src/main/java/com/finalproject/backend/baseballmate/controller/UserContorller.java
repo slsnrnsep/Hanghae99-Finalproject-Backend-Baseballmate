@@ -4,19 +4,24 @@ import com.finalproject.backend.baseballmate.model.*;
 import com.finalproject.backend.baseballmate.repository.*;
 import com.finalproject.backend.baseballmate.requestDto.HeaderDto;
 import com.finalproject.backend.baseballmate.requestDto.MyteamRequestDto;
+import com.finalproject.backend.baseballmate.requestDto.UserProfileRequestDto;
 import com.finalproject.backend.baseballmate.requestDto.UserRequestDto;
 import com.finalproject.backend.baseballmate.responseDto.LoginCheckResponseDto;
 import com.finalproject.backend.baseballmate.responseDto.MsgResponseDto;
 import com.finalproject.backend.baseballmate.responseDto.UserResponseDto;
 import com.finalproject.backend.baseballmate.security.JwtTokenProvider;
 import com.finalproject.backend.baseballmate.security.UserDetailsImpl;
+import com.finalproject.backend.baseballmate.service.FileService;
 import com.finalproject.backend.baseballmate.service.LoginResponseDto;
 import com.finalproject.backend.baseballmate.service.UserService;
+import com.finalproject.backend.baseballmate.util.MD5Generator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,8 +37,12 @@ public class UserContorller {
     private final JwtTokenProvider jwtTokenProvider;
     private final TimeLineLikesRepository timeLineLikesRepository;
     private final GoodsLikesRepository goodsLikesRepository;
+    private final FileService fileService;
+    private String commonPath = "/images";
+
     private final GroupLikesRepository groupLikesRepository;
     private final GroupCommentLikesRepository groupCommentLikesRepository;
+
 
     @PostMapping("/user/signup")
     public MsgResponseDto registerUser(@RequestBody UserRequestDto userRequestDto)
@@ -71,7 +80,7 @@ public class UserContorller {
     // 유저의 구단정보 보내기
     // 일단 myteam 정보만 보내주고 이후에 userresponsedto로 모든 정보를 보내줄 수 있음
     @PatchMapping("/users/{id}")
-    public Map<String, String> updateUserInfo(
+    public Map<String, String> updateUserMyteam(
             @PathVariable Long id,
             @RequestBody UserRequestDto requestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails)
@@ -86,8 +95,55 @@ public class UserContorller {
         myTeamResponse.put("myteam", responseDto.getMyteam());
         return myTeamResponse;
     }
+//
+//    // 프로필사진 등록
+//    @PatchMapping("/users/{id}")
+//    public MsgResponseDto updateUserInfo(
+//            @PathVariable Long id,
+//            @RequestParam(value = "file", required = false) MultipartFile files,
+//            @AuthenticationPrincipal UserDetailsImpl userDetails,
+//            UserProfileRequestDto requestDto) {
+//        // 로그인한 유저의 유저네임 가져오기
+//        if (userDetails == null) {
+//            throw new IllegalArgumentException("로그인 한 이용자만 이용하실 수 있습니다.");
+//        }
+//        try
+//        {
+//            String filename = "basic.jpg";
+//            if (files != null) {
+//                String origFilename = files.getOriginalFilename();
+//                filename = new MD5Generator(origFilename).toString() + ".jpg";
+//                /* 실행되는 위치의 'files' 폴더에 파일이 저장됩니다. */
+//
+//                String savePath = System.getProperty("user.dir") + commonPath;
+//                /* 파일이 저장되는 폴더가 없으면 폴더를 생성합니다. */
+//                //files.part.getcontententtype() 해서 이미지가 아니면 false처리해야함.
+//                if (!new File(savePath).exists()) {
+//                    try {
+//                        new File(savePath).mkdir();
+//                    } catch (Exception e) {
+//                        e.getStackTrace();
+//                    }
+//                }
+//                String filePath = savePath + "\\" + filename;// 이경로는 우분투랑 윈도우랑 다르니까 주의해야댐 우분투 : / 윈도우 \\ 인것같음.
+//                files.transferTo(new File(filePath));
+//            }
+//            requestDto.setProfileImage(filename);
+//            User loginedUser = userDetails.getUser();
+//            String loginedUsername = userDetails.getUser().getUsername();
+//            userService.updateProfileImage(id, requestDto);
+//            MsgResponseDto msgResponseDto = new MsgResponseDto("success", "사진 변경 성공");
+//            return msgResponseDto;
+//        }
+//
+//        catch (Exception e)
+//        {
+//            MsgResponseDto msgResponseDto = new MsgResponseDto("failed", "사진 변경 실패");
+//            return msgResponseDto;
+//        }
+//    }
 
-
+    // 구단 선택 구버전
     @PostMapping("/user/myteam")
     public MyteamRequestDto selectMyteam(
             @RequestBody MyteamRequestDto myteam,
@@ -140,6 +196,7 @@ public class UserContorller {
             myGoodsLikesList.add(GoodsLikesList.get(i).getGoods().getId());
         }
 
+
         List<GroupLikes> groupLikesList = groupLikesRepository.findAllByUserId(user.getId());
         List<Long> myGroupLikesList = new ArrayList<>();
         for (int i=0; i<groupLikesList.size();i++)
@@ -156,6 +213,8 @@ public class UserContorller {
 
 
         LoginCheckResponseDto loginCheckResponseDto = new LoginCheckResponseDto(user.getId(),user.getUserid(), user.getUsername(),user.getMyselectTeam(),user.getPicture(),myTimeLineLikesList,myGoodsLikesList,myGroupLikesList,myGroupCommentLikesList);
+
+
 
         return loginCheckResponseDto;
     }

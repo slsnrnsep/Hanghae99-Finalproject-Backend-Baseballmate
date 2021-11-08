@@ -1,7 +1,9 @@
 package com.finalproject.backend.baseballmate.controller;
 
 import com.finalproject.backend.baseballmate.model.Group;
+import com.finalproject.backend.baseballmate.model.GroupApplication;
 import com.finalproject.backend.baseballmate.model.User;
+import com.finalproject.backend.baseballmate.repository.GroupApplicationRepository;
 import com.finalproject.backend.baseballmate.repository.GroupRepository;
 import com.finalproject.backend.baseballmate.repository.UserRepository;
 import com.finalproject.backend.baseballmate.requestDto.GroupRequestDto;
@@ -31,6 +33,8 @@ public class GroupController {
     private final GroupService groupService;
     private final GroupRepository groupRepository;
     private final FileService fileService;
+    private final GroupApplication groupApplication;
+    private final GroupApplicationRepository groupApplicationRepository;
     private final UserRepository userRepository;
     private String commonPath = "/images";
 
@@ -48,8 +52,8 @@ public class GroupController {
     {
         PageRequest pageRequest = PageRequest.of(0,10, Sort.by(Sort.Direction.DESC,"createdAt"));
         List<AllGroupResponseDto> groupResponseDtos = groupService.showGroupsByTeam(selectTeam,pageRequest);
-//        List<>
         return groupResponseDtos;
+
 
     }
 
@@ -57,7 +61,7 @@ public class GroupController {
     @PostMapping("/groups")
     public MsgResponseDto createGroup(
             @RequestParam(value = "file",required = false) MultipartFile files,
-            GroupRequestDto requestDto,
+            @RequestBody GroupRequestDto requestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
 //         로그인한 유저의 유저네임 가져오기
         if (userDetails == null)
@@ -96,7 +100,7 @@ public class GroupController {
 
         catch (Exception e)
         {
-            MsgResponseDto msgResponseDto = new MsgResponseDto("success", "모임 등록 실패");
+            MsgResponseDto msgResponseDto = new MsgResponseDto("failed", "모임 등록 실패");
             return msgResponseDto;
         }
 
@@ -125,6 +129,18 @@ public class GroupController {
         MsgResponseDto msgResponseDto = new MsgResponseDto("success", "모임 신청 완료");
         return msgResponseDto;
 
+    }
+
+    // 모임 참가신청 취소하기
+    @DeleteMapping("/groups/{groupId}/applications")
+    public MsgResponseDto cancelApply(@PathVariable Long groupId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        if (userDetails == null)
+        {
+            throw new IllegalArgumentException("로그인 한 사용자만 신청할 수 있습니다.");
+        }
+        groupService.cancelApplication(groupId, userDetails);
+        MsgResponseDto msgResponseDto = new MsgResponseDto("success", "모임 신청 취소 완료");
+        return msgResponseDto;
     }
 
     // 모임 수정하기 - 모임을 생성한 사람만 수정할 수 있게

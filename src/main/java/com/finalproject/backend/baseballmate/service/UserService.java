@@ -5,6 +5,7 @@ import com.finalproject.backend.baseballmate.OAuth2.KakaoUserInfo;
 import com.finalproject.backend.baseballmate.model.User;
 import com.finalproject.backend.baseballmate.repository.UserRepository;
 import com.finalproject.backend.baseballmate.requestDto.HeaderDto;
+import com.finalproject.backend.baseballmate.requestDto.UserProfileRequestDto;
 import com.finalproject.backend.baseballmate.requestDto.UserRequestDto;
 import com.finalproject.backend.baseballmate.responseDto.UserResponseDto;
 import com.finalproject.backend.baseballmate.security.JwtTokenProvider;
@@ -98,6 +99,17 @@ public class UserService {
         UserResponseDto userResponseDto =
                 new UserResponseDto(id, updatedUser.getUserid(), updatedUser.getUsername(), updatedUser.getPassword(), updatedUser.getMyselectTeam());
         return userResponseDto;
+    }
+
+    //user 프로필 사진 등록 및 변경
+    @Transactional
+    public void updateProfileImage(Long id, final UserProfileRequestDto requestDto) {
+        Optional<User> optionalUser = userRepository.findById(id);
+
+        User user = optionalUser.get();
+        if (StringUtils.isNotBlank(requestDto.getProfileImage()))
+            user.setPicture(requestDto.getProfileImage());
+        userRepository.save(user);
     }
 
     public HeaderDto kakaoLogin(String authorizedCode) {

@@ -20,6 +20,7 @@ public class Group extends Timestamped{
 
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
+    @Column(name = "group_id")
     private Long groupId; // 모임 고유번호, pk
 
     // 유저 아이디값이 들어감
@@ -71,6 +72,9 @@ public class Group extends Timestamped{
 
 //    @Column
 //    private String baseballTeam; // 구단 이름
+
+//    @Column
+//    private List<Id> canceledUserInx;
 
     @JsonManagedReference
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)

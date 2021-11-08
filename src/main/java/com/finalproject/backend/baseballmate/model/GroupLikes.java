@@ -11,15 +11,19 @@ import javax.persistence.*;
 public class GroupLikes {
     @GeneratedValue
     @Id
+
     private Long id;
 
     @JoinColumn(name = "group_id")
     @ManyToOne
+
     private Group grouplikes;
+
 
     @JoinColumn(name = "user_id")
     @ManyToOne
     private User user;
+
 
     public GroupLikes(Group group,User user)
     {
