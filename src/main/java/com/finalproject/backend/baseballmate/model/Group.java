@@ -77,7 +77,7 @@ public class Group extends Timestamped{
     private List<GroupComment> groupCommentList = new ArrayList<>();
 
     // 좋아요
-    @OneToMany(mappedBy = "group")
+    @OneToMany(mappedBy = "grouplikes",cascade = CascadeType.ALL)
     private List<GroupLikes> grouplikesList;
 
     @Column(columnDefinition = "integer default 0")

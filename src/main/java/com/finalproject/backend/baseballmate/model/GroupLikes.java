@@ -15,7 +15,7 @@ public class GroupLikes {
 
     @JoinColumn(name = "group_id")
     @ManyToOne
-    private Group group;
+    private Group grouplikes;
 
     @JoinColumn(name = "user_id")
     @ManyToOne
@@ -23,7 +23,7 @@ public class GroupLikes {
 
     public GroupLikes(Group group,User user)
     {
-        this.group = group;
+        this.grouplikes = group;
         this.user = user;
     }
 
