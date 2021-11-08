@@ -10,5 +10,5 @@ public class GoodsRequestDto {
     private int goodsPrice;
     private String goodsContent;
     private String goodsImg;
-
+    private String filePath;
 }

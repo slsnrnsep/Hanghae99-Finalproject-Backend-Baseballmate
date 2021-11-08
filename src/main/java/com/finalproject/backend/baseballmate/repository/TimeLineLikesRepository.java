@@ -9,4 +9,5 @@ import java.util.Optional;
 public interface TimeLineLikesRepository extends JpaRepository<TimeLineLikes,Long> {
     Optional<TimeLineLikes> findByTimeLineIdAndUserId(Long timeLineId, Long UserId);
     List<TimeLineLikes> findAllByUserId(Long UserId);
+
 }

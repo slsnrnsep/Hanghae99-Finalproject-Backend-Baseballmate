@@ -1,11 +1,7 @@
 package com.finalproject.backend.baseballmate.controller;
 
-import com.finalproject.backend.baseballmate.model.GoodsLikes;
-import com.finalproject.backend.baseballmate.model.TimeLineLikes;
-import com.finalproject.backend.baseballmate.model.User;
-import com.finalproject.backend.baseballmate.repository.GoodsLikesRepository;
-import com.finalproject.backend.baseballmate.repository.TimeLineLikesRepository;
-import com.finalproject.backend.baseballmate.repository.UserRepository;
+import com.finalproject.backend.baseballmate.model.*;
+import com.finalproject.backend.baseballmate.repository.*;
 import com.finalproject.backend.baseballmate.requestDto.HeaderDto;
 import com.finalproject.backend.baseballmate.requestDto.MyteamRequestDto;
 import com.finalproject.backend.baseballmate.requestDto.UserProfileRequestDto;
@@ -41,8 +37,13 @@ public class UserContorller {
     private final JwtTokenProvider jwtTokenProvider;
     private final TimeLineLikesRepository timeLineLikesRepository;
     private final GoodsLikesRepository goodsLikesRepository;
+<<<<<<< HEAD
     private final FileService fileService;
     private String commonPath = "/images";
+=======
+    private final GroupLikesRepository groupLikesRepository;
+    private final GroupCommentLikesRepository groupCommentLikesRepository;
+>>>>>>> d0a864a9515858a3a05975833100e0376c543e60
 
     @PostMapping("/user/signup")
     public MsgResponseDto registerUser(@RequestBody UserRequestDto userRequestDto)
@@ -196,7 +197,22 @@ public class UserContorller {
             myGoodsLikesList.add(GoodsLikesList.get(i).getGoods().getId());
         }
 
-        LoginCheckResponseDto loginCheckResponseDto = new LoginCheckResponseDto(user.getId(),user.getUsername(),user.getMyselectTeam(),myTimeLineLikesList,myGoodsLikesList);
+
+        List<GroupLikes> groupLikesList = groupLikesRepository.findAllByUserId(user.getId());
+        List<Long> myGroupLikesList = new ArrayList<>();
+        for (int i=0; i<groupLikesList.size();i++)
+        {
+            myGroupLikesList.add(groupLikesList.get(i).getGrouplikes().getGroupId());
+        }
+
+        List<GroupCommentLikes> groupCommentLikesList = groupCommentLikesRepository.findAllByUserId(user.getId());
+        List<Long> myGroupCommentLikesList = new ArrayList<>();
+        for (int i=0; i<groupCommentLikesList.size();i++)
+        {
+            myGroupCommentLikesList.add(groupCommentLikesList.get(i).getGroupComment().getGroupCommentId());
+        }
+        LoginCheckResponseDto loginCheckResponseDto = new LoginCheckResponseDto(user.getId(),user.getUserid(), user.getUsername(),user.getMyselectTeam(),user.getPicture(),user.getPhoneNumber(),myTimeLineLikesList,myGoodsLikesList,myGroupLikesList,myGroupCommentLikesList);
+
 
         return loginCheckResponseDto;
     }

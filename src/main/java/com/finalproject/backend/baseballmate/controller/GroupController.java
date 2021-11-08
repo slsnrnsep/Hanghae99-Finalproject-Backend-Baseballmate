@@ -53,13 +53,15 @@ public class GroupController {
         PageRequest pageRequest = PageRequest.of(0,10, Sort.by(Sort.Direction.DESC,"createdAt"));
         List<AllGroupResponseDto> groupResponseDtos = groupService.showGroupsByTeam(selectTeam,pageRequest);
         return groupResponseDtos;
+
+
     }
 
     // 모임 생성
     @PostMapping("/groups")
     public MsgResponseDto createGroup(
             @RequestParam(value = "file",required = false) MultipartFile files,
-            GroupRequestDto requestDto,
+            @RequestBody GroupRequestDto requestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
 //         로그인한 유저의 유저네임 가져오기
         if (userDetails == null)
@@ -84,9 +86,10 @@ public class GroupController {
                         e.getStackTrace();
                     }
                 }
-                String filePath = savePath + "\\" + filename;// 이경로는 우분투랑 윈도우랑 다르니까 주의해야댐 우분투 : / 윈도우 \\ 인것같음.
+                String filePath = savePath + "/" + filename;// 이경로는 우분투랑 윈도우랑 다르니까 주의해야댐 우분투 : / 윈도우 \\ 인것같음.
                 files.transferTo(new File(filePath));
             }
+
             requestDto.setFilePath(filename);
             User loginedUser = userDetails.getUser();
             String loginedUsername = userDetails.getUser().getUsername();

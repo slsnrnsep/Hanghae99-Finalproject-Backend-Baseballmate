@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @NoArgsConstructor
 @Getter
@@ -27,9 +28,25 @@ public class GoodsComment extends Timestamped {
     @Column
     private Long commentUserIndex;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "goodsId")
     private Goods goods;
+
+    @OneToMany(mappedBy = "goodsComment")
+    private List<GoodsCommentLikes> goodsCommentLikesList;
+
+    @Column(columnDefinition = "integer default 0")
+    private int goodsCommentlikeCount;
+
+    public void addCommentLikes(GoodsCommentLikes likes){
+        this.goodsCommentLikesList.add(likes);
+        this.goodsCommentlikeCount += 1;
+    }
+
+    public void deleteCommentLikes(GoodsCommentLikes likes){
+        this.goodsCommentLikesList.remove(likes);
+        this.goodsCommentlikeCount -= 1;
+    }
 
     public GoodsComment(String userName,GoodsCommentRequestDto requestDto, Goods goods,String loginedUserId,Long loginedUserIndex){
         this.userName = userName;

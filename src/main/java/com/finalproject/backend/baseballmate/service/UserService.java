@@ -5,7 +5,11 @@ import com.finalproject.backend.baseballmate.OAuth2.KakaoUserInfo;
 import com.finalproject.backend.baseballmate.model.User;
 import com.finalproject.backend.baseballmate.repository.UserRepository;
 import com.finalproject.backend.baseballmate.requestDto.HeaderDto;
+<<<<<<< HEAD
 import com.finalproject.backend.baseballmate.requestDto.UserProfileRequestDto;
+=======
+import com.finalproject.backend.baseballmate.requestDto.PhoneRequstDto;
+>>>>>>> d0a864a9515858a3a05975833100e0376c543e60
 import com.finalproject.backend.baseballmate.requestDto.UserRequestDto;
 import com.finalproject.backend.baseballmate.responseDto.UserResponseDto;
 import com.finalproject.backend.baseballmate.security.JwtTokenProvider;
@@ -32,6 +36,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final KakaoOAuth2 kakaoOAuth2;
     private final JwtTokenProvider jwtTokenProvider;
+//    private final PhoneService phoneService;
     private final AuthenticationManager authenticationManager;
     private static final String Pass_Salt = "AAABnv/xRVklrnYxKZ0aHgTBcXukeZygoC";
 
@@ -47,8 +52,15 @@ public class UserService {
         String pattern = "^[a-zA-Z0-9]*$";
 
         password = passwordEncoder.encode(userRequestDto.getPassword());
+//        User user = userRepository.findByPhoneNumber(userRequestDto.getPhonenumber()).orElseThrow(
+//                ()-> new IllegalArgumentException("휴대폰에 맞는 유저정보를 찾을 수 없습니다.")
+//        );
+//        user.setUserid(userid);
+//        user.setUsername(username);
+//        user.setPassword(password);
 
-        User user = new User(userid, username, password);
+        //로컬 강제 DB집어넣기
+        User user = new User(userid,username,password, userRequestDto.getPhonenumber());
         userRepository.save(user);
 
     }
@@ -154,4 +166,19 @@ public class UserService {
 
     }
 
+//    public void confirmNumChk(UserDetailsImpl userDetails, PhoneRequstDto requstDto) {
+//
+//        User user = userRepository.findByUserid(userDetails.getUser().getUserid()).orElseThrow(
+//                () -> new IllegalArgumentException("사용자 정보가 일치하지 않습니다")
+//        );
+//
+//        String ranNumChk = phoneService.sendMessage(requstDto);
+//        if(requstDto.getRanNum() == (ranNumChk)){
+//
+//            user.setRanNum(requstDto.getRanNum());
+//            userRepository.save(user);
+//        }else{
+//            throw new IllegalArgumentException("인증번호가 일치하지 않습니다");
+//        }
+//    }
 }

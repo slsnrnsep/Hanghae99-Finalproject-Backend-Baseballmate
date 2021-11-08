@@ -31,6 +31,12 @@ public class User {
     private String password;
 
     private String myselectTeam;
+
+    private int ranNum;
+
+    @Column
+    private String phoneNumber;
+
 //    private test test;
 //    @OneToMany(mappedBy = "user")
 //    private List<Group> groupList = new ArrayList<Group>();
@@ -60,20 +66,28 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private final List<TimeLineLikes> timeLineLikes = new ArrayList<>();
 
-    public void addLikes(TimeLineLikes likes) {this.timeLineLikes.add(likes);
+    public void addLikes(TimeLineLikes likes) {this.timeLineLikes.add(likes);}
+
+    public void deleteLikes(TimeLineLikes likes) {this.timeLineLikes.remove(likes);
     }
 
-    public void deleteLikes(TimeLineLikes likes) {
-        this.timeLineLikes.remove(likes);
-    }
+    @OneToMany(mappedBy = "user")
+    private final List<GroupLikes> groupLikes = new ArrayList<>();
+
+    public void addGroupLikes(GroupLikes likes) {this.groupLikes.add(likes);}
+
+    public void deleteGroupLikes(GroupLikes likes) {this.groupLikes.remove(likes);}
+
+    @OneToMany(mappedBy = "user")
+    private final List<GroupCommentLikes> groupCommentLikes = new ArrayList<>();
+
+    public void addGroupCommentLikes(GroupCommentLikes likes) {this.groupCommentLikes.add(likes);}
+
+    public void deleteGroupCommentLikes(GroupCommentLikes likes) {this.groupCommentLikes.remove(likes);}
 
     // goods 좋아요 생성자
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private final List<GoodsLikes> goodsLikes = new ArrayList<>();
-
-//    public void addGoodsLikes(GoodsLikes likes){
-//        this.likes.add(likes);
-//    }
 
     public void addGoodsLikes(GoodsLikes likes){
         this.goodsLikes.add(likes);
@@ -83,13 +97,42 @@ public class User {
         this.goodsLikes.remove(likes);
     }
 
+    @OneToMany(mappedBy = "user")
+    private final List<GroupLikes> groupLikes = new ArrayList<>();
 
-    public User(String userid, String username, String password){
+    public void addGroupLikes(GroupLikes likes){this.groupLikes.add(likes);}
+
+    public void deleteGroupLiktes(GroupLikes likes){this.groupLikes.remove(likes);}
+
+    @OneToMany(mappedBy = "user")
+    private final List<GoodsCommentLikes> goodsCommentLikes = new ArrayList<>();
+
+    public void addGoodsCommentLikes(GoodsCommentLikes likes){this.goodsCommentLikes.add(likes);}
+
+    public void deleteGoodsCommentLikes(GoodsCommentLikes likes){this.goodsCommentLikes.remove(likes);}
+
+
+
+    public User(String userid, String username, String password,String phonenumber,int ranNum){
         this.userid = userid;
         this.username = username;
         this.password = password;
+        this.phoneNumber = phonenumber;
+        this.ranNum = ranNum;
     }
 
+    public User(String userid, String username, String password,String phonenumber){
+        this.userid = userid;
+        this.username = username;
+        this.password = password;
+        this.phoneNumber = phonenumber;
+    }
+
+    public User(String phonenumber,int ranNum)
+    {
+        this.phoneNumber = phonenumber;
+        this.ranNum = ranNum;
+    }
     // 카카오 로그인에 필요한 생성자
     @Builder
     public User(String username ,String userid, String picture, String password, Long kakaoId){
