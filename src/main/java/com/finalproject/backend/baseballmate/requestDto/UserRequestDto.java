@@ -13,6 +13,7 @@ public class UserRequestDto {
     private String userid;
     private String password;
     private String myteam;
+//    private String picture;
 
     public UserRequestDto(String username, String userid , String password,String myteam){
 

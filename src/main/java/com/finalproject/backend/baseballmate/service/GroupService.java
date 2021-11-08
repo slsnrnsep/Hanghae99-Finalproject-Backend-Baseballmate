@@ -204,6 +204,48 @@ public class GroupService {
         groupApplication.getAppliedGroup().setHotPercent(updatedHotPercent);
     }
 
+    // 모임 취소하기
+    @Transactional
+    public void cancleApplication(Long groupId, UserDetailsImpl userDetails) {
+        List<GroupApplication> groupApplicationList = groupApplicationRepository.findAllByAppliedGroupId(groupId);
+        Long loginedUserIndex = userDetails.getUser().getId();
+
+        for(int i=0; i<groupApplicationList.size(); i++) {
+            // 참가 신청 취소를 요청한 groupid를 가진 groupapplication하나씩 빼오기
+            GroupApplication groupApplication = groupApplicationList.get(i);
+            if(groupApplication != null){
+                Long appliedUserIndex = groupApplication.getAppliedUser().getId();
+                if (loginedUserIndex == appliedUserIndex) {
+
+                    // 해당 group의 nowappliednum, hotpercent 수정
+                    // 현재 참여 신청 인원 1 감소
+                    int nowAppliedNum = groupApplication.getAppliedGroup().getNowAppliedNum();
+                    int updatedAppliedNum = nowAppliedNum - 1;
+                    groupApplication.getAppliedGroup().setNowAppliedNum(updatedAppliedNum);
+
+                    // 현재 참여 신청 가능한 인원 1 감소
+                    int nowCanApplyNum = groupApplication.getAppliedGroup().getCanApplyNum();
+                    int updatedCanApplyNum = nowCanApplyNum + 1;
+                    groupApplication.getAppliedGroup().setCanApplyNum(updatedCanApplyNum);
+
+                    // 인기도 값 수정
+                    int peopleLimit = groupApplication.getAppliedGroup().getPeopleLimit();
+                    double updatedHotPercent = ((double) updatedAppliedNum / (double) peopleLimit * 100.0);
+                    groupApplication.getAppliedGroup().setHotPercent(updatedHotPercent);
+
+                    // 참가 신청 이력 삭제
+                    groupApplicationRepository.deleteByAppliedGroupId(groupId);
+
+                } else {
+                    throw new IllegalArgumentException("참가 신청을 한 유저가 아닙니다.");
+                }
+            } else {
+                throw new NullPointerException("참가 신청 이력이 존재하지 않습니다.");
+            }
+        }
+
+    }
+
 
 }
 

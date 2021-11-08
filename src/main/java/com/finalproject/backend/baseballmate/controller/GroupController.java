@@ -1,7 +1,9 @@
 package com.finalproject.backend.baseballmate.controller;
 
 import com.finalproject.backend.baseballmate.model.Group;
+import com.finalproject.backend.baseballmate.model.GroupApplication;
 import com.finalproject.backend.baseballmate.model.User;
+import com.finalproject.backend.baseballmate.repository.GroupApplicationRepository;
 import com.finalproject.backend.baseballmate.repository.GroupRepository;
 import com.finalproject.backend.baseballmate.repository.UserRepository;
 import com.finalproject.backend.baseballmate.requestDto.GroupRequestDto;
@@ -31,6 +33,8 @@ public class GroupController {
     private final GroupService groupService;
     private final GroupRepository groupRepository;
     private final FileService fileService;
+    private final GroupApplication groupApplication;
+    private final GroupApplicationRepository groupApplicationRepository;
     private final UserRepository userRepository;
     private String commonPath = "/images";
 
@@ -93,7 +97,7 @@ public class GroupController {
 
         catch (Exception e)
         {
-            MsgResponseDto msgResponseDto = new MsgResponseDto("success", "모임 등록 실패");
+            MsgResponseDto msgResponseDto = new MsgResponseDto("failed", "모임 등록 실패");
             return msgResponseDto;
         }
 
@@ -122,6 +126,18 @@ public class GroupController {
         MsgResponseDto msgResponseDto = new MsgResponseDto("success", "모임 신청 완료");
         return msgResponseDto;
 
+    }
+
+    // 모임 참가신청 취소하기
+    @DeleteMapping("/groups/{groupId}/applications")
+    public MsgResponseDto cancleApply(@PathVariable Long groupId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        if (userDetails == null)
+        {
+            throw new IllegalArgumentException("로그인 한 사용자만 신청할 수 있습니다.");
+        }
+        groupService.cancleApplication(groupId, userDetails);
+        MsgResponseDto msgResponseDto = new MsgResponseDto("success", "모임 신청 취소 완료");
+        return msgResponseDto;
     }
 
     // 모임 수정하기 - 모임을 생성한 사람만 수정할 수 있게
