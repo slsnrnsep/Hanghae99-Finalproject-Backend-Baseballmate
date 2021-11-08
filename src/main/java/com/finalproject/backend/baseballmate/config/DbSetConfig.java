@@ -38,9 +38,9 @@ public class DbSetConfig {
         goodsSet();
     }
 
-    public void dbset3(){
-        commentSet();
-    }
+//    public void dbset3(){
+//        commentSet();
+//    }
 
     @Transactional
     public void kboSet() throws IOException {
@@ -217,7 +217,7 @@ public class DbSetConfig {
     {
         GroupCommentRequestDto com1 = new GroupCommentRequestDto();
         com1.setComment("aaa가 작성한 그룹댓글 내용");
-        Group groud = groupRepository.findById(137L).orElseThrow(
+        Group groud = groupRepository.findById(17L).orElseThrow(
                 ()->new IllegalArgumentException("그룹정보못찾음")
         );
         User user = userRepository.findByUsername("aaa").orElseThrow(
@@ -226,7 +226,7 @@ public class DbSetConfig {
         groupCommentService.createComment(com1,groud.getGroupId(),user);
 
         com1.setComment("bbb가 작성한 그룹댓글내용");
-        groud = groupRepository.findById(137L).orElseThrow(
+        groud = groupRepository.findById(17L).orElseThrow(
                 ()->new IllegalArgumentException("그룹정보못찾음")
         );
         user = userRepository.findByUsername("bbb").orElseThrow(
@@ -235,7 +235,7 @@ public class DbSetConfig {
         groupCommentService.createComment(com1,groud.getGroupId(),user);
 
         com1.setComment("ccc가 작성한 그룹댓글내용");
-        groud = groupRepository.findById(137L).orElseThrow(
+        groud = groupRepository.findById(17L).orElseThrow(
                 ()->new IllegalArgumentException("그룹정보못찾음")
         );
         user = userRepository.findByUsername("ccc").orElseThrow(
@@ -245,7 +245,7 @@ public class DbSetConfig {
 
         GoodsCommentRequestDto com2 = new GoodsCommentRequestDto();
         com2.setComment("aaa가 작성한 굿즈댓글내용");
-        Goods goods = goodsRepository.findById(141L).orElseThrow(
+        Goods goods = goodsRepository.findById(21L).orElseThrow(
                 ()->new IllegalArgumentException("굿즈정보못찾음")
         );
         user = userRepository.findByUsername("ccc").orElseThrow(
@@ -255,7 +255,7 @@ public class DbSetConfig {
 
 
         com2.setComment("bbb가 작성한 굿즈댓글내용");
-        goods = goodsRepository.findById(141L).orElseThrow(
+        goods = goodsRepository.findById(21L).orElseThrow(
                 () -> new IllegalArgumentException("굿즈정보못찾음")
         );
         user = userRepository.findByUsername("bbb").orElseThrow(
@@ -264,7 +264,7 @@ public class DbSetConfig {
         goodsCommentService.createComment(user,com2,goods.getId());
 
         com2.setComment("ccc가 작성한 굿즈댓글내용");
-        goods = goodsRepository.findById(141L).orElseThrow(
+        goods = goodsRepository.findById(21L).orElseThrow(
                 () -> new IllegalArgumentException("굿즈정보못찾음")
         );
         user = userRepository.findByUsername("bbb").orElseThrow(

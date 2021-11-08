@@ -29,6 +29,8 @@ public class MatchInfomation {
     private String location;
     private String homeImage;
     private String awayImage;
+    private String result;
+    private String datenum;
 
     @Builder
     public MatchInfomation(String date ,String time, String match, String hometeam, String awayteam, String location, String homeImage,String awayImage){
@@ -40,6 +42,8 @@ public class MatchInfomation {
         this.location = location;
         this.homeImage = homeImage;
         this.awayImage = awayImage;
+        this.result = date +" - " +time +", "+ match;
+        this.datenum = date.split("[.]")[0] + date.split("[.]")[1].split(" ")[0];
     }
 
     public void update(String date ,String time, String match, String location, String homeImage,String awayImage) {
@@ -49,5 +53,6 @@ public class MatchInfomation {
         this.location = location;
         this.homeImage = homeImage;
         this.awayImage = awayImage;
+        this.result = date +" - " +time +", "+ match;
     }
 }

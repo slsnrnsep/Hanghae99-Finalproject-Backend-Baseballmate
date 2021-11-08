@@ -12,6 +12,4 @@ import lombok.Setter;
 public class TimeLineRequestDto
 {
     private String content;
-
-
 }

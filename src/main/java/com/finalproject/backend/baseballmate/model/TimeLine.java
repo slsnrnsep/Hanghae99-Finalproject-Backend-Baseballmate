@@ -14,7 +14,7 @@ public class TimeLine extends Timestamped
 {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
-    @Column()
+    @Column(name = "timeline_id")
     private Long id; // 게시글 고유 번호
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -27,7 +27,7 @@ public class TimeLine extends Timestamped
     @Column(nullable = false)
     private String content; // 게시글 내용
 
-    @OneToMany(mappedBy = "timeLine" ,cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "timeLine")
     private List<TimeLineLikes> likesList;
 
     @Column(columnDefinition = "integer default 0")

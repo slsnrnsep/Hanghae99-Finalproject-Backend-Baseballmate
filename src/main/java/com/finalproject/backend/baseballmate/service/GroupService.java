@@ -9,11 +9,14 @@ import com.finalproject.backend.baseballmate.repository.GroupRepository;
 import com.finalproject.backend.baseballmate.requestDto.GroupRequestDto;
 import com.finalproject.backend.baseballmate.responseDto.AllGroupResponseDto;
 import com.finalproject.backend.baseballmate.responseDto.GroupDetailResponseDto;
-//import com.finalproject.backend.baseballmate.responseDto.HotGroupReponseDto;
 import com.finalproject.backend.baseballmate.responseDto.HotGroupResponseDto;
 import com.finalproject.backend.baseballmate.responseDto.MsgResponseDto;
 import com.finalproject.backend.baseballmate.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -42,25 +45,52 @@ public class GroupService {
             double hotPercent = group.getHotPercent();
             String stadium = group.getStadium();
             String groupDate = group.getGroupDate();
+            String filePath = group.getFilePath();
+            String selectTeam = group.getSelectTeam();
 
             AllGroupResponseDto allGroupResponseDto =
-                    new AllGroupResponseDto(groupId, title, createdUsername, peopleLimit, canApplyNum, hotPercent, stadium, groupDate);
+                    new AllGroupResponseDto(groupId, title, createdUsername, peopleLimit, canApplyNum, hotPercent, stadium, groupDate, filePath,selectTeam);
 
             allGroupResponseDtoList.add(allGroupResponseDto);
         }
         return allGroupResponseDtoList;
     }
 
-    // 핫한 모임 조회(hotPercent순) - 메인 페이지용
-    public List<HotGroupResponseDto> getHotGroups(int number) {
-        List<Group> hotGroupList = groupRepository.findAllByOrderByHotPercentDesc();
-        List<HotGroupResponseDto> hotGroupResponseDtoList = new ArrayList<>();
+    // 구단별 모임 조회(필터링)
+    public List<AllGroupResponseDto> showGroupsByTeam(String selectedTeam, Pageable pageable) {
+//        PageRequest
+        Page<Group> grouppage = groupRepository.findBySelectTeam(selectedTeam,pageable);
+        List<AllGroupResponseDto> allGroupResponseDtoList = new ArrayList<>();
+        List<Group> groupList=grouppage.getContent();
+        for(int i=0; i<groupList.size(); i++) {
+            Group group = groupList.get(i);
 
-        if(hotGroupList.size()<=number) {
-            number = hotGroupList.size();
+            Long groupId = group.getGroupId();
+            String title = group.getTitle();
+            String createdUsername = group.getCreatedUsername();
+            int peopleLimit = group.getPeopleLimit();
+            int canApplyNum = group.getCanApplyNum();
+            double hotPercent = group.getHotPercent();
+            String stadium = group.getStadium();
+            String groupDate = group.getGroupDate();
+            String filePath = group.getFilePath();
+            String selectTeam = group.getSelectTeam();
+
+            AllGroupResponseDto allGroupResponseDto =
+                    new AllGroupResponseDto(groupId, title, createdUsername, peopleLimit, canApplyNum, hotPercent, stadium, groupDate, filePath, selectTeam);
+
+            allGroupResponseDtoList.add(allGroupResponseDto);
         }
 
-        for(int i=0; i<number; i++) {
+        return allGroupResponseDtoList;
+    }
+
+    // 핫한 모임 조회(hotPercent순) - 메인 페이지용
+    public List<HotGroupResponseDto> getHotGroups() {
+        List<Group> hotGroupList = groupRepository.findTop5ByOrderByHotPercentDesc();
+        List<HotGroupResponseDto> hotGroupResponseDtoList = new ArrayList<>();
+
+        for(int i=0; i< hotGroupList.size(); i++) {
             Group group = hotGroupList.get(i);
 
             Long groupId = group.getGroupId();
@@ -71,9 +101,10 @@ public class GroupService {
             double hotPercent = group.getHotPercent();
             String stadium = group.getStadium();
             String groupDate = group.getGroupDate();
-
+            String filePath =group.getFilePath();
+            String selectTeam = group.getSelectTeam();
             HotGroupResponseDto hotGroupResponseDto =
-                    new HotGroupResponseDto(groupId, createdUsername, title, peopleLimit, canApplyNum, hotPercent, stadium, groupDate);
+                    new HotGroupResponseDto(groupId, createdUsername, title, peopleLimit, canApplyNum, hotPercent, stadium, groupDate,filePath,selectTeam);
 
             hotGroupResponseDtoList.add(hotGroupResponseDto);
         }
@@ -103,10 +134,11 @@ public class GroupService {
         double hotPercent = group.getHotPercent();
         String stadium = group.getStadium();
         String groupDate = group.getGroupDate();
+        String filePath = group.getFilePath();
         List<GroupComment> groupcommentList = group.getGroupCommentList();
 
         GroupDetailResponseDto groupdetailResponseDto =
-                new GroupDetailResponseDto(groupId, createdUserName, title, content, peopleLimit, nowAppliedNum, canApplyNum, hotPercent, stadium , groupDate, groupcommentList);
+                new GroupDetailResponseDto(groupId, createdUserName, title, content, peopleLimit, nowAppliedNum, canApplyNum, hotPercent, stadium , groupDate,groupcommentList,filePath);
 
         return groupdetailResponseDto;
     }

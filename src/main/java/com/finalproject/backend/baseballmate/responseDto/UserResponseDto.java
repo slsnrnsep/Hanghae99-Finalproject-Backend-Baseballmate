@@ -1,17 +1,17 @@
 package com.finalproject.backend.baseballmate.responseDto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 public class UserResponseDto {
 
-    private Boolean ok;
-    private String msg;
-    private int status;
-
-    public UserResponseDto(Boolean ok, String msg, int status){
-        this.ok = ok;
-        this.msg = msg;
-        this.status = status;
-    }
+    private Long id;
+    private String userid;
+    private String username;
+    private String password;
+    private String myteam;
 }

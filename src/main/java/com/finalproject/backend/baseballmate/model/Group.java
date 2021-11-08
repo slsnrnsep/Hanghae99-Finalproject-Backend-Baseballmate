@@ -20,6 +20,7 @@ public class Group extends Timestamped{
 
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
+    @Column(name = "group_id")
     private Long groupId; // 모임 고유번호, pk
 
     // 유저 아이디값이 들어감
@@ -38,6 +39,9 @@ public class Group extends Timestamped{
 
     @Column
     private int peopleLimit; // 모임 최대 제한인원
+
+    @Column
+    private String filePath;
 
     // 참가 신청한 유저와 해당 모임 정보
     @JsonManagedReference
@@ -60,6 +64,8 @@ public class Group extends Timestamped{
     @Column
     private String groupDate; // 모임 날짜
 
+    @Column
+    private String selectTeam;
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "userIndex")
 //    private User userIndex; // user테이블의 id값
@@ -68,8 +74,24 @@ public class Group extends Timestamped{
 //    private String baseballTeam; // 구단 이름
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "group",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "group")
     private List<GroupComment> groupCommentList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "group")
+    private List<GroupLikes> likesList;
+
+    @Column(columnDefinition = "integer default 0")
+    private int likeCount;
+
+    public void addGroupLikes(GroupLikes likes){
+        this.likesList.add(likes);
+        this.likeCount += 1;
+    }
+
+    public void deleteGroupLikes(GroupLikes likes){
+        this.likesList.remove(likes);
+        this.likeCount -= 1;
+    }
 
     // 게시글 전체 조회 생성자
 
@@ -84,6 +106,8 @@ public class Group extends Timestamped{
         this.groupDate = requestDto.getGroupDate();
         this.createdUser = loginedUser;
         this.createdUsername = loginedUser.getUsername();
+        this.filePath = requestDto.getFilePath();
+        this.selectTeam = requestDto.getSelectTeam();
     }
 
     // 모임글 수정 메소드

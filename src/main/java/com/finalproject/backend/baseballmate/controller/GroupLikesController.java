@@ -1,8 +1,8 @@
 package com.finalproject.backend.baseballmate.controller;
 
-import com.finalproject.backend.baseballmate.requestDto.GoodsLikesReqeustDto;
+import com.finalproject.backend.baseballmate.requestDto.GroupLikesRequestDto;
 import com.finalproject.backend.baseballmate.security.UserDetailsImpl;
-import com.finalproject.backend.baseballmate.service.GoodsLikesService;
+import com.finalproject.backend.baseballmate.service.GroupLikesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,26 +10,25 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-@RequiredArgsConstructor
 @RestController
-public class GoodsLikesController {
+@RequiredArgsConstructor
+public class GroupLikesController {
 
-    private final GoodsLikesService goodsLikesService;
+    private final GroupLikesService groupLikesService;
 
-    @PostMapping("/goods/{goodsId}/like")
-    public String GoodsLikePost(
-            @PathVariable("goodsId") Long goodsId,
-            @RequestBody GoodsLikesReqeustDto goodsLikesReqeustDto,
+    @PostMapping("/group/{groupId}/like")
+    public String GroupLikePost(
+            @PathVariable("groupId") Long groupId,
+            @RequestBody GroupLikesRequestDto requestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails)
     {
         if(userDetails == null)
         {
-            throw new IllegalArgumentException("로그인한 사용자만 가능한 기능입니다");
+            throw new IllegalArgumentException("로그인한 사용자만이 이용가능합니다");
         }
+        boolean GroupLiked = groupLikesService.GroupLiked(groupId, requestDto, userDetails);
 
-        boolean goodsLiked = goodsLikesService.goodsLiked(goodsId, goodsLikesReqeustDto, userDetails);
-
-        if(goodsLiked)
+        if(GroupLiked)
         {
             return "true";
         }
@@ -37,9 +36,5 @@ public class GoodsLikesController {
         {
             return "false";
         }
-
     }
-
-
-
 }

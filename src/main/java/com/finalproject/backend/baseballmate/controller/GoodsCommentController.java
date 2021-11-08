@@ -13,45 +13,63 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 public class GoodsCommentController {
+
     private final GoodsCommentService goodsCommentService;
 
-    @PostMapping("/page/goods/detail/{goodsId}/comment")
-    public GoodsCommentResponseDto postComment(@RequestBody GoodsCommentRequestDto requestDto,
-                                               @AuthenticationPrincipal UserDetailsImpl userDetails,
-                                               @PathVariable("goodsId") Long goodsid ){
-        if(userDetails == null){
+    @PostMapping("/goods/{goodsId}/comment")
+    public GoodsCommentResponseDto postComment(
+            @RequestBody GoodsCommentRequestDto requestDto,
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @PathVariable("goodsId") Long goodsid )
+    {
+        if(userDetails == null)
+        {
             throw new IllegalArgumentException("로그인 사용자만 가능한 기능입니다");
         }
+
         try {
             User loginUser = userDetails.getUser();
             goodsCommentService.createComment(loginUser, requestDto, goodsid);
             GoodsCommentResponseDto goodsCommentResponseDto = new GoodsCommentResponseDto("success", "등록완료");
             return goodsCommentResponseDto;
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             GoodsCommentResponseDto goodsCommentResponseDto = new GoodsCommentResponseDto("","에러발생");
             return goodsCommentResponseDto;
         }
     }
 
-    @PutMapping("/page/goods/detail/{goodsCommentId}")
-    public GoodsCommentResponseDto updateComment(@PathVariable("goodsCommentId") Long id,
-                                                 @AuthenticationPrincipal UserDetailsImpl userDetails,
-                                                 @RequestBody GoodsCommentRequestDto requestDto){
+    @PutMapping("/goods/{goodsId}/comment/{commentId}")
+    public GoodsCommentResponseDto updateComment(
+            @PathVariable("goodsId") Long goodsId,
+            @PathVariable("commentId") Long commentId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @RequestBody GoodsCommentRequestDto requestDto)
+    {
         if(userDetails == null){
             throw new IllegalArgumentException("로그인 사용자만이 수정할 수 있습니다");
         }
-        try {
-            goodsCommentService.updateGoodsComment(userDetails, id, requestDto);
+
+        try
+        {
+            goodsCommentService.updateGoodsComment(userDetails, commentId, requestDto);
             GoodsCommentResponseDto goodsCommentResponseDto = new GoodsCommentResponseDto("success","변경완료");
             return goodsCommentResponseDto;
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             GoodsCommentResponseDto goodsCommentResponseDto = new GoodsCommentResponseDto("","에러발생");
             return goodsCommentResponseDto;
         }
     }
-    @DeleteMapping("/page/goods/detail/{goodsCommentId}")
-    public GoodsCommentResponseDto deleteComment(@PathVariable("goodsCommentId") Long id,
-                                                 @AuthenticationPrincipal UserDetailsImpl userDetails){
+
+    @DeleteMapping("/goods/{goodsId}/comment/{commentId}")
+    public GoodsCommentResponseDto deleteComment(
+            @PathVariable("goodsId") Long goodsId,
+            @PathVariable("goodsCommentId") Long id,
+            @AuthenticationPrincipal UserDetailsImpl userDetails)
+    {
         if(userDetails == null){
             throw new IllegalArgumentException("로그인 사용자만이 삭제할 수 있습니다");
         }
@@ -59,5 +77,4 @@ public class GoodsCommentController {
         GoodsCommentResponseDto goodsCommentResponseDto = new GoodsCommentResponseDto("success","삭제완료");
         return goodsCommentResponseDto;
     }
-
 }

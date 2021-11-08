@@ -8,22 +8,22 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @Entity
-public class GoodsLikes {
+public class GroupLikes {
 
     @Id
     @GeneratedValue
     private Long id;
 
-    @JoinColumn(name = "goods_id")
+    @JoinColumn(name = "group_id")
     @ManyToOne
-    private Goods goods;
+    private Group group;
 
     @JoinColumn(name = "user_id")
     @ManyToOne
     private User user;
 
-    public GoodsLikes(Goods goods, User user){
-        this.goods = goods;
+    public GroupLikes(Group group, User user) {
+        this.group = group;
         this.user = user;
     }
 }
