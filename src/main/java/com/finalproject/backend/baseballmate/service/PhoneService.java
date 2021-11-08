@@ -27,7 +27,7 @@ public class PhoneService {
         this.phoneService = phoneService;
     }
 
-    public static final int ranNum = creatkey();
+//    public static final int ranNum = creatkey();
 
     private static int  creatkey(){
         int ranNum = (int)(Math.random() * (99999 - 10000 + 1)) + 10000;
@@ -40,7 +40,7 @@ public class PhoneService {
         String api_secret = "YSQKW2V1YETXYWBZGDWNZSGFLZROFAJV";
         Message coolsms = new Message(api_key, api_secret);
         String phoneNumber = requstDto.getPhoneNumber();
-
+        int ranNum = creatkey();
         // 4 params(to, from, type, text) are mandatory. must be filled
         HashMap<String, String> params = new HashMap<>();
         params.put("to", phoneNumber);    // 수신전화번호

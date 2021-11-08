@@ -9,6 +9,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface GroupCommentLikesRepository extends JpaRepository<GroupCommentLikes,Long> {
-    Optional<GroupCommentLikes> findByGroupcommentIdandUserId(Long groupId, Long UserId);
+    Optional<GroupCommentLikes> findByGroupComment_GroupCommentIdAndUserId(Long groupId, Long UserId);
     List<GroupCommentLikes> findAllByUserId(Long UserId);
 }

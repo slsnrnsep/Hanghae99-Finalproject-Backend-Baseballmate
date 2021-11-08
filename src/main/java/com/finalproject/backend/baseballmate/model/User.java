@@ -34,7 +34,7 @@ public class User {
 
     private int ranNum;
 
-    @Column(nullable = true , unique = true)
+    @Column
     private String phoneNumber;
 
 //    private test test;
@@ -107,12 +107,14 @@ public class User {
         this.phoneNumber = phonenumber;
         this.ranNum = ranNum;
     }
+
     public User(String userid, String username, String password,String phonenumber){
         this.userid = userid;
         this.username = username;
         this.password = password;
         this.phoneNumber = phonenumber;
     }
+
     public User(String phonenumber,int ranNum)
     {
         this.phoneNumber = phonenumber;

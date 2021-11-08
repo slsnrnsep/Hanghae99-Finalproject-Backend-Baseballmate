@@ -36,12 +36,8 @@ public class GroupComment {
     @JoinColumn(name = "groupId")
     private Group group;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "commentUserId")
-//    private User commentUser;
-
-@OneToMany(mappedBy = "groupComment",cascade = CascadeType.ALL)
-private List<GroupCommentLikes> groupcommentlikesList;
+    @OneToMany(mappedBy = "groupComment",cascade = CascadeType.ALL)
+    private List<GroupCommentLikes> groupcommentlikesList;
 
     @Column(columnDefinition = "integer default 0")
     private int groupcommentlikeCount;

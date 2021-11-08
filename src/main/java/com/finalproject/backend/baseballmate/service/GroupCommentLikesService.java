@@ -28,7 +28,7 @@ public class GroupCommentLikesService {
         );
 
         if (reqeustDto.getIsLiked().equals("true")) {
-            GroupCommentLikes likes = groupCommentLikesRepository.findByGroupcommentIdandUserId(groupComment.getGroupCommentId(), user.getId()).orElseThrow(
+            GroupCommentLikes likes = groupCommentLikesRepository.findByGroupComment_GroupCommentIdAndUserId(groupComment.getGroupCommentId(), user.getId()).orElseThrow(
                     () -> new IllegalArgumentException("해당 게시물의 좋아요 이력이 없습니다.")
             );
 
@@ -37,7 +37,7 @@ public class GroupCommentLikesService {
             groupCommentLikesRepository.delete(likes);
             return false;
         } else {
-            if(groupCommentLikesRepository.findByGroupcommentIdandUserId(groupComment.getGroupCommentId(), user.getId()).isPresent())
+            if(groupCommentLikesRepository.findByGroupComment_GroupCommentIdAndUserId(groupComment.getGroupCommentId(), user.getId()).isPresent())
             {
                 return true;
             }

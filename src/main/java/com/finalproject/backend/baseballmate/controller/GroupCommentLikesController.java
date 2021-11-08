@@ -18,6 +18,7 @@ public class GroupCommentLikesController {
 
     @PostMapping("/groups/{groupId}/comment/{commentId}/like")
     public String GroupCommentLikePost(
+            @PathVariable("groupId") Long groupId,
             @PathVariable("commentId") Long groupcommentId,
             @RequestBody GoodsLikesReqeustDto goodsLikesReqeustDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails)
