@@ -35,7 +35,7 @@ public class PhoneController {
 
         } catch (Exception e)
         {
-            throw new IllegalArgumentException("서버에 오류가 발생하였습니다");
+            throw new IllegalArgumentException("번호를 잘못입력했거나,서버에 오류가 발생하였습니다");
         }
 
     }

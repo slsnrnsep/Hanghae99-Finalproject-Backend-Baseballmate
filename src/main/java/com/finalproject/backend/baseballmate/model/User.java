@@ -34,7 +34,9 @@ public class User {
 
     private int ranNum;
 
+    @Column(nullable = true , unique = true)
     private String phoneNumber;
+
 //    private test test;
 //    @OneToMany(mappedBy = "user")
 //    private List<Group> groupList = new ArrayList<Group>();
@@ -71,13 +73,23 @@ public class User {
         this.timeLineLikes.remove(likes);
     }
 
+    @OneToMany(mappedBy = "user")
+    private final List<GroupLikes> groupLikes = new ArrayList<>();
+
+    public void addGroupLikes(GroupLikes likes) {this.groupLikes.add(likes);}
+
+    public void deleteGroupLikes(GroupLikes likes) {this.groupLikes.remove(likes);}
+
+    @OneToMany(mappedBy = "user")
+    private final List<GroupCommentLikes> groupCommentLikes = new ArrayList<>();
+
+    public void addGroupCommentLikes(GroupCommentLikes likes) {this.groupCommentLikes.add(likes);}
+
+    public void deleteGroupCommentLikes(GroupCommentLikes likes) {this.groupCommentLikes.remove(likes);}
+
     // goods 좋아요 생성자
     @OneToMany(mappedBy = "user")
     private final List<GoodsLikes> goodsLikes = new ArrayList<>();
-
-//    public void addGoodsLikes(GoodsLikes likes){
-//        this.likes.add(likes);
-//    }
 
     public void addGoodsLikes(GoodsLikes likes){
         this.goodsLikes.add(likes);

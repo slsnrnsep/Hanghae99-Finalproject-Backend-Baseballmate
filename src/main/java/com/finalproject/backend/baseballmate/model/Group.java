@@ -76,7 +76,23 @@ public class Group extends Timestamped{
     @OneToMany(mappedBy = "group")
     private List<GroupComment> groupCommentList = new ArrayList<>();
 
-    // 게시글 전체 조회 생성자
+    // 좋아요
+    @OneToMany(mappedBy = "group")
+    private List<GroupLikes> grouplikesList;
+
+    @Column(columnDefinition = "integer default 0")
+    private int grouplikeCount;
+
+    public void addLikes(GroupLikes like) {
+        this.grouplikesList.add(like);
+        this.grouplikeCount += 1;
+    }
+
+    public void deleteLikes(GroupLikes like) {
+        this.grouplikesList.remove(like);
+        this.grouplikeCount -= 1;
+    }
+
 
     // 모임글 등록 생성자
     public Group(GroupRequestDto requestDto, User loginedUser) {

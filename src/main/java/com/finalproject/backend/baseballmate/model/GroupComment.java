@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @NoArgsConstructor
 @Setter
@@ -39,6 +40,21 @@ public class GroupComment {
 //    @JoinColumn(name = "commentUserId")
 //    private User commentUser;
 
+@OneToMany(mappedBy = "groupComment")
+private List<GroupCommentLikes> groupcommentlikesList;
+
+    @Column(columnDefinition = "integer default 0")
+    private int groupcommentlikeCount;
+
+    public void addLikes(GroupCommentLikes like) {
+        this.groupcommentlikesList.add(like);
+        this.groupcommentlikeCount += 1;
+    }
+
+    public void deleteLikes(GroupCommentLikes like) {
+        this.groupcommentlikesList.remove(like);
+        this.groupcommentlikeCount -= 1;
+    }
     public GroupComment(GroupCommentRequestDto groupCommentRequestDto, Group group, String commentUsername, Long loginedUserIndex, String loginedUserId) {
         this.commentUsername = commentUsername;
         this.comment = groupCommentRequestDto.getComment();
