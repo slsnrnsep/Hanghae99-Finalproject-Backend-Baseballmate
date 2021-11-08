@@ -19,5 +19,6 @@ public class AllGroupResponseDto {
     private String groupDate;
     private String filePath;
     private String selectTeam;
+    private String dday;
     // private LocalDateTime createdAt;
 }

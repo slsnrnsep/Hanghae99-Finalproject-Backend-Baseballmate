@@ -20,6 +20,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,9 +49,13 @@ public class GroupService {
             String groupDate = group.getGroupDate();
             String filePath = group.getFilePath();
             String selectTeam = group.getSelectTeam();
-
+            int month = Integer.parseInt(group.getGroupDate().split("[.]")[0]);
+            int day = Integer.parseInt(group.getGroupDate().split("[.]")[1].split(" ")[0]);
+            LocalDate target = LocalDate.of(LocalDate.now().getYear(),month,day);
+            Long countingday = ChronoUnit.DAYS.between(LocalDate.now(),target);
+            String dday = countingday.toString();
             AllGroupResponseDto allGroupResponseDto =
-                    new AllGroupResponseDto(groupId, title, createdUsername, peopleLimit, canApplyNum, hotPercent, stadium, groupDate, filePath,selectTeam);
+                    new AllGroupResponseDto(groupId, title, createdUsername, peopleLimit, canApplyNum, hotPercent, stadium, groupDate, filePath,selectTeam,dday);
 
             allGroupResponseDtoList.add(allGroupResponseDto);
         }
@@ -75,9 +81,14 @@ public class GroupService {
             String groupDate = group.getGroupDate();
             String filePath = group.getFilePath();
             String selectTeam = group.getSelectTeam();
+            int month = Integer.parseInt(group.getGroupDate().split("[.]")[0]);
+            int day = Integer.parseInt(group.getGroupDate().split("[.]")[1].split(" ")[0]);
+            LocalDate target = LocalDate.of(LocalDate.now().getYear(),month,day);
+            Long countingday = ChronoUnit.DAYS.between(LocalDate.now(),target);
+            String dday = countingday.toString();
 
             AllGroupResponseDto allGroupResponseDto =
-                    new AllGroupResponseDto(groupId, title, createdUsername, peopleLimit, canApplyNum, hotPercent, stadium, groupDate, filePath, selectTeam);
+                    new AllGroupResponseDto(groupId, title, createdUsername, peopleLimit, canApplyNum, hotPercent, stadium, groupDate, filePath, selectTeam,dday);
 
             allGroupResponseDtoList.add(allGroupResponseDto);
         }
