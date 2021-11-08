@@ -27,7 +27,9 @@ public class TimeLine extends Timestamped
     @Column(nullable = false)
     private String content; // 게시글 내용
 
+
     @OneToMany(mappedBy = "timeLine", cascade = CascadeType.ALL)
+
     private List<TimeLineLikes> likesList;
 
     @Column(columnDefinition = "integer default 0")

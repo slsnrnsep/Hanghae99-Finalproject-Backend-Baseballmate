@@ -20,6 +20,7 @@ public class Group extends Timestamped{
 
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
+    @Column(name = "group_id")
     private Long groupId; // 모임 고유번호, pk
 
     // 유저 아이디값이 들어감
@@ -73,6 +74,10 @@ public class Group extends Timestamped{
 //    private String baseballTeam; // 구단 이름
 
     @JsonManagedReference
+
+
+    // 게시글 전체 조회 생성자
+
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
     private List<GroupComment> groupCommentList = new ArrayList<>();
 

@@ -140,6 +140,7 @@ public class UserContorller {
             myGoodsLikesList.add(GoodsLikesList.get(i).getGoods().getId());
         }
 
+
         List<GroupLikes> groupLikesList = groupLikesRepository.findAllByUserId(user.getId());
         List<Long> myGroupLikesList = new ArrayList<>();
         for (int i=0; i<groupLikesList.size();i++)
@@ -153,9 +154,8 @@ public class UserContorller {
         {
             myGroupCommentLikesList.add(groupCommentLikesList.get(i).getGroupComment().getGroupCommentId());
         }
-
-
         LoginCheckResponseDto loginCheckResponseDto = new LoginCheckResponseDto(user.getId(),user.getUserid(), user.getUsername(),user.getMyselectTeam(),user.getPicture(),user.getPhoneNumber(),myTimeLineLikesList,myGoodsLikesList,myGroupLikesList,myGroupCommentLikesList);
+
 
         return loginCheckResponseDto;
     }
