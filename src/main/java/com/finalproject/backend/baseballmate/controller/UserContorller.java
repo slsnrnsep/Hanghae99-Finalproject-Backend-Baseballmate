@@ -142,7 +142,8 @@ public class UserContorller {
             myGoodsLikesList.add(GoodsLikesList.get(i).getGoods().getId());
         }
 
-        LoginCheckResponseDto loginCheckResponseDto = new LoginCheckResponseDto(user.getId(),user.getUsername(),user.getMyselectTeam(),myTimeLineLikesList,myGoodsLikesList);
+
+        LoginCheckResponseDto loginCheckResponseDto = new LoginCheckResponseDto(user.getId(),user.getUserid(), user.getUsername(),user.getMyselectTeam(),user.getPicture(),myTimeLineLikesList,myGoodsLikesList);
 
         return loginCheckResponseDto;
     }

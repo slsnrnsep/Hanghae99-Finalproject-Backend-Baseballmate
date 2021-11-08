@@ -54,6 +54,7 @@ public class DbSetConfig {
         user.setUserid("bbb@bbb.com");
         user.setUsername("bbb");
         user.setPassword("a123123!");
+        user.setPhonenumber("01071583399");
 //        user.setProfileImage("/Profileimages/basic_profile");
         userService.registerUser(user);
 
@@ -61,6 +62,7 @@ public class DbSetConfig {
         user2.setUserid("aaa@aaa.com");
         user2.setUsername("aaa");
         user2.setPassword("a123123!");
+        user.setPhonenumber("01071583399");
 //        user2.setProfileImage("/Profileimages/basic_profile");
         userService.registerUser(user2);
 
@@ -68,6 +70,7 @@ public class DbSetConfig {
         user3.setUserid("ccc@ccc.com");
         user3.setUsername("ccc");
         user3.setPassword("a123123!");
+        user.setPhonenumber("01071583399");
 //        user2.setProfileImage("/Profileimages/basic_profile");
         userService.registerUser(user3);
     }

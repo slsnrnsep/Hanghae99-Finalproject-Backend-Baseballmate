@@ -27,20 +27,23 @@ public class PhoneController {
     }
 
     @PostMapping("/checkPhone")
-    public void sendMessage(@RequestBody PhoneRequstDto requstDto, User user){
+    public void sendMessage(@RequestBody PhoneRequstDto requstDto){
 
-        try {
-            phoneService.sendMessage(requstDto,user);
-        } catch (Exception e) {
+        try
+        {
+            phoneService.sendMessage(requstDto);
 
+        } catch (Exception e)
+        {
+            throw new IllegalArgumentException("서버에 오류가 발생하였습니다");
         }
 
     }
 
     @PostMapping("/confirmNumChk")
-    public PhoneResponseDto confirmNumChk(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody PhoneRequstDto requstDto){
+    public PhoneResponseDto confirmNumChk(@RequestBody PhoneRequstDto requstDto){
 
-        phoneService.confirmNumChk(userDetails,requstDto);
+        phoneService.confirmNumChk(requstDto);
 
         PhoneResponseDto responseDto = new PhoneResponseDto("success","인증완료");
 

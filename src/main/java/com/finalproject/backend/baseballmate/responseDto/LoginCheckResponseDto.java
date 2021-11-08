@@ -13,8 +13,10 @@ import java.util.List;
 @Getter
 public class LoginCheckResponseDto {
     private Long useridx;
+    private String userid;
     private String username;
     private String myteam;
+    private String picture;
     private List<Long> myTimeLineLikesList;
     private List<Long> myGoodsLikesList;
 }

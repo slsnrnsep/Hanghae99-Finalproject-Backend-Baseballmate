@@ -94,6 +94,11 @@ public class User {
         this.password = password;
     }
 
+    public User(String phonenumber,int ranNum)
+    {
+        this.phoneNumber = phonenumber;
+        this.ranNum = ranNum;
+    }
     // 카카오 로그인에 필요한 생성자
     @Builder
     public User(String username ,String userid, String picture, String password, Long kakaoId){
