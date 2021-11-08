@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 public class PhoneRequstDto {
 
     private String phoneNumber;
-    private int  ranNum;
+    private int ranNum;
 }

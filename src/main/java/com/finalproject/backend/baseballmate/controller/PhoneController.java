@@ -27,23 +27,34 @@ public class PhoneController {
     }
 
     @PostMapping("/checkPhone")
-    public void sendMessage(@RequestBody PhoneRequstDto requstDto, User user){
+    public void sendMessage(@RequestBody PhoneRequstDto requstDto){
+        //중복된 핸드폰번호 가입막기 추가할 예정
 
-        try {
-            phoneService.sendMessage(requstDto,user);
-        } catch (Exception e) {
+        try
+        {
+            phoneService.sendMessage(requstDto);
 
+        } catch (Exception e)
+        {
+            throw new IllegalArgumentException("번호를 잘못입력했거나,서버에 오류가 발생하였습니다");
         }
 
     }
 
     @PostMapping("/confirmNumChk")
-    public PhoneResponseDto confirmNumChk(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody PhoneRequstDto requstDto){
+    public PhoneResponseDto confirmNumChk(@RequestBody PhoneRequstDto requstDto){
 
-        phoneService.confirmNumChk(userDetails,requstDto);
+        phoneService.confirmNumChk(requstDto);
 
         PhoneResponseDto responseDto = new PhoneResponseDto("success","인증완료");
 
         return responseDto;
+    }
+
+    @PostMapping("/custommsg")
+    public void sendcustommsg(@AuthenticationPrincipal UserDetailsImpl userDetails)
+    {
+        String msg = "테스트메시지입니다";
+        phoneService.CustomsendMessage(msg,userDetails.getUser());
     }
 }

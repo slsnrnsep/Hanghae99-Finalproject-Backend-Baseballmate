@@ -32,7 +32,9 @@ public class GoodsController {
     // 굿즈생성
     @PostMapping("/goods")
     public GoodsResponseDto postGoods(
+
             @RequestParam(value = "file",required = false) MultipartFile files,
+
             @RequestBody GoodsRequestDto requestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails)
     {
@@ -43,6 +45,7 @@ public class GoodsController {
 
         try
         {
+
             String filename = "basic.jpg";
             if (files != null) {
                 String origFilename = files.getOriginalFilename();
@@ -63,6 +66,7 @@ public class GoodsController {
                 files.transferTo(new File(filePath));
             }
             requestDto.setFilePath(filename);
+
             User loginUser = userDetails.getUser();
             String loginedUsername = userDetails.getUser().getUsername();
             goodsService.createGoods(loginUser, requestDto);
