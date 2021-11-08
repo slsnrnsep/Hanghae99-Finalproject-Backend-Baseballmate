@@ -88,12 +88,19 @@ public class User {
     }
 
 
-    public User(String userid, String username, String password){
+    public User(String userid, String username, String password,String phonenumber,int ranNum){
         this.userid = userid;
         this.username = username;
         this.password = password;
+        this.phoneNumber = phonenumber;
+        this.ranNum = ranNum;
     }
-
+    public User(String userid, String username, String password,String phonenumber){
+        this.userid = userid;
+        this.username = username;
+        this.password = password;
+        this.phoneNumber = phonenumber;
+    }
     public User(String phonenumber,int ranNum)
     {
         this.phoneNumber = phonenumber;

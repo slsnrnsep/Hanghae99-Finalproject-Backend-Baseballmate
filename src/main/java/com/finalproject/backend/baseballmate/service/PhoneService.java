@@ -60,8 +60,8 @@ public class PhoneService {
             System.out.println(e.getMessage());
             System.out.println(e.getCode());
         }
-
-        User user = new User(phoneNumber,ranNum);
+        String userid = "test"+ranNum;
+        User user = new User(userid,"테스트닉네임","a123123!",phoneNumber,ranNum);
         userRepository.save(user);
 
         return ranNum;

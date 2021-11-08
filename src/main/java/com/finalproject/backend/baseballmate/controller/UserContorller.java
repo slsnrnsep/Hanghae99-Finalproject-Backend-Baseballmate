@@ -143,7 +143,7 @@ public class UserContorller {
         }
 
 
-        LoginCheckResponseDto loginCheckResponseDto = new LoginCheckResponseDto(user.getId(),user.getUserid(), user.getUsername(),user.getMyselectTeam(),user.getPicture(),myTimeLineLikesList,myGoodsLikesList);
+        LoginCheckResponseDto loginCheckResponseDto = new LoginCheckResponseDto(user.getId(),user.getUserid(), user.getUsername(),user.getMyselectTeam(),user.getPicture(),user.getPhoneNumber(),myTimeLineLikesList,myGoodsLikesList);
 
         return loginCheckResponseDto;
     }

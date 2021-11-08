@@ -48,11 +48,13 @@ public class UserService {
         String pattern = "^[a-zA-Z0-9]*$";
 
         password = passwordEncoder.encode(userRequestDto.getPassword());
-        User user = userRepository.findByPhoneNumber(userRequestDto.getPhonenumber()).orElseThrow(
-                ()-> new IllegalArgumentException("휴대폰에 맞는 유저정보를 찾을 수 없습니다.")
-        );
-        user.setUsername(username);
-        user.setPassword(password);
+//        User user = userRepository.findByPhoneNumber(userRequestDto.getPhonenumber()).orElseThrow(
+//                ()-> new IllegalArgumentException("휴대폰에 맞는 유저정보를 찾을 수 없습니다.")
+//        );
+//        user.setUserid(userid);
+//        user.setUsername(username);
+//        user.setPassword(password);
+        User user = new User(userid,username,password, userRequestDto.getPhonenumber());
         userRepository.save(user);
 
     }
