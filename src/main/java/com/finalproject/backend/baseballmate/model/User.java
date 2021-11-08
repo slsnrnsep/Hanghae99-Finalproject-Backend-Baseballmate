@@ -31,6 +31,10 @@ public class User {
     private String password;
 
     private String myselectTeam;
+
+    private int ranNum;
+
+    private String phoneNumber;
 //    private test test;
 //    @OneToMany(mappedBy = "user")
 //    private List<Group> groupList = new ArrayList<Group>();
