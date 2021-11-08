@@ -3,6 +3,7 @@ package com.finalproject.backend.baseballmate.service;
 import com.finalproject.backend.baseballmate.model.*;
 import com.finalproject.backend.baseballmate.repository.*;
 import com.finalproject.backend.baseballmate.requestDto.GoodsLikesReqeustDto;
+import com.finalproject.backend.baseballmate.requestDto.LikesRequestDto;
 import com.finalproject.backend.baseballmate.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,7 @@ public class GroupCommentLikesService {
     private final GroupCommentRepository groupCommentRepository;
 
     @Transactional
-    public boolean groupCommentLikes(Long groupcommentId, GoodsLikesReqeustDto reqeustDto, UserDetailsImpl userDetails)
+    public boolean groupCommentLikes(Long groupcommentId, LikesRequestDto reqeustDto, UserDetailsImpl userDetails)
     {
         User user = userRepository.findById(userDetails.getUser().getId()).orElseThrow(
                 () -> new IllegalArgumentException("로그인 정보를 찾을 수 없습니다.")

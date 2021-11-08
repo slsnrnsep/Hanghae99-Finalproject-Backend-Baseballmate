@@ -20,4 +20,6 @@ public class LoginCheckResponseDto {
     private String phonenumber;
     private List<Long> myTimeLineLikesList;
     private List<Long> myGoodsLikesList;
+    private List<Long> myGroupLikesList;
+    private List<Long> myGroupCommentLikesList;
 }

@@ -1,6 +1,7 @@
 package com.finalproject.backend.baseballmate.controller;
 
 import com.finalproject.backend.baseballmate.requestDto.GoodsLikesReqeustDto;
+import com.finalproject.backend.baseballmate.requestDto.LikesRequestDto;
 import com.finalproject.backend.baseballmate.security.UserDetailsImpl;
 import com.finalproject.backend.baseballmate.service.GroupCommentLikesService;
 import com.finalproject.backend.baseballmate.service.GroupLikesService;
@@ -20,7 +21,7 @@ public class GroupLikesController {
     @PostMapping("/groups/{groupId}/like")
     public String GroupLikePost(
             @PathVariable("groupId") Long groupId,
-            @RequestBody GoodsLikesReqeustDto goodsLikesReqeustDto,
+            @RequestBody LikesRequestDto likesRequestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails)
     {
         if(userDetails == null)
@@ -28,7 +29,7 @@ public class GroupLikesController {
             throw new IllegalArgumentException("로그인한 사용자만 가능한 기능입니다");
         }
 
-        boolean groupLikes = groupLikesService.groupLikes(groupId, goodsLikesReqeustDto, userDetails);
+        boolean groupLikes = groupLikesService.groupLikes(groupId, likesRequestDto, userDetails);
 
         if(groupLikes)
         {

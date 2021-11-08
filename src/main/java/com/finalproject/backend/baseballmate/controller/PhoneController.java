@@ -29,7 +29,7 @@ public class PhoneController {
     @PostMapping("/checkPhone")
     public void sendMessage(@RequestBody PhoneRequstDto requstDto){
         //중복된 핸드폰번호 가입막기 추가할 예정
-        
+
         try
         {
             phoneService.sendMessage(requstDto);
