@@ -50,4 +50,11 @@ public class PhoneController {
 
         return responseDto;
     }
+
+    @PostMapping("/custommsg")
+    public void sendcustommsg(@AuthenticationPrincipal UserDetailsImpl userDetails)
+    {
+        String msg = "테스트메시지입니다";
+        phoneService.CustomsendMessage(msg,userDetails.getUser());
+    }
 }
