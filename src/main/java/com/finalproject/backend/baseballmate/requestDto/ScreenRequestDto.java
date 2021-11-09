@@ -1,16 +1,19 @@
 package com.finalproject.backend.baseballmate.requestDto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Setter
 @Getter
-public class GroupRequestDto {
+@NoArgsConstructor
+@AllArgsConstructor
+public class ScreenRequestDto {
     private String title;
     private String content;
     private int peopleLimit;
     private String groupDate;
     private String filePath;
-    private String selectTeam;
-
+    private String selectPlace;
 }
