@@ -5,11 +5,8 @@ import com.finalproject.backend.baseballmate.OAuth2.KakaoUserInfo;
 import com.finalproject.backend.baseballmate.model.User;
 import com.finalproject.backend.baseballmate.repository.UserRepository;
 import com.finalproject.backend.baseballmate.requestDto.HeaderDto;
-<<<<<<< HEAD
 import com.finalproject.backend.baseballmate.requestDto.UserProfileRequestDto;
-=======
 import com.finalproject.backend.baseballmate.requestDto.PhoneRequstDto;
->>>>>>> d0a864a9515858a3a05975833100e0376c543e60
 import com.finalproject.backend.baseballmate.requestDto.UserRequestDto;
 import com.finalproject.backend.baseballmate.responseDto.UserResponseDto;
 import com.finalproject.backend.baseballmate.security.JwtTokenProvider;

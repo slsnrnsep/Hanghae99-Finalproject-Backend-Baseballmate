@@ -1,23 +1,17 @@
 package com.finalproject.backend.baseballmate.controller;
 
 import com.finalproject.backend.baseballmate.model.Group;
-import com.finalproject.backend.baseballmate.model.GroupApplication;
 import com.finalproject.backend.baseballmate.model.User;
-import com.finalproject.backend.baseballmate.repository.GroupApplicationRepository;
 import com.finalproject.backend.baseballmate.repository.GroupRepository;
-import com.finalproject.backend.baseballmate.repository.UserRepository;
 import com.finalproject.backend.baseballmate.requestDto.GroupRequestDto;
 import com.finalproject.backend.baseballmate.responseDto.AllGroupResponseDto;
 import com.finalproject.backend.baseballmate.responseDto.GroupDetailResponseDto;
 import com.finalproject.backend.baseballmate.responseDto.MsgResponseDto;
 import com.finalproject.backend.baseballmate.security.UserDetailsImpl;
-import com.finalproject.backend.baseballmate.service.FileService;
 import com.finalproject.backend.baseballmate.service.GroupService;
 import com.finalproject.backend.baseballmate.util.MD5Generator;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -32,10 +26,6 @@ public class GroupController {
 
     private final GroupService groupService;
     private final GroupRepository groupRepository;
-    private final FileService fileService;
-    private final GroupApplication groupApplication;
-    private final GroupApplicationRepository groupApplicationRepository;
-    private final UserRepository userRepository;
     private String commonPath = "/images";
 
     // 모임페이지 전체 조회 :

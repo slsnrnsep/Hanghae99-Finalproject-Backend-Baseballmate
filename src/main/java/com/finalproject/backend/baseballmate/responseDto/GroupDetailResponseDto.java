@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Map;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,6 +22,8 @@ public class GroupDetailResponseDto {
     private double hotPercent;
     private String stadium; // 경기장 이름
     private String groupDate; // 모임 날짜
+    private String filePath;
+    private List<Map<String, String>> appliedUserInfo;
     List<GroupComment> groupCommentList;
-    private String filePath;// 모임 게시글 내의 댓글 리스트
+    // 모임 게시글 내의 댓글 리스트
 }

@@ -10,18 +10,18 @@ import com.finalproject.backend.baseballmate.requestDto.GroupRequestDto;
 import com.finalproject.backend.baseballmate.responseDto.AllGroupResponseDto;
 import com.finalproject.backend.baseballmate.responseDto.GroupDetailResponseDto;
 import com.finalproject.backend.baseballmate.responseDto.HotGroupResponseDto;
-import com.finalproject.backend.baseballmate.responseDto.MsgResponseDto;
 import com.finalproject.backend.baseballmate.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Service
@@ -123,6 +123,24 @@ public class GroupService {
     public GroupDetailResponseDto getGroupDetail(Long id) {
         // 모임 entity에서 해당 모임에 대한 모든 정보 빼오기
         Group group = groupRepository.findByGroupId(id);
+        List<Map<String, String>> appliedUsers = new ArrayList<>();
+
+        // 참여자 정보 리스트 만들기
+        for(int i=0; i<group.getGroupApplications().size(); i++) {
+            GroupApplication groupApplication = group.getGroupApplications().get(i);
+            String appliedUserInx = groupApplication.getAppliedUser().getId().toString();
+            String appliedUserId = groupApplication.getAppliedUser().getUserid();
+            String appliedUsername = groupApplication.getAppliedUser().getUsername();
+            String appliedUserImage = groupApplication.getAppliedUser().getPicture();
+
+            Map<String, String> userInfo = new HashMap<>();
+            userInfo.put("UserImage", appliedUserImage);
+            userInfo.put("Username", appliedUsername);
+            userInfo.put("UserId", appliedUserId);
+            userInfo.put("UserInx", appliedUserInx);
+
+            appliedUsers.add(i, userInfo);
+        }
 
         Long groupId = group.getGroupId();
         String createdUserName = group.getCreatedUsername();
@@ -135,10 +153,11 @@ public class GroupService {
         String stadium = group.getStadium();
         String groupDate = group.getGroupDate();
         String filePath = group.getFilePath();
+        List<Map<String, String>> appliedUserInfo = appliedUsers;
         List<GroupComment> groupcommentList = group.getGroupCommentList();
 
         GroupDetailResponseDto groupdetailResponseDto =
-                new GroupDetailResponseDto(groupId, createdUserName, title, content, peopleLimit, nowAppliedNum, canApplyNum, hotPercent, stadium , groupDate,groupcommentList,filePath);
+                new GroupDetailResponseDto(groupId, createdUserName, title, content, peopleLimit, nowAppliedNum, canApplyNum, hotPercent, stadium , groupDate, filePath, appliedUserInfo, groupcommentList);
 
         return groupdetailResponseDto;
     }
@@ -184,24 +203,31 @@ public class GroupService {
     // 모임 참여하기
     @Transactional
     public void applyGroup(User appliedUser, Group appliedGroup) {
-        GroupApplication groupApplication = new GroupApplication(appliedUser, appliedGroup);
-        groupApplicationRepository.save(groupApplication);
+        // 참가 신청 이력 조회
+        GroupApplication groupApplication1 = groupApplicationRepository.findByAppliedGroupAndAppliedUser(appliedGroup, appliedUser);
+        if (groupApplication1 != null) {
+            throw new IllegalArgumentException("참가 신청 이력이 존재합니다.");
+        } else {
+            GroupApplication groupApplication = new GroupApplication(appliedUser, appliedGroup);
+            groupApplicationRepository.save(groupApplication);
+            // 참여 신청과 동시에 해당 group의 nowappliednum, hotpercent 수정
+            // 현재 참여 신청한 인원 1 증가
+            int nowAppliedNum = groupApplication.getAppliedGroup().getNowAppliedNum();
+            int updatedAppliedNum = nowAppliedNum + 1;
+            groupApplication.getAppliedGroup().setNowAppliedNum(updatedAppliedNum);
 
-        // 참여 신청과 동시에 해당 group의 nowappliednum, hotpercent 수정
-        // 현재 참여 신청한 인원 1 증가
-        int nowAppliedNum = groupApplication.getAppliedGroup().getNowAppliedNum();
-        int updatedAppliedNum = nowAppliedNum + 1;
-        groupApplication.getAppliedGroup().setNowAppliedNum(updatedAppliedNum);
+            // 현재 참여 신청 가능한 인원 1 감소
+            int nowCanApplyNum = groupApplication.getAppliedGroup().getCanApplyNum();
+            int updatedCanApplyNum = nowCanApplyNum -1;
+            groupApplication.getAppliedGroup().setCanApplyNum(updatedCanApplyNum);
 
-        // 현재 참여 신청 가능한 인원 1 감소
-        int nowCanApplyNum = groupApplication.getAppliedGroup().getCanApplyNum();
-        int updatedCanApplyNum = nowCanApplyNum -1;
-        groupApplication.getAppliedGroup().setCanApplyNum(updatedCanApplyNum);
+            // 인기도 값 수정
+            int peopleLimit = groupApplication.getAppliedGroup().getPeopleLimit();
+            double updatedHotPercent = ((double) updatedAppliedNum / (double) peopleLimit * 100.0);
+            groupApplication.getAppliedGroup().setHotPercent(updatedHotPercent);
+        }
 
-        // 인기도 값 수정
-        int peopleLimit = groupApplication.getAppliedGroup().getPeopleLimit();
-        double updatedHotPercent = ((double) updatedAppliedNum / (double) peopleLimit * 100.0);
-        groupApplication.getAppliedGroup().setHotPercent(updatedHotPercent);
+
     }
 
     // 모임 취소하기
@@ -212,7 +238,9 @@ public class GroupService {
 
     @Transactional
     public void cancelApplication(Long groupId, UserDetailsImpl userDetails) {
-        List<GroupApplication> groupApplicationList = groupRepository.findByGroupId(groupId).getGroupApplications();
+        Group group = groupRepository.findByGroupId(groupId);
+        List<GroupApplication> groupApplicationList = group.getGroupApplications();
+        User loginedUser = userDetails.getUser();
         Long loginedUserIndex = userDetails.getUser().getId();
 
         for(int i=0; i<groupApplicationList.size(); i++) {
@@ -239,12 +267,13 @@ public class GroupService {
                     groupApplication.getAppliedGroup().setHotPercent(updatedHotPercent);
 
                     // 참가 신청 이력 삭제
+                    GroupApplication groupApplication2 =groupApplicationRepository.findByAppliedGroup_GroupIdAndAppliedUserId(groupId,loginedUserIndex);
+                    groupApplicationRepository.deleteById(groupApplication2.getId());
                     ///////////// 여기에 group -> List<groupapplication> -> groupapplication 일케 타고 들어가서 groupapplication을 삭제하면 되는데
                     ///////////// 그 코드가 구현이 안되네요!!!!!! 영호님 도와주세요!!!!!!!
-                    /// + 참가 취소했던 list<id>에 userinx 저장하기
+                    /// + 참가 취소했던 list<User>에 userinx 저장하기
+                    group.getCanceledUser().add(loginedUser);
 
-                } else {
-                    throw new IllegalArgumentException("참가 신청을 한 유저가 아닙니다.");
                 }
             } else {
                 throw new NullPointerException("참가 신청 이력이 존재하지 않습니다.");
@@ -255,88 +284,3 @@ public class GroupService {
 
 
 }
-
-// 모임 전체 조회(등록 순)
-//    public AllGroupResponseDto getAllGroups() {
-//        List<Group> groupList = groupRepository.findAllByOrderByCreatedAtDesc();
-//        AllGroupResponseDto allGroupResponseDto = new AllGroupResponseDto("success", groupList);
-//        System.out.println(allGroupResponseDto);
-//        return allGroupResponseDto;
-//    }
-
-// 모임 상세 조회
-//    public GroupDetailResponseDto getGroupDetail(Long groupId) {
-//        // 모임 entity에서 해당 모임에 대한 모든 정보 빼오기
-//        Group group = groupRepository.findByGroupId(groupId);
-//
-//
-//        String createdUserName = group.getCreatedUsername();
-//        String title = group.getTitle();
-//        String content = group.getContent();
-//        int peopleLimit = group.getPeopleLimit();
-//        int nowAppliedNum = getNowAppliedNum(groupId);
-//        int canApplyNum = (peopleLimit - nowAppliedNum);
-//        double hotPercent = getUpdatedHotPercent(groupId);
-//        String stadium = group.getStadium();
-//        String groupDate = group.getGroupDate();
-//        List<GroupComment> groupcommentList = group.getGroupCommentList();
-//
-//        GroupDetailResponseDto groupdetailResponseDto =
-//                new GroupDetailResponseDto(createdUserName, title, content, peopleLimit, nowAppliedNum, canApplyNum, hotPercent, stadium , groupDate, groupcommentList);
-//
-//        return groupdetailResponseDto;
-//    }
-
-// 어떤 모임의 핫한 정도 업데이트하기
-// 나중에 주기적으로 알아서 update 하도록 구현하기(몇 시간마다 업데이트 한다던가)
-//    public double getUpdatedHotPercent(Long groupId) {
-//        // (현재 신청 인원수/모임 최대 인원수) * 100 퍼센트 구하기
-//        Group group = groupRepository.findByGroupId(groupId);
-//        int peopleLimit = group.getPeopleLimit();
-//        int nowAppliedNum = getNowAppliedNum(groupId);
-////        int canApplyNum = (peopleLimit - nowAppliedNum);
-//        // 현재 hotPercent 구하기
-//        double hotPercent = ((double) nowAppliedNum / (double) peopleLimit * 100.0);
-//        group.updateHotPercent(hotPercent);
-//        Group updatedGroup = groupRepository.save(group);
-//        return updatedGroup.getHotPercent();
-//    }
-
-// 어떤 모임의 핫한 정도 수정하기
-//    public double updateHotPercent(Long groupId) {
-//        Group group = groupRepository.findByGroupId(groupId);
-//        double groupHotPercent = getHotPercent(groupId);
-//        double updatedHotPercent = group.setHotPercent(groupHotPercent);
-//        return updatedHotPercent;
-//    }
-
-// 모임 ID별로 현재 참여신청 인원 구하기
-//    public int getNowAppliedNum(Long groupId) {
-//        List<GroupApplication> groupApplications = groupApplicationRepository.findAll();
-//
-//        List<Long> appliedGroupIdList = new ArrayList<>();
-//        for (int i=0; i<groupApplications.size(); i++) {
-//            GroupApplication groupApplication = groupApplications.get(i);
-//            Long appliedGroupId = groupApplication.getAppliedGroup().getGroupId();
-//            appliedGroupIdList.add(appliedGroupId);
-//        }
-//
-//        int nowAppliedNum = 0;
-//        for (int l=0; l<appliedGroupIdList.size(); l++) {
-//            Long appliedGroupId = appliedGroupIdList.get(l);
-//            if (groupId == appliedGroupId) {
-//                nowAppliedNum = nowAppliedNum + 1;
-//            }
-//        }
-//        return nowAppliedNum;
-//    }
-
-
-// hotPercent 구하기
-//    public double newHotPercent() {
-//        Group group = new Group();
-//        int peopleLimit = group.getPeopleLimit();
-//        int nowAppliedNum = group.getNowAppliedNum();
-//        double nowHotPercent = ((double) nowAppliedNum / (double) peopleLimit * 100.0);
-//        group.setHotPercent(nowHotPercent);
-//    }

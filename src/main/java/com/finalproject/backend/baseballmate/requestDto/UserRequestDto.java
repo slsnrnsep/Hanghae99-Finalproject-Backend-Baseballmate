@@ -13,11 +13,8 @@ public class UserRequestDto {
     private String userid;
     private String password;
     private String myteam;
-<<<<<<< HEAD
 //    private String picture;
-=======
     private String phonenumber;
->>>>>>> d0a864a9515858a3a05975833100e0376c543e60
 
     public UserRequestDto(String username, String userid , String password,String myteam){
 

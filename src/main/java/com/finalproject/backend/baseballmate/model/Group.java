@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @NoArgsConstructor
@@ -45,7 +46,7 @@ public class Group extends Timestamped{
 
     // 참가 신청한 유저와 해당 모임 정보
     @JsonManagedReference
-    @OneToMany(mappedBy = "appliedUser")
+    @OneToMany(mappedBy = "appliedGroup")
     private List<GroupApplication> groupApplications = new ArrayList<>();
     // groupapplication에서 유저 정보 빼오기
 
@@ -73,8 +74,9 @@ public class Group extends Timestamped{
 //    @Column
 //    private String baseballTeam; // 구단 이름
 
-//    @Column
-//    private List<Id> canceledUserInx;
+    @JsonManagedReference
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "id")
+    private List<User> canceledUser = new ArrayList<>();
 
     @JsonManagedReference
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)

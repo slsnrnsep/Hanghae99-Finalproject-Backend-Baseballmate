@@ -37,13 +37,9 @@ public class UserContorller {
     private final JwtTokenProvider jwtTokenProvider;
     private final TimeLineLikesRepository timeLineLikesRepository;
     private final GoodsLikesRepository goodsLikesRepository;
-<<<<<<< HEAD
-    private final FileService fileService;
-    private String commonPath = "/images";
-=======
     private final GroupLikesRepository groupLikesRepository;
     private final GroupCommentLikesRepository groupCommentLikesRepository;
->>>>>>> d0a864a9515858a3a05975833100e0376c543e60
+    private String commonPath = "/images";
 
     @PostMapping("/user/signup")
     public MsgResponseDto registerUser(@RequestBody UserRequestDto userRequestDto)
@@ -98,7 +94,7 @@ public class UserContorller {
     }
 
     // 프로필사진 등록
-    @PatchMapping("/users/{id}")
+    @PatchMapping("/users/{Userid}")
     public MsgResponseDto updateUserInfo(
             @PathVariable Long id,
             @RequestParam(value = "file", required = false) MultipartFile files,
@@ -145,31 +141,31 @@ public class UserContorller {
     }
 
     // 구단 선택 구버전
-    @PostMapping("/user/myteam")
-    public MyteamRequestDto selectMyteam(
-            @RequestBody MyteamRequestDto myteam,
-            @AuthenticationPrincipal UserDetailsImpl userDetails)
-    {
-        if(userDetails == null)
-        {
-            throw new IllegalArgumentException("로그인 한 사용자만 사용 가능합니다");
-        }
-
-        User user = userRepository.findByUserid(userDetails.getUser().getUserid())
-                .orElseThrow(()-> new IllegalArgumentException("로그인 정보를 찾을 수 없습니다."));
-
-        if(myteam.getMyteam() == null)
-        {
-            throw new IllegalArgumentException("구단선택을 null로 했습니다");
-        }
-
-        user.setMyselectTeam(myteam.getMyteam());
-
-        userRepository.save(user);
-
-        MyteamRequestDto myteamRequestDto = new MyteamRequestDto(user.getMyselectTeam());
-        return myteamRequestDto;
-    }
+//    @PostMapping("/user/myteam")
+//    public MyteamRequestDto selectMyteam(
+//            @RequestBody MyteamRequestDto myteam,
+//            @AuthenticationPrincipal UserDetailsImpl userDetails)
+//    {
+//        if(userDetails == null)
+//        {
+//            throw new IllegalArgumentException("로그인 한 사용자만 사용 가능합니다");
+//        }
+//
+//        User user = userRepository.findByUserid(userDetails.getUser().getUserid())
+//                .orElseThrow(()-> new IllegalArgumentException("로그인 정보를 찾을 수 없습니다."));
+//
+//        if(myteam.getMyteam() == null)
+//        {
+//            throw new IllegalArgumentException("구단선택을 null로 했습니다");
+//        }
+//
+//        user.setMyselectTeam(myteam.getMyteam());
+//
+//        userRepository.save(user);
+//
+//        MyteamRequestDto myteamRequestDto = new MyteamRequestDto(user.getMyselectTeam());
+//        return myteamRequestDto;
+//    }
 
     @PostMapping("/user/logincheck")
     public LoginCheckResponseDto loginCheck(@AuthenticationPrincipal UserDetailsImpl userDetails)
