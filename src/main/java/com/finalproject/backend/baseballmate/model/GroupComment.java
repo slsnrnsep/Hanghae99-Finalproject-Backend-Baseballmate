@@ -32,7 +32,7 @@ public class GroupComment {
     private String commentUserId;
 
     @JsonBackReference
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "groupId")
     private Group group;
 

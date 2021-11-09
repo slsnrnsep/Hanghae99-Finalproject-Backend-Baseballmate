@@ -74,11 +74,11 @@ public class Group extends Timestamped{
 //    private String baseballTeam; // 구단 이름
 
     @JsonManagedReference
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "id",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "id",cascade = CascadeType.ALL)
     private List<User> canceledUser = new ArrayList<>();
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "group", cascade = CascadeType.REMOVE)
     private List<GroupComment> groupCommentList = new ArrayList<>();
 
     // 좋아요

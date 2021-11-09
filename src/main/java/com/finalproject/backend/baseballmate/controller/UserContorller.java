@@ -96,37 +96,38 @@ public class UserContorller {
 
     //patchmapping 일반화(구단 정보 수정, 사진 등록 모두 가능)
     @RequestMapping(value = "/users/{id}", method = RequestMethod.PATCH, consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE })
-    public UserResponseDto updateUserInfoGeneric(
+    public void updateUserInfoGeneric(
             @PathVariable("id") Long id,
             @RequestPart(required = false) UserUpdateRequestDto requestDto,
             @RequestPart(value="file", required = false) MultipartFile file,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
         if (userDetails == null) {
             throw new IllegalArgumentException("로그인 한 이용자만 이용하실 수 있습니다.");
-        } else if (requestDto != null) {
-            String filename = "basic.jpg";
-            if (file != null) {
-                String origFilename = file.getOriginalFilename();
-                filename = new MD5Generator(origFilename).toString() + ".jpg";
-                /*실행되는 위치의  'files' 폴더에 파일이 저장됩니다. */
-
-                String savePath = System.getProperty("user.dir") + commonPath;
-                /* 파일이 저장되는 폴더가 없으면 폴더를 생성합니다. */
-                //files.part.getcontenttype()해서 이미지가 아니면 false처리하기
-                if (!new File(savePath).exists()) {
-                    try {
-                        new File(savePath).mkdir();
-                    } catch (Exception e) {
-                        e. getStackTrace();
-                    }
-                }
-                String filePath = savePath + "\\" + filename;
-                file.transferTo(new File(filePath));
-            }
-            requestDto.setPicture(filename);
-            UserResponseDto userResponseDto = userService.partialUpdateUserInfo(id, requestDto);
-            return userResponseDto;
-        } else {
+        }
+//        else if (requestDto != null) {
+//            String filename = "basic.jpg";
+//            if (file != null) {
+//                String origFilename = file.getOriginalFilename();
+//                filename = new MD5Generator(origFilename).toString() + ".jpg";
+//                /*실행되는 위치의  'files' 폴더에 파일이 저장됩니다. */
+//
+//                String savePath = System.getProperty("user.dir") + commonPath;
+//                /* 파일이 저장되는 폴더가 없으면 폴더를 생성합니다. */
+//                //files.part.getcontenttype()해서 이미지가 아니면 false처리하기
+//                if (!new File(savePath).exists()) {
+//                    try {
+//                        new File(savePath).mkdir();
+//                    } catch (Exception e) {
+//                        e. getStackTrace();
+//                    }
+//                }
+//                String filePath = savePath + "\\" + filename;
+//                file.transferTo(new File(filePath));
+//            }
+//            requestDto.setPicture(filename);
+//            UserResponseDto userResponseDto = userService.partialUpdateUserInfo(id, requestDto);
+//            return userResponseDto;
+//        } else {
 //            String origFilename = file.getOriginalFilename();
 //            filename = new MD5Generator(origFilename).toString() + ".jpg";
 //            /*실행되는 위치의  'files' 폴더에 파일이 저장됩니다. */
@@ -143,9 +144,8 @@ public class UserContorller {
 //            }
 //            String filePath = savePath + "\\" + filename;
 //            file.transferTo(new File(filePath));
-        }
-
-
+//        }
+//
     }
 
     // 프로필사진 등록

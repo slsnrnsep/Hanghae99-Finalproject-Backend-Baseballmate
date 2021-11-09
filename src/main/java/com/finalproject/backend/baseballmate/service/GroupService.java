@@ -259,6 +259,8 @@ public class GroupService {
 
         Long groupId = group.getGroupId();
         String createdUserName = group.getCreatedUsername();
+        String createdUserId = group.getCreatedUser().getUserid();
+        String createdUserProfileImg = group.getCreatedUser().getPicture();
         String title = group.getTitle();
         String content = group.getContent();
         int peopleLimit = group.getPeopleLimit();
@@ -278,7 +280,7 @@ public class GroupService {
         String dday = countingday.toString();
 
         GroupDetailResponseDto groupdetailResponseDto =
-                new GroupDetailResponseDto(groupId, createdUserName, title, content, peopleLimit, nowAppliedNum, canApplyNum, hotPercent, stadium , groupDate, filePath, dday, appliedUserInfo, groupcommentList);
+                new GroupDetailResponseDto(groupId, createdUserName, createdUserId, createdUserProfileImg, title, content, peopleLimit, nowAppliedNum, canApplyNum, hotPercent, stadium , groupDate, filePath, dday, appliedUserInfo, groupcommentList);
 
         return groupdetailResponseDto;
     }
