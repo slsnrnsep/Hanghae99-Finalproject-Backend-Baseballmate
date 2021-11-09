@@ -1,19 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-<<<<<<< HEAD
-    <data-source source="LOCAL" name="baseballmate@baseballmate.cmkvlbsugcya.ap-northeast-2.rds.amazonaws.com" uuid="be4e643e-b770-41ae-94e0-d6c1707d5682">
+    <data-source source="LOCAL" name="baseballmate@baseballmate.cmkvlbsugcya.ap-northeast-2.rds.amazonaws.com" uuid="f2242abf-1b3b-4dfd-b637-c4e28e485064">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
       <jdbc-url>jdbc:mysql://baseballmate.cmkvlbsugcya.ap-northeast-2.rds.amazonaws.com:3306/baseballmate</jdbc-url>
-=======
-    <data-source source="LOCAL" name="baseballmate" uuid="03c21364-6865-4832-95c5-1d3090cd0013">
-      <driver-ref>mysql.8</driver-ref>
-      <synchronize>true</synchronize>
-      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://baseballmate.cmkvlbsugcya.ap-northeast-2.rds.amazonaws.com:3306</jdbc-url>
->>>>>>> ba2f5948b3d5246da1c15b54ac15406fbaee4f94
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>

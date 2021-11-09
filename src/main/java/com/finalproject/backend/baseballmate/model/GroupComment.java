@@ -36,6 +36,7 @@ public class GroupComment {
     @JoinColumn(name = "groupId")
     private Group group;
 
+    @JsonBackReference
     @OneToMany(mappedBy = "groupComment",cascade = CascadeType.ALL)
     private List<GroupCommentLikes> groupcommentlikesList;
 

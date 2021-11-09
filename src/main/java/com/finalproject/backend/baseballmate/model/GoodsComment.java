@@ -1,5 +1,6 @@
 package com.finalproject.backend.baseballmate.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.finalproject.backend.baseballmate.requestDto.GoodsCommentRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,6 +33,7 @@ public class GoodsComment extends Timestamped {
     @JoinColumn(name = "goodsId")
     private Goods goods;
 
+    @JsonBackReference
     @OneToMany(mappedBy = "goodsComment")
     private List<GoodsCommentLikes> goodsCommentLikesList;
 

@@ -1,5 +1,6 @@
 package com.finalproject.backend.baseballmate.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.finalproject.backend.baseballmate.requestDto.GroupRequestDto;
 import lombok.Getter;
@@ -81,6 +82,7 @@ public class Group extends Timestamped{
     private List<GroupComment> groupCommentList = new ArrayList<>();
 
     // 좋아요
+    @JsonBackReference
     @OneToMany(mappedBy = "grouplikes",cascade = CascadeType.ALL)
     private List<GroupLikes> grouplikesList;
 
