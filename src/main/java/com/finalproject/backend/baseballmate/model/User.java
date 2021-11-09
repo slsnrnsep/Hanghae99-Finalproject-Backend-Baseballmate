@@ -51,6 +51,10 @@ public class User {
     @OneToMany(mappedBy = "createdUser", cascade = CascadeType.ALL)
     private List<Group> createdGroupList = new ArrayList<>();
 
+    @JsonManagedReference
+    @OneToMany(mappedBy = "screenCreatedUser", cascade = CascadeType.ALL)
+    private List<Screen> createdScreenList = new ArrayList<>();
+
     @Column(nullable = true)
     private Long kakaoId;
 
