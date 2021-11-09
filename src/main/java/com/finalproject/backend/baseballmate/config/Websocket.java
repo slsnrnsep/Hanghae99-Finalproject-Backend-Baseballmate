@@ -1,5 +1,6 @@
 package com.finalproject.backend.baseballmate.config;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Component;
 
 import javax.websocket.*;
@@ -41,6 +42,7 @@ public class Websocket {
         if (session != null) {
             String sessionId = session.getId();
             System.out.println("message is arrived. sessionId == [" + sessionId + "] / message == [" + message + "]");
+
 
             // 웹소켓 연결 성립되어 있는 모든 사용자에게 메시지 전송
             sendMessageToAll("[USER-" + sessionId + "] " + message);

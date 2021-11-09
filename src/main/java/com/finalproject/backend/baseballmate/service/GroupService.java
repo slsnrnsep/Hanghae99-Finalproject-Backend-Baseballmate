@@ -169,6 +169,7 @@ public class GroupService {
         String stadium = group.getStadium();
         String groupDate = group.getGroupDate();
         String filePath = group.getFilePath();
+        List<GroupComment> groupcommentList = group.getGroupCommentList();
         List<Map<String, String>> appliedUserInfo = appliedUsers;
 
         int month = Integer.parseInt(group.getGroupDate().split("[.]")[0]);
@@ -176,8 +177,6 @@ public class GroupService {
         LocalDate target = LocalDate.of(LocalDate.now().getYear(),month,day);
         Long countingday = ChronoUnit.DAYS.between(LocalDate.now(),target);
         String dday = countingday.toString();
-
-        List<GroupComment> groupcommentList = group.getGroupCommentList();
 
         GroupDetailResponseDto groupdetailResponseDto =
                 new GroupDetailResponseDto(groupId, createdUserName, title, content, peopleLimit, nowAppliedNum, canApplyNum, hotPercent, stadium , groupDate, filePath, dday, appliedUserInfo, groupcommentList);

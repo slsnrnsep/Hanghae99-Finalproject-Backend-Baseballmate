@@ -3,6 +3,7 @@ package com.finalproject.backend.baseballmate.controller;
 import com.finalproject.backend.baseballmate.model.Goods;
 import com.finalproject.backend.baseballmate.model.User;
 import com.finalproject.backend.baseballmate.repository.GoodsRepository;
+import com.finalproject.backend.baseballmate.repository.UserRepository;
 import com.finalproject.backend.baseballmate.requestDto.GoodsRequestDto;
 import com.finalproject.backend.baseballmate.responseDto.AllGoodsResponseDto;
 import com.finalproject.backend.baseballmate.responseDto.GoodsDetailResponseDto;
@@ -24,6 +25,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class GoodsController {
 
+    private final UserRepository userRepository;
     private final GoodsRepository goodsRepository;
     private final GoodsService goodsService;
     private String commonPath = "/images";
@@ -35,13 +37,13 @@ public class GoodsController {
 
             @RequestParam(value = "file",required = false) MultipartFile files,
 
-            @RequestBody GoodsRequestDto requestDto,
-            @AuthenticationPrincipal UserDetailsImpl userDetails)
+            GoodsRequestDto requestDto)
+//            @AuthenticationPrincipal UserDetailsImpl userDetails)
     {
-        if(userDetails == null)
-        {
-            throw new IllegalArgumentException("로그인 한 사용자만 등록 가능합니다");
-        }
+//        if(userDetails == null)
+//        {
+//            throw new IllegalArgumentException("로그인 한 사용자만 등록 가능합니다");
+//        }
 
         try
         {
@@ -67,8 +69,11 @@ public class GoodsController {
             }
             requestDto.setGoodsImg(filename);
 
-            User loginUser = userDetails.getUser();
-            String loginedUsername = userDetails.getUser().getUsername();
+//            User loginUser = userDetails.getUser();
+//            String loginedUsername = userDetails.getUser().getUsername();
+            User loginUser = userRepository.findByUsername("aaa").orElseThrow(
+                    ()-> new IllegalArgumentException("유저찾을수 없슴")
+            );
             goodsService.createGoods(loginUser, requestDto);
             GoodsResponseDto goodsResponseDto = new GoodsResponseDto("success","등록완료");
             return goodsResponseDto;

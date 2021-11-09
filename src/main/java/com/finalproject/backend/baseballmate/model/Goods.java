@@ -1,5 +1,6 @@
 package com.finalproject.backend.baseballmate.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.finalproject.backend.baseballmate.requestDto.GoodsRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -36,6 +37,7 @@ public class Goods extends Timestamped {
     @Column
     private String goodsImg;
 
+    @JsonBackReference
     @OneToMany(mappedBy = "goods", cascade = CascadeType.ALL)
     private List<GoodsLikes> likesList;
 
@@ -43,6 +45,7 @@ public class Goods extends Timestamped {
     private int likeCount;
 
     // comment와 연관관계
+    @JsonBackReference
     @OneToMany(mappedBy = "goods", cascade = CascadeType.ALL)
     private List<GoodsComment> goodsCommentList = new ArrayList<>();
 

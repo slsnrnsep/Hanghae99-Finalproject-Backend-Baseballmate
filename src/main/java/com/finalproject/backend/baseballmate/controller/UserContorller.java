@@ -72,7 +72,7 @@ public class UserContorller {
             throw new IllegalArgumentException("잘못된 비밀번호입니다.");
         }
 
-        LoginResponseDto loginResponseDto = new LoginResponseDto(jwtTokenProvider.createToken(user.getUserid(), user.getId(),user.getUsername()),user.getMyselectTeam());
+        LoginResponseDto loginResponseDto = new LoginResponseDto(jwtTokenProvider.createToken(user.getUserid(), user.getId(),user.getUsername(), user.getPicture()),user.getMyselectTeam());
         return loginResponseDto;
     }
 
