@@ -14,10 +14,10 @@ import com.finalproject.backend.baseballmate.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-
 import javax.transaction.Transactional;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,9 +47,13 @@ public class GroupService {
             String groupDate = group.getGroupDate();
             String filePath = group.getFilePath();
             String selectTeam = group.getSelectTeam();
-
+            int month = Integer.parseInt(group.getGroupDate().split("[.]")[0]);
+            int day = Integer.parseInt(group.getGroupDate().split("[.]")[1].split(" ")[0]);
+            LocalDate target = LocalDate.of(LocalDate.now().getYear(),month,day);
+            Long countingday = ChronoUnit.DAYS.between(LocalDate.now(),target);
+            String dday = countingday.toString();
             AllGroupResponseDto allGroupResponseDto =
-                    new AllGroupResponseDto(groupId, title, createdUsername, peopleLimit, canApplyNum, hotPercent, stadium, groupDate, filePath,selectTeam);
+                    new AllGroupResponseDto(groupId, title, createdUsername, peopleLimit, canApplyNum, hotPercent, stadium, groupDate, filePath,selectTeam,dday);
 
             allGroupResponseDtoList.add(allGroupResponseDto);
         }
@@ -75,9 +79,14 @@ public class GroupService {
             String groupDate = group.getGroupDate();
             String filePath = group.getFilePath();
             String selectTeam = group.getSelectTeam();
+            int month = Integer.parseInt(group.getGroupDate().split("[.]")[0]);
+            int day = Integer.parseInt(group.getGroupDate().split("[.]")[1].split(" ")[0]);
+            LocalDate target = LocalDate.of(LocalDate.now().getYear(),month,day);
+            Long countingday = ChronoUnit.DAYS.between(LocalDate.now(),target);
+            String dday = countingday.toString();
 
             AllGroupResponseDto allGroupResponseDto =
-                    new AllGroupResponseDto(groupId, title, createdUsername, peopleLimit, canApplyNum, hotPercent, stadium, groupDate, filePath, selectTeam);
+                    new AllGroupResponseDto(groupId, title, createdUsername, peopleLimit, canApplyNum, hotPercent, stadium, groupDate, filePath, selectTeam,dday);
 
             allGroupResponseDtoList.add(allGroupResponseDto);
         }
@@ -103,8 +112,15 @@ public class GroupService {
             String groupDate = group.getGroupDate();
             String filePath =group.getFilePath();
             String selectTeam = group.getSelectTeam();
+
+            int month = Integer.parseInt(group.getGroupDate().split("[.]")[0]);
+            int day = Integer.parseInt(group.getGroupDate().split("[.]")[1].split(" ")[0]);
+            LocalDate target = LocalDate.of(LocalDate.now().getYear(),month,day);
+            Long countingday = ChronoUnit.DAYS.between(LocalDate.now(),target);
+            String dday = countingday.toString();
+
             HotGroupResponseDto hotGroupResponseDto =
-                    new HotGroupResponseDto(groupId, createdUsername, title, peopleLimit, canApplyNum, hotPercent, stadium, groupDate,filePath,selectTeam);
+                    new HotGroupResponseDto(groupId, createdUsername, title, peopleLimit, canApplyNum, hotPercent, stadium, groupDate,filePath,selectTeam,dday);
 
             hotGroupResponseDtoList.add(hotGroupResponseDto);
         }
@@ -154,10 +170,18 @@ public class GroupService {
         String groupDate = group.getGroupDate();
         String filePath = group.getFilePath();
         List<Map<String, String>> appliedUserInfo = appliedUsers;
+
+        // 디데이 계산
+        int month = Integer.parseInt(group.getGroupDate().split("[.]")[0]);
+        int day = Integer.parseInt(group.getGroupDate().split("[.]")[1].split(" ")[0]);
+        LocalDate target = LocalDate.of(LocalDate.now().getYear(),month,day);
+        Long countingday = ChronoUnit.DAYS.between(LocalDate.now(),target);
+        String dday = countingday.toString();
+
         List<GroupComment> groupcommentList = group.getGroupCommentList();
 
         GroupDetailResponseDto groupdetailResponseDto =
-                new GroupDetailResponseDto(groupId, createdUserName, title, content, peopleLimit, nowAppliedNum, canApplyNum, hotPercent, stadium , groupDate, filePath, appliedUserInfo, groupcommentList);
+                new GroupDetailResponseDto(groupId, createdUserName, title, content, peopleLimit, nowAppliedNum, canApplyNum, hotPercent, stadium , groupDate, filePath, dday, appliedUserInfo, groupcommentList);
 
         return groupdetailResponseDto;
     }
@@ -203,31 +227,36 @@ public class GroupService {
     // 모임 참여하기
     @Transactional
     public void applyGroup(User appliedUser, Group appliedGroup) {
+        List<User> canceledUserList = appliedGroup.getCanceledUser();
+
         // 참가 신청 이력 조회
         GroupApplication groupApplication1 = groupApplicationRepository.findByAppliedGroupAndAppliedUser(appliedGroup, appliedUser);
         if (groupApplication1 != null) {
             throw new IllegalArgumentException("참가 신청 이력이 존재합니다.");
         } else {
-            GroupApplication groupApplication = new GroupApplication(appliedUser, appliedGroup);
-            groupApplicationRepository.save(groupApplication);
-            // 참여 신청과 동시에 해당 group의 nowappliednum, hotpercent 수정
-            // 현재 참여 신청한 인원 1 증가
-            int nowAppliedNum = groupApplication.getAppliedGroup().getNowAppliedNum();
-            int updatedAppliedNum = nowAppliedNum + 1;
-            groupApplication.getAppliedGroup().setNowAppliedNum(updatedAppliedNum);
+            if (groupApplication1 == null && canceledUserList.contains(appliedUser)) {
+                throw new IllegalArgumentException("재참가는 불가합니다.");
+            } else {
+                GroupApplication groupApplication = new GroupApplication(appliedUser, appliedGroup);
+                groupApplicationRepository.save(groupApplication);
+                // 참여 신청과 동시에 해당 group의 nowappliednum, hotpercent 수정
+                // 현재 참여 신청한 인원 1 증가
+                int nowAppliedNum = groupApplication.getAppliedGroup().getNowAppliedNum();
+                int updatedAppliedNum = nowAppliedNum + 1;
+                groupApplication.getAppliedGroup().setNowAppliedNum(updatedAppliedNum);
 
-            // 현재 참여 신청 가능한 인원 1 감소
-            int nowCanApplyNum = groupApplication.getAppliedGroup().getCanApplyNum();
-            int updatedCanApplyNum = nowCanApplyNum -1;
-            groupApplication.getAppliedGroup().setCanApplyNum(updatedCanApplyNum);
+                // 현재 참여 신청 가능한 인원 1 감소
+                int nowCanApplyNum = groupApplication.getAppliedGroup().getCanApplyNum();
+                int updatedCanApplyNum = nowCanApplyNum - 1;
+                groupApplication.getAppliedGroup().setCanApplyNum(updatedCanApplyNum);
 
-            // 인기도 값 수정
-            int peopleLimit = groupApplication.getAppliedGroup().getPeopleLimit();
-            double updatedHotPercent = ((double) updatedAppliedNum / (double) peopleLimit * 100.0);
-            groupApplication.getAppliedGroup().setHotPercent(updatedHotPercent);
+                // 인기도 값 수정
+                int peopleLimit = groupApplication.getAppliedGroup().getPeopleLimit();
+                double updatedHotPercent = ((double) updatedAppliedNum / (double) peopleLimit * 100.0);
+                groupApplication.getAppliedGroup().setHotPercent(updatedHotPercent);
+            }
+
         }
-
-
     }
 
     // 모임 취소하기
@@ -267,11 +296,9 @@ public class GroupService {
                     groupApplication.getAppliedGroup().setHotPercent(updatedHotPercent);
 
                     // 참가 신청 이력 삭제
-                    GroupApplication groupApplication2 =groupApplicationRepository.findByAppliedGroup_GroupIdAndAppliedUserId(groupId,loginedUserIndex);
+                    GroupApplication groupApplication2 = groupApplicationRepository.findByAppliedGroup_GroupIdAndAppliedUserId(groupId,loginedUserIndex);
                     groupApplicationRepository.deleteById(groupApplication2.getId());
-                    ///////////// 여기에 group -> List<groupapplication> -> groupapplication 일케 타고 들어가서 groupapplication을 삭제하면 되는데
-                    ///////////// 그 코드가 구현이 안되네요!!!!!! 영호님 도와주세요!!!!!!!
-                    /// + 참가 취소했던 list<User>에 userinx 저장하기
+
                     group.getCanceledUser().add(loginedUser);
 
                 }

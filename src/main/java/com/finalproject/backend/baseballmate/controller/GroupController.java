@@ -28,6 +28,7 @@ public class GroupController {
     private final GroupRepository groupRepository;
     private String commonPath = "/images";
 
+
     // 모임페이지 전체 조회 :
     @GetMapping("/groups")
     public List<AllGroupResponseDto> getAllGroups()
@@ -51,7 +52,7 @@ public class GroupController {
     @PostMapping("/groups")
     public MsgResponseDto createGroup(
             @RequestParam(value = "file",required = false) MultipartFile files,
-            @RequestBody GroupRequestDto requestDto,
+            GroupRequestDto requestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
 //         로그인한 유저의 유저네임 가져오기
         if (userDetails == null)

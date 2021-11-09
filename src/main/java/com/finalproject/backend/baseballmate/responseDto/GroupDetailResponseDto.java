@@ -23,7 +23,8 @@ public class GroupDetailResponseDto {
     private String stadium; // 경기장 이름
     private String groupDate; // 모임 날짜
     private String filePath;
+    private String dday;
     private List<Map<String, String>> appliedUserInfo;
     List<GroupComment> groupCommentList;
-    // 모임 게시글 내의 댓글 리스트
+
 }

@@ -39,6 +39,7 @@ public class UserContorller {
     private final GoodsLikesRepository goodsLikesRepository;
     private final GroupLikesRepository groupLikesRepository;
     private final GroupCommentLikesRepository groupCommentLikesRepository;
+    private final FileService fileService;
     private String commonPath = "/images";
 
     @PostMapping("/user/signup")
@@ -207,7 +208,10 @@ public class UserContorller {
         {
             myGroupCommentLikesList.add(groupCommentLikesList.get(i).getGroupComment().getGroupCommentId());
         }
-        LoginCheckResponseDto loginCheckResponseDto = new LoginCheckResponseDto(user.getId(),user.getUserid(), user.getUsername(),user.getMyselectTeam(),user.getPicture(),user.getPhoneNumber(),myTimeLineLikesList,myGoodsLikesList,myGroupLikesList,myGroupCommentLikesList);
+
+
+        LoginCheckResponseDto loginCheckResponseDto = new LoginCheckResponseDto(user.getId(),user.getUserid(), user.getUsername(),user.getMyselectTeam(),user.getPicture(),myTimeLineLikesList,myGoodsLikesList,myGroupLikesList,myGroupCommentLikesList);
+
 
 
         return loginCheckResponseDto;

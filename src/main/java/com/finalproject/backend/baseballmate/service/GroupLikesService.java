@@ -3,7 +3,6 @@ package com.finalproject.backend.baseballmate.service;
 
 import com.finalproject.backend.baseballmate.model.*;
 import com.finalproject.backend.baseballmate.repository.*;
-import com.finalproject.backend.baseballmate.requestDto.GoodsLikesReqeustDto;
 import com.finalproject.backend.baseballmate.requestDto.LikesRequestDto;
 import com.finalproject.backend.baseballmate.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;

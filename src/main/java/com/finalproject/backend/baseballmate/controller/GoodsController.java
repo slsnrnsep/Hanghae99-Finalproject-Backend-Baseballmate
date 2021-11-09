@@ -65,7 +65,7 @@ public class GoodsController {
                 String filePath = savePath + "\\" + filename;// 이경로는 우분투랑 윈도우랑 다르니까 주의해야댐 우분투 : / 윈도우 \\ 인것같음.
                 files.transferTo(new File(filePath));
             }
-            requestDto.setFilePath(filename);
+            requestDto.setGoodsImg(filename);
 
             User loginUser = userDetails.getUser();
             String loginedUsername = userDetails.getUser().getUsername();
