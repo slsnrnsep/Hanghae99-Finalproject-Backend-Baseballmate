@@ -1,16 +1,15 @@
-package com.finalproject.backend.baseballmate.responseDto;
+package com.finalproject.backend.baseballmate.requestDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@AllArgsConstructor
-@NoArgsConstructor
+@Setter
 @Getter
-public class UserResponseDto {
-
-    private Long id;
-    private String userid;
+@NoArgsConstructor
+@AllArgsConstructor
+public class UserUpdateRequestDto {
     private String username;
     private String password;
     private String myteam;

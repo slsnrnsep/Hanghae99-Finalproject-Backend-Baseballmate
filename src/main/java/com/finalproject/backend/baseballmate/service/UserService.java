@@ -4,10 +4,7 @@ import com.finalproject.backend.baseballmate.OAuth2.KakaoOAuth2;
 import com.finalproject.backend.baseballmate.OAuth2.KakaoUserInfo;
 import com.finalproject.backend.baseballmate.model.User;
 import com.finalproject.backend.baseballmate.repository.UserRepository;
-import com.finalproject.backend.baseballmate.requestDto.HeaderDto;
-import com.finalproject.backend.baseballmate.requestDto.UserProfileRequestDto;
-import com.finalproject.backend.baseballmate.requestDto.PhoneRequstDto;
-import com.finalproject.backend.baseballmate.requestDto.UserRequestDto;
+import com.finalproject.backend.baseballmate.requestDto.*;
 import com.finalproject.backend.baseballmate.responseDto.UserResponseDto;
 import com.finalproject.backend.baseballmate.security.JwtTokenProvider;
 import com.finalproject.backend.baseballmate.security.UserDetailsImpl;
@@ -22,6 +19,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.lang.reflect.MalformedParameterizedTypeException;
+import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
@@ -99,34 +98,36 @@ public class UserService {
 
     // user정보 부분 변경
     @Transactional
-    public UserResponseDto partialUpdate(long id, final UserRequestDto requestDto) {
-        Optional<User> oUser = userRepository.findById(id);
+    public UserResponseDto partialUpdateUserInfo(long id, UserUpdateRequestDto requestDto) {
+        Optional<User> optionalUser = userRepository.findById(id);
 //        if (!oUser.isPresent())
 //            return 0;
-        User user = oUser.get();
+        User user = optionalUser.get();
         if (StringUtils.isNotBlank(requestDto.getUsername()))
             user.setUsername(requestDto.getUsername());
         if (StringUtils.isNotBlank(requestDto.getPassword()))
             user.setPassword(requestDto.getPassword());
         if (StringUtils.isNotBlank(requestDto.getMyteam()))
             user.setMyselectTeam(requestDto.getMyteam());
+        if (StringUtils.isNotBlank(requestDto.getPicture()))
+            user.setPicture(requestDto.getPicture());
         User updatedUser = userRepository.save(user);
 
         UserResponseDto userResponseDto =
-                new UserResponseDto(id, updatedUser.getUserid(), updatedUser.getUsername(), updatedUser.getPassword(), updatedUser.getMyselectTeam());
+                new UserResponseDto(id, updatedUser.getUserid(), updatedUser.getUsername(), updatedUser.getPassword(), updatedUser.getMyselectTeam(), updatedUser.getPicture());
         return userResponseDto;
     }
 
     //user 프로필 사진 등록 및 변경
-    @Transactional
-    public void updateProfileImage(Long id, final UserProfileRequestDto requestDto) {
-        Optional<User> optionalUser = userRepository.findById(id);
-
-        User user = optionalUser.get();
-        if (StringUtils.isNotBlank(requestDto.getProfileImage()))
-            user.setPicture(requestDto.getProfileImage());
-        userRepository.save(user);
-    }
+//    @Transactional
+//    public void updateProfileImage(Long id, final UserProfileRequestDto requestDto) {
+//        Optional<User> optionalUser = userRepository.findById(id);
+//
+//        User user = optionalUser.get();
+//        if (StringUtils.isNotBlank(requestDto.getProfileImage()))
+//            user.setPicture(requestDto.getProfileImage());
+//        userRepository.save(user);
+//    }
 
     public HeaderDto kakaoLogin(String authorizedCode) {
         // 카카오 OAuth2 를 통해 카카오 사용자 정보 조회
