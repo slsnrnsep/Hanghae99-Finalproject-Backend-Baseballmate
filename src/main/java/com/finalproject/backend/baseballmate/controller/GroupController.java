@@ -26,7 +26,6 @@ public class GroupController {
 
     private final GroupService groupService;
     private final GroupRepository groupRepository;
-    
     private String commonPath = "/images";
 
 
