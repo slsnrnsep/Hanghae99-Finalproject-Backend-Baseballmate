@@ -45,7 +45,7 @@ public class Group extends Timestamped{
 
     // 참가 신청한 유저와 해당 모임 정보
     @JsonManagedReference
-    @OneToMany(mappedBy = "appliedGroup")
+    @OneToMany(mappedBy = "appliedGroup",cascade = CascadeType.ALL)
     private List<GroupApplication> groupApplications = new ArrayList<>();
     // groupapplication에서 유저 정보 빼오기
 
@@ -74,11 +74,11 @@ public class Group extends Timestamped{
 //    private String baseballTeam; // 구단 이름
 
     @JsonManagedReference
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "id")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "id",cascade = CascadeType.ALL)
     private List<User> canceledUser = new ArrayList<>();
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL,orphanRemoval = true)
     private List<GroupComment> groupCommentList = new ArrayList<>();
 
     // 좋아요

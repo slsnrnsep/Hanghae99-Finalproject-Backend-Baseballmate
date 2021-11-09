@@ -32,7 +32,7 @@ public class GroupComment {
     private String commentUserId;
 
     @JsonBackReference
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name = "groupId")
     private Group group;
 
@@ -52,6 +52,7 @@ public class GroupComment {
         this.groupcommentlikesList.remove(like);
         this.groupcommentlikeCount -= 1;
     }
+
     public GroupComment(GroupCommentRequestDto groupCommentRequestDto, Group group, String commentUsername, Long loginedUserIndex, String loginedUserId) {
         this.commentUsername = commentUsername;
         this.comment = groupCommentRequestDto.getComment();

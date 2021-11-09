@@ -1,10 +1,8 @@
 package com.finalproject.backend.baseballmate.service;
 
-import com.finalproject.backend.baseballmate.model.Group;
-import com.finalproject.backend.baseballmate.model.GroupApplication;
-import com.finalproject.backend.baseballmate.model.GroupComment;
-import com.finalproject.backend.baseballmate.model.User;
+import com.finalproject.backend.baseballmate.model.*;
 import com.finalproject.backend.baseballmate.repository.GroupApplicationRepository;
+import com.finalproject.backend.baseballmate.repository.GroupLikesRepository;
 import com.finalproject.backend.baseballmate.repository.GroupRepository;
 import com.finalproject.backend.baseballmate.requestDto.GroupRequestDto;
 import com.finalproject.backend.baseballmate.responseDto.AllGroupResponseDto;
@@ -29,6 +27,7 @@ public class GroupService {
 
     private final GroupRepository groupRepository;
     private final GroupApplicationRepository groupApplicationRepository;
+    private final GroupLikesRepository groupLikesRepository;
 
     // 모임 전체 조회(등록 순)
     public List<AllGroupResponseDto> getAllGroups() {
@@ -60,6 +59,106 @@ public class GroupService {
         return allGroupResponseDtoList;
     }
 
+    // 내가 작성한 모임 조회(등록 순)
+    public List<AllGroupResponseDto> getMywriteAllGroups(User userdetail) {
+        List<Group> groupList = groupRepository.findAllByCreatedUser(userdetail);
+        List<AllGroupResponseDto> allGroupResponseDtoList = new ArrayList<>();
+        for (int i=0; i<groupList.size(); i++) {
+            Group group = groupList.get(i);
+
+            Long groupId = group.getGroupId();
+            String title = group.getTitle();
+            String createdUsername = group.getCreatedUsername();
+            int peopleLimit = group.getPeopleLimit();
+            int canApplyNum = group.getCanApplyNum();
+            double hotPercent = group.getHotPercent();
+            String stadium = group.getStadium();
+            String groupDate = group.getGroupDate();
+            String filePath = group.getFilePath();
+            String selectTeam = group.getSelectTeam();
+            int month = Integer.parseInt(group.getGroupDate().split("[.]")[0]);
+            int day = Integer.parseInt(group.getGroupDate().split("[.]")[1].split(" ")[0]);
+            LocalDate target = LocalDate.of(LocalDate.now().getYear(),month,day);
+            Long countingday = ChronoUnit.DAYS.between(LocalDate.now(),target);
+            String dday = countingday.toString();
+            AllGroupResponseDto allGroupResponseDto =
+                    new AllGroupResponseDto(groupId, title, createdUsername, peopleLimit, canApplyNum, hotPercent, stadium, groupDate, filePath,selectTeam,dday);
+
+            allGroupResponseDtoList.add(allGroupResponseDto);
+        }
+        return allGroupResponseDtoList;
+    }
+
+    // 내가 참여한 모임 조회(등록 순)
+    public List<AllGroupResponseDto> getMyapplicationAllGroups(User userdetail) {
+        List<Group> groupList = new ArrayList<>();
+        List<GroupApplication> mygroupApplicationList=groupApplicationRepository.findAllByAppliedUser(userdetail);
+        for(int i=0; i<mygroupApplicationList.size();i++)
+        {
+            groupList.add(mygroupApplicationList.get(i).getAppliedGroup());
+        }
+
+        List<AllGroupResponseDto> allGroupResponseDtoList = new ArrayList<>();
+        for (int i=0; i<groupList.size(); i++) {
+            Group group = groupList.get(i);
+
+            Long groupId = group.getGroupId();
+            String title = group.getTitle();
+            String createdUsername = group.getCreatedUsername();
+            int peopleLimit = group.getPeopleLimit();
+            int canApplyNum = group.getCanApplyNum();
+            double hotPercent = group.getHotPercent();
+            String stadium = group.getStadium();
+            String groupDate = group.getGroupDate();
+            String filePath = group.getFilePath();
+            String selectTeam = group.getSelectTeam();
+            int month = Integer.parseInt(group.getGroupDate().split("[.]")[0]);
+            int day = Integer.parseInt(group.getGroupDate().split("[.]")[1].split(" ")[0]);
+            LocalDate target = LocalDate.of(LocalDate.now().getYear(),month,day);
+            Long countingday = ChronoUnit.DAYS.between(LocalDate.now(),target);
+            String dday = countingday.toString();
+            AllGroupResponseDto allGroupResponseDto =
+                    new AllGroupResponseDto(groupId, title, createdUsername, peopleLimit, canApplyNum, hotPercent, stadium, groupDate, filePath,selectTeam,dday);
+
+            allGroupResponseDtoList.add(allGroupResponseDto);
+        }
+        return allGroupResponseDtoList;
+    }
+
+    // 내가 좋아요한 모임 조회(등록 순)
+    public List<AllGroupResponseDto> getMylikeAllGroups(User userdetail) {
+        List<Group> groupList = new ArrayList<>();
+        List<GroupLikes> mygrouplikeslist = groupLikesRepository.findAllByUserId(userdetail.getId());
+        for(int i=0; i<mygrouplikeslist.size();i++)
+        {
+            groupList.add(mygrouplikeslist.get(i).getGrouplikes());
+        }
+        List<AllGroupResponseDto> allGroupResponseDtoList = new ArrayList<>();
+        for (int i=0; i<groupList.size(); i++) {
+            Group group = groupList.get(i);
+
+            Long groupId = group.getGroupId();
+            String title = group.getTitle();
+            String createdUsername = group.getCreatedUsername();
+            int peopleLimit = group.getPeopleLimit();
+            int canApplyNum = group.getCanApplyNum();
+            double hotPercent = group.getHotPercent();
+            String stadium = group.getStadium();
+            String groupDate = group.getGroupDate();
+            String filePath = group.getFilePath();
+            String selectTeam = group.getSelectTeam();
+            int month = Integer.parseInt(group.getGroupDate().split("[.]")[0]);
+            int day = Integer.parseInt(group.getGroupDate().split("[.]")[1].split(" ")[0]);
+            LocalDate target = LocalDate.of(LocalDate.now().getYear(),month,day);
+            Long countingday = ChronoUnit.DAYS.between(LocalDate.now(),target);
+            String dday = countingday.toString();
+            AllGroupResponseDto allGroupResponseDto =
+                    new AllGroupResponseDto(groupId, title, createdUsername, peopleLimit, canApplyNum, hotPercent, stadium, groupDate, filePath,selectTeam,dday);
+
+            allGroupResponseDtoList.add(allGroupResponseDto);
+        }
+        return allGroupResponseDtoList;
+    }
     // 구단별 모임 조회(필터링)
     public List<AllGroupResponseDto> showGroupsByTeam(String selectedTeam, Pageable pageable) {
 //        PageRequest

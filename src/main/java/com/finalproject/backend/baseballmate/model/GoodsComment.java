@@ -34,7 +34,7 @@ public class GoodsComment extends Timestamped {
     private Goods goods;
 
     @JsonBackReference
-    @OneToMany(mappedBy = "goodsComment")
+    @OneToMany(mappedBy = "goodsComment",cascade = CascadeType.ALL)
     private List<GoodsCommentLikes> goodsCommentLikesList;
 
     @Column(columnDefinition = "integer default 0")
