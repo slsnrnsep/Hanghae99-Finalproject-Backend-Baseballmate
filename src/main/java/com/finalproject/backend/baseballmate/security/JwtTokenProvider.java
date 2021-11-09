@@ -36,10 +36,11 @@ public class JwtTokenProvider {
     }
 
     // JWT 토큰 생성
-    public String createToken(String userPk, Long userId, String username) {
+    public String createToken(String userPk, Long userId, String username, String picture) {
         Claims claims = Jwts.claims().setSubject(userPk); // JWT payload 에 저장되는 정보단위
         claims.put("userId", userId);
         claims.put("username", username);
+        claims.put("picture", picture);
         Date now = new Date();
 
         return Jwts.builder()

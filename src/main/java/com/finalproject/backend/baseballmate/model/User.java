@@ -97,6 +97,16 @@ public class User {
         this.goodsLikes.remove(likes);
     }
 
+<<<<<<< HEAD
+=======
+//    @OneToMany(mappedBy = "user")
+//    private final List<GroupLikes> groupLikes = new ArrayList<>();
+//
+//    public void addGroupLikes(GroupLikes likes){this.groupLikes.add(likes);}
+//
+//    public void deleteGroupLiktes(GroupLikes likes){this.groupLikes.remove(likes);}
+
+>>>>>>> ba2f5948b3d5246da1c15b54ac15406fbaee4f94
     @OneToMany(mappedBy = "user")
     private final List<GoodsCommentLikes> goodsCommentLikes = new ArrayList<>();
 

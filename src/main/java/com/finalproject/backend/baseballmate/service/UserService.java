@@ -155,7 +155,7 @@ public class UserService {
         User member = userRepository.findByKakaoId(kakaoId).orElseThrow(()
                 -> new IllegalArgumentException("존재하지 않는 유저입니다."));
 
-        headerDto.setTOKEN(jwtTokenProvider.createToken(member.getUserid(), member.getId(), member.getUsername()));
+        headerDto.setTOKEN(jwtTokenProvider.createToken(member.getUserid(), member.getId(), member.getUsername(), member.getPicture()));
 //      headerDto.setTOKEN(jwtTokenProvider.createToken(email, member.getId(), member.getUsername()));
 //        System.out.println(test);
         return headerDto;
