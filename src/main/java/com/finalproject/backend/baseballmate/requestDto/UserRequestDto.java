@@ -14,7 +14,7 @@ public class UserRequestDto {
     private String password;
     private String myteam;
 //    private String picture;
-    private String phonenumber;
+//    private String phonenumber;
 
     public UserRequestDto(String username, String userid , String password,String myteam){
 

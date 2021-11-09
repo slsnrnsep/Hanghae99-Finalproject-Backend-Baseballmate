@@ -171,7 +171,6 @@ public class GroupService {
         String filePath = group.getFilePath();
         List<Map<String, String>> appliedUserInfo = appliedUsers;
 
-        // 디데이 계산
         int month = Integer.parseInt(group.getGroupDate().split("[.]")[0]);
         int day = Integer.parseInt(group.getGroupDate().split("[.]")[1].split(" ")[0]);
         LocalDate target = LocalDate.of(LocalDate.now().getYear(),month,day);
