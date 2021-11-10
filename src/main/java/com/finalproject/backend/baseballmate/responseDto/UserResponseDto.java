@@ -15,4 +15,6 @@ public class UserResponseDto {
     private String password;
     private String myteam;
     private String picture;
+    private String selfIntroduction;
+    private String address;
 }

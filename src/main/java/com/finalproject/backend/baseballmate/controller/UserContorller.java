@@ -39,7 +39,6 @@ public class UserContorller {
     private final GroupLikesRepository groupLikesRepository;
     private final GroupCommentLikesRepository groupCommentLikesRepository;
     private final FileService fileService;
-    private String commonPath = "/images";
 
     @PostMapping("/user/signup")
     public MsgResponseDto registerUser(@RequestBody UserRequestDto userRequestDto)
@@ -75,152 +74,27 @@ public class UserContorller {
         return loginResponseDto;
     }
 
-    // 유저의 구단정보 보내기
-    // 일단 myteam 정보만 보내주고 이후에 userresponsedto로 모든 정보를 보내줄 수 있음
-//    @PatchMapping("/users/{id}")
-//    public Map<String, String> updateUserMyteam(
-//            @PathVariable Long id,
-//            @RequestBody UserRequestDto requestDto,
-//            @AuthenticationPrincipal UserDetailsImpl userDetails)
-//    {
-//        if (userDetails == null)
-//        {
-//            throw new IllegalArgumentException("로그인 후에 이용하실 수 있습니다.");
-//        }
-//
-//        UserResponseDto responseDto = userService.partialUpdate(id, requestDto);
-//        Map<String, String> myTeamResponse = new HashMap<>();
-//        myTeamResponse.put("myteam", responseDto.getMyteam());
-//        return myTeamResponse;
-//    }
 
-    //patchmapping 일반화(구단 정보 수정, 사진 등록 모두 가능)
-    @RequestMapping(value = "/users/{id}", method = RequestMethod.PATCH, consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE })
-    public void updateUserInfoGeneric(
+    //patchmapping 일반화(구단 정보, 주소, 자기소개 등록 모두 가능)
+    @PatchMapping( "/users/{id}")
+    public UserResponseDto updateUserInfoGeneric(
             @PathVariable("id") Long id,
-            @RequestPart(required = false) UserUpdateRequestDto requestDto,
-            @RequestPart(value="file", required = false) MultipartFile file,
+            @RequestBody UserUpdateRequestDto requestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        if (userDetails == null) {
-            throw new IllegalArgumentException("로그인 한 이용자만 이용하실 수 있습니다.");
-        }
-//        else if (requestDto != null) {
-//            String filename = "basic.jpg";
-//            if (file != null) {
-//                String origFilename = file.getOriginalFilename();
-//                filename = new MD5Generator(origFilename).toString() + ".jpg";
-//                /*실행되는 위치의  'files' 폴더에 파일이 저장됩니다. */
-//
-//                String savePath = System.getProperty("user.dir") + commonPath;
-//                /* 파일이 저장되는 폴더가 없으면 폴더를 생성합니다. */
-//                //files.part.getcontenttype()해서 이미지가 아니면 false처리하기
-//                if (!new File(savePath).exists()) {
-//                    try {
-//                        new File(savePath).mkdir();
-//                    } catch (Exception e) {
-//                        e. getStackTrace();
-//                    }
-//                }
-//                String filePath = savePath + "\\" + filename;
-//                file.transferTo(new File(filePath));
-//            }
-//            requestDto.setPicture(filename);
-//            UserResponseDto userResponseDto = userService.partialUpdateUserInfo(id, requestDto);
-//            return userResponseDto;
-//        } else {
-//            String origFilename = file.getOriginalFilename();
-//            filename = new MD5Generator(origFilename).toString() + ".jpg";
-//            /*실행되는 위치의  'files' 폴더에 파일이 저장됩니다. */
-//
-//            String savePath = System.getProperty("user.dir") + commonPath;
-//            /* 파일이 저장되는 폴더가 없으면 폴더를 생성합니다. */
-//            //files.part.getcontenttype()해서 이미지가 아니면 false처리하기
-//            if (!new File(savePath).exists()) {
-//                try {
-//                    new File(savePath).mkdir();
-//                } catch (Exception e) {
-//                    e. getStackTrace();
-//                }
-//            }
-//            String filePath = savePath + "\\" + filename;
-//            file.transferTo(new File(filePath));
-//        }
-//
+
+        UserResponseDto userResponseDto = userService.partialUpdateUserInfo(id, requestDto, userDetails);
+        return userResponseDto;
     }
 
     // 프로필사진 등록
-//    @PatchMapping("/users/{Userid}")
+//    @PostMapping("/users/{Userid}")
 //    public MsgResponseDto updateUserInfo(
 //            @PathVariable Long id,
 //            @RequestParam(value = "file", required = false) MultipartFile files,
-//            @AuthenticationPrincipal UserDetailsImpl userDetails,
-//            UserProfileRequestDto requestDto) {
-//        // 로그인한 유저의 유저네임 가져오기
-//        if (userDetails == null) {
-//            throw new IllegalArgumentException("로그인 한 이용자만 이용하실 수 있습니다.");
-//        }
-//        try
-//        {
-//            String filename = "basic.jpg";
-//            if (files != null) {
-//                String origFilename = files.getOriginalFilename();
-//                filename = new MD5Generator(origFilename).toString() + ".jpg";
-//                /* 실행되는 위치의 'files' 폴더에 파일이 저장됩니다. */
+//            @AuthenticationPrincipal UserDetailsImpl userDetails) {
 //
-//                String savePath = System.getProperty("user.dir") + commonPath;
-//                /* 파일이 저장되는 폴더가 없으면 폴더를 생성합니다. */
-//                //files.part.getcontententtype() 해서 이미지가 아니면 false처리해야함.
-//                if (!new File(savePath).exists()) {
-//                    try {
-//                        new File(savePath).mkdir();
-//                    } catch (Exception e) {
-//                        e.getStackTrace();
-//                    }
-//                }
-//                String filePath = savePath + "\\" + filename;// 이경로는 우분투랑 윈도우랑 다르니까 주의해야댐 우분투 : / 윈도우 \\ 인것같음.
-//                files.transferTo(new File(filePath));
-//            }
-//            requestDto.setProfileImage(filename);
-//            User loginedUser = userDetails.getUser();
-//            String loginedUsername = userDetails.getUser().getUsername();
-//            userService.updateProfileImage(id, requestDto);
-//            MsgResponseDto msgResponseDto = new MsgResponseDto("success", "사진 변경 성공");
-//            return msgResponseDto;
-//        }
-//
-//        catch (Exception e)
-//        {
-//            MsgResponseDto msgResponseDto = new MsgResponseDto("failed", "사진 변경 실패");
-//            return msgResponseDto;
-//        }
 //    }
 
-    // 구단 선택 구버전
-//    @PostMapping("/user/myteam")
-//    public MyteamRequestDto selectMyteam(
-//            @RequestBody MyteamRequestDto myteam,
-//            @AuthenticationPrincipal UserDetailsImpl userDetails)
-//    {
-//        if(userDetails == null)
-//        {
-//            throw new IllegalArgumentException("로그인 한 사용자만 사용 가능합니다");
-//        }
-//
-//        User user = userRepository.findByUserid(userDetails.getUser().getUserid())
-//                .orElseThrow(()-> new IllegalArgumentException("로그인 정보를 찾을 수 없습니다."));
-//
-//        if(myteam.getMyteam() == null)
-//        {
-//            throw new IllegalArgumentException("구단선택을 null로 했습니다");
-//        }
-//
-//        user.setMyselectTeam(myteam.getMyteam());
-//
-//        userRepository.save(user);
-//
-//        MyteamRequestDto myteamRequestDto = new MyteamRequestDto(user.getMyselectTeam());
-//        return myteamRequestDto;
-//    }
 
     @PostMapping("/user/logincheck")
     public LoginCheckResponseDto loginCheck(@AuthenticationPrincipal UserDetailsImpl userDetails)
@@ -289,3 +163,50 @@ public class UserContorller {
     }
 
 }
+
+// 유저의 구단정보 보내기
+// 일단 myteam 정보만 보내주고 이후에 userresponsedto로 모든 정보를 보내줄 수 있음
+//    @PatchMapping("/users/{id}")
+//    public Map<String, String> updateUserMyteam(
+//            @PathVariable Long id,
+//            @RequestBody UserRequestDto requestDto,
+//            @AuthenticationPrincipal UserDetailsImpl userDetails)
+//    {
+//        if (userDetails == null)
+//        {
+//            throw new IllegalArgumentException("로그인 후에 이용하실 수 있습니다.");
+//        }
+//
+//        UserResponseDto responseDto = userService.partialUpdate(id, requestDto);
+//        Map<String, String> myTeamResponse = new HashMap<>();
+//        myTeamResponse.put("myteam", responseDto.getMyteam());
+//        return myTeamResponse;
+//    }
+
+// 구단 선택 구버전
+//    @PostMapping("/user/myteam")
+//    public MyteamRequestDto selectMyteam(
+//            @RequestBody MyteamRequestDto myteam,
+//            @AuthenticationPrincipal UserDetailsImpl userDetails)
+//    {
+//        if(userDetails == null)
+//        {
+//            throw new IllegalArgumentException("로그인 한 사용자만 사용 가능합니다");
+//        }
+//
+//        User user = userRepository.findByUserid(userDetails.getUser().getUserid())
+//                .orElseThrow(()-> new IllegalArgumentException("로그인 정보를 찾을 수 없습니다."));
+//
+//        if(myteam.getMyteam() == null)
+//        {
+//            throw new IllegalArgumentException("구단선택을 null로 했습니다");
+//        }
+//
+//        user.setMyselectTeam(myteam.getMyteam());
+//
+//        userRepository.save(user);
+//
+//        MyteamRequestDto myteamRequestDto = new MyteamRequestDto(user.getMyselectTeam());
+//        return myteamRequestDto;
+//    }
+

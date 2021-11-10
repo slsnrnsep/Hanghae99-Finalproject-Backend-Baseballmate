@@ -69,7 +69,7 @@ public class GroupController {
 
                 String savePath = System.getProperty("user.dir") + commonPath;
                 /* 파일이 저장되는 폴더가 없으면 폴더를 생성합니다. */
-                //files.part.getcontententtype() 해서 이미지가 아니면 false처리해야함.
+                //files.part.getcontenttype() 해서 이미지가 아니면 false처리해야함.
                 if (!new File(savePath).exists()) {
                     try {
                         new File(savePath).mkdir();

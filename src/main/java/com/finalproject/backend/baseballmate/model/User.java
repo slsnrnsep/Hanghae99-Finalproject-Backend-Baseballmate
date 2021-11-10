@@ -60,8 +60,13 @@ public class User {
 //    @Column(nullable = true, name = "EMAIL")
 //    private String email;
 //
-//    @Column(nullable = true, name = "NICKNAME")
-//    private String nickname;
+    // 마이페이지에서 수정 가능한 정보
+    @Column(nullable = true)
+    private String selfIntroduction;
+
+    // 마이페이지에서 수정 가능한 정보
+    @Column(nullable = true)
+    private String address;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private final List<TimeLineLikes> timeLineLikes = new ArrayList<>();
