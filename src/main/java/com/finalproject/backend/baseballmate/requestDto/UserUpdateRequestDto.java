@@ -13,7 +13,6 @@ public class UserUpdateRequestDto {
     private String username;
     private String password;
     private String myteam;
-    private String picture;
     private String selfIntroduction;
     private String address;
 }

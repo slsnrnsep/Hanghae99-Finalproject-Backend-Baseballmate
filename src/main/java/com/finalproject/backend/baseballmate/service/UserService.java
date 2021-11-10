@@ -12,6 +12,7 @@ import com.finalproject.backend.baseballmate.security.UserDetailsImpl;
 import com.finalproject.backend.baseballmate.util.MD5Generator;
 import com.finalproject.backend.baseballmate.utils.StringUtils;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -23,9 +24,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.MalformedParameterizedTypeException;
-import java.util.Map;
-import java.util.Optional;
+import java.security.NoSuchAlgorithmException;
+import java.util.*;
 import java.util.regex.Pattern;
 
 @Service
@@ -38,9 +40,10 @@ public class UserService {
     private final PhoneService phoneService;
     private final AuthenticationManager authenticationManager;
     private static final String Pass_Salt = "AAABnv/xRVklrnYxKZ0aHgTBcXukeZygoC";
+    private String commonPath = "/images"; // 파일 저장할 기본 경로 변수 설정, 초기화
 
 //    @Value("${app.auth.tokenSecret}")
-    private String secretKey;
+//    private String secretKey;
 
     public void registerUser(UserRequestDto userRequestDto) {
         String username = userRequestDto.getUsername();
@@ -59,27 +62,11 @@ public class UserService {
         user.setPassword(password);
         user.setPicture("sample.png");
 
-
 //        //로컬 강제 DB집어넣기
 //        User user = new User(userid,username,password, userRequestDto.getPhonenumber());
         userRepository.save(user);
 
     }
-
-//    public void registerUser(UserRequestDto userRequestDto) {
-//        String username = userRequestDto.getUsername();
-//        String password = userRequestDto.getPassword();
-//        String userid = userRequestDto.getUserid();
-//
-////        Optional<User> check = userRepository.findByUsername(username);
-//        String pattern = "^[a-zA-Z0-9]*$";
-//
-//        password = passwordEncoder.encode(userRequestDto.getPassword());
-//
-//        User user = new User(userid, username, password);
-//        userRepository.save(user);
-//
-//    }
 
     public void passwordCheck(String password) {
         final int MIN = 8;
@@ -104,7 +91,10 @@ public class UserService {
 
     // user정보 부분 변경
     @Transactional
-    public UserResponseDto partialUpdateUserInfo(long id, UserUpdateRequestDto requestDto, UserDetailsImpl userDetails) {
+    public List<Map<String, String>> partialUpdateUserInfo(long id, MultipartFile file, UserUpdateRequestDto requestDto, UserDetailsImpl userDetails) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+
+        List<Map<String, String>> responseList = new ArrayList<>();
+        Map<String,String> response = new HashMap<>();
 
         // 로그인 유무 판별
         if (userDetails == null) {
@@ -116,77 +106,66 @@ public class UserService {
         User user = optionalUser.get();
 
         // Dto로 온 정보를 유저 객체에 새롭게 저장
-        if (StringUtils.isNotBlank(requestDto.getUsername()))
+        if (StringUtils.isNotBlank(requestDto.getUsername())) {
             user.setUsername(requestDto.getUsername());
-        if (StringUtils.isNotBlank(requestDto.getPassword()))
+            response.put("username", user.getUsername());
+            responseList.add(0, response);
+        }
+        if (StringUtils.isNotBlank(requestDto.getPassword())) {
             user.setPassword(requestDto.getPassword());
-        if (StringUtils.isNotBlank(requestDto.getMyteam()))
+            response.put("password", user.getPassword());
+            responseList.add(0, response);
+        }
+        if (StringUtils.isNotBlank(requestDto.getMyteam())) {
             user.setMyselectTeam(requestDto.getMyteam());
-        if (StringUtils.isNotBlank(requestDto.getPicture()))
-            user.setPicture(requestDto.getPicture());
-        if (StringUtils.isNotBlank(requestDto.getSelfIntroduction()))
+            response.put("myteam", user.getMyselectTeam());
+            responseList.add(0, response);
+        }
+        if (StringUtils.isNotBlank(requestDto.getSelfIntroduction())){
             user.setSelfIntroduction(requestDto.getSelfIntroduction());
-        if (StringUtils.isNotBlank(requestDto.getAddress()))
+            response.put("selfIntroduction", user.getSelfIntroduction());
+            responseList.add(0, response);
+        }
+        if (StringUtils.isNotBlank(requestDto.getAddress())) {
             user.setAddress(requestDto.getAddress());
+            response.put("address", user.getAddress());
+            responseList.add(0, response);
+        }
         User updatedUser = userRepository.save(user);
 
         // 이미지 파일 확인하기
         // 이미지 파일이 들어온 게 있으면 변경, dto만 있으면 dto값들만 변경, 둘 다 있으면 이미지 파일, dto 내용 모두 변경
 
-        UserResponseDto userResponseDto =
-                new UserResponseDto(id, updatedUser.getUserid(), updatedUser.getUsername(), updatedUser.getPassword(), updatedUser.getMyselectTeam(), updatedUser.getPicture(), updatedUser.getSelfIntroduction(), updatedUser.getAddress());
-        return userResponseDto;
+        if (file != null) {
+            String origFilename = file.getOriginalFilename();
+            String filename = new MD5Generator(origFilename).toString() + "jpg";
+
+            String savePath = System.getProperty("user.dir") + commonPath;
+
+            // 파일이 저장되는 폴더가 없을 경우 폴더 생성
+            if (!new File(savePath).exists()) {
+                try {
+                    new File(savePath).mkdir();
+                } catch (Exception e) {
+                    e.getStackTrace();
+                }
+            }
+
+            // 이미지 파일 저장
+            String filePath = savePath + "/" + filename;
+            try{
+                file.transferTo(new File(filePath));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            updatedUser.setPicture(filename);
+            response.put("picture", updatedUser.getPicture());
+            responseList.add(0, response);
+        }
+
+        return responseList;
     }
 
-    //user 프로필 사진 등록 및 변경
-//    @Transactional
-//    public void updateUserPicture(Long id, ) {
-//        Optional<User> optionalUser = userRepository.findById(id);
-//        User user = optionalUser.get();
-//
-//        // 로그인한 유저의 유저네임 가져오기
-//        if (userDetails == null) {
-//            throw new IllegalArgumentException("로그인 한 이용자만 이용하실 수 있습니다.");
-//        }
-//        try
-//        {
-//            String filename = "basic.jpg";
-//            if (files != null) {
-//                String origFilename = files.getOriginalFilename();
-//                filename = new MD5Generator(origFilename).toString() + ".jpg";
-//                /* 실행되는 위치의 'files' 폴더에 파일이 저장됩니다. */
-//
-//                String savePath = System.getProperty("user.dir") + commonPath;
-//                /* 파일이 저장되는 폴더가 없으면 폴더를 생성합니다. */
-//                //files.part.getcontententtype() 해서 이미지가 아니면 false처리해야함.
-//                if (!new File(savePath).exists()) {
-//                    try {
-//                        new File(savePath).mkdir();
-//                    } catch (Exception e) {
-//                        e.getStackTrace();
-//                    }
-//                }
-//                String filePath = savePath + "\\" + filename;// 이경로는 우분투랑 윈도우랑 다르니까 주의해야댐 우분투 : / 윈도우 \\ 인것같음.
-//                files.transferTo(new File(filePath));
-//            }
-//            requestDto.setProfileImage(filename);
-//            User loginedUser = userDetails.getUser();
-//            String loginedUsername = userDetails.getUser().getUsername();
-//            userService.updateProfileImage(id, requestDto);
-//            MsgResponseDto msgResponseDto = new MsgResponseDto("success", "사진 변경 성공");
-//            return msgResponseDto;
-//        }
-//
-//        catch (Exception e)
-//        {
-//            MsgResponseDto msgResponseDto = new MsgResponseDto("failed", "사진 변경 실패");
-//            return msgResponseDto;
-//        }
-//
-//        if (StringUtils.isNotBlank(requestDto.getProfileImage()))
-//            user.setPicture(requestDto.getProfileImage());
-//        userRepository.save(user);
-//    }
 
     public HeaderDto kakaoLogin(String authorizedCode) {
         // 카카오 OAuth2 를 통해 카카오 사용자 정보 조회
@@ -239,7 +218,7 @@ public class UserService {
 
 //    public void confirmNumChk(UserDetailsImpl userDetails, PhoneRequstDto requstDto) {
 //
-//        User user = userRepository.findByUserid(userDetails.getUser().getUserid()).orElseThrow(
+//       User user = userRepository.findByUserid(userDetails.getUser().getUserid()).orElseThrow(
 //                () -> new IllegalArgumentException("사용자 정보가 일치하지 않습니다")
 //        );
 //

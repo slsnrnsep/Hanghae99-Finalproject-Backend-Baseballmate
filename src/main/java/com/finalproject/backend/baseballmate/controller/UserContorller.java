@@ -21,6 +21,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.awt.*;
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -76,24 +78,19 @@ public class UserContorller {
 
 
     //patchmapping 일반화(구단 정보, 주소, 자기소개 등록 모두 가능)
-    @PatchMapping( "/users/{id}")
-    public UserResponseDto updateUserInfoGeneric(
+    @RequestMapping(value = "/users/{id}", method = RequestMethod.PATCH, consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public List<Map<String, String>> updateUserInfo(
             @PathVariable("id") Long id,
-            @RequestBody UserUpdateRequestDto requestDto,
-            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+            @RequestPart(required = false)UserUpdateRequestDto requestDto,
+            @RequestPart(required = false, value = "file") MultipartFile file,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) throws UnsupportedEncodingException, NoSuchAlgorithmException {
 
-        UserResponseDto userResponseDto = userService.partialUpdateUserInfo(id, requestDto, userDetails);
-        return userResponseDto;
+
+        List<Map<String, String>> responseList = userService.partialUpdateUserInfo(id, file, requestDto, userDetails);
+        return responseList;
+
     }
 
-    // 프로필사진 등록
-//    @PostMapping("/users/{Userid}")
-//    public MsgResponseDto updateUserInfo(
-//            @PathVariable Long id,
-//            @RequestParam(value = "file", required = false) MultipartFile files,
-//            @AuthenticationPrincipal UserDetailsImpl userDetails) {
-//
-//    }
 
 
     @PostMapping("/user/logincheck")
@@ -163,50 +160,4 @@ public class UserContorller {
     }
 
 }
-
-// 유저의 구단정보 보내기
-// 일단 myteam 정보만 보내주고 이후에 userresponsedto로 모든 정보를 보내줄 수 있음
-//    @PatchMapping("/users/{id}")
-//    public Map<String, String> updateUserMyteam(
-//            @PathVariable Long id,
-//            @RequestBody UserRequestDto requestDto,
-//            @AuthenticationPrincipal UserDetailsImpl userDetails)
-//    {
-//        if (userDetails == null)
-//        {
-//            throw new IllegalArgumentException("로그인 후에 이용하실 수 있습니다.");
-//        }
-//
-//        UserResponseDto responseDto = userService.partialUpdate(id, requestDto);
-//        Map<String, String> myTeamResponse = new HashMap<>();
-//        myTeamResponse.put("myteam", responseDto.getMyteam());
-//        return myTeamResponse;
-//    }
-
-// 구단 선택 구버전
-//    @PostMapping("/user/myteam")
-//    public MyteamRequestDto selectMyteam(
-//            @RequestBody MyteamRequestDto myteam,
-//            @AuthenticationPrincipal UserDetailsImpl userDetails)
-//    {
-//        if(userDetails == null)
-//        {
-//            throw new IllegalArgumentException("로그인 한 사용자만 사용 가능합니다");
-//        }
-//
-//        User user = userRepository.findByUserid(userDetails.getUser().getUserid())
-//                .orElseThrow(()-> new IllegalArgumentException("로그인 정보를 찾을 수 없습니다."));
-//
-//        if(myteam.getMyteam() == null)
-//        {
-//            throw new IllegalArgumentException("구단선택을 null로 했습니다");
-//        }
-//
-//        user.setMyselectTeam(myteam.getMyteam());
-//
-//        userRepository.save(user);
-//
-//        MyteamRequestDto myteamRequestDto = new MyteamRequestDto(user.getMyselectTeam());
-//        return myteamRequestDto;
-//    }
 
