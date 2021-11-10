@@ -19,6 +19,7 @@ public class LoginCheckResponseDto {
     private String picture;
     private String address;
     private String usertype;
+    private String selfIntroduce;
 
     private List<Long> myTimeLineLikesList;
     private List<Long> myGoodsLikesList;
