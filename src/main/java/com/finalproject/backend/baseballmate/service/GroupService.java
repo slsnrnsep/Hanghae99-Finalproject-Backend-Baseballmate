@@ -259,6 +259,8 @@ public class GroupService {
 
         Long groupId = group.getGroupId();
         String createdUserName = group.getCreatedUsername();
+        String createdUserId = group.getCreatedUser().getUserid();
+        String createdUserProfileImg = group.getCreatedUser().getPicture();
         String title = group.getTitle();
         String content = group.getContent();
         int peopleLimit = group.getPeopleLimit();
@@ -271,7 +273,6 @@ public class GroupService {
         List<GroupComment> groupcommentList = group.getGroupCommentList();
         List<Map<String, String>> appliedUserInfo = appliedUsers;
 
-        // 디데이 계산
         int month = Integer.parseInt(group.getGroupDate().split("[.]")[0]);
         int day = Integer.parseInt(group.getGroupDate().split("[.]")[1].split(" ")[0]);
         LocalDate target = LocalDate.of(LocalDate.now().getYear(),month,day);
@@ -279,7 +280,7 @@ public class GroupService {
         String dday = countingday.toString();
 
         GroupDetailResponseDto groupdetailResponseDto =
-                new GroupDetailResponseDto(groupId, createdUserName, title, content, peopleLimit, nowAppliedNum, canApplyNum, hotPercent, stadium , groupDate, filePath, dday, appliedUserInfo, groupcommentList);
+                new GroupDetailResponseDto(groupId, createdUserName, createdUserId, createdUserProfileImg, title, content, peopleLimit, nowAppliedNum, canApplyNum, hotPercent, stadium , groupDate, filePath, dday, appliedUserInfo, groupcommentList);
 
         return groupdetailResponseDto;
     }

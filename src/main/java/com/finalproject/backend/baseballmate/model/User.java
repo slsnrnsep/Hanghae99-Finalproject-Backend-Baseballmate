@@ -51,6 +51,10 @@ public class User {
     @OneToMany(mappedBy = "createdUser", cascade = CascadeType.ALL)
     private List<Group> createdGroupList = new ArrayList<>();
 
+    @JsonManagedReference
+    @OneToMany(mappedBy = "screenCreatedUser", cascade = CascadeType.ALL)
+    private List<Screen> createdScreenList = new ArrayList<>();
+
     @Column(nullable = true)
     private Long kakaoId;
 
@@ -60,8 +64,13 @@ public class User {
 //    @Column(nullable = true, name = "EMAIL")
 //    private String email;
 //
-//    @Column(nullable = true, name = "NICKNAME")
-//    private String nickname;
+    // 마이페이지에서 수정 가능한 정보
+    @Column(nullable = true)
+    private String selfIntroduction;
+
+    // 마이페이지에서 수정 가능한 정보
+    @Column(nullable = true)
+    private String address;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private final List<TimeLineLikes> timeLineLikes = new ArrayList<>();
@@ -84,6 +93,24 @@ public class User {
     public void addGroupCommentLikes(GroupCommentLikes likes) {this.groupCommentLikes.add(likes);}
 
     public void deleteGroupCommentLikes(GroupCommentLikes likes) {this.groupCommentLikes.remove(likes);}
+
+
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    private final List<ScreenLikes> screenLikes = new ArrayList<>();
+
+    public void addScreenLikes(ScreenLikes likes){this.screenLikes.add(likes);}
+
+    public void deleteScreenLikes(ScreenLikes likes){this.screenLikes.remove(likes);}
+
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    private final List<ScreenCommentLikes> screenCommentLikes = new ArrayList<>();
+
+    public void addScreenCommentLikes(ScreenCommentLikes likes){this.screenCommentLikes.add(likes);}
+
+    public void deleteScreenCommentLikes(ScreenCommentLikes likes){this.screenCommentLikes.remove(likes);}
+
+
+
 
     // goods 좋아요 생성자
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
@@ -126,6 +153,13 @@ public class User {
         this.phoneNumber = phonenumber;
         this.ranNum = ranNum;
     }
+
+    public User(String userid, String username, String password){
+        this.userid = userid;
+        this.username = username;
+        this.password = password;
+    }
+
     // 카카오 로그인에 필요한 생성자
     @Builder
     public User(String username ,String userid, String picture, String password, Long kakaoId){
@@ -135,6 +169,4 @@ public class User {
         this.password = password;
         this.kakaoId = kakaoId;
     }
-
-
 }

@@ -29,7 +29,6 @@ public class TimeLine extends Timestamped
 
 
     @OneToMany(mappedBy = "timeLine", cascade = CascadeType.ALL)
-
     private List<TimeLineLikes> likesList;
 
     @Column(columnDefinition = "integer default 0")

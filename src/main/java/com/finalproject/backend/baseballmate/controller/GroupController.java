@@ -51,7 +51,7 @@ public class GroupController {
     // 모임 생성
     @PostMapping("/groups")
     public MsgResponseDto createGroup(
-            @RequestParam(value = "file",required = false) MultipartFile files,
+            @RequestParam(value = "file",required = false) MultipartFile file,
             GroupRequestDto requestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
 //         로그인한 유저의 유저네임 가져오기
@@ -62,14 +62,14 @@ public class GroupController {
         try
         {
             String filename = "basic.jpg";
-            if (files != null) {
-                String origFilename = files.getOriginalFilename();
+            if (file != null) {
+                String origFilename = file.getOriginalFilename();
                 filename = new MD5Generator(origFilename).toString() + ".jpg";
                 /* 실행되는 위치의 'files' 폴더에 파일이 저장됩니다. */
 
                 String savePath = System.getProperty("user.dir") + commonPath;
                 /* 파일이 저장되는 폴더가 없으면 폴더를 생성합니다. */
-                //files.part.getcontententtype() 해서 이미지가 아니면 false처리해야함.
+                //files.part.getcontenttype() 해서 이미지가 아니면 false처리해야함.
                 if (!new File(savePath).exists()) {
                     try {
                         new File(savePath).mkdir();
@@ -78,7 +78,7 @@ public class GroupController {
                     }
                 }
                 String filePath = savePath + "/" + filename;// 이경로는 우분투랑 윈도우랑 다르니까 주의해야댐 우분투 : / 윈도우 \\ 인것같음.
-                files.transferTo(new File(filePath));
+                file.transferTo(new File(filePath));
             }
 
             requestDto.setFilePath(filename);
