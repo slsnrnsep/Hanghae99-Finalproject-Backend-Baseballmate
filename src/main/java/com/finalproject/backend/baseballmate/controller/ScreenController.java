@@ -30,7 +30,7 @@ public class ScreenController {
     @PostMapping("/screen")
     public ScreenResponseDto postScreen(
             @RequestParam(value = "file",required = false) MultipartFile files,
-            @RequestBody ScreenRequestDto requestDto,
+            ScreenRequestDto requestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails){
         if(userDetails == null)
         {
