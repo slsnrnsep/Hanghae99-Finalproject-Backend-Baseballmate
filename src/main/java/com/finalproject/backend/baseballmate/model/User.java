@@ -88,19 +88,29 @@ public class User {
     public void deleteGroupLikes(GroupLikes likes) {this.groupLikes.remove(likes);}
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    private final List<GroupCommentLikes> groupCommentLikes = new ArrayList<>();
+
+    public void addGroupCommentLikes(GroupCommentLikes likes) {this.groupCommentLikes.add(likes);}
+
+    public void deleteGroupCommentLikes(GroupCommentLikes likes) {this.groupCommentLikes.remove(likes);}
+
+
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     private final List<ScreenLikes> screenLikes = new ArrayList<>();
 
     public void addScreenLikes(ScreenLikes likes){this.screenLikes.add(likes);}
 
     public void deleteScreenLikes(ScreenLikes likes){this.screenLikes.remove(likes);}
 
-
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
-    private final List<GroupCommentLikes> groupCommentLikes = new ArrayList<>();
+    private final List<ScreenCommentLikes> screenCommentLikes = new ArrayList<>();
 
-    public void addGroupCommentLikes(GroupCommentLikes likes) {this.groupCommentLikes.add(likes);}
+    public void addScreenCommentLikes(ScreenCommentLikes likes){this.screenCommentLikes.add(likes);}
 
-    public void deleteGroupCommentLikes(GroupCommentLikes likes) {this.groupCommentLikes.remove(likes);}
+    public void deleteScreenCommentLikes(ScreenCommentLikes likes){this.screenCommentLikes.remove(likes);}
+
+
+
 
     // goods 좋아요 생성자
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)

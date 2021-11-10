@@ -35,34 +35,12 @@ public class UserService {
     private final UserRepository userRepository;
     private final KakaoOAuth2 kakaoOAuth2;
     private final JwtTokenProvider jwtTokenProvider;
-//    private final PhoneService phoneService;
+    private final PhoneService phoneService;
     private final AuthenticationManager authenticationManager;
     private static final String Pass_Salt = "AAABnv/xRVklrnYxKZ0aHgTBcXukeZygoC";
 
 //    @Value("${app.auth.tokenSecret}")
-//    private String secretKey;
-
-//    public void registerUser(UserRequestDto userRequestDto) {
-//        String username = userRequestDto.getUsername();
-//        String password = userRequestDto.getPassword();
-//        String userid = userRequestDto.getUserid();
-//
-////        Optional<User> check = userRepository.findByUsername(username);
-//        String pattern = "^[a-zA-Z0-9]*$";
-//
-//        password = passwordEncoder.encode(userRequestDto.getPassword());
-//        User user = userRepository.findByPhoneNumber(userRequestDto.getPhonenumber()).orElseThrow(
-//                ()-> new IllegalArgumentException("휴대폰에 맞는 유저정보를 찾을 수 없습니다.")
-//        );
-//        user.setUserid(userid);
-//        user.setUsername(username);
-//        user.setPassword(password);
-//
-////        //로컬 강제 DB집어넣기
-////        User user = new User(userid,username,password, userRequestDto.getPhonenumber());
-//        userRepository.save(user);
-//
-//    }
+    private String secretKey;
 
     public void registerUser(UserRequestDto userRequestDto) {
         String username = userRequestDto.getUsername();
@@ -73,11 +51,35 @@ public class UserService {
         String pattern = "^[a-zA-Z0-9]*$";
 
         password = passwordEncoder.encode(userRequestDto.getPassword());
+        User user = userRepository.findByPhoneNumber(userRequestDto.getPhonenumber()).orElseThrow(
+                ()-> new IllegalArgumentException("휴대폰에 맞는 유저정보를 찾을 수 없습니다.")
+        );
+        user.setUserid(userid);
+        user.setUsername(username);
+        user.setPassword(password);
+        user.setPicture("sample.png");
 
-        User user = new User(userid, username, password);
+
+//        //로컬 강제 DB집어넣기
+//        User user = new User(userid,username,password, userRequestDto.getPhonenumber());
         userRepository.save(user);
 
     }
+
+//    public void registerUser(UserRequestDto userRequestDto) {
+//        String username = userRequestDto.getUsername();
+//        String password = userRequestDto.getPassword();
+//        String userid = userRequestDto.getUserid();
+//
+////        Optional<User> check = userRepository.findByUsername(username);
+//        String pattern = "^[a-zA-Z0-9]*$";
+//
+//        password = passwordEncoder.encode(userRequestDto.getPassword());
+//
+//        User user = new User(userid, username, password);
+//        userRepository.save(user);
+//
+//    }
 
     public void passwordCheck(String password) {
         final int MIN = 8;

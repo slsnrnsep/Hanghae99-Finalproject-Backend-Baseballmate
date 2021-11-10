@@ -52,7 +52,7 @@ public class GroupController {
     @PostMapping("/groups")
     public MsgResponseDto createGroup(
             @RequestParam(value = "file",required = false) MultipartFile file,
-            @RequestBody GroupRequestDto requestDto,
+            GroupRequestDto requestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
 //         로그인한 유저의 유저네임 가져오기
         if (userDetails == null)
