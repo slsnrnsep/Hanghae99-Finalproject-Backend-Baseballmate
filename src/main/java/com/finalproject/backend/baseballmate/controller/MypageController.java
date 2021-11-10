@@ -1,17 +1,20 @@
 package com.finalproject.backend.baseballmate.controller;
 
+import com.finalproject.backend.baseballmate.model.AddressEnum;
 import com.finalproject.backend.baseballmate.model.Group;
 import com.finalproject.backend.baseballmate.repository.GroupRepository;
 import com.finalproject.backend.baseballmate.repository.UserRepository;
 import com.finalproject.backend.baseballmate.responseDto.AllGroupResponseDto;
 import com.finalproject.backend.baseballmate.security.UserDetailsImpl;
 import com.finalproject.backend.baseballmate.service.GroupService;
+import com.finalproject.backend.baseballmate.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -21,8 +24,7 @@ public class MypageController {
     private final GroupRepository groupRepository;
     private final UserRepository userRepository;
     private final GroupService groupService;
-    // 마이페이지에서 유저 프로필 사진 등록
-//    @PostMapping("")
+    private final UserService userService;
 
 
     //내가 작성한 그룹 조회
@@ -57,5 +59,12 @@ public class MypageController {
         }
 
         return groupService.getMylikeAllGroups(userDetails.getUser());
+    }
+
+    // 지역 정보 조회
+    @GetMapping("/my/address")
+    public List<AddressEnum> getAddressEnumList(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        List<AddressEnum> addressEnumList = userService.getAddressEnumList(userDetails);
+        return addressEnumList;
     }
 }
