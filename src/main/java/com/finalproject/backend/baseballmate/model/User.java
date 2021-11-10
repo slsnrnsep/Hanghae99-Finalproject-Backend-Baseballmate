@@ -43,7 +43,7 @@ public class User {
 
     // 참여 신청한 모임
     @JsonManagedReference
-    @OneToMany(mappedBy = "appliedGroup") // groupapplication을 역참조하여 내가 참여 신청한 모임들 리스트 가져오기
+    @OneToMany(mappedBy = "appliedGroup",cascade = CascadeType.ALL) // groupapplication을 역참조하여 내가 참여 신청한 모임들 리스트 가져오기
     private List<GroupApplication> appliedGroup = new ArrayList<>();
     // 최종 타입이 groupapplication이 아니고 group이어야 할텐데 함수를 써서 가져오기
 
@@ -64,8 +64,13 @@ public class User {
 //    @Column(nullable = true, name = "EMAIL")
 //    private String email;
 //
-//    @Column(nullable = true, name = "NICKNAME")
-//    private String nickname;
+    // 마이페이지에서 수정 가능한 정보
+    @Column(nullable = true)
+    private String selfIntroduction;
+
+    // 마이페이지에서 수정 가능한 정보
+    @Column(nullable = true)
+    private String address;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private final List<TimeLineLikes> timeLineLikes = new ArrayList<>();
@@ -75,14 +80,14 @@ public class User {
     public void deleteLikes(TimeLineLikes likes) {this.timeLineLikes.remove(likes);
     }
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     private final List<GroupLikes> groupLikes = new ArrayList<>();
 
     public void addGroupLikes(GroupLikes likes) {this.groupLikes.add(likes);}
 
     public void deleteGroupLikes(GroupLikes likes) {this.groupLikes.remove(likes);}
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     private final List<GroupCommentLikes> groupCommentLikes = new ArrayList<>();
 
     public void addGroupCommentLikes(GroupCommentLikes likes) {this.groupCommentLikes.add(likes);}
@@ -101,14 +106,7 @@ public class User {
         this.goodsLikes.remove(likes);
     }
 
-//    @OneToMany(mappedBy = "user")
-//    private final List<GroupLikes> groupLikes = new ArrayList<>();
-//
-//    public void addGroupLikes(GroupLikes likes){this.groupLikes.add(likes);}
-//
-//    public void deleteGroupLiktes(GroupLikes likes){this.groupLikes.remove(likes);}
-
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     private final List<GoodsCommentLikes> goodsCommentLikes = new ArrayList<>();
 
     public void addGoodsCommentLikes(GoodsCommentLikes likes){this.goodsCommentLikes.add(likes);}
@@ -137,6 +135,13 @@ public class User {
         this.phoneNumber = phonenumber;
         this.ranNum = ranNum;
     }
+
+    public User(String userid, String username, String password){
+        this.userid = userid;
+        this.username = username;
+        this.password = password;
+    }
+
     // 카카오 로그인에 필요한 생성자
     @Builder
     public User(String username ,String userid, String picture, String password, Long kakaoId){

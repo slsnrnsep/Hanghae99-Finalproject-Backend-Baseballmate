@@ -2,21 +2,25 @@ package com.finalproject.backend.baseballmate.controller;
 
 import com.finalproject.backend.baseballmate.model.*;
 import com.finalproject.backend.baseballmate.repository.*;
-import com.finalproject.backend.baseballmate.requestDto.HeaderDto;
-import com.finalproject.backend.baseballmate.requestDto.MyteamRequestDto;
-import com.finalproject.backend.baseballmate.requestDto.UserRequestDto;
+import com.finalproject.backend.baseballmate.requestDto.*;
 import com.finalproject.backend.baseballmate.responseDto.LoginCheckResponseDto;
 import com.finalproject.backend.baseballmate.responseDto.MsgResponseDto;
 import com.finalproject.backend.baseballmate.responseDto.UserResponseDto;
 import com.finalproject.backend.baseballmate.security.JwtTokenProvider;
 import com.finalproject.backend.baseballmate.security.UserDetailsImpl;
+import com.finalproject.backend.baseballmate.service.FileService;
 import com.finalproject.backend.baseballmate.service.LoginResponseDto;
 import com.finalproject.backend.baseballmate.service.UserService;
+import com.finalproject.backend.baseballmate.util.MD5Generator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.awt.*;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,6 +38,7 @@ public class UserContorller {
     private final GoodsLikesRepository goodsLikesRepository;
     private final GroupLikesRepository groupLikesRepository;
     private final GroupCommentLikesRepository groupCommentLikesRepository;
+    private final FileService fileService;
 
     @PostMapping("/user/signup")
     public MsgResponseDto registerUser(@RequestBody UserRequestDto userRequestDto)
@@ -53,6 +58,7 @@ public class UserContorller {
         }
     }
 
+
     @PostMapping("/user/login")
     public LoginResponseDto login(@RequestBody UserRequestDto userRequestDto)
     {
@@ -68,55 +74,32 @@ public class UserContorller {
         return loginResponseDto;
     }
 
-    // 유저의 구단정보 보내기
-    // 일단 myteam 정보만 보내주고 이후에 userresponsedto로 모든 정보를 보내줄 수 있음
-    @PatchMapping("/users/{id}")
-    public Map<String, String> updateUserInfo(
-            @PathVariable Long id,
-            @RequestBody UserRequestDto requestDto,
-            @AuthenticationPrincipal UserDetailsImpl userDetails)
-    {
-        if (userDetails == null)
-        {
-            throw new IllegalArgumentException("로그인 후에 이용하실 수 있습니다.");
-        }
 
-        UserResponseDto responseDto = userService.partialUpdate(id, requestDto);
-        Map<String, String> myTeamResponse = new HashMap<>();
-        myTeamResponse.put("myteam", responseDto.getMyteam());
-        return myTeamResponse;
+    //patchmapping 일반화(구단 정보, 주소, 자기소개 등록 모두 가능)
+    @PatchMapping( "/users/{id}")
+    public UserResponseDto updateUserInfoGeneric(
+            @PathVariable("id") Long id,
+            @RequestBody UserUpdateRequestDto requestDto,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+        UserResponseDto userResponseDto = userService.partialUpdateUserInfo(id, requestDto, userDetails);
+        return userResponseDto;
     }
 
+    // 프로필사진 등록
+//    @PostMapping("/users/{Userid}")
+//    public MsgResponseDto updateUserInfo(
+//            @PathVariable Long id,
+//            @RequestParam(value = "file", required = false) MultipartFile files,
+//            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+//
+//    }
 
-    @PostMapping("/user/myteam")
-    public MyteamRequestDto selectMyteam(
-            @RequestBody MyteamRequestDto myteam,
-            @AuthenticationPrincipal UserDetailsImpl userDetails)
-    {
-        if(userDetails == null)
-        {
-            throw new IllegalArgumentException("로그인 한 사용자만 사용 가능합니다");
-        }
-
-        User user = userRepository.findByUserid(userDetails.getUser().getUserid())
-                .orElseThrow(()-> new IllegalArgumentException("로그인 정보를 찾을 수 없습니다."));
-
-        if(myteam.getMyteam() == null)
-        {
-            throw new IllegalArgumentException("구단선택을 null로 했습니다");
-        }
-
-        user.setMyselectTeam(myteam.getMyteam());
-
-        userRepository.save(user);
-
-        MyteamRequestDto myteamRequestDto = new MyteamRequestDto(user.getMyselectTeam());
-        return myteamRequestDto;
-    }
 
     @PostMapping("/user/logincheck")
     public LoginCheckResponseDto loginCheck(@AuthenticationPrincipal UserDetailsImpl userDetails)
     {
+        String usertype = "";
         if(userDetails == null)
         {
             throw new IllegalArgumentException("로그인 정보를 찾을 수 없습니다");
@@ -125,6 +108,14 @@ public class UserContorller {
         User user = userRepository.findByUsername(userDetails.getUser().getUsername())
                 .orElseThrow(()-> new IllegalArgumentException("로그인 유저를 찾을 수 없습니다."));
 
+        if(user.getKakaoId() == null)
+        {
+            usertype = "normal";
+        }
+        else
+        {
+            usertype = "kakao";
+        }
         //프론트엔드 진식님 요청사항
         List<TimeLineLikes> TimeLineLikesList=timeLineLikesRepository.findAllByUserId(user.getId());
         List<Long> myTimeLineLikesList = new ArrayList<>();
@@ -154,7 +145,10 @@ public class UserContorller {
         {
             myGroupCommentLikesList.add(groupCommentLikesList.get(i).getGroupComment().getGroupCommentId());
         }
-        LoginCheckResponseDto loginCheckResponseDto = new LoginCheckResponseDto(user.getId(),user.getUserid(), user.getUsername(),user.getMyselectTeam(),user.getPicture(),user.getPhoneNumber(),myTimeLineLikesList,myGoodsLikesList,myGroupLikesList,myGroupCommentLikesList);
+
+
+        LoginCheckResponseDto loginCheckResponseDto = new LoginCheckResponseDto(user.getId(),user.getUserid(), user.getUsername(),user.getMyselectTeam(),user.getPicture(),usertype, myTimeLineLikesList,myGoodsLikesList,myGroupLikesList,myGroupCommentLikesList);
+
 
 
         return loginCheckResponseDto;
@@ -169,3 +163,50 @@ public class UserContorller {
     }
 
 }
+
+// 유저의 구단정보 보내기
+// 일단 myteam 정보만 보내주고 이후에 userresponsedto로 모든 정보를 보내줄 수 있음
+//    @PatchMapping("/users/{id}")
+//    public Map<String, String> updateUserMyteam(
+//            @PathVariable Long id,
+//            @RequestBody UserRequestDto requestDto,
+//            @AuthenticationPrincipal UserDetailsImpl userDetails)
+//    {
+//        if (userDetails == null)
+//        {
+//            throw new IllegalArgumentException("로그인 후에 이용하실 수 있습니다.");
+//        }
+//
+//        UserResponseDto responseDto = userService.partialUpdate(id, requestDto);
+//        Map<String, String> myTeamResponse = new HashMap<>();
+//        myTeamResponse.put("myteam", responseDto.getMyteam());
+//        return myTeamResponse;
+//    }
+
+// 구단 선택 구버전
+//    @PostMapping("/user/myteam")
+//    public MyteamRequestDto selectMyteam(
+//            @RequestBody MyteamRequestDto myteam,
+//            @AuthenticationPrincipal UserDetailsImpl userDetails)
+//    {
+//        if(userDetails == null)
+//        {
+//            throw new IllegalArgumentException("로그인 한 사용자만 사용 가능합니다");
+//        }
+//
+//        User user = userRepository.findByUserid(userDetails.getUser().getUserid())
+//                .orElseThrow(()-> new IllegalArgumentException("로그인 정보를 찾을 수 없습니다."));
+//
+//        if(myteam.getMyteam() == null)
+//        {
+//            throw new IllegalArgumentException("구단선택을 null로 했습니다");
+//        }
+//
+//        user.setMyselectTeam(myteam.getMyteam());
+//
+//        userRepository.save(user);
+//
+//        MyteamRequestDto myteamRequestDto = new MyteamRequestDto(user.getMyselectTeam());
+//        return myteamRequestDto;
+//    }
+

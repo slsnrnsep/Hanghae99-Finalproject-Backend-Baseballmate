@@ -17,7 +17,7 @@ public class LoginCheckResponseDto {
     private String username;
     private String myteam;
     private String picture;
-    private String phonenumber;
+    private String usertype;
     private List<Long> myTimeLineLikesList;
     private List<Long> myGoodsLikesList;
     private List<Long> myGroupLikesList;

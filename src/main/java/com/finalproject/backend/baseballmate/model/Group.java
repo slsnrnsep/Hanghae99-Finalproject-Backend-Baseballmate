@@ -1,10 +1,10 @@
 package com.finalproject.backend.baseballmate.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.finalproject.backend.baseballmate.requestDto.GroupRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -45,7 +45,7 @@ public class Group extends Timestamped{
 
     // 참가 신청한 유저와 해당 모임 정보
     @JsonManagedReference
-    @OneToMany(mappedBy = "appliedUser")
+    @OneToMany(mappedBy = "appliedGroup",cascade = CascadeType.ALL)
     private List<GroupApplication> groupApplications = new ArrayList<>();
     // groupapplication에서 유저 정보 빼오기
 
@@ -74,14 +74,15 @@ public class Group extends Timestamped{
 //    private String baseballTeam; // 구단 이름
 
     @JsonManagedReference
+    @OneToMany(mappedBy = "id",cascade = CascadeType.ALL)
+    private List<User> canceledUser = new ArrayList<>();
 
-
-    // 게시글 전체 조회 생성자
-
-    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    @OneToMany(mappedBy = "group", cascade = CascadeType.REMOVE)
     private List<GroupComment> groupCommentList = new ArrayList<>();
 
     // 좋아요
+    @JsonManagedReference
     @OneToMany(mappedBy = "grouplikes",cascade = CascadeType.ALL)
     private List<GroupLikes> grouplikesList;
 

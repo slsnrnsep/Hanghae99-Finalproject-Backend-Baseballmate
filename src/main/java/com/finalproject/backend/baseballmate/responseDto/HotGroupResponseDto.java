@@ -18,7 +18,7 @@ public class HotGroupResponseDto {
     private String groupDate; // 모임 날짜
     private String filePath;
     private String selectTeam;
-
+    private String dday;
     //프로필 사진
     //등급정보
     //모집중인지 아닌지

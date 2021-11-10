@@ -16,7 +16,6 @@ public class GroupLikes {
 
     @JoinColumn(name = "group_id")
     @ManyToOne
-
     private Group grouplikes;
 
 

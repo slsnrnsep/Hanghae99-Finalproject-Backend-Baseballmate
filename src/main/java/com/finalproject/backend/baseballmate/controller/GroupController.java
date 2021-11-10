@@ -3,19 +3,15 @@ package com.finalproject.backend.baseballmate.controller;
 import com.finalproject.backend.baseballmate.model.Group;
 import com.finalproject.backend.baseballmate.model.User;
 import com.finalproject.backend.baseballmate.repository.GroupRepository;
-import com.finalproject.backend.baseballmate.repository.UserRepository;
 import com.finalproject.backend.baseballmate.requestDto.GroupRequestDto;
 import com.finalproject.backend.baseballmate.responseDto.AllGroupResponseDto;
 import com.finalproject.backend.baseballmate.responseDto.GroupDetailResponseDto;
 import com.finalproject.backend.baseballmate.responseDto.MsgResponseDto;
 import com.finalproject.backend.baseballmate.security.UserDetailsImpl;
-import com.finalproject.backend.baseballmate.service.FileService;
 import com.finalproject.backend.baseballmate.service.GroupService;
 import com.finalproject.backend.baseballmate.util.MD5Generator;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -30,9 +26,8 @@ public class GroupController {
 
     private final GroupService groupService;
     private final GroupRepository groupRepository;
-    private final FileService fileService;
-    private final UserRepository userRepository;
     private String commonPath = "/images";
+
 
     // 모임페이지 전체 조회 :
     @GetMapping("/groups")
@@ -56,7 +51,7 @@ public class GroupController {
     // 모임 생성
     @PostMapping("/groups")
     public MsgResponseDto createGroup(
-            @RequestParam(value = "file",required = false) MultipartFile files,
+            @RequestParam(value = "file",required = false) MultipartFile file,
             @RequestBody GroupRequestDto requestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
 //         로그인한 유저의 유저네임 가져오기
@@ -67,14 +62,14 @@ public class GroupController {
         try
         {
             String filename = "basic.jpg";
-            if (files != null) {
-                String origFilename = files.getOriginalFilename();
+            if (file != null) {
+                String origFilename = file.getOriginalFilename();
                 filename = new MD5Generator(origFilename).toString() + ".jpg";
                 /* 실행되는 위치의 'files' 폴더에 파일이 저장됩니다. */
 
                 String savePath = System.getProperty("user.dir") + commonPath;
                 /* 파일이 저장되는 폴더가 없으면 폴더를 생성합니다. */
-                //files.part.getcontententtype() 해서 이미지가 아니면 false처리해야함.
+                //files.part.getcontenttype() 해서 이미지가 아니면 false처리해야함.
                 if (!new File(savePath).exists()) {
                     try {
                         new File(savePath).mkdir();
@@ -83,7 +78,7 @@ public class GroupController {
                     }
                 }
                 String filePath = savePath + "/" + filename;// 이경로는 우분투랑 윈도우랑 다르니까 주의해야댐 우분투 : / 윈도우 \\ 인것같음.
-                files.transferTo(new File(filePath));
+                file.transferTo(new File(filePath));
             }
 
             requestDto.setFilePath(filename);
@@ -96,7 +91,7 @@ public class GroupController {
 
         catch (Exception e)
         {
-            MsgResponseDto msgResponseDto = new MsgResponseDto("success", "모임 등록 실패");
+            MsgResponseDto msgResponseDto = new MsgResponseDto("failed", "모임 등록 실패");
             return msgResponseDto;
         }
 
@@ -125,6 +120,18 @@ public class GroupController {
         MsgResponseDto msgResponseDto = new MsgResponseDto("success", "모임 신청 완료");
         return msgResponseDto;
 
+    }
+
+    // 모임 참가신청 취소하기
+    @DeleteMapping("/groups/{groupId}/applications")
+    public MsgResponseDto cancelApply(@PathVariable Long groupId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        if (userDetails == null)
+        {
+            throw new IllegalArgumentException("로그인 한 사용자만 신청할 수 있습니다.");
+        }
+        groupService.cancelApplication(groupId, userDetails);
+        MsgResponseDto msgResponseDto = new MsgResponseDto("success", "모임 신청 취소 완료");
+        return msgResponseDto;
     }
 
     // 모임 수정하기 - 모임을 생성한 사람만 수정할 수 있게
