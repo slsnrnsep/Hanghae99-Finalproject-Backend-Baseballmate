@@ -1,5 +1,6 @@
 package com.finalproject.backend.baseballmate.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.finalproject.backend.baseballmate.requestDto.ScreenRequestDto;
 import lombok.Getter;
@@ -58,6 +59,28 @@ public class Screen extends Timestamped{
 
     @Column
     private String selectPlace;
+
+    @JsonBackReference
+    @OneToMany(mappedBy = "screen", cascade = CascadeType.ALL)
+    private List<ScreenComment> screenCommentList = new ArrayList<>();
+
+    // 스크린 야구 모임 좋아요
+    @JsonManagedReference
+    @OneToMany(mappedBy = "screenlikes",cascade = CascadeType.ALL)
+    private List<ScreenLikes> screenLikesList;
+
+    @Column(columnDefinition = "integer default 0")
+    private int screenlikeCount;
+
+    public void addLikes(ScreenLikes like){
+        this.screenLikesList.add(like);
+        this.screenlikeCount += 1;
+    }
+    public void deleteLikes(ScreenLikes like){
+        this.screenLikesList.remove(like);
+        this.screenlikeCount -= 1;
+    }
+
 
     // 스크린모임 등록 생성자
     public Screen(ScreenRequestDto requestDto, User loginedUser){

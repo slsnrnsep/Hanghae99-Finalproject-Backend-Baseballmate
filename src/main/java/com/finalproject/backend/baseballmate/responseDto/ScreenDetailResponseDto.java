@@ -1,5 +1,6 @@
 package com.finalproject.backend.baseballmate.responseDto;
 
+import com.finalproject.backend.baseballmate.model.ScreenComment;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,6 +20,6 @@ public class ScreenDetailResponseDto {
     private int canApplyNum; // 현재 참여 가능한 인원 수
     private double hotPercent;
     private String groupDate; // 모임 날짜
-//    List<GroupComment> groupCommentList;
     private String filePath;// 모임 게시글 내의 댓글 리스트
+    List<ScreenComment> screenCommentList;
 }
