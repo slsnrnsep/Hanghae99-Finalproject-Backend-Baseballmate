@@ -1,6 +1,7 @@
 package com.finalproject.backend.baseballmate.service;
 
 import com.finalproject.backend.baseballmate.model.Screen;
+import com.finalproject.backend.baseballmate.model.ScreenComment;
 import com.finalproject.backend.baseballmate.model.User;
 import com.finalproject.backend.baseballmate.repository.ScreenRepository;
 import com.finalproject.backend.baseballmate.requestDto.AllScreenResponseDto;
@@ -64,9 +65,10 @@ public class ScreenService {
         double hotPercent = screen.getHotPercent();
         String groupDate = screen.getGroupDate();
         String filePath = screen.getFilePath();
+        List<ScreenComment> screenCommentList = screen.getScreenCommentList();
 
         ScreenDetailResponseDto screenDetailResponseDto =
-                new ScreenDetailResponseDto(screenId, title, createdUsername, content, peopleLimit, nowAppliedNum, canApplyNum, hotPercent, groupDate, filePath);
+                new ScreenDetailResponseDto(screenId, title, createdUsername, content, peopleLimit, nowAppliedNum, canApplyNum, hotPercent, groupDate, filePath,screenCommentList);
         return screenDetailResponseDto;
     }
     // 스크린 야구 모임 수정
