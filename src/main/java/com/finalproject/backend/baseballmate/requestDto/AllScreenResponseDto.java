@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 public class AllScreenResponseDto {
-    private Long id;
+    private Long screenId;
     private String title;
     private String createdUsername;
     private int peopleLimit;

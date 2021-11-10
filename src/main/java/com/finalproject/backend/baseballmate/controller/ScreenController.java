@@ -24,12 +24,12 @@ import java.util.List;
 public class ScreenController {
     private final UserRepository userRepository;
     private final ScreenService screenService;
-//    private final String commonPath = "/images";
+    private final String commonPath = "/images";
     private final FileService fileService;
 
     @PostMapping("/screen")
     public ScreenResponseDto postScreen(
-//            @RequestParam(value = "file",required = false) MultipartFile files,
+            @RequestParam(value = "file",required = false) MultipartFile files,
             @RequestBody ScreenRequestDto requestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails){
         if(userDetails == null)
@@ -37,26 +37,26 @@ public class ScreenController {
             throw new IllegalArgumentException("로그인 이용자만 스크인 야구 모임생성이 가능합니다");
         }
         try {
-//            String filename = "basic.jpg";
-//            if (files != null) {
-//                String origFilename = files.getOriginalFilename();
-//                filename = new MD5Generator(origFilename).toString() + ".jpg";
-//                /* 실행되는 위치의 'files' 폴더에 파일이 저장됩니다. */
-//
-//                String savePath = System.getProperty("user.dir") + commonPath;
-//                /* 파일이 저장되는 폴더가 없으면 폴더를 생성합니다. */
-//                //files.part.getcontententtype() 해서 이미지가 아니면 false처리해야함.
-//                if (!new File(savePath).exists()) {
-//                    try {
-//                        new File(savePath).mkdir();
-//                    } catch (Exception e) {
-//                        e.getStackTrace();
-//                    }
-//                }
-//                String filePath = savePath + "/" + filename;// 이경로는 우분투랑 윈도우랑 다르니까 주의해야댐 우분투 : / 윈도우 \\ 인것같음.
-//                files.transferTo(new File(filePath));
-//            }
-//            requestDto.setFilePath(filename);
+            String filename = "basic.jpg";
+            if (files != null) {
+                String origFilename = files.getOriginalFilename();
+                filename = new MD5Generator(origFilename).toString() + ".jpg";
+                /* 실행되는 위치의 'files' 폴더에 파일이 저장됩니다. */
+
+                String savePath = System.getProperty("user.dir") + commonPath;
+                /* 파일이 저장되는 폴더가 없으면 폴더를 생성합니다. */
+                //files.part.getcontententtype() 해서 이미지가 아니면 false처리해야함.
+                if (!new File(savePath).exists()) {
+                    try {
+                        new File(savePath).mkdir();
+                    } catch (Exception e) {
+                        e.getStackTrace();
+                    }
+                }
+                String filePath = savePath + "/" + filename;// 이경로는 우분투랑 윈도우랑 다르니까 주의해야댐 우분투 : / 윈도우 \\ 인것같음.
+                files.transferTo(new File(filePath));
+            }
+            requestDto.setFilePath(filename);
             User loginedUser = userDetails.getUser();
             String loginedUsername = userDetails.getUser().getUsername();
             screenService.createScreen(requestDto, loginedUser);
