@@ -113,6 +113,9 @@ public class UserContorller {
         {
             usertype = "kakao";
         }
+
+
+
         //프론트엔드 진식님 요청사항
         List<TimeLineLikes> TimeLineLikesList=timeLineLikesRepository.findAllByUserId(user.getId());
         List<Long> myTimeLineLikesList = new ArrayList<>();
@@ -144,7 +147,7 @@ public class UserContorller {
         }
 
 
-        LoginCheckResponseDto loginCheckResponseDto = new LoginCheckResponseDto(user.getId(),user.getUserid(), user.getUsername(),user.getMyselectTeam(),user.getPicture(),usertype, myTimeLineLikesList,myGoodsLikesList,myGroupLikesList,myGroupCommentLikesList);
+        LoginCheckResponseDto loginCheckResponseDto = new LoginCheckResponseDto(user.getId(),user.getUserid(), user.getUsername(),user.getMyselectTeam(),user.getPicture(),user.getAddress(),usertype, myTimeLineLikesList,myGoodsLikesList,myGroupLikesList,myGroupCommentLikesList);
 
 
 

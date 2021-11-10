@@ -60,6 +60,7 @@ public class UserService {
         user.setUserid(userid);
         user.setUsername(username);
         user.setPassword(password);
+        user.setAddress("전국");
         user.setPicture("sample.png");
 
 //        //로컬 강제 DB집어넣기
