@@ -73,6 +73,7 @@ public class Group extends Timestamped{
 //    @Column
 //    private String baseballTeam; // 구단 이름
 
+    // 모임을 취소했던 유저 리스트
     @JsonManagedReference
     @OneToMany(mappedBy = "id",cascade = CascadeType.ALL)
     private List<User> canceledUser = new ArrayList<>();

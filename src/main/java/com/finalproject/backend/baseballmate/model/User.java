@@ -141,6 +141,7 @@ public class User {
         this.ranNum = ranNum;
     }
 
+    // 로컬에서 강제로 DB에 집어넣는 생성자
     public User(String userid, String username, String password,String phonenumber){
         this.userid = userid;
         this.username = username;
