@@ -1,8 +1,10 @@
 package com.finalproject.backend.baseballmate.service;
 
 import com.finalproject.backend.baseballmate.model.Screen;
+import com.finalproject.backend.baseballmate.model.ScreenApplication;
 import com.finalproject.backend.baseballmate.model.ScreenComment;
 import com.finalproject.backend.baseballmate.model.User;
+import com.finalproject.backend.baseballmate.repository.ScreenApplicationRepository;
 import com.finalproject.backend.baseballmate.repository.ScreenRepository;
 import com.finalproject.backend.baseballmate.requestDto.AllScreenResponseDto;
 import com.finalproject.backend.baseballmate.requestDto.ScreenRequestDto;
@@ -20,6 +22,7 @@ import java.util.List;
 public class ScreenService {
 
     private final ScreenRepository screenRepository;
+    private final ScreenApplicationRepository screenApplicationRepository;
 
     @Transactional
     public Screen createScreen(ScreenRequestDto requestDto, User loginedUser) {
@@ -106,6 +109,77 @@ public class ScreenService {
             screenRepository.deleteById(screenId);
         }else {
             throw new IllegalArgumentException("해당 게시글이 존재하지 않습니다");
+        }
+    }
+    // 스크린 야구 모임 참여하기
+    @Transactional
+    public void applyScreen(User appliedUser, Screen appliedScreen) {
+        List<User> cancleUserList = appliedScreen.getCanceledUser();
+
+        // 참가 이력 조회
+        ScreenApplication screenApplication1 = screenApplicationRepository.findByAppliedScreenAndAndAppliedUser(appliedScreen, appliedUser);
+        if(screenApplication1 != null){
+            throw new IllegalArgumentException("참가 신청 이력이 존재합니다");
+        }else {
+            if(screenApplication1 == null && cancleUserList.contains(appliedUser)){
+                throw new IllegalArgumentException("재참가는 불가능합니다");
+            }else{
+                ScreenApplication screenApplication = new ScreenApplication(appliedUser,appliedScreen);
+                screenApplicationRepository.save(screenApplication);
+
+                int nowAppliedNum = screenApplication.getAppliedScreen().getNowAppliedNum();
+                int updateAppliedNum = nowAppliedNum + 1;
+                screenApplication.getAppliedScreen().setNowAppliedNum(updateAppliedNum);
+
+                int nowCanApplyNum = screenApplication.getAppliedScreen().getCanApplyNum();
+                int updatedCanApplyNum = nowCanApplyNum - 1;
+                screenApplication.getAppliedScreen().setCanApplyNum(updatedCanApplyNum);
+
+//                int peopleLimit = screenApplication.getAppliedScreen().getPeopleLimit();
+//                double updateHotPercent = ((double) updateAppliedNum / (double) peopleLimit * 100.0);
+//                screenApplication.getAppliedScreen().setHotPercent(updateHotPercent);
+            }
+        }
+
+
+    }
+    @Transactional
+    public void cancleApplication(Long screenId, UserDetailsImpl userDetails) {
+        Screen screen = screenRepository.findByScreenId(screenId);
+        List<ScreenApplication> screenApplicationList = screen.getScreenApplications();
+        User loginedUser = userDetails.getUser();
+        Long loginedUserIndex = userDetails.getUser().getId();
+
+        for (int i = 0; i < screenApplicationList.size(); i++) {
+            // 참가 신청 취소를 요청한 screenId를 가진 groupapplication하나씩 빼오기
+            ScreenApplication screenApplication = screenApplicationList.get(i);
+            if (screenApplication != null) {
+                Long appliedUserIndex = screenApplication.getAppliedUser().getId();
+                if (loginedUserIndex == appliedUserIndex) {
+                    // 현재 참여 신청 인원 1 감소
+                    int nowAppliedNum = screenApplication.getAppliedScreen().getNowAppliedNum();
+                    int updatedAppliedNum = nowAppliedNum - 1;
+                    screenApplication.getAppliedScreen().setNowAppliedNum(updatedAppliedNum);
+
+                    // 현재 참여 신청 가능한 인원 1 감소
+                    int nowCanApplyNum = screenApplication.getAppliedScreen().getCanApplyNum();
+                    int updatedCanApplyNum = nowCanApplyNum + 1;
+                    screenApplication.getAppliedScreen().setCanApplyNum(updatedCanApplyNum);
+
+                    // 인기도 값 수정
+//                    int peopleLimit = screenApplication.getAppliedScreen().getPeopleLimit();
+//                    double updatedHotPercent = ((double) updatedAppliedNum / (double) peopleLimit * 100.0);
+//                    screenApplication.getAppliedScreen().setHotPercent(updatedHotPercent);
+
+                    ScreenApplication screenApplication2 = screenApplicationRepository.findByAppliedScreenScreenIdAndAppliedUserId(screenId, loginedUserIndex);
+                    screenApplicationRepository.deleteById(screenApplication2.getId());
+
+                    screen.getCanceledUser().add(loginedUser);
+                    }
+                }
+                else {
+                    throw new NullPointerException("참가 신청 이력이 존재하지 않습니다.");
+                }
         }
     }
 }
