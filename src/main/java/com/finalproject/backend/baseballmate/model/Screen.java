@@ -41,9 +41,13 @@ public class Screen extends Timestamped{
     private String filePath;
 
     // 참가 신청한 유저와 해당 모임 정보
-//    @JsonManagedReference
-//    @OneToMany(mappedBy = "appliedUser")
-//    private List<ScreenApplication> screenApplications = new ArrayList<>();
+    @JsonManagedReference
+    @OneToMany(mappedBy = "appliedScreen")
+    private List<ScreenApplication> screenApplications = new ArrayList<>();
+
+    @JsonManagedReference
+    @OneToMany(mappedBy = "id")
+    private List<User> canceledUser = new ArrayList<>();
 
     @Column
     private int nowAppliedNum; // 현재 참여신청한 인원 -> get으로 가져오기

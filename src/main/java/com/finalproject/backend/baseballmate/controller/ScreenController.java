@@ -1,6 +1,8 @@
 package com.finalproject.backend.baseballmate.controller;
 
+import com.finalproject.backend.baseballmate.model.Screen;
 import com.finalproject.backend.baseballmate.model.User;
+import com.finalproject.backend.baseballmate.repository.ScreenRepository;
 import com.finalproject.backend.baseballmate.repository.UserRepository;
 import com.finalproject.backend.baseballmate.requestDto.AllScreenResponseDto;
 import com.finalproject.backend.baseballmate.requestDto.ScreenRequestDto;
@@ -22,15 +24,45 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 public class ScreenController {
-    private final UserRepository userRepository;
+    private final ScreenRepository screenRepository;
     private final ScreenService screenService;
     private final String commonPath = "/images";
     private final FileService fileService;
 
+    @PostMapping("/screen/{screenId}/applications")
+    public MsgResponseDto applyScreen(
+            @PathVariable Long screenId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails)
+    {
+        if (userDetails == null)
+        {
+            throw new IllegalArgumentException("로그인 한 사용자만 신청할 수 있습니다.");
+        }
+
+        User appliedUser = userDetails.getUser();
+        Screen appliedScreen = screenRepository.findByScreenId(screenId);
+        screenService.applyScreen(appliedUser, appliedScreen);
+        MsgResponseDto msgResponseDto = new MsgResponseDto("success", "모임 신청 완료");
+        return msgResponseDto;
+    }
+
+    @DeleteMapping("/screen/{screenId}/applications")
+    public MsgResponseDto cancleApply(
+            @PathVariable Long screenId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        if (userDetails == null) {
+            throw new IllegalArgumentException("로그인 한 사용자만 신청할 수 있습니다.");
+        }
+        screenService.cancleApplication(screenId, userDetails);
+        MsgResponseDto msgResponseDto = new MsgResponseDto("success", "모임 신청 취소 완료");
+        return msgResponseDto;
+
+    }
+
     @PostMapping("/screen")
     public ScreenResponseDto postScreen(
             @RequestParam(value = "file",required = false) MultipartFile files,
-            @RequestBody ScreenRequestDto requestDto,
+            ScreenRequestDto requestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails){
         if(userDetails == null)
         {
