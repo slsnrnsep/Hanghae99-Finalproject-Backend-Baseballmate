@@ -245,7 +245,7 @@ public class GroupService {
         Group group = groupRepository.findByGroupId(id);
         List<Map<String, String>> appliedUsers = new ArrayList<>();
 
-        if(group.getGroupApplications()!=null)
+        if(group.getGroupApplications().size()!=0)
         {
             // 참여자 정보 리스트 만들기
             for (int i = 0; i < group.getGroupApplications().size(); i++) {

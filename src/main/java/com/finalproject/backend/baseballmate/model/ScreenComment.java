@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Entity
-public class ScreenComment {
+public class ScreenComment extends Timestamped {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
     private Long screenCommentId;

@@ -3,6 +3,7 @@ package com.finalproject.backend.baseballmate.service;
 import com.finalproject.backend.baseballmate.model.*;
 import com.finalproject.backend.baseballmate.repository.CanceledScreenListRepository;
 import com.finalproject.backend.baseballmate.repository.ScreenApplicationRepository;
+import com.finalproject.backend.baseballmate.repository.ScreenCommentRepository;
 import com.finalproject.backend.baseballmate.repository.ScreenRepository;
 import com.finalproject.backend.baseballmate.requestDto.AllScreenResponseDto;
 import com.finalproject.backend.baseballmate.requestDto.GroupRequestDto;
@@ -23,9 +24,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +32,7 @@ public class ScreenService {
 
     private final ScreenRepository screenRepository;
     private final ScreenApplicationRepository screenApplicationRepository;
+    private final ScreenCommentRepository screenCommentRepository;
     private String commonPath = "/images";
 
     private final CanceledScreenListRepository canceledScreenListRepository;
@@ -113,7 +113,27 @@ public class ScreenService {
     // 스크린 야구 상세조회
     public ScreenDetailResponseDto getScreenDetails(Long id) {
         Screen screen = screenRepository.findByScreenId(id);
+        List<Map<String, String>> appliedUsers = new ArrayList<>();
 
+        if(screen.getScreenApplications().size()!=0)
+        {
+            // 참여자 정보 리스트 만들기
+            for (int i = 0; i < screen.getScreenApplications().size(); i++) {
+                ScreenApplication screenApplication = screen.getScreenApplications().get(i);
+                String appliedUserInx = screenApplication.getAppliedUser().getId().toString();
+                String appliedUserId = screenApplication.getAppliedUser().getUserid();
+                String appliedUsername = screenApplication.getAppliedUser().getUsername();
+                String appliedUserImage = screenApplication.getAppliedUser().getPicture();
+
+                Map<String, String> userInfo = new HashMap<>();
+                userInfo.put("UserImage", appliedUserImage);
+                userInfo.put("Username", appliedUsername);
+                userInfo.put("UserId", appliedUserId);
+                userInfo.put("UserInx", appliedUserInx);
+
+                appliedUsers.add(i, userInfo);
+            }
+        }
         Long screenId = screen.getScreenId();
         String title = screen.getTitle();
         String createdUsername = screen.getCreatedUsername();
@@ -124,12 +144,14 @@ public class ScreenService {
         double hotPercent = screen.getHotPercent();
         String groupDate = screen.getGroupDate();
         String filePath = screen.getFilePath();
-        List<ScreenComment> screenCommentList = screen.getScreenCommentList();
+        List<ScreenComment> screenCommentList = screenCommentRepository.findAllByScreenScreenIdOrderByCreatedAt(id);
+        List<Map<String, String>> appliedUserInfo = appliedUsers;
 
         ScreenDetailResponseDto screenDetailResponseDto =
-                new ScreenDetailResponseDto(screenId, title, createdUsername, content, peopleLimit, nowAppliedNum, canApplyNum, hotPercent, groupDate, filePath,screenCommentList);
+                new ScreenDetailResponseDto(screenId, title, createdUsername, content, peopleLimit, nowAppliedNum, canApplyNum, hotPercent, groupDate, filePath,appliedUserInfo,screenCommentList);
         return screenDetailResponseDto;
     }
+
     // 스크린 야구 모임 수정
     @Transactional
     public void deleteScreen(Long screenId, UserDetailsImpl userDetails) {
