@@ -7,11 +7,17 @@ import com.finalproject.backend.baseballmate.responseDto.AllGroupResponseDto;
 import com.finalproject.backend.baseballmate.responseDto.GroupDetailResponseDto;
 import com.finalproject.backend.baseballmate.responseDto.HotGroupResponseDto;
 import com.finalproject.backend.baseballmate.security.UserDetailsImpl;
+import com.finalproject.backend.baseballmate.util.MD5Generator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
 import javax.transaction.Transactional;
+import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -25,6 +31,7 @@ public class GroupService {
     private final GroupLikesRepository groupLikesRepository;
     private final CanceledListRepository canceledListRepository;
     private final GroupCommentRepository groupCommentRepository;
+    private String commonPath = "/images"; // 파일 저장할 기본 경로 변수 설정, 초기화
 
     // 모임 전체 조회(등록 순)
     public List<AllGroupResponseDto> getAllGroups() {
@@ -286,7 +293,12 @@ public class GroupService {
 
 
     // 모임 게시글 수정하기
-    public void updateGroup(Long groupId, GroupRequestDto requestDto, UserDetailsImpl userDetails) {
+    public void updateGroup(Long groupId, MultipartFile file, GroupRequestDto requestDto, UserDetailsImpl userDetails) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+        // 유저 로그인 체크
+        if(userDetails == null) {
+            throw new IllegalArgumentException("로그인 하신 후 이용해주세요.");
+        }
+
         String loginedUserId = userDetails.getUser().getUserid();
         String createdUserId = "";
 
@@ -296,6 +308,31 @@ public class GroupService {
 
             if(!loginedUserId.equals(createdUserId)) {
                 throw new IllegalArgumentException("수정 권한이 없습니다.");
+            }
+            if (file != null) {
+                String origFilename = file.getOriginalFilename();
+                String filename = new MD5Generator(origFilename).toString() + "jpg";
+
+                String savePath = System.getProperty("user.dir") + commonPath;
+
+                // 파일이 저장되는 폴더가 없을 경우 폴더 생성
+                if (!new java.io.File(savePath).exists()) {
+                    try {
+                        new java.io.File(savePath).mkdir();
+                    } catch (Exception e) {
+                        e.getStackTrace();
+                    }
+                }
+
+                // 이미지 파일 저장
+                String filePath = savePath + "/" + filename;
+                try{
+                    file.transferTo(new File(filePath));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                group.setFilePath(filename);
+
             }
             group.updateGroup(requestDto);
             groupRepository.save(group);
