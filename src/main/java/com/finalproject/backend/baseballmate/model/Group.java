@@ -1,6 +1,5 @@
 package com.finalproject.backend.baseballmate.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.finalproject.backend.baseballmate.requestDto.GroupRequestDto;
 import lombok.Getter;
@@ -75,8 +74,8 @@ public class Group extends Timestamped{
 
     // 모임을 취소했던 유저 리스트
     @JsonManagedReference
-    @OneToMany(mappedBy = "id", cascade = CascadeType.MERGE)
-    private List<User> canceledUser = new ArrayList<>();
+    @OneToMany(mappedBy = "canceledGroup", cascade = CascadeType.ALL)
+    private List<CanceledList> canceledLists = new ArrayList<>();
 
     @JsonManagedReference
     @OneToMany(mappedBy = "group", cascade = CascadeType.REMOVE)
