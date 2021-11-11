@@ -40,10 +40,19 @@ public class Screen extends Timestamped{
     @Column
     private String filePath;
 
+    // 스야모임을 취소한 유저 리스트
+    @JsonManagedReference
+    @OneToMany(mappedBy = "cancledScreen", cascade = CascadeType.ALL)
+    private List<CanceledScreenList> canceledScreenLists = new ArrayList<>();
+
     // 참가 신청한 유저와 해당 모임 정보
+    @JsonManagedReference
+    @OneToMany(mappedBy = "appliedScreen")
+    private List<ScreenApplication> screenApplications = new ArrayList<>();
+
 //    @JsonManagedReference
-//    @OneToMany(mappedBy = "appliedUser")
-//    private List<ScreenApplication> screenApplications = new ArrayList<>();
+//    @OneToMany(mappedBy = "id")
+//    private List<User> canceledUser = new ArrayList<>();
 
     @Column
     private int nowAppliedNum; // 현재 참여신청한 인원 -> get으로 가져오기
@@ -59,6 +68,9 @@ public class Screen extends Timestamped{
 
     @Column
     private String selectPlace;
+
+    @Column
+    private String placeInfomation;
 
     @JsonBackReference
     @OneToMany(mappedBy = "screen", cascade = CascadeType.ALL)
@@ -95,6 +107,7 @@ public class Screen extends Timestamped{
         this.groupDate = requestDto.getGroupDate();
         this.selectPlace = requestDto.getSelectPlace();
         this.filePath = requestDto.getFilePath();
+        this.placeInfomation = requestDto.getPlaceInfomation();
     }
 
     // 스크린모임 수정 메소드

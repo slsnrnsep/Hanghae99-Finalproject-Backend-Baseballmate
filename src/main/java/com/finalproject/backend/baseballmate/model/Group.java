@@ -122,5 +122,5 @@ public class Group extends Timestamped{
         this.peopleLimit = requestDto.getPeopleLimit();
         this.groupDate = requestDto.getGroupDate();
     }
-
+    
 }

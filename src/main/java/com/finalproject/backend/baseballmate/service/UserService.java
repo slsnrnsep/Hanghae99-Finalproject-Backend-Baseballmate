@@ -64,7 +64,7 @@ public class UserService {
 //        user.setAddress("전국");
 //        user.setPicture("sample.png");
 
-//        //로컬 강제 DB집어넣기
+
         User user = new User(userid,username,password, userRequestDto.getPhonenumber());
         userRepository.save(user);
 

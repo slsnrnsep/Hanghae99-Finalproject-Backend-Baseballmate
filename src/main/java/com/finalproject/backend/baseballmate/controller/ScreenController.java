@@ -1,6 +1,8 @@
 package com.finalproject.backend.baseballmate.controller;
 
+import com.finalproject.backend.baseballmate.model.Screen;
 import com.finalproject.backend.baseballmate.model.User;
+import com.finalproject.backend.baseballmate.repository.ScreenRepository;
 import com.finalproject.backend.baseballmate.repository.UserRepository;
 import com.finalproject.backend.baseballmate.requestDto.AllScreenResponseDto;
 import com.finalproject.backend.baseballmate.requestDto.ScreenRequestDto;
@@ -12,6 +14,8 @@ import com.finalproject.backend.baseballmate.service.FileService;
 import com.finalproject.backend.baseballmate.service.ScreenService;
 import com.finalproject.backend.baseballmate.util.MD5Generator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,15 +26,39 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 public class ScreenController {
-    private final UserRepository userRepository;
+    private final ScreenRepository screenRepository;
     private final ScreenService screenService;
     private final String commonPath = "/images";
     private final FileService fileService;
 
+    @PostMapping("/screen/{screenId}/applications")
+    public MsgResponseDto applyScreen(
+            @PathVariable Long screenId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails)
+    {
+
+        screenService.applyScreen(screenId, userDetails);
+        MsgResponseDto msgResponseDto = new MsgResponseDto("success", "모임 신청 완료");
+        return msgResponseDto;
+    }
+
+    @DeleteMapping("/screen/{screenId}/applications")
+    public MsgResponseDto cancleApply(
+            @PathVariable Long screenId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        if (userDetails == null) {
+            throw new IllegalArgumentException("로그인 한 사용자만 신청할 수 있습니다.");
+        }
+        screenService.cancleApplication(screenId, userDetails);
+        MsgResponseDto msgResponseDto = new MsgResponseDto("success", "모임 신청 취소 완료");
+        return msgResponseDto;
+
+    }
+
     @PostMapping("/screen")
     public ScreenResponseDto postScreen(
             @RequestParam(value = "file",required = false) MultipartFile files,
-            @RequestBody ScreenRequestDto requestDto,
+            ScreenRequestDto requestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails){
         if(userDetails == null)
         {
@@ -73,6 +101,15 @@ public class ScreenController {
         List<AllScreenResponseDto> screenList = screenService.getAllScreens();
         return screenList;
     }
+
+    @GetMapping(path="/screen",params = "region")
+    public List<AllScreenResponseDto> showScreenByregion (@RequestParam("region") String location)
+    {
+        PageRequest pageRequest = PageRequest.of(0,10, Sort.by(Sort.Direction.DESC,"createdAt"));
+        List<AllScreenResponseDto> screenResponseDtos = screenService.showScreenByregion(location,pageRequest);
+        return screenResponseDtos;
+    }
+
     // 스크린야구 상세 조회
     @GetMapping("/screen/{screenId}")
     public ScreenDetailResponseDto getScreenDetails(@PathVariable("screenId") Long screenId)
