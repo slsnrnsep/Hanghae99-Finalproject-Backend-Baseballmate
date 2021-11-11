@@ -17,5 +17,6 @@ public class AllScreenResponseDto {
     private String groupDate;
     private String filePath;
     private String selectPlace;
+    private String placeInfomation;
     private String dday;
 }

@@ -3,15 +3,12 @@ package com.finalproject.backend.baseballmate.controller;
 import com.finalproject.backend.baseballmate.model.Group;
 import com.finalproject.backend.baseballmate.model.User;
 import com.finalproject.backend.baseballmate.repository.GroupRepository;
-import com.finalproject.backend.baseballmate.repository.ScreenRepository;
-import com.finalproject.backend.baseballmate.requestDto.AllScreenResponseDto;
 import com.finalproject.backend.baseballmate.requestDto.GroupRequestDto;
 import com.finalproject.backend.baseballmate.responseDto.AllGroupResponseDto;
 import com.finalproject.backend.baseballmate.responseDto.GroupDetailResponseDto;
 import com.finalproject.backend.baseballmate.responseDto.MsgResponseDto;
 import com.finalproject.backend.baseballmate.security.UserDetailsImpl;
 import com.finalproject.backend.baseballmate.service.GroupService;
-import com.finalproject.backend.baseballmate.service.ScreenService;
 import com.finalproject.backend.baseballmate.util.MD5Generator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -29,9 +26,6 @@ public class GroupController {
 
     private final GroupService groupService;
     private final GroupRepository groupRepository;
-    private final ScreenRepository screenRepository;
-    private final ScreenService screenService;
-
     private String commonPath = "/images";
 
 
@@ -50,9 +44,9 @@ public class GroupController {
         PageRequest pageRequest = PageRequest.of(0,10, Sort.by(Sort.Direction.DESC,"createdAt"));
         List<AllGroupResponseDto> groupResponseDtos = groupService.showGroupsByTeam(selectTeam,pageRequest);
         return groupResponseDtos;
+
+
     }
-
-
 
     // 모임 생성
     @PostMapping("/groups")

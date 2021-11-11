@@ -49,7 +49,7 @@ public class ScreenService {
             String groupDate = screen.getGroupDate();
             String filePath = screen.getFilePath();
             String selectPlace = screen.getSelectPlace();
-
+            String placeInfomation = screen.getPlaceInfomation();
             int month = Integer.parseInt(screen.getGroupDate().split("[.]")[0]);
             int day = Integer.parseInt(screen.getGroupDate().split("[.]")[1].split(" ")[0]);
             LocalDate target = LocalDate.of(LocalDate.now().getYear(),month,day);
@@ -57,7 +57,7 @@ public class ScreenService {
             String dday = countingday.toString();
 
             AllScreenResponseDto allScreenResponseDto =
-                    new AllScreenResponseDto(screenId, title, createdUsername, peopleLimit, canApplyNum , hotPercent, groupDate, filePath, selectPlace,dday);
+                    new AllScreenResponseDto(screenId, title, createdUsername, peopleLimit, canApplyNum , hotPercent, groupDate, filePath, selectPlace,placeInfomation,dday);
             allScreenResponseDtos.add(allScreenResponseDto);
         }
         return allScreenResponseDtos;
@@ -80,6 +80,7 @@ public class ScreenService {
             String groupDate = group.getGroupDate();
             String filePath = group.getFilePath();
             String selectPlace = group.getSelectPlace();
+            String placeInfomation = group.getPlaceInfomation();
 
             int month = Integer.parseInt(group.getGroupDate().split("[.]")[0]);
             int day = Integer.parseInt(group.getGroupDate().split("[.]")[1].split(" ")[0]);
@@ -88,7 +89,7 @@ public class ScreenService {
             String dday = countingday.toString();
 
             AllScreenResponseDto allGroupResponseDto =
-                    new AllScreenResponseDto(groupId, title, createdUsername, peopleLimit, canApplyNum, hotPercent, groupDate, filePath, selectPlace,dday);
+                    new AllScreenResponseDto(groupId, title, createdUsername, peopleLimit, canApplyNum, hotPercent, groupDate, filePath, selectPlace,placeInfomation,dday);
 
             allScreenResponseDtos.add(allGroupResponseDto);
         }
