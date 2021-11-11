@@ -107,16 +107,9 @@ public class GroupController {
 
     // 모임 참여신청하기
     @PostMapping("/groups/{groupId}/applications")
-    public MsgResponseDto applyGroup(@PathVariable Long groupId, @AuthenticationPrincipal UserDetailsImpl userDetails)
-    {
-        if (userDetails == null)
-        {
-            throw new IllegalArgumentException("로그인 한 사용자만 신청할 수 있습니다.");
-        }
+    public MsgResponseDto applyGroup(@PathVariable Long groupId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-        User appliedUser = userDetails.getUser();
-        Group appliedGroup = groupRepository.findByGroupId(groupId);
-        groupService.applyGroup(appliedUser, appliedGroup);
+        groupService.applyGroup(groupId, userDetails);
         MsgResponseDto msgResponseDto = new MsgResponseDto("success", "모임 신청 완료");
         return msgResponseDto;
 

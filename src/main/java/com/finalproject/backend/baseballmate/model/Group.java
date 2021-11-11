@@ -75,7 +75,7 @@ public class Group extends Timestamped{
 
     // 모임을 취소했던 유저 리스트
     @JsonManagedReference
-    @OneToMany(mappedBy = "id",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "id", cascade = CascadeType.MERGE)
     private List<User> canceledUser = new ArrayList<>();
 
     @JsonManagedReference
