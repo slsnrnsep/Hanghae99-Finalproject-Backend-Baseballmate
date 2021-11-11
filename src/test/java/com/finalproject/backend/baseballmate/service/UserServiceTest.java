@@ -9,7 +9,8 @@ class UserServiceTest {
     @Test
     void registerUser() {
         //given
-        //when
+
+        // when
         //then
     }
 
