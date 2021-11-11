@@ -4,16 +4,22 @@ import com.finalproject.backend.baseballmate.model.*;
 import com.finalproject.backend.baseballmate.repository.ScreenApplicationRepository;
 import com.finalproject.backend.baseballmate.repository.ScreenRepository;
 import com.finalproject.backend.baseballmate.requestDto.AllScreenResponseDto;
+import com.finalproject.backend.baseballmate.requestDto.GroupRequestDto;
 import com.finalproject.backend.baseballmate.requestDto.ScreenRequestDto;
 import com.finalproject.backend.baseballmate.responseDto.AllGroupResponseDto;
 import com.finalproject.backend.baseballmate.responseDto.ScreenDetailResponseDto;
 import com.finalproject.backend.baseballmate.security.UserDetailsImpl;
+import com.finalproject.backend.baseballmate.util.MD5Generator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -25,6 +31,7 @@ public class ScreenService {
 
     private final ScreenRepository screenRepository;
     private final ScreenApplicationRepository screenApplicationRepository;
+    private String commonPath = "/images";
 
     @Transactional
     public Screen createScreen(ScreenRequestDto requestDto, User loginedUser) {
@@ -120,25 +127,6 @@ public class ScreenService {
     }
     // 스크린 야구 모임 수정
     @Transactional
-    public void updateScreen(Long screenId, ScreenRequestDto requestDto, UserDetailsImpl userDetails){
-        String loginedUserId = userDetails.getUser().getUserid();
-        String createdUserId = "";
-
-        Screen screen = screenRepository.findByScreenId(screenId);
-        if(screen != null) {
-            createdUserId = screen.getScreenCreatedUser().getUserid();
-
-            if(!loginedUserId.equals(createdUserId)){
-                throw new IllegalArgumentException("수정권한이 없습니다");
-            }
-            screen.updateScreen(requestDto);
-            screenRepository.save(screen);
-        }else {
-            throw new IllegalArgumentException("해당 게시물이 존재하지 않습니다");
-        }
-
-    }
-    @Transactional
     public void deleteScreen(Long screenId, UserDetailsImpl userDetails) {
         String loginedUserId = userDetails.getUser().getUserid();
         String createdUserId = "";
@@ -226,4 +214,54 @@ public class ScreenService {
                 }
         }
     }
+
+
+    public void updateScreen(Long screenId, MultipartFile file, ScreenRequestDto requestDto, UserDetailsImpl userDetails) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+        // 유저 로그인 체크
+        if(userDetails == null) {
+            throw new IllegalArgumentException("로그인 하신 후 이용해주세요.");
+        }
+
+        String loginedUserId = userDetails.getUser().getUserid();
+        String createdUserId = "";
+
+        Screen screen = screenRepository.findByScreenId(screenId);
+        if(screen != null) {
+            createdUserId = screen.getScreenCreatedUser().getUserid();
+
+            if(!loginedUserId.equals(createdUserId)) {
+                throw new IllegalArgumentException("수정 권한이 없습니다.");
+            }
+            if (file != null) {
+                String origFilename = file.getOriginalFilename();
+                String filename = new MD5Generator(origFilename).toString() + "jpg";
+
+                String savePath = System.getProperty("user.dir") + commonPath;
+
+                // 파일이 저장되는 폴더가 없을 경우 폴더 생성
+                if (!new java.io.File(savePath).exists()) {
+                    try {
+                        new java.io.File(savePath).mkdir();
+                    } catch (Exception e) {
+                        e.getStackTrace();
+                    }
+                }
+
+                // 이미지 파일 저장
+                String filePath = savePath + "/" + filename;
+                try{
+                    file.transferTo(new File(filePath));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                screen.setFilePath(filename);
+
+            }
+            screen.updateScreen(requestDto);
+            screenRepository.save(screen);
+        } else {
+            throw new NullPointerException("해당 게시글이 존재하지 않습니다.");
+        }
+    }
+
 }

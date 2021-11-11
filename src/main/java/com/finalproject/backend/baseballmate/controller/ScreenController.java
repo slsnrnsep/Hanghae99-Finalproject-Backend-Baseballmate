@@ -5,6 +5,7 @@ import com.finalproject.backend.baseballmate.model.User;
 import com.finalproject.backend.baseballmate.repository.ScreenRepository;
 import com.finalproject.backend.baseballmate.repository.UserRepository;
 import com.finalproject.backend.baseballmate.requestDto.AllScreenResponseDto;
+import com.finalproject.backend.baseballmate.requestDto.GroupRequestDto;
 import com.finalproject.backend.baseballmate.requestDto.ScreenRequestDto;
 import com.finalproject.backend.baseballmate.responseDto.MsgResponseDto;
 import com.finalproject.backend.baseballmate.responseDto.ScreenDetailResponseDto;
@@ -16,11 +17,14 @@ import com.finalproject.backend.baseballmate.util.MD5Generator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 @RestController
@@ -124,18 +128,16 @@ public class ScreenController {
         return detailResponseDto;
     }
 
-    @PutMapping("/screen/{screenId}")
-    public MsgResponseDto updateScreen(
+    // 모임 수정하기 - 모임을 생성한 사람만 수정할 수 있게
+    @RequestMapping(value = "/screen/{screenId}", method = RequestMethod.PATCH, consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public MsgResponseDto updateGroup(
             @PathVariable Long screenId,
-            @RequestBody ScreenRequestDto requestDto,
-            @AuthenticationPrincipal UserDetailsImpl userDetails)
-    {
-        if(userDetails == null)
-        {
-            throw new IllegalArgumentException("로그인을 해주세요");
-        }
-        screenService.updateScreen(screenId,requestDto,userDetails);
-        MsgResponseDto msgResponseDto = new MsgResponseDto("success","수정 완료");
+            @RequestPart(required = false, value = "file") MultipartFile file,
+            ScreenRequestDto requestDto,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+
+        screenService.updateScreen(screenId, file, requestDto, userDetails);
+        MsgResponseDto msgResponseDto = new MsgResponseDto("success", "수정 완료");
         return msgResponseDto;
     }
 
