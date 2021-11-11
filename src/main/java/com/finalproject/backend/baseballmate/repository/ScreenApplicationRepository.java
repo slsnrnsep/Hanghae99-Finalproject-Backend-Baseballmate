@@ -12,4 +12,5 @@ public interface ScreenApplicationRepository extends JpaRepository<ScreenApplica
 //    List<ScreenApplication> findAllByAppliedUser(User user);
     ScreenApplication findByAppliedScreenAndAndAppliedUser(Screen screen, User user);
     ScreenApplication findByAppliedScreenScreenIdAndAppliedUserId(Long appliedScreenId,Long userId);
+    List<ScreenApplication> findAllByAppliedScreen(Screen screen);
 }

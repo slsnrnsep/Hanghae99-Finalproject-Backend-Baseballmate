@@ -40,14 +40,8 @@ public class ScreenController {
             @PathVariable Long screenId,
             @AuthenticationPrincipal UserDetailsImpl userDetails)
     {
-        if (userDetails == null)
-        {
-            throw new IllegalArgumentException("로그인 한 사용자만 신청할 수 있습니다.");
-        }
 
-        User appliedUser = userDetails.getUser();
-        Screen appliedScreen = screenRepository.findByScreenId(screenId);
-        screenService.applyScreen(appliedUser, appliedScreen);
+        screenService.applyScreen(screenId, userDetails);
         MsgResponseDto msgResponseDto = new MsgResponseDto("success", "모임 신청 완료");
         return msgResponseDto;
     }
