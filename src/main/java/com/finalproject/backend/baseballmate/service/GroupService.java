@@ -1,10 +1,7 @@
 package com.finalproject.backend.baseballmate.service;
 
 import com.finalproject.backend.baseballmate.model.*;
-import com.finalproject.backend.baseballmate.repository.CanceledListRepository;
-import com.finalproject.backend.baseballmate.repository.GroupApplicationRepository;
-import com.finalproject.backend.baseballmate.repository.GroupLikesRepository;
-import com.finalproject.backend.baseballmate.repository.GroupRepository;
+import com.finalproject.backend.baseballmate.repository.*;
 import com.finalproject.backend.baseballmate.requestDto.GroupRequestDto;
 import com.finalproject.backend.baseballmate.responseDto.AllGroupResponseDto;
 import com.finalproject.backend.baseballmate.responseDto.GroupDetailResponseDto;
@@ -27,6 +24,7 @@ public class GroupService {
     private final GroupApplicationRepository groupApplicationRepository;
     private final GroupLikesRepository groupLikesRepository;
     private final CanceledListRepository canceledListRepository;
+    private final GroupCommentRepository groupCommentRepository;
 
     // 모임 전체 조회(등록 순)
     public List<AllGroupResponseDto> getAllGroups() {
@@ -270,9 +268,10 @@ public class GroupService {
         String stadium = group.getStadium();
         String groupDate = group.getGroupDate();
         String filePath = group.getFilePath();
-        List<GroupComment> groupcommentList = group.getGroupCommentList();
+        List<GroupComment> groupcommentList = groupCommentRepository.findAllByGroup_GroupIdOrderByCreatedAtDesc(id);
         List<Map<String, String>> appliedUserInfo = appliedUsers;
 
+        // D - day 계산
         int month = Integer.parseInt(group.getGroupDate().split("[.]")[0]);
         int day = Integer.parseInt(group.getGroupDate().split("[.]")[1].split(" ")[0]);
         LocalDate target = LocalDate.of(LocalDate.now().getYear(),month,day);

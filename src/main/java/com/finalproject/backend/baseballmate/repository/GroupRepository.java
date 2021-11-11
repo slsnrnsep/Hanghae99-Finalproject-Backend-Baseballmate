@@ -1,6 +1,7 @@
 package com.finalproject.backend.baseballmate.repository;
 
 import com.finalproject.backend.baseballmate.model.Group;
+import com.finalproject.backend.baseballmate.model.GroupComment;
 import com.finalproject.backend.baseballmate.model.User;
 import com.finalproject.backend.baseballmate.responseDto.AllGroupResponseDto;
 import org.springframework.data.domain.Page;
