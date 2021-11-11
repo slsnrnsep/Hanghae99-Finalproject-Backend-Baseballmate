@@ -64,8 +64,9 @@ public class UserService {
         user.setAddress("전국");
         user.setPicture("sample.png");
 
-//        //로컬 강제 DB집어넣기
-//        User user = new User(userid,username,password, userRequestDto.getPhonenumber());
+//        User user = userRepository.findByPhoneNumber(userRequestDto.getPhonenumber()).orElseThrow(
+//                ()-> new IllegalArgumentException("휴대폰에 맞는 유저정보를 찾을 수 없습니다.")
+//        );
         userRepository.save(user);
 
     }

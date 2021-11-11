@@ -24,14 +24,14 @@ public class ScreenApplication {
 
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "appliedGroupId")
-    private Group appliedGroup; // 지원자가 지원한 모임
+    @JoinColumn(name = "appliedScreenId")
+    private Screen appliedScreen; // 지원자가 지원한 모임
 
     @Column
     private Boolean isAccepted; // 지원자의 모임 참가 확정 여부
 
-    public ScreenApplication(User user, Group group) {
+    public ScreenApplication(User user, Screen group) {
         this.appliedUser = user;
-        this.appliedGroup = group;
+        this.appliedScreen = group;
     }
 }
