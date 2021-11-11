@@ -245,23 +245,25 @@ public class GroupService {
         Group group = groupRepository.findByGroupId(id);
         List<Map<String, String>> appliedUsers = new ArrayList<>();
 
-        // 참여자 정보 리스트 만들기
-        for(int i=0; i<group.getGroupApplications().size(); i++) {
-            GroupApplication groupApplication = group.getGroupApplications().get(i);
-            String appliedUserInx = groupApplication.getAppliedUser().getId().toString();
-            String appliedUserId = groupApplication.getAppliedUser().getUserid();
-            String appliedUsername = groupApplication.getAppliedUser().getUsername();
-            String appliedUserImage = groupApplication.getAppliedUser().getPicture();
+        if(group.getGroupApplications().size()!=0)
+        {
+            // 참여자 정보 리스트 만들기
+            for (int i = 0; i < group.getGroupApplications().size(); i++) {
+                GroupApplication groupApplication = group.getGroupApplications().get(i);
+                String appliedUserInx = groupApplication.getAppliedUser().getId().toString();
+                String appliedUserId = groupApplication.getAppliedUser().getUserid();
+                String appliedUsername = groupApplication.getAppliedUser().getUsername();
+                String appliedUserImage = groupApplication.getAppliedUser().getPicture();
 
-            Map<String, String> userInfo = new HashMap<>();
-            userInfo.put("UserImage", appliedUserImage);
-            userInfo.put("Username", appliedUsername);
-            userInfo.put("UserId", appliedUserId);
-            userInfo.put("UserInx", appliedUserInx);
+                Map<String, String> userInfo = new HashMap<>();
+                userInfo.put("UserImage", appliedUserImage);
+                userInfo.put("Username", appliedUsername);
+                userInfo.put("UserId", appliedUserId);
+                userInfo.put("UserInx", appliedUserInx);
 
-            appliedUsers.add(i, userInfo);
+                appliedUsers.add(i, userInfo);
+            }
         }
-
         Long groupId = group.getGroupId();
         String createdUserName = group.getCreatedUsername();
         String createdUserId = group.getCreatedUser().getUserid();

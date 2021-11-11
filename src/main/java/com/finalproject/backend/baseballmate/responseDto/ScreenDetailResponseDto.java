@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Map;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,5 +22,6 @@ public class ScreenDetailResponseDto {
     private double hotPercent;
     private String groupDate; // 모임 날짜
     private String filePath;// 모임 게시글 내의 댓글 리스트
+    private List<Map<String, String>> appliedUserInfo;
     List<ScreenComment> screenCommentList;
 }
