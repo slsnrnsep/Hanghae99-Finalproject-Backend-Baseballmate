@@ -13,7 +13,7 @@ import java.util.List;
 @Setter
 @Getter
 @Entity
-public class GroupComment {
+public class GroupComment extends Timestamped{
 
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
@@ -30,6 +30,9 @@ public class GroupComment {
 
     @Column
     private String commentUserId;
+
+    @Column
+    private String commentUserPicture;
 
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
@@ -53,12 +56,14 @@ public class GroupComment {
         this.groupcommentlikeCount -= 1;
     }
 
-    public GroupComment(GroupCommentRequestDto groupCommentRequestDto, Group group, String commentUsername, Long loginedUserIndex, String loginedUserId) {
-        this.commentUsername = commentUsername;
-        this.comment = groupCommentRequestDto.getComment();
+    // 댓글 생성 시 사용하는 생성자
+    public GroupComment(GroupCommentRequestDto groupCommentRequestDto, Group group, Long loginedUserIndex, String loginedUserId, String commentUsername, String loginedUserPicture) {
         this.group = group;
         this.commentUserIndex = loginedUserIndex;
         this.commentUserId = loginedUserId;
+        this.commentUsername = commentUsername;
+        this.commentUserPicture = loginedUserPicture;
+        this.comment = groupCommentRequestDto.getComment();
     }
 
     public void updateGroupComment(GroupCommentRequestDto requestDto)
