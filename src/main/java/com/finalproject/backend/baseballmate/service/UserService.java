@@ -2,6 +2,7 @@ package com.finalproject.backend.baseballmate.service;
 
 import com.finalproject.backend.baseballmate.OAuth2.KakaoOAuth2;
 import com.finalproject.backend.baseballmate.OAuth2.KakaoUserInfo;
+import com.finalproject.backend.baseballmate.model.AddressEnum;
 import com.finalproject.backend.baseballmate.model.User;
 import com.finalproject.backend.baseballmate.repository.UserRepository;
 import com.finalproject.backend.baseballmate.requestDto.*;
@@ -54,16 +55,17 @@ public class UserService {
         String pattern = "^[a-zA-Z0-9]*$";
 
         password = passwordEncoder.encode(userRequestDto.getPassword());
-//        User user = userRepository.findByPhoneNumber(userRequestDto.getPhonenumber()).orElseThrow(
-//                ()-> new IllegalArgumentException("휴대폰에 맞는 유저정보를 찾을 수 없습니다.")
-//        );
-//        user.setUserid(userid);
-//        user.setUsername(username);
-//        user.setPassword(password);
-//        user.setPicture("sample.png");
+        User user = userRepository.findByPhoneNumber(userRequestDto.getPhonenumber()).orElseThrow(
+                ()-> new IllegalArgumentException("휴대폰에 맞는 유저정보를 찾을 수 없습니다.")
+        );
+        user.setUserid(userid);
+        user.setUsername(username);
+        user.setPassword(password);
+        user.setAddress("전국");
+        user.setPicture("sample.png");
 
-//        //로컬 강제 DB집어넣기
-        User user = new User(userid,username,password, userRequestDto.getPhonenumber());
+
+//        User user = new User(userid,username,password, userRequestDto.getPhonenumber());
         userRepository.save(user);
 
     }
@@ -216,6 +218,21 @@ public class UserService {
 
     }
 
+    public List<AddressEnum> getAddressEnumList(UserDetailsImpl userDetails) {
+        if (userDetails == null)
+        {
+            throw new IllegalArgumentException("로그인 후 이용 가능합니다.");
+        }
+        AddressEnum[] values = AddressEnum.values();
+        List<AddressEnum> addressEnums = new ArrayList<>();
+        addressEnums.addAll(Arrays.asList(values));
+
+        return addressEnums;
+    }
+
+}
+
+// 클래스 묶는 중괄호 밖으로 빼놓음
 //    public void confirmNumChk(UserDetailsImpl userDetails, PhoneRequstDto requstDto) {
 //
 //       User user = userRepository.findByUserid(userDetails.getUser().getUserid()).orElseThrow(
@@ -231,4 +248,3 @@ public class UserService {
 //            throw new IllegalArgumentException("인증번호가 일치하지 않습니다");
 //        }
 //    }
-}

@@ -81,7 +81,7 @@ public class UserContorller {
     @RequestMapping(value = "/users/{id}", method = RequestMethod.PATCH, consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public List<Map<String, String>> updateUserInfo(
             @PathVariable("id") Long id,
-            @RequestPart(required = false)UserUpdateRequestDto requestDto,
+            UserUpdateRequestDto requestDto,
             @RequestPart(required = false, value = "file") MultipartFile file,
             @AuthenticationPrincipal UserDetailsImpl userDetails) throws UnsupportedEncodingException, NoSuchAlgorithmException {
 
@@ -113,6 +113,9 @@ public class UserContorller {
         {
             usertype = "kakao";
         }
+
+
+
         //프론트엔드 진식님 요청사항
         List<TimeLineLikes> TimeLineLikesList=timeLineLikesRepository.findAllByUserId(user.getId());
         List<Long> myTimeLineLikesList = new ArrayList<>();
@@ -143,8 +146,7 @@ public class UserContorller {
             myGroupCommentLikesList.add(groupCommentLikesList.get(i).getGroupComment().getGroupCommentId());
         }
 
-
-        LoginCheckResponseDto loginCheckResponseDto = new LoginCheckResponseDto(user.getId(),user.getUserid(), user.getUsername(),user.getMyselectTeam(),user.getPicture(),usertype, myTimeLineLikesList,myGoodsLikesList,myGroupLikesList,myGroupCommentLikesList);
+        LoginCheckResponseDto loginCheckResponseDto = new LoginCheckResponseDto(user.getId(),user.getUserid(), user.getUsername(),user.getMyselectTeam(),user.getPicture(),user.getAddress(),usertype, user.getSelfIntroduction(),myTimeLineLikesList,myGoodsLikesList,myGroupLikesList,myGroupCommentLikesList);
 
 
 
