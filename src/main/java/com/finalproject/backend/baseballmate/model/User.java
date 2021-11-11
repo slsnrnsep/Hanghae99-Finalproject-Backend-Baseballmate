@@ -64,6 +64,10 @@ public class User {
     @OneToMany(mappedBy = "screenCreatedUser", cascade = CascadeType.ALL)
     private List<Screen> createdScreenList = new ArrayList<>();
 
+    @JsonManagedReference
+    @OneToMany(mappedBy = "cancledScreen", cascade = CascadeType.ALL)
+    private List<CanceledScreenList> canceledScreenLists = new ArrayList<>();
+
     @Column(nullable = true)
     private Long kakaoId;
 

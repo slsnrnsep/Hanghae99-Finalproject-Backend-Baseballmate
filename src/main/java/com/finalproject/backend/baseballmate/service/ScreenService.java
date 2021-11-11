@@ -1,6 +1,7 @@
 package com.finalproject.backend.baseballmate.service;
 
 import com.finalproject.backend.baseballmate.model.*;
+import com.finalproject.backend.baseballmate.repository.CanceledScreenListRepository;
 import com.finalproject.backend.baseballmate.repository.ScreenApplicationRepository;
 import com.finalproject.backend.baseballmate.repository.ScreenRepository;
 import com.finalproject.backend.baseballmate.requestDto.AllScreenResponseDto;
@@ -18,6 +19,7 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +27,7 @@ public class ScreenService {
 
     private final ScreenRepository screenRepository;
     private final ScreenApplicationRepository screenApplicationRepository;
+    private final CanceledScreenListRepository canceledScreenListRepository;
 
     @Transactional
     public Screen createScreen(ScreenRequestDto requestDto, User loginedUser) {
@@ -157,48 +160,75 @@ public class ScreenService {
     }
     // 스크린 야구 모임 참여하기
     @Transactional
-    public void applyScreen(User appliedUser, Screen appliedScreen) {
-        List<User> cancleUserList = appliedScreen.getCanceledUser();
+    public void applyScreen(Long screenId, UserDetailsImpl userDetails) {
+//        List<User> cancleUserList = appliedScreen.getCanceledUser();
+        Screen appliedScreen = screenRepository.findByScreenId(screenId);
 
-        // 참가 이력 조회
-        ScreenApplication screenApplication1 = screenApplicationRepository.findByAppliedScreenAndAndAppliedUser(appliedScreen, appliedUser);
-        if(screenApplication1 != null){
-            throw new IllegalArgumentException("참가 신청 이력이 존재합니다");
-        }else {
-            if(screenApplication1 == null && cancleUserList.contains(appliedUser)){
-                throw new IllegalArgumentException("재참가는 불가능합니다");
-            }else{
-                ScreenApplication screenApplication = new ScreenApplication(appliedUser,appliedScreen);
-                screenApplicationRepository.save(screenApplication);
+        if (userDetails == null) {
+            throw new IllegalArgumentException("로그인 한 사용자만 신청할 수 있습니다.");
+        } else {
+            User loginedUser = userDetails.getUser();
+        ScreenApplication screenApplication = screenApplicationRepository.findByAppliedScreenAndAndAppliedUser(appliedScreen, loginedUser);
+        // 모임에 대한 해당 참가자의 참가 이력이 없고, 모임을 만든 사람이 아닌 유저가 참가 신청하는 경우 -> 이 경우만 참가 신청 가능
+        if((screenApplication == null) && (!Objects.equals(loginedUser.getUserid(), appliedScreen.getScreenCreatedUser().getUserid()))){
 
-                int nowAppliedNum = screenApplication.getAppliedScreen().getNowAppliedNum();
-                int updateAppliedNum = nowAppliedNum + 1;
-                screenApplication.getAppliedScreen().setNowAppliedNum(updateAppliedNum);
+            // 모임이 참조하는 취소 리스트에서 해당 모임의 인덱스를 갖는 취소 리스트들 찾아오기
+            List<CanceledScreenList> canceledScreenLists = canceledScreenListRepository.findAllByCancledScreen_ScreenId(screenId);
+            if(canceledScreenLists.size() != 0) {
+                for(int i=0; i<canceledScreenLists.size(); i++){
+                    CanceledScreenList canceledScreenList = canceledScreenLists.get(i);
+                    if(canceledScreenList.getCanceledUser().getId() == loginedUser.getId()){
+                        throw new IllegalArgumentException("모임 취소후 재참가는 불가합니다");
+                        }
+                    else {
+                        ScreenApplication application = new ScreenApplication(loginedUser,appliedScreen);
+                        screenApplicationRepository.save(application);
 
-                int nowCanApplyNum = screenApplication.getAppliedScreen().getCanApplyNum();
-                int updatedCanApplyNum = nowCanApplyNum - 1;
-                screenApplication.getAppliedScreen().setCanApplyNum(updatedCanApplyNum);
+                        int nowAppliedNum = application.getAppliedScreen().getNowAppliedNum();
+                        int updateAppliedNum = nowAppliedNum + 1;
+                        application.getAppliedScreen().setNowAppliedNum(updateAppliedNum);
 
-//                int peopleLimit = screenApplication.getAppliedScreen().getPeopleLimit();
-//                double updateHotPercent = ((double) updateAppliedNum / (double) peopleLimit * 100.0);
-//                screenApplication.getAppliedScreen().setHotPercent(updateHotPercent);
+                        int nowCanApplyNum = application.getAppliedScreen().getCanApplyNum();
+                        int updatedCanApplyNum = nowCanApplyNum - 1;
+                        application.getAppliedScreen().setCanApplyNum(updatedCanApplyNum);
+                        }
+                    }
+                } else {
+                    // 취소 리스트가 아예 없을 경우 그냥 신청 가능
+                    ScreenApplication application1 = new ScreenApplication(loginedUser, appliedScreen);
+                    screenApplicationRepository.save(application1);
+
+                    int nowAppliedNum = application1.getAppliedScreen().getNowAppliedNum();
+                    int updateAppliedNum = nowAppliedNum + 1;
+                    application1.getAppliedScreen().setNowAppliedNum(updateAppliedNum);
+
+                    int nowCanApplyNum = application1.getAppliedScreen().getCanApplyNum();
+                    int updatedCanApplyNum = nowCanApplyNum - 1;
+                    application1.getAppliedScreen().setCanApplyNum(updatedCanApplyNum);
+                }
+            } else {
+            throw new IllegalArgumentException("참가 신청이 불가합니다."); // 모임을 만든 사람이 요청하는 경우 or 참가 이력이 있는 경우
             }
         }
-
-
     }
+
+
+
+
     @Transactional
     public void cancleApplication(Long screenId, UserDetailsImpl userDetails) {
         Screen screen = screenRepository.findByScreenId(screenId);
-        List<ScreenApplication> screenApplicationList = screen.getScreenApplications();
+        List<ScreenApplication> screenApplicationList = screenApplicationRepository.findAllByAppliedScreen(screen);
         User loginedUser = userDetails.getUser();
         Long loginedUserIndex = userDetails.getUser().getId();
 
         for (int i = 0; i < screenApplicationList.size(); i++) {
             // 참가 신청 취소를 요청한 screenId를 가진 groupapplication하나씩 빼오기
             ScreenApplication screenApplication = screenApplicationList.get(i);
+            // 참가 신청 취소를 요청하는 모임에 대한 신청 내역들이 있고
             if (screenApplication != null) {
                 Long appliedUserIndex = screenApplication.getAppliedUser().getId();
+                // 로그인 한 유저가 참가 신청을 했던 유저와 같다면
                 if (loginedUserIndex == appliedUserIndex) {
                     // 현재 참여 신청 인원 1 감소
                     int nowAppliedNum = screenApplication.getAppliedScreen().getNowAppliedNum();
@@ -215,15 +245,18 @@ public class ScreenService {
 //                    double updatedHotPercent = ((double) updatedAppliedNum / (double) peopleLimit * 100.0);
 //                    screenApplication.getAppliedScreen().setHotPercent(updatedHotPercent);
 
-                    ScreenApplication screenApplication2 = screenApplicationRepository.findByAppliedScreenScreenIdAndAppliedUserId(screenId, loginedUserIndex);
-                    screenApplicationRepository.deleteById(screenApplication2.getId());
+                    // 참가 신청 이력 삭제하기
+                    screenApplicationRepository.delete(screenApplication);
 
-                    screen.getCanceledUser().add(loginedUser);
+                    // 취소 리스트에 추가하기
+                    CanceledScreenList canceledScreenList = new CanceledScreenList(loginedUser, screen);
+                    canceledScreenListRepository.save(canceledScreenList);
+                    } else {
+                        throw new NullPointerException("참가 신청 이력이 존재하지 않습니다."); // '참가 신청을 했던 유저가 아님'을 의미
                     }
-                }
-                else {
-                    throw new NullPointerException("참가 신청 이력이 존재하지 않습니다.");
-                }
+                } else {
+                    throw new NullPointerException("참가 신청 이력이 존재하지 않습니다."); // 'group에 참가 신청을 한 사람이 없음'을 의미
+            }
         }
     }
 }

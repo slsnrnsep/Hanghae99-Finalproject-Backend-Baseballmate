@@ -23,8 +23,8 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
         String token = jwtTokenProvider.resolveToken((HttpServletRequest) request); // 헤더에서 JWT 를 받아옵니다.
         if(token !=null){
             // 클라이언트에서 받은 token값을 서버 콘솔에 찍어줌.
-        System.out.print("Server provided token:");
-        System.out.println(token.substring(0,20));
+//        System.out.print("Server provided token:");
+//        System.out.println(token.substring(0,20));
         }
         // 유효한 토큰인지 확인합니다.
         if (token != null && jwtTokenProvider.validateToken(token)) {
