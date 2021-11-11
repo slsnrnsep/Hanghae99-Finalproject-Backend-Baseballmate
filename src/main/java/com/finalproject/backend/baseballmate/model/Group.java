@@ -73,8 +73,9 @@ public class Group extends Timestamped{
 //    @Column
 //    private String baseballTeam; // 구단 이름
 
+    // 모임을 취소했던 유저 리스트
     @JsonManagedReference
-    @OneToMany(mappedBy = "id",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "id", cascade = CascadeType.MERGE)
     private List<User> canceledUser = new ArrayList<>();
 
     @JsonManagedReference
@@ -123,4 +124,8 @@ public class Group extends Timestamped{
         this.groupDate = requestDto.getGroupDate();
     }
 
+    public void update2(List<User> canceledUserlist) {
+        this.canceledUser = canceledUserlist;
+
+    }
 }

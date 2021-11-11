@@ -14,6 +14,8 @@ import com.finalproject.backend.baseballmate.service.FileService;
 import com.finalproject.backend.baseballmate.service.ScreenService;
 import com.finalproject.backend.baseballmate.util.MD5Generator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -105,6 +107,15 @@ public class ScreenController {
         List<AllScreenResponseDto> screenList = screenService.getAllScreens();
         return screenList;
     }
+
+    @GetMapping(path="/screen",params = "region")
+    public List<AllScreenResponseDto> showScreenByregion (@RequestParam("region") String location)
+    {
+        PageRequest pageRequest = PageRequest.of(0,10, Sort.by(Sort.Direction.DESC,"createdAt"));
+        List<AllScreenResponseDto> screenResponseDtos = screenService.showScreenByregion(location,pageRequest);
+        return screenResponseDtos;
+    }
+
     // 스크린야구 상세 조회
     @GetMapping("/screen/{screenId}")
     public ScreenDetailResponseDto getScreenDetails(@PathVariable("screenId") Long screenId)

@@ -114,8 +114,6 @@ public class User {
     public void deleteScreenCommentLikes(ScreenCommentLikes likes){this.screenCommentLikes.remove(likes);}
 
 
-
-
     // goods 좋아요 생성자
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private final List<GoodsLikes> goodsLikes = new ArrayList<>();
@@ -145,6 +143,7 @@ public class User {
         this.ranNum = ranNum;
     }
 
+    // 로컬에서 강제로 DB에 집어넣는 생성자
     public User(String userid, String username, String password,String phonenumber){
         this.userid = userid;
         this.username = username;

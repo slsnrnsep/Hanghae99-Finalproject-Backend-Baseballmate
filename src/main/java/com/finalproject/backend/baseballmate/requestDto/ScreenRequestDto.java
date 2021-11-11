@@ -16,4 +16,5 @@ public class ScreenRequestDto {
     private String groupDate;
     private String filePath;
     private String selectPlace;
+    private String placeInfomation;
 }

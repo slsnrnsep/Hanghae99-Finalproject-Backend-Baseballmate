@@ -3,12 +3,15 @@ package com.finalproject.backend.baseballmate.controller;
 import com.finalproject.backend.baseballmate.model.Group;
 import com.finalproject.backend.baseballmate.model.User;
 import com.finalproject.backend.baseballmate.repository.GroupRepository;
+import com.finalproject.backend.baseballmate.repository.ScreenRepository;
+import com.finalproject.backend.baseballmate.requestDto.AllScreenResponseDto;
 import com.finalproject.backend.baseballmate.requestDto.GroupRequestDto;
 import com.finalproject.backend.baseballmate.responseDto.AllGroupResponseDto;
 import com.finalproject.backend.baseballmate.responseDto.GroupDetailResponseDto;
 import com.finalproject.backend.baseballmate.responseDto.MsgResponseDto;
 import com.finalproject.backend.baseballmate.security.UserDetailsImpl;
 import com.finalproject.backend.baseballmate.service.GroupService;
+import com.finalproject.backend.baseballmate.service.ScreenService;
 import com.finalproject.backend.baseballmate.util.MD5Generator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -26,6 +29,9 @@ public class GroupController {
 
     private final GroupService groupService;
     private final GroupRepository groupRepository;
+    private final ScreenRepository screenRepository;
+    private final ScreenService screenService;
+
     private String commonPath = "/images";
 
 
@@ -44,9 +50,9 @@ public class GroupController {
         PageRequest pageRequest = PageRequest.of(0,10, Sort.by(Sort.Direction.DESC,"createdAt"));
         List<AllGroupResponseDto> groupResponseDtos = groupService.showGroupsByTeam(selectTeam,pageRequest);
         return groupResponseDtos;
-
-
     }
+
+
 
     // 모임 생성
     @PostMapping("/groups")
@@ -107,16 +113,9 @@ public class GroupController {
 
     // 모임 참여신청하기
     @PostMapping("/groups/{groupId}/applications")
-    public MsgResponseDto applyGroup(@PathVariable Long groupId, @AuthenticationPrincipal UserDetailsImpl userDetails)
-    {
-        if (userDetails == null)
-        {
-            throw new IllegalArgumentException("로그인 한 사용자만 신청할 수 있습니다.");
-        }
+    public MsgResponseDto applyGroup(@PathVariable Long groupId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-        User appliedUser = userDetails.getUser();
-        Group appliedGroup = groupRepository.findByGroupId(groupId);
-        groupService.applyGroup(appliedUser, appliedGroup);
+        groupService.applyGroup(groupId, userDetails);
         MsgResponseDto msgResponseDto = new MsgResponseDto("success", "모임 신청 완료");
         return msgResponseDto;
 

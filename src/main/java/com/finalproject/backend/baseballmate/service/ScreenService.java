@@ -1,19 +1,21 @@
 package com.finalproject.backend.baseballmate.service;
 
-import com.finalproject.backend.baseballmate.model.Screen;
-import com.finalproject.backend.baseballmate.model.ScreenApplication;
-import com.finalproject.backend.baseballmate.model.ScreenComment;
-import com.finalproject.backend.baseballmate.model.User;
+import com.finalproject.backend.baseballmate.model.*;
 import com.finalproject.backend.baseballmate.repository.ScreenApplicationRepository;
 import com.finalproject.backend.baseballmate.repository.ScreenRepository;
 import com.finalproject.backend.baseballmate.requestDto.AllScreenResponseDto;
 import com.finalproject.backend.baseballmate.requestDto.ScreenRequestDto;
+import com.finalproject.backend.baseballmate.responseDto.AllGroupResponseDto;
 import com.finalproject.backend.baseballmate.responseDto.ScreenDetailResponseDto;
 import com.finalproject.backend.baseballmate.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,12 +50,53 @@ public class ScreenService {
             String filePath = screen.getFilePath();
             String selectPlace = screen.getSelectPlace();
 
+            int month = Integer.parseInt(screen.getGroupDate().split("[.]")[0]);
+            int day = Integer.parseInt(screen.getGroupDate().split("[.]")[1].split(" ")[0]);
+            LocalDate target = LocalDate.of(LocalDate.now().getYear(),month,day);
+            Long countingday = ChronoUnit.DAYS.between(LocalDate.now(),target);
+            String dday = countingday.toString();
+
             AllScreenResponseDto allScreenResponseDto =
-                    new AllScreenResponseDto(screenId, title, createdUsername, peopleLimit, canApplyNum , hotPercent, groupDate, filePath, selectPlace);
+                    new AllScreenResponseDto(screenId, title, createdUsername, peopleLimit, canApplyNum , hotPercent, groupDate, filePath, selectPlace,dday);
             allScreenResponseDtos.add(allScreenResponseDto);
         }
         return allScreenResponseDtos;
     }
+
+    public List<AllScreenResponseDto> showScreenByregion(String location, Pageable pageable) {
+//        PageRequest
+        Page<Screen> grouppage = screenRepository.findByPlaceInfomation(location,pageable);
+        List<AllScreenResponseDto> allScreenResponseDtos = new ArrayList<>();
+        List<Screen> groupList=grouppage.getContent();
+        for(int i=0; i<groupList.size(); i++) {
+            Screen group = groupList.get(i);
+
+            Long groupId = group.getScreenId();
+            String title = group.getTitle();
+            String createdUsername = group.getCreatedUsername();
+            int peopleLimit = group.getPeopleLimit();
+            int canApplyNum = group.getCanApplyNum();
+            double hotPercent = group.getHotPercent();
+            String groupDate = group.getGroupDate();
+            String filePath = group.getFilePath();
+            String selectPlace = group.getSelectPlace();
+
+            int month = Integer.parseInt(group.getGroupDate().split("[.]")[0]);
+            int day = Integer.parseInt(group.getGroupDate().split("[.]")[1].split(" ")[0]);
+            LocalDate target = LocalDate.of(LocalDate.now().getYear(),month,day);
+            Long countingday = ChronoUnit.DAYS.between(LocalDate.now(),target);
+            String dday = countingday.toString();
+
+            AllScreenResponseDto allGroupResponseDto =
+                    new AllScreenResponseDto(groupId, title, createdUsername, peopleLimit, canApplyNum, hotPercent, groupDate, filePath, selectPlace,dday);
+
+            allScreenResponseDtos.add(allGroupResponseDto);
+        }
+
+        return allScreenResponseDtos;
+    }
+
+
     // 스크린 야구 상세조회
     public ScreenDetailResponseDto getScreenDetails(Long id) {
         Screen screen = screenRepository.findByScreenId(id);
