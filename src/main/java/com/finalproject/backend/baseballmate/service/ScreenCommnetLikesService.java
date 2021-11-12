@@ -32,7 +32,7 @@ public class ScreenCommnetLikesService {
         );
 
         if(likesRequestDto.getIsLiked().equals("true")){
-            ScreenCommentLikes likes = screenCommentLikesRepository.findByScreenCommentLikesIdAndUserId(screenComment.getScreenCommentId(), user.getId()).orElseThrow(
+            ScreenCommentLikes likes = screenCommentLikesRepository.findByScreenComment_ScreenCommentIdAndUserId(screenComment.getScreenCommentId(), user.getId()).orElseThrow(
                     () -> new IllegalArgumentException("해당 게시물의 좋아요 이력이 없습니다.")
             );
         user.deleteScreenCommentLikes(likes);
@@ -40,7 +40,7 @@ public class ScreenCommnetLikesService {
         screenCommentLikesRepository.delete(likes);
         return false;
         }else{
-            if(screenCommentLikesRepository.findByScreenCommentLikesIdAndUserId(screenComment.getScreenCommentId(), user.getId()).isPresent())
+            if(screenCommentLikesRepository.findByScreenComment_ScreenCommentIdAndUserId(screenComment.getScreenCommentId(), user.getId()).isPresent())
             {
                 return true;
             }
