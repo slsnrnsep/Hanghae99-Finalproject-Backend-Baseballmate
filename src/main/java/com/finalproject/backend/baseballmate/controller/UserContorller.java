@@ -40,6 +40,8 @@ public class UserContorller {
     private final GoodsLikesRepository goodsLikesRepository;
     private final GroupLikesRepository groupLikesRepository;
     private final GroupCommentLikesRepository groupCommentLikesRepository;
+    private final ScreenLikesRepository screenLikesRepository;
+    private final ScreenCommentLikesRepository screenCommentLikesRepository;
     private final FileService fileService;
 
     @PostMapping("/user/signup")
@@ -123,30 +125,38 @@ public class UserContorller {
         {
             myTimeLineLikesList.add(TimeLineLikesList.get(i).getTimeLine().getId());
         }
-
         List<GoodsLikes> GoodsLikesList = goodsLikesRepository.findAllByUserId(user.getId());
         List<Long> myGoodsLikesList = new ArrayList<>();
         for(int i=0; i<GoodsLikesList.size();i++)
         {
             myGoodsLikesList.add(GoodsLikesList.get(i).getGoods().getId());
         }
-
-
         List<GroupLikes> groupLikesList = groupLikesRepository.findAllByUserId(user.getId());
         List<Long> myGroupLikesList = new ArrayList<>();
         for (int i=0; i<groupLikesList.size();i++)
         {
             myGroupLikesList.add(groupLikesList.get(i).getGrouplikes().getGroupId());
         }
-
         List<GroupCommentLikes> groupCommentLikesList = groupCommentLikesRepository.findAllByUserId(user.getId());
         List<Long> myGroupCommentLikesList = new ArrayList<>();
         for (int i=0; i<groupCommentLikesList.size();i++)
         {
             myGroupCommentLikesList.add(groupCommentLikesList.get(i).getGroupComment().getGroupCommentId());
         }
+        List<ScreenLikes> screenLikesList = screenLikesRepository.findAllByUserId(user.getId());
+        List<Long> myScreenLikesList = new ArrayList<>();
+        for (int i=0; i<screenLikesList.size();i++)
+        {
+            myScreenLikesList.add(screenLikesList.get(i).getScreenlikes().getScreenId());
+        }
+        List<ScreenCommentLikes> screenCommentLikesList = screenCommentLikesRepository.findAllByUserId(user.getId());
+        List<Long> myScreenCommentLikesList = new ArrayList<>();
+        for (int i=0; i<screenCommentLikesList.size();i++)
+        {
+            myScreenCommentLikesList.add(screenCommentLikesList.get(i).getScreenComment().getScreenCommentId());
+        }
 
-        LoginCheckResponseDto loginCheckResponseDto = new LoginCheckResponseDto(user.getId(),user.getUserid(), user.getUsername(),user.getMyselectTeam(),user.getPicture(),user.getAddress(),usertype, user.getSelfIntroduction(),myTimeLineLikesList,myGoodsLikesList,myGroupLikesList,myGroupCommentLikesList);
+        LoginCheckResponseDto loginCheckResponseDto = new LoginCheckResponseDto(user.getId(),user.getUserid(), user.getUsername(),user.getMyselectTeam(),user.getPicture(),user.getAddress(),usertype, user.getSelfIntroduction(),myTimeLineLikesList,myGoodsLikesList,myGroupLikesList,myGroupCommentLikesList,myScreenLikesList,myScreenCommentLikesList);
 
 
 

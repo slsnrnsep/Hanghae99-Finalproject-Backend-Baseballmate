@@ -25,4 +25,6 @@ public class LoginCheckResponseDto {
     private List<Long> myGoodsLikesList;
     private List<Long> myGroupLikesList;
     private List<Long> myGroupCommentLikesList;
+    private List<Long> myScreenLikesList;
+    private List<Long> myScreenCommentLikesList;
 }
