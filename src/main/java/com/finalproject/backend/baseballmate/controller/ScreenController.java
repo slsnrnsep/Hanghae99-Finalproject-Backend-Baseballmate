@@ -1,11 +1,8 @@
 package com.finalproject.backend.baseballmate.controller;
 
-import com.finalproject.backend.baseballmate.model.Screen;
 import com.finalproject.backend.baseballmate.model.User;
 import com.finalproject.backend.baseballmate.repository.ScreenRepository;
-import com.finalproject.backend.baseballmate.repository.UserRepository;
-import com.finalproject.backend.baseballmate.requestDto.AllScreenResponseDto;
-import com.finalproject.backend.baseballmate.requestDto.GroupRequestDto;
+import com.finalproject.backend.baseballmate.responseDto.AllScreenResponseDto;
 import com.finalproject.backend.baseballmate.requestDto.ScreenRequestDto;
 import com.finalproject.backend.baseballmate.responseDto.MsgResponseDto;
 import com.finalproject.backend.baseballmate.responseDto.ScreenDetailResponseDto;
