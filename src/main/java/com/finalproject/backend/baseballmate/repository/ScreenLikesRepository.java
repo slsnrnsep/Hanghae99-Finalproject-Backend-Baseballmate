@@ -7,5 +7,6 @@ import java.util.Optional;
 
 public interface ScreenLikesRepository extends JpaRepository<ScreenLikes, Long> {
     Optional<ScreenLikes> findByScreenLikeIdAndUserId(Long screenId, Long UserId);
+    Optional<ScreenLikes> findByScreenlikesScreenIdAndUserId(Long screenId, Long UserId);
 
 }
