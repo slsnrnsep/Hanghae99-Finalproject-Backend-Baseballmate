@@ -391,11 +391,9 @@ public class GroupService {
                     // 취소 리스트에서 참가 신청한 유저 찾기
                     for (int i=0; i< canceledLists.size(); i++) {
                         CanceledList canceledList = canceledLists.get(i);
-                        Long test = canceledList.getCanceledUser().getId();
-//                        System.out.println("test = " + test);
-                        Long test2= loginedUser.getId();
+
                         // 참가 신청하는 모임의 취소 유저 리스트에 이름이 있지 않을 경우 -> 이 경우에만 참가 신청 가능
-                        if (test2 == test)
+                        if (canceledList.getCanceledUser().getId().equals(loginedUser.getId()))
                         {
                             throw new IllegalArgumentException("취소후 재참가는 불가합니다.");
                         }

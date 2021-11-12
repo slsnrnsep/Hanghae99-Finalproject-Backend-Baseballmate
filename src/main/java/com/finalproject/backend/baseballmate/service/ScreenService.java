@@ -199,7 +199,7 @@ public class ScreenService {
             if(canceledScreenLists.size() != 0) {
                 for(int i=0; i<canceledScreenLists.size(); i++){
                     CanceledScreenList canceledScreenList = canceledScreenLists.get(i);
-                    if(canceledScreenList.getCanceledUser().getId() == loginedUser.getId()){
+                    if(canceledScreenList.getCanceledUser().getId().equals(loginedUser.getId())){
                         throw new IllegalArgumentException("모임 취소후 재참가는 불가합니다");
                         }
                     else {
