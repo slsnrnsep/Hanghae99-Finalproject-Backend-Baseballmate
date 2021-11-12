@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface ScreenCommentRepository extends JpaRepository<ScreenComment, Long> {
-    List<ScreenComment> findAllByScreenScreenIdOrderByCreatedAt(Long screenId);
+    List<ScreenComment> findAllByScreenScreenIdOrderByModifiedAtDesc(Long screenId);
     ScreenComment findByScreenCommentId(Long screenCommentId);
 }

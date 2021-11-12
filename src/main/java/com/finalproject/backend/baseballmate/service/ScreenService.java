@@ -146,7 +146,7 @@ public class ScreenService {
         double hotPercent = screen.getHotPercent();
         String groupDate = screen.getGroupDate();
         String filePath = screen.getFilePath();
-        List<ScreenComment> screenCommentList = screenCommentRepository.findAllByScreenScreenIdOrderByCreatedAt(id);
+        List<ScreenComment> screenCommentList = screenCommentRepository.findAllByScreenScreenIdOrderByModifiedAtDesc(id);
         List<Map<String, String>> appliedUserInfo = appliedUsers;
 
         // D - day 계산
