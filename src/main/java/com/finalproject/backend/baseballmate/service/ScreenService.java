@@ -146,6 +146,7 @@ public class ScreenService {
         double hotPercent = screen.getHotPercent();
         String groupDate = screen.getGroupDate();
         String filePath = screen.getFilePath();
+        String placeInfomation = screen.getPlaceInfomation();
         List<ScreenComment> screenCommentList = screenCommentRepository.findAllByScreenScreenIdOrderByModifiedAtDesc(id);
         List<Map<String, String>> appliedUserInfo = appliedUsers;
 
@@ -157,7 +158,7 @@ public class ScreenService {
         String dday = countingday.toString();
 
         ScreenDetailResponseDto screenDetailResponseDto =
-                new ScreenDetailResponseDto(screenId, createdUsername, createdUserId, createdUserProfileImg, title,content, peopleLimit, nowAppliedNum, canApplyNum, hotPercent, groupDate, filePath,dday,appliedUserInfo,screenCommentList);
+                new ScreenDetailResponseDto(screenId, createdUsername, createdUserId, createdUserProfileImg, title,content, peopleLimit, nowAppliedNum, canApplyNum, hotPercent, groupDate, filePath,dday,placeInfomation,appliedUserInfo,screenCommentList);
         return screenDetailResponseDto;
     }
 
@@ -260,9 +261,8 @@ public class ScreenService {
             ScreenApplication screenApplication = screenApplicationList.get(i);
             // 참가 신청 취소를 요청하는 모임에 대한 신청 내역들이 있고
             if (screenApplication != null) {
-                Long appliedUserIndex = screenApplication.getAppliedUser().getId();
+
                 // 로그인 한 유저가 참가 신청을 했던 유저와 같다면
-                if (loginedUserIndex == appliedUserIndex) {
                     // 현재 참여 신청 인원 1 감소
                     int nowAppliedNum = screenApplication.getAppliedScreen().getNowAppliedNum();
                     int updatedAppliedNum = nowAppliedNum - 1;
@@ -284,7 +284,7 @@ public class ScreenService {
                     // 취소 리스트에 추가하기
                     CanceledScreenList canceledScreenList = new CanceledScreenList(loginedUser, screen);
                     canceledScreenListRepository.save(canceledScreenList);
-                    }
+
                 }
         }
     }
