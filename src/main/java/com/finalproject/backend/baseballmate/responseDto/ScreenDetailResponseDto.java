@@ -13,7 +13,9 @@ import java.util.Map;
 @Getter
 public class ScreenDetailResponseDto {
     private Long id;
-    private String createdUserName; // 모임 형성한 유저의 유저네임
+    private String createdUserName;
+    private String createdUserId; //  모임 형성한 유저의 이메일 아이디
+    private String createdUserProfileImg; // 모임 형성한 유저의 프로필 사진
     private String title; // 모임 게시글의 제목
     private String content; // 모임 게시글의 내용
     private int peopleLimit; // 모임 최대 제한 인원 수
@@ -22,6 +24,7 @@ public class ScreenDetailResponseDto {
     private double hotPercent;
     private String groupDate; // 모임 날짜
     private String filePath;// 모임 게시글 내의 댓글 리스트
+    private String dday;
     private List<Map<String, String>> appliedUserInfo;
     List<ScreenComment> screenCommentList;
 }

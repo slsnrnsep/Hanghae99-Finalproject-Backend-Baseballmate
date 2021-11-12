@@ -135,6 +135,8 @@ public class ScreenService {
             }
         }
         Long screenId = screen.getScreenId();
+        String createdUserId = screen.getScreenCreatedUser().getUserid();
+        String createdUserProfileImg = screen.getScreenCreatedUser().getPicture();
         String title = screen.getTitle();
         String createdUsername = screen.getCreatedUsername();
         String content = screen.getContent();
@@ -147,8 +149,15 @@ public class ScreenService {
         List<ScreenComment> screenCommentList = screenCommentRepository.findAllByScreenScreenIdOrderByCreatedAt(id);
         List<Map<String, String>> appliedUserInfo = appliedUsers;
 
+        // D - day 계산
+        int month = Integer.parseInt(screen.getGroupDate().split("[.]")[0]);
+        int day = Integer.parseInt(screen.getGroupDate().split("[.]")[1].split(" ")[0]);
+        LocalDate target = LocalDate.of(LocalDate.now().getYear(),month,day);
+        Long countingday = ChronoUnit.DAYS.between(LocalDate.now(),target);
+        String dday = countingday.toString();
+
         ScreenDetailResponseDto screenDetailResponseDto =
-                new ScreenDetailResponseDto(screenId, title, createdUsername, content, peopleLimit, nowAppliedNum, canApplyNum, hotPercent, groupDate, filePath,appliedUserInfo,screenCommentList);
+                new ScreenDetailResponseDto(screenId, createdUsername, createdUserId, createdUserProfileImg, title,content, peopleLimit, nowAppliedNum, canApplyNum, hotPercent, groupDate, filePath,dday,appliedUserInfo,screenCommentList);
         return screenDetailResponseDto;
     }
 
@@ -219,7 +228,7 @@ public class ScreenService {
                     application1.getAppliedScreen().setCanApplyNum(updatedCanApplyNum);
                 }
             } else {
-            throw new IllegalArgumentException("참가 신청이 불가합니다."); // 모임을 만든 사람이 요청하는 경우 or 참가 이력이 있는 경우
+            throw new IllegalArgumentException("모임을 만들었거나 참가이력이 있습니다."); // 모임을 만든 사람이 요청하는 경우 or 참가 이력이 있는 경우
             }
         }
     }
