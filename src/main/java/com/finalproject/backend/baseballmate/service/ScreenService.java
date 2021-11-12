@@ -243,6 +243,18 @@ public class ScreenService {
         User loginedUser = userDetails.getUser();
         Long loginedUserIndex = userDetails.getUser().getId();
 
+        List<Long> testlist = new ArrayList<>();
+
+        for(int j=0; j<screenApplicationList.size();j++)
+        {
+            testlist.add(screenApplicationList.get(j).getAppliedUser().getId());
+        }
+
+        if(!testlist.contains(loginedUserIndex))
+        {
+            throw new IllegalArgumentException("참여신청 기록이 없습니다.");
+        }
+
         for (int i = 0; i < screenApplicationList.size(); i++) {
             // 참가 신청 취소를 요청한 screenId를 가진 groupapplication하나씩 빼오기
             ScreenApplication screenApplication = screenApplicationList.get(i);
@@ -272,12 +284,8 @@ public class ScreenService {
                     // 취소 리스트에 추가하기
                     CanceledScreenList canceledScreenList = new CanceledScreenList(loginedUser, screen);
                     canceledScreenListRepository.save(canceledScreenList);
-                    } else {
-                        throw new NullPointerException("참가 신청 이력이 존재하지 않습니다."); // '참가 신청을 했던 유저가 아님'을 의미
                     }
-                } else {
-                    throw new NullPointerException("참가 신청 이력이 존재하지 않습니다."); // 'group에 참가 신청을 한 사람이 없음'을 의미
-            }
+                }
         }
     }
 

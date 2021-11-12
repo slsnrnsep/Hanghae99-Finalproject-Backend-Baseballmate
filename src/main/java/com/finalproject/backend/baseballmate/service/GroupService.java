@@ -465,9 +465,23 @@ public class GroupService {
         User loginedUser = userDetails.getUser();
         Long loginedUserIndex = userDetails.getUser().getId();
 
+        List<Long> testlist = new ArrayList<>();
+
+        for(int j=0; j<groupApplicationList.size();j++)
+        {
+            testlist.add(groupApplicationList.get(j).getAppliedUser().getId());
+        }
+
+        if(!testlist.contains(loginedUserIndex))
+        {
+            throw new IllegalArgumentException("참여신청 기록이 없습니다.");
+        }
+
+
         for(int i=0; i<groupApplicationList.size(); i++) {
             // 참가 신청 취소를 요청한 groupid를 가진 groupapplication하나씩 빼오기
             GroupApplication groupApplication = groupApplicationList.get(i);
+
             // 참가 신청 취소를 요청하는 모임에 대한 신청 내역들이 있고
             if(groupApplication != null) {
                 Long appliedUserIndex = groupApplication.getAppliedUser().getId();
@@ -502,13 +516,10 @@ public class GroupService {
                     // 취소 리스트에 추가하기
                     CanceledList canceledList = new CanceledList(loginedUser, group);
                     canceledListRepository.save(canceledList);
-                } else {
-                    throw new NullPointerException("나는 이그룹에 참가 신청 이력이 존재하지 않습니다."); // '참가 신청을 했던 유저가 아님'을 의미
                 }
-            } else {
-                throw new NullPointerException("참가 신청 이력이 존재하지 않습니다."); // 'group에 참가 신청을 한 사람이 없음'을 의미
             }
         }
+
 
     }
 

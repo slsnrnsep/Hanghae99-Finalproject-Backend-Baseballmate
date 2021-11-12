@@ -1,12 +1,10 @@
 package com.finalproject.backend.baseballmate.controller;
 
 import com.finalproject.backend.baseballmate.model.AddressEnum;
-import com.finalproject.backend.baseballmate.model.Group;
 import com.finalproject.backend.baseballmate.repository.GroupRepository;
 import com.finalproject.backend.baseballmate.repository.ScreenRepository;
 import com.finalproject.backend.baseballmate.repository.UserRepository;
 import com.finalproject.backend.baseballmate.responseDto.AllGroupResponseDto;
-import com.finalproject.backend.baseballmate.responseDto.MypageResponseDto;
 import com.finalproject.backend.baseballmate.security.UserDetailsImpl;
 import com.finalproject.backend.baseballmate.service.GroupService;
 import com.finalproject.backend.baseballmate.service.ScreenService;
@@ -14,8 +12,6 @@ import com.finalproject.backend.baseballmate.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
