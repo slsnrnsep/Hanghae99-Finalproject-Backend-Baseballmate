@@ -30,7 +30,7 @@ public class ScreenLikesService {
                 () -> new IllegalArgumentException("스크인야구 모임이 존재하지 않습니다")
         );
         if(likesRequestDto.getIsLiked().equals("true")){
-            ScreenLikes likes = screenLikesRepository.findByScreenLikeIdAndUserId(screen.getScreenId(),user.getId()).orElseThrow(
+            ScreenLikes likes = screenLikesRepository.findByScreenlikesScreenIdAndUserId(screen.getScreenId(),user.getId()).orElseThrow(
                     () -> new IllegalArgumentException("해당 모임에 좋아요 이력이 없습니다")
             );
             user.deleteScreenLikes(likes);
