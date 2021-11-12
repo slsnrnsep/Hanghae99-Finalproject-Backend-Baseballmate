@@ -38,7 +38,7 @@ public class ScreenLikesService {
             screenLikesRepository.delete(likes);
             return false;
         }else{
-            if(screenLikesRepository.findByScreenLikeIdAndUserId(screen.getScreenId(), user.getId()).isPresent())
+            if(screenLikesRepository.findByScreenlikesScreenIdAndUserId(screen.getScreenId(), user.getId()).isPresent())
             {
                 return true;
             }

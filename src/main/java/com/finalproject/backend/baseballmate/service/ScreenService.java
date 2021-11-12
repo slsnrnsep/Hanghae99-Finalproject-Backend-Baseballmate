@@ -228,7 +228,7 @@ public class ScreenService {
                     application1.getAppliedScreen().setCanApplyNum(updatedCanApplyNum);
                 }
             } else {
-            throw new IllegalArgumentException("참가 신청이 불가합니다."); // 모임을 만든 사람이 요청하는 경우 or 참가 이력이 있는 경우
+            throw new IllegalArgumentException("모임을 만들었거나 참가이력이 있습니다."); // 모임을 만든 사람이 요청하는 경우 or 참가 이력이 있는 경우
             }
         }
     }
