@@ -212,6 +212,12 @@ public class ScreenService {
                         int nowCanApplyNum = application.getAppliedScreen().getCanApplyNum();
                         int updatedCanApplyNum = nowCanApplyNum - 1;
                         application.getAppliedScreen().setCanApplyNum(updatedCanApplyNum);
+
+                        // 인기도 값 수정
+                        int peopleLimit = application.getAppliedScreen().getPeopleLimit();
+                        double updatedHotPercent = ((double) updateAppliedNum / (double) peopleLimit * 100.0);
+                        application.getAppliedScreen().setHotPercent(updatedHotPercent);
+
                         }
                     }
                 } else {
@@ -226,6 +232,11 @@ public class ScreenService {
                     int nowCanApplyNum = application1.getAppliedScreen().getCanApplyNum();
                     int updatedCanApplyNum = nowCanApplyNum - 1;
                     application1.getAppliedScreen().setCanApplyNum(updatedCanApplyNum);
+
+                    // 인기도 값 수정
+                    int peopleLimit = application1.getAppliedScreen().getPeopleLimit();
+                    double updatedHotPercent = ((double) updateAppliedNum / (double) peopleLimit * 100.0);
+                    application1.getAppliedScreen().setHotPercent(updatedHotPercent);
                 }
             } else {
                 throw new IllegalArgumentException("모임을 만들었거나 참가이력이 있습니다."); // 모임을 만든 사람이 요청하는 경우 or 참가 이력이 있는 경우
@@ -271,9 +282,9 @@ public class ScreenService {
                     screenApplication.getAppliedScreen().setCanApplyNum(updatedCanApplyNum);
 
                     // 인기도 값 수정
-//                    int peopleLimit = screenApplication.getAppliedScreen().getPeopleLimit();
-//                    double updatedHotPercent = ((double) updatedAppliedNum / (double) peopleLimit * 100.0);
-//                    screenApplication.getAppliedScreen().setHotPercent(updatedHotPercent);
+                    int peopleLimit = screenApplication.getAppliedScreen().getPeopleLimit();
+                    double updatedHotPercent = ((double) updatedAppliedNum / (double) peopleLimit * 100.0);
+                    screenApplication.getAppliedScreen().setHotPercent(updatedHotPercent);
 
                     // 참가 신청 이력 삭제하기
                     screenApplicationRepository.delete(screenApplication);
