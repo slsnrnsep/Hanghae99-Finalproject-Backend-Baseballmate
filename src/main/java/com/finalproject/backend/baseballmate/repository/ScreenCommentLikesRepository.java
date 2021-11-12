@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ScreenCommentLikesRepository extends JpaRepository<ScreenCommentLikes, Long> {
-    Optional<ScreenCommentLikes> findByScreenCommentLikesIdAndUserId(Long screenId, Long UserId);
+//    Optional<ScreenCommentLikes> findByScreenCommentLikesIdAndUserId(Long screenId, Long UserId);
     List<ScreenCommentLikes> findAllByUserId(Long UserId);
+    Optional<ScreenCommentLikes> findByScreenComment_ScreenCommentIdAndUserId(Long screenId, Long UserId);
 }
