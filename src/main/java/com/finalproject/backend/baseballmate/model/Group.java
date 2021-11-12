@@ -120,6 +120,8 @@ public class Group extends Timestamped{
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
         this.peopleLimit = requestDto.getPeopleLimit();
+        this.nowAppliedNum = getNowAppliedNum();
+        this.canApplyNum = (requestDto.getPeopleLimit() - getNowAppliedNum());
         this.groupDate = requestDto.getGroupDate();
     }
 
