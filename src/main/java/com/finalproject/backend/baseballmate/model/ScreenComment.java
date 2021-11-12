@@ -29,6 +29,9 @@ public class ScreenComment extends Timestamped {
     @Column
     private String commentUserId;
 
+    @Column
+    private String commentUserPicture;
+
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "screenId")
@@ -51,12 +54,13 @@ public class ScreenComment extends Timestamped {
     }
 
 
-    public ScreenComment(ScreenCommentRequestDto screenCommentRequestDto, Screen screen, String commentUsername, Long loginedUserIndex, String loginedUserId){
+    public ScreenComment(ScreenCommentRequestDto screenCommentRequestDto, Screen screen, String commentUsername, Long loginedUserIndex, String loginedUserId, String loginedUserPicture){
         this.commentUsername = commentUsername;
         this.comment = screenCommentRequestDto.getComment();
         this.commentUserIndex = loginedUserIndex;
         this.commentUserId = loginedUserId;
         this.screen = screen;
+        this.commentUserPicture = loginedUserPicture;
     }
 
     public void updateScreenComment(ScreenCommentRequestDto requestDto) {
