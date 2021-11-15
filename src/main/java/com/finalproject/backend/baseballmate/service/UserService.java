@@ -62,6 +62,7 @@ public class UserService {
         user.setUserid(userid);
         user.setUsername(username);
         user.setPassword(password);
+        user.setPhoneNumber(userRequestDto.getPhonenumber()+"/"+user.getRanNum());
         user.setAddress("전국");
         user.setPicture("sample.png");
 

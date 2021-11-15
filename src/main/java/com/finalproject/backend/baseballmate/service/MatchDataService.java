@@ -174,7 +174,7 @@ public class MatchDataService {
     }
     @Transactional
     public void updateKBODatas(List<MatchInfomation> requestDto) {
-        List<MatchInfomation> matchInfomation = matchRepository.findAllByOrderByMatchIdDesc();
+        List<MatchInfomation> matchInfomation = matchRepository.findAllByOrderByMatchIdAsc();
         for (int i = 0; i < requestDto.size(); i++) {
 
             MatchInfomation updateinfomation = matchInfomation.get(i);

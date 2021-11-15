@@ -28,8 +28,11 @@ public class ScreenCommentController {
         User loginedUser = userDetails.getUser();
         screenCommentService.createComment(commentRequestDto, screenId, loginedUser);
         MsgResponseDto msgResponseDto = new MsgResponseDto("success", "댓글 등록 완료");
+
         return msgResponseDto;
+
     }
+
     // 모임 내 댓글 수정
     @PutMapping("/screen/{screenId}/comment/{commentId}")
     public MsgResponseDto updateScreenComment(
