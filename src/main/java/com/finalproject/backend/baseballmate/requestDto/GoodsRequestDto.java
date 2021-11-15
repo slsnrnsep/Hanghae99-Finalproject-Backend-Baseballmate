@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class GoodsRequestDto {
     private String goodsName;
-    private int goodsPrice;
     private String goodsContent;
     private String goodsImg;
+//    private String filePath;
 }
