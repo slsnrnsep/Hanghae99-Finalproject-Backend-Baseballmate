@@ -29,9 +29,6 @@ public class Goods extends Timestamped {
     private String goodsName;
 
     @Column
-    private int goodsPrice;
-
-    @Column
     private String goodsContent;
 
     @Column
@@ -54,7 +51,6 @@ public class Goods extends Timestamped {
         this.createdUser = loginUser;
         this.userName = loginUser.getUsername();
         this.goodsName = requestDto.getGoodsName();
-        this.goodsPrice = requestDto.getGoodsPrice();
         this.goodsContent = requestDto.getGoodsContent();
         this.goodsImg = requestDto.getGoodsImg();
     }
@@ -62,7 +58,6 @@ public class Goods extends Timestamped {
     // 굿즈 업데이트 생성자
     public void update(GoodsRequestDto requestDto) {
         this.goodsName = requestDto.getGoodsName();
-        this.goodsPrice = requestDto.getGoodsPrice();
         this.goodsContent = requestDto.getGoodsContent();
         this.goodsImg = requestDto.getGoodsImg();
     }

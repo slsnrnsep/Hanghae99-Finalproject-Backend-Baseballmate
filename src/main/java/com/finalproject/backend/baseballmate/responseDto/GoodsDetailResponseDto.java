@@ -14,7 +14,6 @@ import java.util.List;
 public class GoodsDetailResponseDto {
     private String userName;
     private String goodsName;
-    private int goodsPrice;
     private String goodsContent;
     private String goodsImg;
     List<GoodsDetailRequestDto> goodsCommentList;
