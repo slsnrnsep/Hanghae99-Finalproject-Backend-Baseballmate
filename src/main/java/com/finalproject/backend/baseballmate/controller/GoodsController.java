@@ -34,20 +34,16 @@ public class GoodsController {
     // 굿즈생성
     @PostMapping("/goods")
     public GoodsResponseDto postGoods(
-
             @RequestParam(value = "file",required = false) MultipartFile files,
-
-            GoodsRequestDto requestDto)
-//            @AuthenticationPrincipal UserDetailsImpl userDetails)
-    {
-//        if(userDetails == null)
-//        {
-//            throw new IllegalArgumentException("로그인 한 사용자만 등록 가능합니다");
-//        }
+            GoodsRequestDto requestDto,
+            @AuthenticationPrincipal UserDetailsImpl userDetails){
+        if(userDetails == null)
+        {
+            throw new IllegalArgumentException("로그인 한 사용자만 등록 가능합니다");
+        }
 
         try
         {
-
             String filename = "basic.jpg";
             if (files != null) {
                 String origFilename = files.getOriginalFilename();
@@ -68,12 +64,11 @@ public class GoodsController {
                 files.transferTo(new File(filePath));
             }
             requestDto.setGoodsImg(filename);
-
-//            User loginUser = userDetails.getUser();
-//            String loginedUsername = userDetails.getUser().getUsername();
-            User loginUser = userRepository.findByUsername("aaa").orElseThrow(
-                    ()-> new IllegalArgumentException("유저찾을수 없슴")
-            );
+            User loginUser = userDetails.getUser();
+            String loginedUsername = userDetails.getUser().getUsername();
+//            User loginUser = userRepository.findByUsername("aaa").orElseThrow(
+//                    ()-> new IllegalArgumentException("유저찾을수 없슴")
+//            );
             goodsService.createGoods(loginUser, requestDto);
             GoodsResponseDto goodsResponseDto = new GoodsResponseDto("success","등록완료");
             return goodsResponseDto;

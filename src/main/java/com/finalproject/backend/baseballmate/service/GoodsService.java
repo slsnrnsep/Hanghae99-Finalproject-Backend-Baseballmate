@@ -44,14 +44,14 @@ public class GoodsService {
             Long id = goods.getId();
             String userName = goods.getUserName();
             String goodsName = goods.getGoodsName();
-            int goodsPrice = goods.getGoodsPrice();
+            String goodsContent = goods.getGoodsContent();
             String goodsImg = goods.getGoodsImg();
             String dayBefore = getDayBefore(goods);
 
 //            int likeCount = goods.getLikeCount();
 
             AllGoodsResponseDto responseDto =
-                    new AllGoodsResponseDto(id,userName, goodsName,goodsPrice,goodsImg,dayBefore);
+                    new AllGoodsResponseDto(id,userName ,goodsName,goodsContent,goodsImg,dayBefore);
             data.add(responseDto);
         }
         return data;
@@ -60,9 +60,7 @@ public class GoodsService {
     @Transactional
     public List<AllGoodsResponseDto> getnowGoods(int number) throws ParseException {
         List<Goods> goodsList = goodsRepository.findAllByOrderByCreatedAtDesc();
-
         List<AllGoodsResponseDto> data = new ArrayList<>();
-
         if(goodsList.size()<=number) {
             number = goodsList.size();
         }
@@ -73,14 +71,14 @@ public class GoodsService {
             Long id = goods.getId();
             String userName = goods.getUserName();
             String goodsName = goods.getGoodsName();
-            int goodsPrice = goods.getGoodsPrice();
+            String goodsContent = goods.getGoodsContent();
             String goodsImg = goods.getGoodsImg();
             String dayBefore = getDayBefore(goods);
 
 //            int likeCount = goods.getLikeCount();
 
             AllGoodsResponseDto responseDto =
-                    new AllGoodsResponseDto(id, userName, goodsName,goodsPrice,goodsImg,dayBefore);
+                    new AllGoodsResponseDto(id, userName, goodsName,goodsContent,goodsImg,dayBefore);
             data.add(responseDto);
         }
         return data;
@@ -94,7 +92,6 @@ public class GoodsService {
         GoodsDetailRequestDto goodsDetailRequestDto = new GoodsDetailRequestDto();
         String userName = goods.getUserName();
         String goodsName = goods.getGoodsName();
-        int goodsPrice = goods.getGoodsPrice();
         String goodsContent = goods.getGoodsContent();
         String goodsImg = goods.getGoodsImg();
         List<GoodsComment> goodsComments = goodsCommentRepository.findAllByGoodsId(goodsId);
@@ -105,7 +102,7 @@ public class GoodsService {
             goodsCommentList.add(goodsDetailRequestDto);
         }
         GoodsDetailResponseDto goodsDetailResponseDto =
-                new GoodsDetailResponseDto(userName, goodsName, goodsPrice, goodsContent, goodsImg, goodsCommentList);
+                new GoodsDetailResponseDto(userName, goodsName, goodsContent, goodsImg, goodsCommentList);
         return goodsDetailResponseDto;
     }
 
