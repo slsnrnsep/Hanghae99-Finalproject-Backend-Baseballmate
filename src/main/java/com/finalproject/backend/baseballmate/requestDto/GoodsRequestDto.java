@@ -8,6 +8,7 @@ import lombok.Setter;
 public class GoodsRequestDto {
     private String goodsName;
     private String goodsContent;
-    private String goodsImg;
-//    private String filePath;
+//    private String goodsImg;
+    private String filePath;
+
 }

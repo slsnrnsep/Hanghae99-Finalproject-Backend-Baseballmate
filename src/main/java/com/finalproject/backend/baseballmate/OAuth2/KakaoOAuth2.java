@@ -45,7 +45,7 @@ public class KakaoOAuth2 {
 
         //프론트 로컬 용
         params.add("redirect_uri", "http://localhost:3000/user/kakao/callback");
-
+        params.add("redirect_uri", "http://meetball.shop/");
         //최종 배포용
 //        params.add("redirect_uri", "");
         //백엔드 로컬 테스트용
