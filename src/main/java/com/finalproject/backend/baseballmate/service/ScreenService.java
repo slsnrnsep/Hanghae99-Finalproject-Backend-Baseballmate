@@ -268,7 +268,7 @@ public class ScreenService {
             // 참가 신청 취소를 요청한 screenId를 가진 groupapplication하나씩 빼오기
             ScreenApplication screenApplication = screenApplicationList.get(i);
             // 참가 신청 취소를 요청하는 모임에 대한 신청 내역들이 있고
-            if (screenApplication != null) {
+            if (screenApplication != null && screenApplication.getAppliedUser().getId().equals(loginedUserIndex)) {
 
                 // 로그인 한 유저가 참가 신청을 했던 유저와 같다면
                     // 현재 참여 신청 인원 1 감소

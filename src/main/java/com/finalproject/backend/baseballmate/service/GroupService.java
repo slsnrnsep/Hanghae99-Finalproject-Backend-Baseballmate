@@ -485,7 +485,7 @@ public class GroupService {
             GroupApplication groupApplication = groupApplicationList.get(i);
 
             // 참가 신청 취소를 요청하는 모임에 대한 신청 내역들이 있고
-            if(groupApplication != null) {
+            if(groupApplication != null && groupApplication.getAppliedUser().getId().equals(loginedUserIndex)) {
                 // 로그인 한 유저가 참가 신청을 했던 유저와 같다면
 
                     // 해당 group의 nowappliednum, hotpercent 수정
