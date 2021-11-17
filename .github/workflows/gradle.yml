@@ -20,15 +20,12 @@ jobs:
       uses: actions/setup-java@v2
       with:
         java-version: '11'
-        distribution: 'adopt'
-        cache: gradle
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
     - name: Build with Gradle
       run: |
         ./gradlew --version
-        ./gradlew build # 빌드 
-        
+        ./gradlew build 
     - name: Upload S3
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_S3_UPLOAD }}
