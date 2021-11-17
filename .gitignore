@@ -158,9 +158,7 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-### Gradle ###
-.gradle
-build/
+
 
 # Ignore Gradle GUI config
 gradle-app.setting
@@ -174,8 +172,6 @@ gradle-app.setting
 # # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
 # gradle/wrapper/gradle-wrapper.properties
 
-### Gradle Patch ###
-**/build/
 
 # Eclipse Gradle plugin generated files
 # Eclipse Core
