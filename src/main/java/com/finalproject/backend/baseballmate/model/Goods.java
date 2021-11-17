@@ -32,7 +32,7 @@ public class Goods extends Timestamped {
     private String goodsContent;
 
     @Column
-    private String goodsImg;
+    private String filePath;
 
     @JsonBackReference
     @OneToMany(mappedBy = "goods", cascade = CascadeType.ALL)
@@ -41,25 +41,28 @@ public class Goods extends Timestamped {
     @Column(columnDefinition = "integer default 0")
     private int likeCount;
 
+    @Column
+    private String goodsUserPicture;
+
     // comment와 연관관계
     @JsonBackReference
     @OneToMany(mappedBy = "goods", cascade = CascadeType.ALL)
     private List<GoodsComment> goodsCommentList = new ArrayList<>();
 
     // 굿즈 등록 생성자
-    public Goods(User loginUser, GoodsRequestDto requestDto){
+    public Goods(User loginUser, GoodsRequestDto requestDto, String goodsUserPicture){
         this.createdUser = loginUser;
         this.userName = loginUser.getUsername();
         this.goodsName = requestDto.getGoodsName();
         this.goodsContent = requestDto.getGoodsContent();
-        this.goodsImg = requestDto.getGoodsImg();
+        this.filePath = requestDto.getFilePath();
+        this.goodsUserPicture = goodsUserPicture;
     }
 
     // 굿즈 업데이트 생성자
     public void update(GoodsRequestDto requestDto) {
         this.goodsName = requestDto.getGoodsName();
         this.goodsContent = requestDto.getGoodsContent();
-        this.goodsImg = requestDto.getGoodsImg();
     }
 
     // 좋아요 생성자

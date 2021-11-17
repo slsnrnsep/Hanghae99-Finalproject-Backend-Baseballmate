@@ -28,7 +28,8 @@ public class GoodsService {
 
     @Transactional
     public Goods createGoods(User loginUser, GoodsRequestDto requestDto) {
-        Goods goods = new Goods(loginUser, requestDto);
+        String goodsUserPicture = loginUser.getPicture();
+        Goods goods = new Goods(loginUser, requestDto, goodsUserPicture);
         goodsRepository.save(goods);
         return goods;
     }
@@ -45,13 +46,13 @@ public class GoodsService {
             String userName = goods.getUserName();
             String goodsName = goods.getGoodsName();
             String goodsContent = goods.getGoodsContent();
-            String goodsImg = goods.getGoodsImg();
+            String filePath = goods.getFilePath();
             String dayBefore = getDayBefore(goods);
-
+            String goodsUserPicture = goods.getGoodsUserPicture();
 //            int likeCount = goods.getLikeCount();
 
             AllGoodsResponseDto responseDto =
-                    new AllGoodsResponseDto(id,userName ,goodsName,goodsContent,goodsImg,dayBefore);
+                    new AllGoodsResponseDto(id,userName ,goodsName,goodsContent,filePath,dayBefore, goodsUserPicture);
             data.add(responseDto);
         }
         return data;
@@ -72,13 +73,13 @@ public class GoodsService {
             String userName = goods.getUserName();
             String goodsName = goods.getGoodsName();
             String goodsContent = goods.getGoodsContent();
-            String goodsImg = goods.getGoodsImg();
+            String filePath = goods.getFilePath();
             String dayBefore = getDayBefore(goods);
-
+            String goodsUserPicture = goods.getGoodsUserPicture();
 //            int likeCount = goods.getLikeCount();
 
             AllGoodsResponseDto responseDto =
-                    new AllGoodsResponseDto(id, userName, goodsName,goodsContent,goodsImg,dayBefore);
+                    new AllGoodsResponseDto(id, userName, goodsName,goodsContent,filePath,dayBefore, goodsUserPicture);
             data.add(responseDto);
         }
         return data;
@@ -93,7 +94,7 @@ public class GoodsService {
         String userName = goods.getUserName();
         String goodsName = goods.getGoodsName();
         String goodsContent = goods.getGoodsContent();
-        String goodsImg = goods.getGoodsImg();
+        String filePath = goods.getFilePath();
         List<GoodsComment> goodsComments = goodsCommentRepository.findAllByGoodsId(goodsId);
         for (int i = 0; i < goodsComments.size(); i++ ) {
             goodsDetailRequestDto.setId(goodsComments.get(i).getId());
@@ -102,7 +103,7 @@ public class GoodsService {
             goodsCommentList.add(goodsDetailRequestDto);
         }
         GoodsDetailResponseDto goodsDetailResponseDto =
-                new GoodsDetailResponseDto(userName, goodsName, goodsContent, goodsImg, goodsCommentList);
+                new GoodsDetailResponseDto(userName, goodsName, goodsContent, filePath, goodsCommentList);
         return goodsDetailResponseDto;
     }
 
