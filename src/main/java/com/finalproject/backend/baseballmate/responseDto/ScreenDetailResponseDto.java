@@ -25,6 +25,7 @@ public class ScreenDetailResponseDto {
     private String groupDate; // 모임 날짜
     private String filePath;// 모임 게시글 내의 댓글 리스트
     private String dday;
+    private String placeInfomation;
     private List<Map<String, String>> appliedUserInfo;
     List<ScreenComment> screenCommentList;
 }
