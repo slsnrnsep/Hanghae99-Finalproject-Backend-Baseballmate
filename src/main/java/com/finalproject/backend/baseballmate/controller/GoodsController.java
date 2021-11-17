@@ -34,8 +34,8 @@ public class GoodsController {
     // 굿즈생성
     @PostMapping("/goods")
     public GoodsResponseDto postGoods(
-            @RequestParam(value = "file",required = false) MultipartFile files,
-            GoodsRequestDto requestDto,
+            @RequestPart(value = "file",required = false) MultipartFile files,
+            @RequestPart GoodsRequestDto requestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails){
         if(userDetails == null)
         {
