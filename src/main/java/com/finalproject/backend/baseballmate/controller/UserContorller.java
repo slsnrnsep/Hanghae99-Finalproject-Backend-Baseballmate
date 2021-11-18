@@ -83,7 +83,7 @@ public class UserContorller {
     @RequestMapping(value = "/users/{id}", method = RequestMethod.PATCH, consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public List<Map<String, String>> updateUserInfo(
             @PathVariable("id") Long id,
-            UserUpdateRequestDto requestDto,
+            @RequestPart(required = false) UserUpdateRequestDto requestDto,
             @RequestPart(required = false, value = "file") MultipartFile file,
             @AuthenticationPrincipal UserDetailsImpl userDetails) throws UnsupportedEncodingException, NoSuchAlgorithmException {
 

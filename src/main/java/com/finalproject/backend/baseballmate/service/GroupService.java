@@ -460,52 +460,47 @@ public class GroupService {
         // groupApplication에서 해당 groupid에 속하는 groupApplication들을 찾아오기
         List<GroupApplication> groupApplicationList = groupApplicationRepository.findAllByAppliedGroup(group);
 
-//        List<GroupApplication> groupApplicationList = group.getGroupApplications();
         // 로그인 한 유저의 유저 객체와 인덱스 값 빼오기
         User loginedUser = userDetails.getUser();
         Long loginedUserIndex = userDetails.getUser().getId();
 
+        // groupid에 속하는 applieduserindex들을 모아놓고 해당 인덱스에 현재 로그인 한 유저의 인덱스가 있는지 검사
+        List<Long> appliedUserIndexList = new ArrayList<>();
+        for (int j=0; j<groupApplicationList.size(); j++) {
+            GroupApplication groupApplication = groupApplicationList.get(j);
+            Long appliedUserIndex = groupApplication.getAppliedUser().getId();
+            appliedUserIndexList.add(appliedUserIndex);
+        }
+        if (!appliedUserIndexList.contains(loginedUserIndex)) {
+            throw new IllegalArgumentException("참가 신청한 이력이 존재하지 않습니다.");
+        }
+
         for(int i=0; i<groupApplicationList.size(); i++) {
             // 참가 신청 취소를 요청한 groupid를 가진 groupapplication하나씩 빼오기
             GroupApplication groupApplication = groupApplicationList.get(i);
-            // 참가 신청 취소를 요청하는 모임에 대한 신청 내역들이 있고
-            if(groupApplication != null) {
-                Long appliedUserIndex = groupApplication.getAppliedUser().getId();
-                // 로그인 한 유저가 참가 신청을 했던 유저와 같다면
-                if (loginedUserIndex == appliedUserIndex) {
 
-                    // 해당 group의 nowappliednum, hotpercent 수정
-                    // 현재 참여 신청 인원 1 감소
-                    int nowAppliedNum = groupApplication.getAppliedGroup().getNowAppliedNum();
-                    int updatedAppliedNum = nowAppliedNum - 1;
-                    groupApplication.getAppliedGroup().setNowAppliedNum(updatedAppliedNum);
+            // 해당 group의 nowappliednum, hotpercent 수정
+            // 현재 참여 신청 인원 1 감소
+            int nowAppliedNum = groupApplication.getAppliedGroup().getNowAppliedNum();
+            int updatedAppliedNum = nowAppliedNum - 1;
+            groupApplication.getAppliedGroup().setNowAppliedNum(updatedAppliedNum);
 
-                    // 현재 참여 신청 가능한 인원 1 감소
-                    int nowCanApplyNum = groupApplication.getAppliedGroup().getCanApplyNum();
-                    int updatedCanApplyNum = nowCanApplyNum + 1;
-                    groupApplication.getAppliedGroup().setCanApplyNum(updatedCanApplyNum);
+            // 현재 참여 신청 가능한 인원 1 감소
+            int nowCanApplyNum = groupApplication.getAppliedGroup().getCanApplyNum();
+            int updatedCanApplyNum = nowCanApplyNum + 1;
+            groupApplication.getAppliedGroup().setCanApplyNum(updatedCanApplyNum);
 
-                    // 인기도 값 수정
-                    int peopleLimit = groupApplication.getAppliedGroup().getPeopleLimit();
-                    double updatedHotPercent = ((double) updatedAppliedNum / (double) peopleLimit * 100.0);
-                    groupApplication.getAppliedGroup().setHotPercent(updatedHotPercent);
+            // 인기도 값 수정
+            int peopleLimit = groupApplication.getAppliedGroup().getPeopleLimit();
+            double updatedHotPercent = ((double) updatedAppliedNum / (double) peopleLimit * 100.0);
+            groupApplication.getAppliedGroup().setHotPercent(updatedHotPercent);
 
+            // 참가 신청 이력 삭제하기
+            groupApplicationRepository.delete(groupApplication);
 
-//                    groupApplicationRepository.findByAppliedGroupAndAppliedUser(group, loginedUser)
-//                    groupApplicationRepository.deleteById(groupApplication2.getId());
-
-                    // 참가 신청 이력 삭제하기
-                    groupApplicationRepository.delete(groupApplication);
-
-                    // 취소 리스트에 추가하기
-                    CanceledList canceledList = new CanceledList(loginedUser, group);
-                    canceledListRepository.save(canceledList);
-                } else {
-                    throw new NullPointerException("참가 신청 이력이 존재하지 않습니다."); // '참가 신청을 했던 유저가 아님'을 의미
-                }
-            } else {
-                throw new NullPointerException("참가 신청 이력이 존재하지 않습니다."); // 'group에 참가 신청을 한 사람이 없음'을 의미
-            }
+            // 취소 리스트에 추가하기
+            CanceledList canceledList = new CanceledList(loginedUser, group);
+            canceledListRepository.save(canceledList);
         }
 
     }
