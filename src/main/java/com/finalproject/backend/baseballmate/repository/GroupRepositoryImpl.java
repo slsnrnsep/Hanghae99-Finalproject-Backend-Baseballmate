@@ -1,7 +1,5 @@
 package com.finalproject.backend.baseballmate.repository;
-
 import com.finalproject.backend.baseballmate.model.Group;
-import com.finalproject.backend.baseballmate.model.QGroup;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import javax.persistence.EntityManager;

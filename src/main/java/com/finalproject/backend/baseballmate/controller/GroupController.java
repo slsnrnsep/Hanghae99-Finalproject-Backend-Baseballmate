@@ -112,6 +112,14 @@ public class GroupController {
         return detailResponseDto;
     }
 
+    //모임 확정내기
+    @PatchMapping("/groups/{groupId}/applications")
+    public MsgResponseDto denyGroup(@PathVariable Long groupId, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        String msg = groupService.denyGroup(groupId, userDetails);
+        MsgResponseDto msgResponseDto = new MsgResponseDto("success", msg);
+        return msgResponseDto;
+    }
+
     // 모임 참여신청하기
     @PostMapping("/groups/{groupId}/applications")
     public MsgResponseDto applyGroup(@PathVariable Long groupId, @AuthenticationPrincipal UserDetailsImpl userDetails) {

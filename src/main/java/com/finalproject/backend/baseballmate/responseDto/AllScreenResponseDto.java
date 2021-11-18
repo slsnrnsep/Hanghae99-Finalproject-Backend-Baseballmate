@@ -19,4 +19,5 @@ public class AllScreenResponseDto {
     private String selectPlace;
     private String placeInfomation;
     private String dday;
+    private boolean allowtype;
 }
