@@ -196,10 +196,44 @@ public class GroupService {
 
         return allGroupResponseDtoList;
     }
-
     // 핫한 모임 조회(hotPercent순) - 메인 페이지용
-    public List<HotGroupResponseDto> getHotGroups() {
+    public List<HotGroupResponseDto> getHotGroups2() {
         List<Group> hotGroupList = groupRepository.findTop5ByOrderByHotPercentDesc();
+        List<HotGroupResponseDto> hotGroupResponseDtoList = new ArrayList<>();
+
+        for(int i=0; i< hotGroupList.size(); i++) {
+            Group group = hotGroupList.get(i);
+
+            Long groupId = group.getGroupId();
+            String createdUsername = group.getCreatedUsername();
+            String title = group.getTitle();
+            int peopleLimit = group.getPeopleLimit();
+            int canApplyNum = group.getCanApplyNum();
+            double hotPercent = group.getHotPercent();
+            String stadium = group.getStadium();
+            String groupDate = group.getGroupDate();
+            String filePath =group.getFilePath();
+            String selectTeam = group.getSelectTeam();
+
+            int month = Integer.parseInt(group.getGroupDate().split("[.]")[0]);
+            int day = Integer.parseInt(group.getGroupDate().split("[.]")[1].split(" ")[0]);
+            LocalDate target = LocalDate.of(LocalDate.now().getYear(),month,day);
+            Long countingday = ChronoUnit.DAYS.between(LocalDate.now(),target);
+            String dday = countingday.toString();
+
+            HotGroupResponseDto hotGroupResponseDto =
+                    new HotGroupResponseDto(groupId, createdUsername, title, peopleLimit, canApplyNum, hotPercent, stadium, groupDate,filePath,selectTeam,dday);
+
+            hotGroupResponseDtoList.add(hotGroupResponseDto);
+        }
+        return hotGroupResponseDtoList;
+    }
+
+
+
+    // 핫한 내가 응원하는 모임 조회(hotPercent순) - 메인 페이지용
+    public List<HotGroupResponseDto> getHotGroups(String team) {
+        List<Group> hotGroupList = groupRepository.searchTeamHotgroup(team);
         List<HotGroupResponseDto> hotGroupResponseDtoList = new ArrayList<>();
 
         for(int i=0; i< hotGroupList.size(); i++) {
