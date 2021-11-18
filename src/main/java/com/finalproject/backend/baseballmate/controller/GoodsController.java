@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.text.ParseException;
 import java.util.List;
+import java.util.Random;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,7 +31,8 @@ public class GoodsController {
     private final GoodsService goodsService;
     private String commonPath = "/images";
     private final FileService fileService;
-
+    String[] picturelist = {"basic0.jpg","basic1.jpg","basic2.jpg","basic3.jpg","basic4.jpg","basic5.jpg","basic6.jpg","basic7.jpg","basic8.jpg","basic9.jpg"};
+    Random random = new Random();
     // 굿즈생성
     @PostMapping("/goods")
     public GoodsResponseDto postGoods(
@@ -44,7 +46,7 @@ public class GoodsController {
 
         try
         {
-            String filename = "basic.jpg";
+            String filename = picturelist[random.nextInt(10)+1];
             if (files != null) {
                 String origFilename = files.getOriginalFilename();
                 filename = new MD5Generator(origFilename).toString() + ".jpg";

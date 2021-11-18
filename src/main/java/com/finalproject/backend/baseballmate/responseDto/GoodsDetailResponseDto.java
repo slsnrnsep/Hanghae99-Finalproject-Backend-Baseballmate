@@ -17,5 +17,4 @@ public class GoodsDetailResponseDto {
     private String goodsContent;
     private String goodsImg;
     List<GoodsDetailRequestDto> goodsCommentList;
-
 }

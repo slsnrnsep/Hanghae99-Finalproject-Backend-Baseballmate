@@ -103,7 +103,7 @@ public class GoodsService {
             goodsCommentList.add(goodsDetailRequestDto);
         }
         GoodsDetailResponseDto goodsDetailResponseDto =
-                new GoodsDetailResponseDto(userName, goodsName, goodsContent, filePath, goodsCommentList);
+                new GoodsDetailResponseDto(userName, goodsName, goodsContent, filePath,goodsCommentList);
         return goodsDetailResponseDto;
     }
 
