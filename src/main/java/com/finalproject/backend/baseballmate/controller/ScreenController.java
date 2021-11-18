@@ -21,8 +21,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import java.util.Random;
 
 @RestController
 @RequiredArgsConstructor
@@ -31,7 +34,8 @@ public class ScreenController {
     private final ScreenService screenService;
     private final String commonPath = "/images";
     private final FileService fileService;
-
+    String[] picturelist = {"basic0.jpg","basic1.jpg","basic2.jpg","basic3.jpg","basic4.jpg","basic5.jpg","basic6.jpg","basic7.jpg","basic8.jpg","basic9.jpg"};
+    Random random = new Random();
     @PostMapping("/screen/{screenId}/applications")
     public MsgResponseDto applyScreen(
             @PathVariable Long screenId,
@@ -66,7 +70,7 @@ public class ScreenController {
             throw new IllegalArgumentException("로그인 이용자만 스크인 야구 모임생성이 가능합니다");
         }
         try {
-            String filename = "basic.jpg";
+            String filename = picturelist[random.nextInt(10)+1];
             if (files != null) {
                 String origFilename = files.getOriginalFilename();
                 filename = new MD5Generator(origFilename).toString() + ".jpg";
@@ -104,9 +108,9 @@ public class ScreenController {
     }
 
     @GetMapping(path="/screen",params = "region")
-    public List<AllScreenResponseDto> showScreenByregion (@RequestParam("region") String location)
-    {
+    public List<AllScreenResponseDto> showScreenByregion (@RequestParam("region") String location) throws UnsupportedEncodingException {
         PageRequest pageRequest = PageRequest.of(0,10, Sort.by(Sort.Direction.DESC,"createdAt"));
+        URLDecoder.decode(location,"UTF-8");
         List<AllScreenResponseDto> screenResponseDtos = screenService.showScreenByregion(location,pageRequest);
         return screenResponseDtos;
     }
