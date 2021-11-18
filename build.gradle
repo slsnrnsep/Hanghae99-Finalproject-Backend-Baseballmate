@@ -73,7 +73,6 @@ dependencies {
     //querydsl 추가
     implementation 'com.querydsl:querydsl-jpa'
 
-    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.5.8'
 }
 
 test {
@@ -93,8 +92,8 @@ configurations {
     querydsl.extendsFrom compileClasspath
 }
 compileQuerydsl {
-    options.annotationProcessorPath = configurations.querydsl
     if(file(querydslDir).exists() )
         delete(file(querydslDir))
+    options.annotationProcessorPath = configurations.querydsl
 }
 //querydsl 추가 끝

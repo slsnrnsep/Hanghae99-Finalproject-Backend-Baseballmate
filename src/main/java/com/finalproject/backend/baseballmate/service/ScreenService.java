@@ -64,9 +64,9 @@ public class ScreenService {
             LocalDate target = LocalDate.of(LocalDate.now().getYear(), month, day);
             Long countingday = ChronoUnit.DAYS.between(LocalDate.now(), target);
             String dday = countingday.toString();
-
+            boolean allowtype = screen.isAllowtype();
             AllScreenResponseDto allScreenResponseDto =
-                    new AllScreenResponseDto(screenId, title, createdUsername, peopleLimit, canApplyNum, hotPercent, groupDate, filePath, selectPlace, placeInfomation, dday);
+                    new AllScreenResponseDto(screenId, title, createdUsername, peopleLimit, canApplyNum, hotPercent, groupDate, filePath, selectPlace, placeInfomation, dday,allowtype);
             allScreenResponseDtos.add(allScreenResponseDto);
         }
         return allScreenResponseDtos;
@@ -96,9 +96,9 @@ public class ScreenService {
             LocalDate target = LocalDate.of(LocalDate.now().getYear(), month, day);
             Long countingday = ChronoUnit.DAYS.between(LocalDate.now(), target);
             String dday = countingday.toString();
-
+            boolean allowtype = group.isAllowtype();
             AllScreenResponseDto allGroupResponseDto =
-                    new AllScreenResponseDto(groupId, title, createdUsername, peopleLimit, canApplyNum, hotPercent, groupDate, filePath, selectPlace, placeInfomation, dday);
+                    new AllScreenResponseDto(groupId, title, createdUsername, peopleLimit, canApplyNum, hotPercent, groupDate, filePath, selectPlace, placeInfomation, dday,allowtype);
 
             allScreenResponseDtos.add(allGroupResponseDto);
         }
@@ -152,9 +152,9 @@ public class ScreenService {
         LocalDate target = LocalDate.of(LocalDate.now().getYear(), month, day);
         Long countingday = ChronoUnit.DAYS.between(LocalDate.now(), target);
         String dday = countingday.toString();
-
+        boolean allowtype = screen.isAllowtype();
         ScreenDetailResponseDto screenDetailResponseDto =
-                new ScreenDetailResponseDto(screenId, createdUsername, createdUserId, createdUserProfileImg, title,content, peopleLimit, nowAppliedNum, canApplyNum, hotPercent, groupDate, filePath,dday,placeInfomation,appliedUserInfo,screenCommentList);
+                new ScreenDetailResponseDto(screenId, createdUsername, createdUserId, createdUserProfileImg, title,content, peopleLimit, nowAppliedNum, canApplyNum, hotPercent, groupDate, filePath,dday,placeInfomation,allowtype,appliedUserInfo,screenCommentList);
 
         return screenDetailResponseDto;
     }
@@ -183,6 +183,11 @@ public class ScreenService {
     public void applyScreen(Long screenId, UserDetailsImpl userDetails) {
 //        List<User> cancleUserList = appliedScreen.getCanceledUser();
         Screen appliedScreen = screenRepository.findByScreenId(screenId);
+
+        if(!appliedScreen.isAllowtype())
+        {
+            throw new IllegalArgumentException("모임이 모집을 마감하였습니다.");
+        }
 
         if (userDetails == null) {
             throw new IllegalArgumentException("로그인 한 사용자만 신청할 수 있습니다.");
@@ -367,9 +372,9 @@ public class ScreenService {
             LocalDate target = LocalDate.of(LocalDate.now().getYear(), month, day);
             Long countingday = ChronoUnit.DAYS.between(LocalDate.now(), target);
             String dday = countingday.toString();
-
+            boolean allowtype = screen.isAllowtype();
             AllScreenResponseDto allScreenResponseDto =
-                    new AllScreenResponseDto(screenId, title, createdUsername, peopleLimit, canApplyNum, hotPercent, groupDate, filePath, selectPlace, placeInfomation, dday);
+                    new AllScreenResponseDto(screenId, title, createdUsername, peopleLimit, canApplyNum, hotPercent, groupDate, filePath, selectPlace, placeInfomation, dday,allowtype);
             allScreenResponseDtoList.add(allScreenResponseDto);
         }
         return allScreenResponseDtoList;
@@ -401,9 +406,9 @@ public class ScreenService {
             LocalDate target = LocalDate.of(LocalDate.now().getYear(), month, day);
             Long countingday = ChronoUnit.DAYS.between(LocalDate.now(), target);
             String dday = countingday.toString();
-
+            boolean allowtype = screen.isAllowtype();
             AllScreenResponseDto allScreenResponseDto =
-                    new AllScreenResponseDto(screenId, title, createdUsername, peopleLimit, canApplyNum, hotPercent, groupDate, filePath, selectPlace, placeInfomation, dday);
+                    new AllScreenResponseDto(screenId, title, createdUsername, peopleLimit, canApplyNum, hotPercent, groupDate, filePath, selectPlace, placeInfomation, dday,allowtype);
             allScreenResponseDtoList.add(allScreenResponseDto);
         }
         return allScreenResponseDtoList;
@@ -435,13 +440,28 @@ public class ScreenService {
             LocalDate target = LocalDate.of(LocalDate.now().getYear(), month, day);
             Long countingday = ChronoUnit.DAYS.between(LocalDate.now(), target);
             String dday = countingday.toString();
-
+            boolean allowtype = screen.isAllowtype();
             AllScreenResponseDto allScreenResponseDto =
-                    new AllScreenResponseDto(screenId, title, createdUsername, peopleLimit, canApplyNum, hotPercent, groupDate, filePath, selectPlace, placeInfomation, dday);
+                    new AllScreenResponseDto(screenId, title, createdUsername, peopleLimit, canApplyNum, hotPercent, groupDate, filePath, selectPlace, placeInfomation, dday,allowtype);
             allScreenResponseDtoList.add(allScreenResponseDto);
         }
         return allScreenResponseDtoList;
     }
 
 
+    @Transactional
+    public String denyScreen(Long screenId, UserDetailsImpl userDetails) {
+        Screen screen = screenRepository.findByScreenId(screenId);
+        if (screen.getScreenCreatedUser().getUserid().equals(userDetails.getUser().getUserid())) {
+            if (screen.isAllowtype()) {
+                screen.setAllowtype(false);
+                return "모임 확정 완료. 이제부터 모집을 하지 못합니다.";
+            } else {
+                screen.setAllowtype(true);
+                return "모임 확정취소 완료. 이제부터 모집을 다시 할 수 있습니다.";
+            }
+        } else {
+            throw new IllegalArgumentException("모임장만 확정이 가능합니다");
+        }
+    }
 }

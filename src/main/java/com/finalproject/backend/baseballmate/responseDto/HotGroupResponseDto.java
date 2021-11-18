@@ -19,6 +19,7 @@ public class HotGroupResponseDto {
     private String filePath;
     private String selectTeam;
     private String dday;
+    private boolean allowtype;
     //프로필 사진
     //등급정보
     //모집중인지 아닌지
