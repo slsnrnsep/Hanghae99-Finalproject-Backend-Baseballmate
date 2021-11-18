@@ -1,19 +1,16 @@
 package com.finalproject.backend.baseballmate.service;
 
-import com.finalproject.backend.baseballmate.OAuth2.KakaoOAuth2;
-import com.finalproject.backend.baseballmate.OAuth2.KakaoUserInfo;
+import com.finalproject.backend.baseballmate.security.OAuth2.KakaoOAuth2;
+import com.finalproject.backend.baseballmate.security.OAuth2.KakaoUserInfo;
 import com.finalproject.backend.baseballmate.model.AddressEnum;
 import com.finalproject.backend.baseballmate.model.User;
 import com.finalproject.backend.baseballmate.repository.UserRepository;
 import com.finalproject.backend.baseballmate.requestDto.*;
-import com.finalproject.backend.baseballmate.responseDto.MsgResponseDto;
-import com.finalproject.backend.baseballmate.responseDto.UserResponseDto;
 import com.finalproject.backend.baseballmate.security.JwtTokenProvider;
 import com.finalproject.backend.baseballmate.security.UserDetailsImpl;
 import com.finalproject.backend.baseballmate.util.MD5Generator;
 import com.finalproject.backend.baseballmate.utils.StringUtils;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -26,7 +23,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.transaction.Transactional;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.MalformedParameterizedTypeException;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.regex.Pattern;
@@ -55,17 +51,18 @@ public class UserService {
         String pattern = "^[a-zA-Z0-9]*$";
 
         password = passwordEncoder.encode(userRequestDto.getPassword());
-//        User user = userRepository.findByPhoneNumber(userRequestDto.getPhonenumber()).orElseThrow(
-//                ()-> new IllegalArgumentException("휴대폰에 맞는 유저정보를 찾을 수 없습니다.")
-//        );
-//        user.setUserid(userid);
-//        user.setUsername(username);
-//        user.setPassword(password);
-//        user.setAddress("전국");
-//        user.setPicture("sample.png");
 
+        User user = userRepository.findByPhoneNumber(userRequestDto.getPhonenumber()).orElseThrow(
+                ()-> new IllegalArgumentException("휴대폰에 맞는 유저정보를 찾을 수 없습니다.")
+        );
+        user.setUserid(userid);
+        user.setUsername(username);
+        user.setPassword(password);
+        user.setPhoneNumber(userRequestDto.getPhonenumber()+"/"+user.getRanNum());
+        user.setAddress("전국");
+        user.setPicture("sample.png");
 
-        User user = new User(userid,username,password, userRequestDto.getPhonenumber());
+//        User user = new User(userid,username,password, userRequestDto.getPhonenumber());
         userRepository.save(user);
 
     }
@@ -118,11 +115,13 @@ public class UserService {
             response.put("password", user.getPassword());
             responseList.add(0, response);
         }
+
         if (StringUtils.isNotBlank(requestDto.getMyteam())) {
             user.setMyselectTeam(requestDto.getMyteam());
             response.put("myteam", user.getMyselectTeam());
             responseList.add(0, response);
         }
+
         if (StringUtils.isNotBlank(requestDto.getSelfIntroduction())){
             user.setSelfIntroduction(requestDto.getSelfIntroduction());
             response.put("selfIntroduction", user.getSelfIntroduction());
@@ -133,6 +132,8 @@ public class UserService {
             response.put("address", user.getAddress());
             responseList.add(0, response);
         }
+
+
         User updatedUser = userRepository.save(user);
 
         // 이미지 파일 확인하기
