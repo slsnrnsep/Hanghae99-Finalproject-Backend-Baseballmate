@@ -23,6 +23,7 @@ public class StompHandler implements ChannelInterceptor {
     private final ChatRoomService chatRoomService;
     private final ChatMessageService chatMessageService;
     private final UserRepository userRepository;
+    private final AllChatInfoService allChatInfoService;
 
     // 최초로 받은 클라이언트의 메시지를 인터셉트하여 처리
     @Override
@@ -43,7 +44,7 @@ public class StompHandler implements ChannelInterceptor {
         } else if (StompCommand.SUBSCRIBE == accessor.getCommand()) {
             // 헤더의 구독 destination에서 roomid 빼오기
             System.out.println("구독 요청");
-            String roomId = chatService.getRoomId(Optional.ofNullable((String)message.getHeaders().get("simpDestination")).orElse("InvalidRoomId"));
+            String roomId = chatMessageService.getRoomId(Optional.ofNullable((String)message.getHeaders().get("simpDestination")).orElse("InvalidRoomId"));
             // 채팅방을 구독한 클라이언트 sessionId를 roomId와 맵핑 -> 후에 어떤 채팅방에 어떤 세션이 있는지 알기 위함
             System.out.println("해당 룸 ID:" +roomId);
             String sessionId = (String) message.getHeaders().get("simpSessionId");
@@ -60,6 +61,7 @@ public class StompHandler implements ChannelInterceptor {
             } else {
                 throw new IllegalArgumentException("유효하지 않는 token입니다.");
             }
+            // 유저 인덱스 추출
             Long userId = user.getId();
             chatRoomService.setUserEnterInfo(sessionId, roomId, userId);
             chatMessageService.sendChatMessage(ChatMessage.builder()

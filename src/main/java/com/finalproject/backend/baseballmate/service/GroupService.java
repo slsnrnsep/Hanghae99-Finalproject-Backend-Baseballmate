@@ -1,5 +1,6 @@
 package com.finalproject.backend.baseballmate.service;
 
+import com.finalproject.backend.baseballmate.chat.ChatRoomService;
 import com.finalproject.backend.baseballmate.model.*;
 import com.finalproject.backend.baseballmate.repository.*;
 import com.finalproject.backend.baseballmate.requestDto.GroupRequestDto;
@@ -32,6 +33,7 @@ public class GroupService {
     private final CanceledListRepository canceledListRepository;
     private final GroupCommentRepository groupCommentRepository;
     private String commonPath = "/images"; // 파일 저장할 기본 경로 변수 설정, 초기화
+    private final ChatRoomService chatRoomService;
 
     // 모임 전체 조회(등록 순)
     public List<AllGroupResponseDto> getAllGroups() {
@@ -568,6 +570,8 @@ public class GroupService {
         if (group.getCreatedUser().getUserid().equals(userDetails.getUser().getUserid())) {
             if (group.isAllowtype()) {
                 group.setAllowtype(false);
+                // 확정되면 채팅방 형성되게
+//                chatRoomService.createChatRoom(userDetails.getUser());
                 return "모임 확정 완료. 이제부터 모집을 하지 못합니다.";
             } else {
                 group.setAllowtype(true);

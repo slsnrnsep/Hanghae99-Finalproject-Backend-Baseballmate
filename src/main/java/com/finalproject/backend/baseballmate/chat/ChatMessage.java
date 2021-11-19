@@ -2,15 +2,15 @@ package com.finalproject.backend.baseballmate.chat;
 
 import com.finalproject.backend.baseballmate.model.User;
 import com.finalproject.backend.baseballmate.service.UserService;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Getter
 @Setter
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 public class ChatMessage {
     // 메시지 타입 : 입장, 채팅, 퇴장
     public enum MessageType {
@@ -18,7 +18,7 @@ public class ChatMessage {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column
@@ -32,7 +32,7 @@ public class ChatMessage {
     private String message; // 메시지
 
     @ManyToOne
-    private User sender; // 메시지 보낸 우저의 인덱스
+    private User sender; // 메시지 보낸 유저의 인덱스
 
     @Column
     private String userEmail; // 메시지 보낸 사람의 이름

@@ -1,7 +1,6 @@
 package com.finalproject.backend.baseballmate.chat;
 
 import com.finalproject.backend.baseballmate.model.Group;
-import com.finalproject.backend.baseballmate.model.Timestamped;
 import com.finalproject.backend.baseballmate.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,7 +9,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.UUID;
 
 @Getter
 @Setter
@@ -33,7 +31,7 @@ public class ChatRoom implements Serializable {
     private String roomName;
 
     @Column
-    private Long ownUserId;
+    private Long ownUserId; //방장 인덱스스
 
     @Column
     private int userCount; //채팅방 인원수
