@@ -32,6 +32,7 @@ public class GroupService {
     private final CanceledListRepository canceledListRepository;
     private final GroupCommentRepository groupCommentRepository;
     private String commonPath = "/images"; // 파일 저장할 기본 경로 변수 설정, 초기화
+    private final AlarmService alarmService;
 
     // 모임 전체 조회(등록 순)
     public List<AllGroupResponseDto> getAllGroups() {
@@ -401,6 +402,9 @@ public class GroupService {
         // 참여 신청 들어온 groupid에 해당하는 그룹을 찾기
         Group appliedGroup = groupRepository.findByGroupId(groupId);
 
+
+        Group group = new Group();
+        User user = new User();
 //        List<User> canceledUserList = appliedGroup.getCanceledUser();
 //        List<Long> canceledUserInxList = new ArrayList<>();
 //        for (int i=0; i< canceledUserList.size(); i++) {
@@ -414,6 +418,7 @@ public class GroupService {
             throw new IllegalArgumentException("로그인 한 사용자만 신청할 수 있습니다.");
         } else {
             User loginedUser = userDetails.getUser();
+
             GroupApplication groupApplication = groupApplicationRepository.findByAppliedGroupAndAppliedUser(appliedGroup, loginedUser);
             // 모임에 대한 해당 참가자의 참가 이력이 없고, 모임을 만든 사람이 아닌 유저가 참가 신청하는 경우 -> 이 경우만 참가 신청 가능
             if ((groupApplication == null) && (!Objects.equals(loginedUser.getUserid(), appliedGroup.getCreatedUser().getUserid()))) {
@@ -450,6 +455,8 @@ public class GroupService {
                             int peopleLimit = application.getAppliedGroup().getPeopleLimit();
                             double updatedHotPercent = ((double) updatedAppliedNum / (double) peopleLimit * 100.0);
                             application.getAppliedGroup().setHotPercent(updatedHotPercent);
+
+
                         }
                     }
                 } else {
@@ -472,6 +479,9 @@ public class GroupService {
                     int peopleLimit = application1.getAppliedGroup().getPeopleLimit();
                     double updatedHotPercent = ((double) updatedAppliedNum / (double) peopleLimit * 100.0);
                     application1.getAppliedGroup().setHotPercent(updatedHotPercent);
+
+//                    String commentAlarm = loginedUser + "님 께서" + group.getTitle() + "모임에 지원하셨습니다";
+//                    alarmService.alarmAppliedUser(commentAlarm, group, user);
                 }
 
             } else {
