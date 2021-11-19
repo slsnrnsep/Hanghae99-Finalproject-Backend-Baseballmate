@@ -1,7 +1,6 @@
-package com.finalproject.backend.baseballmate.OAuth2;
+package com.finalproject.backend.baseballmate.security.OAuth2;
 
 import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -45,7 +44,7 @@ public class KakaoOAuth2 {
 
         //프론트 로컬 용
         params.add("redirect_uri", "http://localhost:3000/user/kakao/callback");
-
+        params.add("redirect_uri", "http://meetball.shop/");
         //최종 배포용
 //        params.add("redirect_uri", "");
         //백엔드 로컬 테스트용

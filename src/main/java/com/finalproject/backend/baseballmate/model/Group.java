@@ -5,6 +5,7 @@ import com.finalproject.backend.baseballmate.requestDto.GroupRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.web.bind.annotation.CookieValue;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -65,6 +66,9 @@ public class Group extends Timestamped{
 
     @Column
     private String selectTeam;
+
+    @Column
+    private boolean allowtype;
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "userIndex")
 //    private User userIndex; // user테이블의 id값
@@ -113,6 +117,7 @@ public class Group extends Timestamped{
         this.createdUsername = loginedUser.getUsername();
         this.filePath = requestDto.getFilePath();
         this.selectTeam = requestDto.getSelectTeam();
+        this.allowtype = true;
     }
 
     // 모임글 수정 메소드

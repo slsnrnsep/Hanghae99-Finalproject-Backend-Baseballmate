@@ -22,6 +22,9 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -64,8 +67,8 @@ public class MainController {
     }
     //내가 응원하는 구단의 가장 최근 경기 일정 조회
     @GetMapping(path="/kbodatas",params = "team")
-    public List<MatchInfomation> getmyteamSchedule(@RequestParam("team") String myteam)
-    {
+    public List<MatchInfomation> getmyteamSchedule(@RequestParam("team") String myteam) throws UnsupportedEncodingException {
+        URLDecoder.decode(myteam,"UTF-8");
         return matchDataService.myteamselect(myteam);
     }
 
@@ -77,11 +80,18 @@ public class MainController {
         System.out.println("업데이트가 실행되었습니다.매 시각 30분마다 한번");
         return "업데이트에 성공하였습니다. 데이터를 다시 조회해보세요";
     }
-
     //지금 핫한 모임 목록 조회(내가 응원하는 구단의 모임 + 잔여인원 적은 순으로 정렬)
     @GetMapping("/groups/hotgroup")
     public List<HotGroupResponseDto> getHotGroupList() {
-        List<HotGroupResponseDto> hotGroupResponseDtoList = groupService.getHotGroups();
+        List<HotGroupResponseDto> hotGroupResponseDtoList = groupService.getHotGroups2();
+        return hotGroupResponseDtoList;
+    }
+
+    //내가 응원하는 구단의 모임에서 핫한거만 출력
+    @GetMapping(path="/groups/hotgroup",params = "team")
+    public List<HotGroupResponseDto> getHotGroupList(@RequestParam("team") String myteam) throws UnsupportedEncodingException {
+        URLDecoder.decode(myteam,"UTF-8");
+        List<HotGroupResponseDto> hotGroupResponseDtoList = groupService.getHotGroups(myteam);
         return hotGroupResponseDtoList;
     }
 

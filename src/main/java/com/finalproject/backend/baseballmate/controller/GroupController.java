@@ -20,8 +20,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import java.util.Random;
 
 @RequiredArgsConstructor
 @RestController
@@ -30,7 +33,8 @@ public class GroupController {
     private final GroupService groupService;
     private final GroupRepository groupRepository;
     private String commonPath = "/images";
-
+    String[] picturelist = {"basic0.jpg","basic1.jpg","basic2.jpg","basic3.jpg","basic4.jpg","basic5.jpg","basic6.jpg","basic7.jpg","basic8.jpg","basic9.jpg"};
+    Random random = new Random();
 
     // 모임페이지 전체 조회 :
     @GetMapping("/groups")
@@ -42,9 +46,9 @@ public class GroupController {
 
     // 구단별 모임 조회
     @GetMapping(path="/groups",params = "team")
-    public List<AllGroupResponseDto> showGroupsByTeam (@RequestParam("team") String selectTeam)
-    {
+    public List<AllGroupResponseDto> showGroupsByTeam (@RequestParam("team") String selectTeam) throws UnsupportedEncodingException {
         PageRequest pageRequest = PageRequest.of(0,10, Sort.by(Sort.Direction.DESC,"createdAt"));
+        URLDecoder.decode(selectTeam,"UTF-8");
         List<AllGroupResponseDto> groupResponseDtos = groupService.showGroupsByTeam(selectTeam,pageRequest);
         return groupResponseDtos;
 
@@ -64,7 +68,7 @@ public class GroupController {
         }
         try
         {
-            String filename = "basic.jpg";
+            String filename = picturelist[random.nextInt(10)+1];
             if (file != null) {
                 String origFilename = file.getOriginalFilename();
                 filename = new MD5Generator(origFilename).toString() + ".jpg";
@@ -106,6 +110,14 @@ public class GroupController {
     {
         GroupDetailResponseDto detailResponseDto = groupService.getGroupDetail(groupId);
         return detailResponseDto;
+    }
+
+    //모임 확정내기
+    @PatchMapping("/groups/{groupId}/applications")
+    public MsgResponseDto denyGroup(@PathVariable Long groupId, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        String msg = groupService.denyGroup(groupId, userDetails);
+        MsgResponseDto msgResponseDto = new MsgResponseDto("success", msg);
+        return msgResponseDto;
     }
 
     // 모임 참여신청하기

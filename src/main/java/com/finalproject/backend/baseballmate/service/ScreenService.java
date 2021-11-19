@@ -1,14 +1,10 @@
 package com.finalproject.backend.baseballmate.service;
 
 import com.finalproject.backend.baseballmate.model.*;
-import com.finalproject.backend.baseballmate.repository.CanceledScreenListRepository;
-import com.finalproject.backend.baseballmate.repository.ScreenApplicationRepository;
-import com.finalproject.backend.baseballmate.repository.ScreenCommentRepository;
-import com.finalproject.backend.baseballmate.repository.ScreenRepository;
-import com.finalproject.backend.baseballmate.requestDto.AllScreenResponseDto;
-import com.finalproject.backend.baseballmate.requestDto.GroupRequestDto;
-import com.finalproject.backend.baseballmate.requestDto.ScreenRequestDto;
+import com.finalproject.backend.baseballmate.repository.*;
 import com.finalproject.backend.baseballmate.responseDto.AllGroupResponseDto;
+import com.finalproject.backend.baseballmate.responseDto.AllScreenResponseDto;
+import com.finalproject.backend.baseballmate.requestDto.ScreenRequestDto;
 import com.finalproject.backend.baseballmate.responseDto.ScreenDetailResponseDto;
 import com.finalproject.backend.baseballmate.security.UserDetailsImpl;
 import com.finalproject.backend.baseballmate.util.MD5Generator;
@@ -33,6 +29,7 @@ public class ScreenService {
     private final ScreenRepository screenRepository;
     private final ScreenApplicationRepository screenApplicationRepository;
     private final ScreenCommentRepository screenCommentRepository;
+    private final ScreenLikesRepository screenLikesRepository;
     private String commonPath = "/images";
 
     private final CanceledScreenListRepository canceledScreenListRepository;
@@ -40,7 +37,7 @@ public class ScreenService {
 
     @Transactional
     public Screen createScreen(ScreenRequestDto requestDto, User loginedUser) {
-        Screen screen = new Screen(requestDto,loginedUser);
+        Screen screen = new Screen(requestDto, loginedUser);
         screenRepository.save(screen);
         return screen;
     }
@@ -49,7 +46,7 @@ public class ScreenService {
     public List<AllScreenResponseDto> getAllScreens() {
         List<Screen> screenList = screenRepository.findAllByOrderByCreatedAtDesc();
         List<AllScreenResponseDto> allScreenResponseDtos = new ArrayList<>();
-        for(int i=0; i<screenList.size(); i++){
+        for (int i = 0; i < screenList.size(); i++) {
             Screen screen = screenList.get(i);
 
             Long screenId = screen.getScreenId();
@@ -64,12 +61,12 @@ public class ScreenService {
             String placeInfomation = screen.getPlaceInfomation();
             int month = Integer.parseInt(screen.getGroupDate().split("[.]")[0]);
             int day = Integer.parseInt(screen.getGroupDate().split("[.]")[1].split(" ")[0]);
-            LocalDate target = LocalDate.of(LocalDate.now().getYear(),month,day);
-            Long countingday = ChronoUnit.DAYS.between(LocalDate.now(),target);
+            LocalDate target = LocalDate.of(LocalDate.now().getYear(), month, day);
+            Long countingday = ChronoUnit.DAYS.between(LocalDate.now(), target);
             String dday = countingday.toString();
-
+            boolean allowtype = screen.isAllowtype();
             AllScreenResponseDto allScreenResponseDto =
-                    new AllScreenResponseDto(screenId, title, createdUsername, peopleLimit, canApplyNum , hotPercent, groupDate, filePath, selectPlace,placeInfomation,dday);
+                    new AllScreenResponseDto(screenId, title, createdUsername, peopleLimit, canApplyNum, hotPercent, groupDate, filePath, selectPlace, placeInfomation, dday,allowtype);
             allScreenResponseDtos.add(allScreenResponseDto);
         }
         return allScreenResponseDtos;
@@ -77,10 +74,10 @@ public class ScreenService {
 
     public List<AllScreenResponseDto> showScreenByregion(String location, Pageable pageable) {
 //        PageRequest
-        Page<Screen> grouppage = screenRepository.findByPlaceInfomation(location,pageable);
+        Page<Screen> grouppage = screenRepository.findByPlaceInfomation(location, pageable);
         List<AllScreenResponseDto> allScreenResponseDtos = new ArrayList<>();
-        List<Screen> groupList=grouppage.getContent();
-        for(int i=0; i<groupList.size(); i++) {
+        List<Screen> groupList = grouppage.getContent();
+        for (int i = 0; i < groupList.size(); i++) {
             Screen group = groupList.get(i);
 
             Long groupId = group.getScreenId();
@@ -96,12 +93,12 @@ public class ScreenService {
 
             int month = Integer.parseInt(group.getGroupDate().split("[.]")[0]);
             int day = Integer.parseInt(group.getGroupDate().split("[.]")[1].split(" ")[0]);
-            LocalDate target = LocalDate.of(LocalDate.now().getYear(),month,day);
-            Long countingday = ChronoUnit.DAYS.between(LocalDate.now(),target);
+            LocalDate target = LocalDate.of(LocalDate.now().getYear(), month, day);
+            Long countingday = ChronoUnit.DAYS.between(LocalDate.now(), target);
             String dday = countingday.toString();
-
+            boolean allowtype = group.isAllowtype();
             AllScreenResponseDto allGroupResponseDto =
-                    new AllScreenResponseDto(groupId, title, createdUsername, peopleLimit, canApplyNum, hotPercent, groupDate, filePath, selectPlace,placeInfomation,dday);
+                    new AllScreenResponseDto(groupId, title, createdUsername, peopleLimit, canApplyNum, hotPercent, groupDate, filePath, selectPlace, placeInfomation, dday,allowtype);
 
             allScreenResponseDtos.add(allGroupResponseDto);
         }
@@ -115,8 +112,7 @@ public class ScreenService {
         Screen screen = screenRepository.findByScreenId(id);
         List<Map<String, String>> appliedUsers = new ArrayList<>();
 
-        if(screen.getScreenApplications().size()!=0)
-        {
+        if (screen.getScreenApplications().size() != 0) {
             // 참여자 정보 리스트 만들기
             for (int i = 0; i < screen.getScreenApplications().size(); i++) {
                 ScreenApplication screenApplication = screen.getScreenApplications().get(i);
@@ -146,18 +142,20 @@ public class ScreenService {
         double hotPercent = screen.getHotPercent();
         String groupDate = screen.getGroupDate();
         String filePath = screen.getFilePath();
-        List<ScreenComment> screenCommentList = screenCommentRepository.findAllByScreenScreenIdOrderByCreatedAt(id);
+        String placeInfomation = screen.getPlaceInfomation();
+        List<ScreenComment> screenCommentList = screenCommentRepository.findAllByScreenScreenIdOrderByModifiedAtDesc(id);
         List<Map<String, String>> appliedUserInfo = appliedUsers;
 
         // D - day 계산
         int month = Integer.parseInt(screen.getGroupDate().split("[.]")[0]);
         int day = Integer.parseInt(screen.getGroupDate().split("[.]")[1].split(" ")[0]);
-        LocalDate target = LocalDate.of(LocalDate.now().getYear(),month,day);
-        Long countingday = ChronoUnit.DAYS.between(LocalDate.now(),target);
+        LocalDate target = LocalDate.of(LocalDate.now().getYear(), month, day);
+        Long countingday = ChronoUnit.DAYS.between(LocalDate.now(), target);
         String dday = countingday.toString();
-
+        boolean allowtype = screen.isAllowtype();
         ScreenDetailResponseDto screenDetailResponseDto =
-                new ScreenDetailResponseDto(screenId, createdUsername, createdUserId, createdUserProfileImg, title,content, peopleLimit, nowAppliedNum, canApplyNum, hotPercent, groupDate, filePath,dday,appliedUserInfo,screenCommentList);
+                new ScreenDetailResponseDto(screenId, createdUsername, createdUserId, createdUserProfileImg, title,content, peopleLimit, nowAppliedNum, canApplyNum, hotPercent, groupDate, filePath,dday,placeInfomation,allowtype,appliedUserInfo,screenCommentList);
+
         return screenDetailResponseDto;
     }
 
@@ -168,27 +166,34 @@ public class ScreenService {
         String createdUserId = "";
 
         Screen screen = screenRepository.findByScreenId(screenId);
-        if(screen != null){
+        if (screen != null) {
             createdUserId = screen.getScreenCreatedUser().getUserid();
 
-            if(!loginedUserId.equals(createdUserId)){
+            if (!loginedUserId.equals(createdUserId)) {
                 throw new IllegalArgumentException("삭제 권한이 없습니다");
             }
             screenRepository.deleteById(screenId);
-        }else {
+        } else {
             throw new IllegalArgumentException("해당 게시글이 존재하지 않습니다");
         }
     }
+
     // 스크린 야구 모임 참여하기
     @Transactional
     public void applyScreen(Long screenId, UserDetailsImpl userDetails) {
 //        List<User> cancleUserList = appliedScreen.getCanceledUser();
         Screen appliedScreen = screenRepository.findByScreenId(screenId);
 
+        if(!appliedScreen.isAllowtype())
+        {
+            throw new IllegalArgumentException("모임이 모집을 마감하였습니다.");
+        }
+
         if (userDetails == null) {
             throw new IllegalArgumentException("로그인 한 사용자만 신청할 수 있습니다.");
         } else {
             User loginedUser = userDetails.getUser();
+
         ScreenApplication screenApplication = screenApplicationRepository.findByAppliedScreenAndAndAppliedUser(appliedScreen, loginedUser);
         // 모임에 대한 해당 참가자의 참가 이력이 없고, 모임을 만든 사람이 아닌 유저가 참가 신청하는 경우 -> 이 경우만 참가 신청 가능
         if((screenApplication == null) && (!Objects.equals(loginedUser.getUserid(), appliedScreen.getScreenCreatedUser().getUserid()))){
@@ -198,7 +203,7 @@ public class ScreenService {
             if(canceledScreenLists.size() != 0) {
                 for(int i=0; i<canceledScreenLists.size(); i++){
                     CanceledScreenList canceledScreenList = canceledScreenLists.get(i);
-                    if(canceledScreenList.getCanceledUser().getId() == loginedUser.getId()){
+                    if(canceledScreenList.getCanceledUser().getId().equals(loginedUser.getId())){
                         throw new IllegalArgumentException("모임 취소후 재참가는 불가합니다");
                         }
                     else {
@@ -212,6 +217,12 @@ public class ScreenService {
                         int nowCanApplyNum = application.getAppliedScreen().getCanApplyNum();
                         int updatedCanApplyNum = nowCanApplyNum - 1;
                         application.getAppliedScreen().setCanApplyNum(updatedCanApplyNum);
+
+                        // 인기도 값 수정
+                        int peopleLimit = application.getAppliedScreen().getPeopleLimit();
+                        double updatedHotPercent = ((double) updateAppliedNum / (double) peopleLimit * 100.0);
+                        application.getAppliedScreen().setHotPercent(updatedHotPercent);
+
                         }
                     }
                 } else {
@@ -226,14 +237,17 @@ public class ScreenService {
                     int nowCanApplyNum = application1.getAppliedScreen().getCanApplyNum();
                     int updatedCanApplyNum = nowCanApplyNum - 1;
                     application1.getAppliedScreen().setCanApplyNum(updatedCanApplyNum);
+
+                    // 인기도 값 수정
+                    int peopleLimit = application1.getAppliedScreen().getPeopleLimit();
+                    double updatedHotPercent = ((double) updateAppliedNum / (double) peopleLimit * 100.0);
+                    application1.getAppliedScreen().setHotPercent(updatedHotPercent);
                 }
             } else {
-            throw new IllegalArgumentException("모임을 만들었거나 참가이력이 있습니다."); // 모임을 만든 사람이 요청하는 경우 or 참가 이력이 있는 경우
+                throw new IllegalArgumentException("모임을 만들었거나 참가이력이 있습니다."); // 모임을 만든 사람이 요청하는 경우 or 참가 이력이 있는 경우
             }
         }
     }
-
-
 
 
     @Transactional
@@ -243,14 +257,25 @@ public class ScreenService {
         User loginedUser = userDetails.getUser();
         Long loginedUserIndex = userDetails.getUser().getId();
 
+        List<Long> testlist = new ArrayList<>();
+
+        for(int j=0; j<screenApplicationList.size();j++)
+        {
+            testlist.add(screenApplicationList.get(j).getAppliedUser().getId());
+        }
+
+        if(!testlist.contains(loginedUserIndex))
+        {
+            throw new IllegalArgumentException("참여신청 기록이 없습니다.");
+        }
+
         for (int i = 0; i < screenApplicationList.size(); i++) {
             // 참가 신청 취소를 요청한 screenId를 가진 groupapplication하나씩 빼오기
             ScreenApplication screenApplication = screenApplicationList.get(i);
             // 참가 신청 취소를 요청하는 모임에 대한 신청 내역들이 있고
-            if (screenApplication != null) {
-                Long appliedUserIndex = screenApplication.getAppliedUser().getId();
+            if (screenApplication != null && screenApplication.getAppliedUser().getId().equals(loginedUserIndex)) {
+
                 // 로그인 한 유저가 참가 신청을 했던 유저와 같다면
-                if (loginedUserIndex == appliedUserIndex) {
                     // 현재 참여 신청 인원 1 감소
                     int nowAppliedNum = screenApplication.getAppliedScreen().getNowAppliedNum();
                     int updatedAppliedNum = nowAppliedNum - 1;
@@ -262,9 +287,9 @@ public class ScreenService {
                     screenApplication.getAppliedScreen().setCanApplyNum(updatedCanApplyNum);
 
                     // 인기도 값 수정
-//                    int peopleLimit = screenApplication.getAppliedScreen().getPeopleLimit();
-//                    double updatedHotPercent = ((double) updatedAppliedNum / (double) peopleLimit * 100.0);
-//                    screenApplication.getAppliedScreen().setHotPercent(updatedHotPercent);
+                    int peopleLimit = screenApplication.getAppliedScreen().getPeopleLimit();
+                    double updatedHotPercent = ((double) updatedAppliedNum / (double) peopleLimit * 100.0);
+                    screenApplication.getAppliedScreen().setHotPercent(updatedHotPercent);
 
                     // 참가 신청 이력 삭제하기
                     screenApplicationRepository.delete(screenApplication);
@@ -272,19 +297,15 @@ public class ScreenService {
                     // 취소 리스트에 추가하기
                     CanceledScreenList canceledScreenList = new CanceledScreenList(loginedUser, screen);
                     canceledScreenListRepository.save(canceledScreenList);
-                    } else {
-                        throw new NullPointerException("참가 신청 이력이 존재하지 않습니다."); // '참가 신청을 했던 유저가 아님'을 의미
-                    }
-                } else {
-                    throw new NullPointerException("참가 신청 이력이 존재하지 않습니다."); // 'group에 참가 신청을 한 사람이 없음'을 의미
-            }
+
+                }
         }
     }
 
 
     public void updateScreen(Long screenId, MultipartFile file, ScreenRequestDto requestDto, UserDetailsImpl userDetails) throws UnsupportedEncodingException, NoSuchAlgorithmException {
         // 유저 로그인 체크
-        if(userDetails == null) {
+        if (userDetails == null) {
             throw new IllegalArgumentException("로그인 하신 후 이용해주세요.");
         }
 
@@ -292,10 +313,10 @@ public class ScreenService {
         String createdUserId = "";
 
         Screen screen = screenRepository.findByScreenId(screenId);
-        if(screen != null) {
+        if (screen != null) {
             createdUserId = screen.getScreenCreatedUser().getUserid();
 
-            if(!loginedUserId.equals(createdUserId)) {
+            if (!loginedUserId.equals(createdUserId)) {
                 throw new IllegalArgumentException("수정 권한이 없습니다.");
             }
             if (file != null) {
@@ -315,7 +336,7 @@ public class ScreenService {
 
                 // 이미지 파일 저장
                 String filePath = savePath + "/" + filename;
-                try{
+                try {
                     file.transferTo(new File(filePath));
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -330,4 +351,117 @@ public class ScreenService {
         }
     }
 
+    public List<AllScreenResponseDto> getMywriteAllScreens(User userdetail) {
+        List<Screen> screenList = screenRepository.findAllByScreenCreatedUser(userdetail);
+        List<AllScreenResponseDto> allScreenResponseDtoList = new ArrayList<>();
+        for (int i = 0; i < screenList.size(); i++) {
+            Screen screen = screenList.get(i);
+
+            Long screenId = screen.getScreenId();
+            String title = screen.getTitle();
+            String createdUsername = screen.getCreatedUsername();
+            int peopleLimit = screen.getPeopleLimit();
+            int canApplyNum = screen.getCanApplyNum();
+            double hotPercent = screen.getHotPercent();
+            String groupDate = screen.getGroupDate();
+            String filePath = screen.getFilePath();
+            String selectPlace = screen.getSelectPlace();
+            String placeInfomation = screen.getPlaceInfomation();
+            int month = Integer.parseInt(screen.getGroupDate().split("[.]")[0]);
+            int day = Integer.parseInt(screen.getGroupDate().split("[.]")[1].split(" ")[0]);
+            LocalDate target = LocalDate.of(LocalDate.now().getYear(), month, day);
+            Long countingday = ChronoUnit.DAYS.between(LocalDate.now(), target);
+            String dday = countingday.toString();
+            boolean allowtype = screen.isAllowtype();
+            AllScreenResponseDto allScreenResponseDto =
+                    new AllScreenResponseDto(screenId, title, createdUsername, peopleLimit, canApplyNum, hotPercent, groupDate, filePath, selectPlace, placeInfomation, dday,allowtype);
+            allScreenResponseDtoList.add(allScreenResponseDto);
+        }
+        return allScreenResponseDtoList;
+    }
+
+    // 내가 참여한 모임 조회
+    public List<AllScreenResponseDto> getMyapplicationAllScreens(User userdetail) {
+        List<Screen> screenList = new ArrayList<>();
+        List<ScreenApplication> myscreenApplicationList = screenApplicationRepository.findAllByAppliedUser(userdetail);
+        for (int i = 0; i < myscreenApplicationList.size(); i++) {
+            screenList.add(myscreenApplicationList.get(i).getAppliedScreen());
+        }
+        List<AllScreenResponseDto> allScreenResponseDtoList = new ArrayList<>();
+        for (int i = 0; i < screenList.size(); i++) {
+            Screen screen = screenList.get(i);
+
+            Long screenId = screen.getScreenId();
+            String title = screen.getTitle();
+            String createdUsername = screen.getCreatedUsername();
+            int peopleLimit = screen.getPeopleLimit();
+            int canApplyNum = screen.getCanApplyNum();
+            double hotPercent = screen.getHotPercent();
+            String groupDate = screen.getGroupDate();
+            String filePath = screen.getFilePath();
+            String selectPlace = screen.getSelectPlace();
+            String placeInfomation = screen.getPlaceInfomation();
+            int month = Integer.parseInt(screen.getGroupDate().split("[.]")[0]);
+            int day = Integer.parseInt(screen.getGroupDate().split("[.]")[1].split(" ")[0]);
+            LocalDate target = LocalDate.of(LocalDate.now().getYear(), month, day);
+            Long countingday = ChronoUnit.DAYS.between(LocalDate.now(), target);
+            String dday = countingday.toString();
+            boolean allowtype = screen.isAllowtype();
+            AllScreenResponseDto allScreenResponseDto =
+                    new AllScreenResponseDto(screenId, title, createdUsername, peopleLimit, canApplyNum, hotPercent, groupDate, filePath, selectPlace, placeInfomation, dday,allowtype);
+            allScreenResponseDtoList.add(allScreenResponseDto);
+        }
+        return allScreenResponseDtoList;
+    }
+
+    public List<AllScreenResponseDto> getMylikeAllScreens(User userdetail) {
+        List<Screen> screenList = new ArrayList<>();
+        List<ScreenLikes> myscreenlikeslist = screenLikesRepository.findAllByUserId(userdetail.getId());
+        for(int i = 0; i<myscreenlikeslist.size(); i++)
+        {
+            screenList.add(myscreenlikeslist.get(i).getScreenlikes());
+        }
+        List<AllScreenResponseDto> allScreenResponseDtoList = new ArrayList<>();
+        for (int i = 0; i < screenList.size(); i++) {
+            Screen screen = screenList.get(i);
+
+            Long screenId = screen.getScreenId();
+            String title = screen.getTitle();
+            String createdUsername = screen.getCreatedUsername();
+            int peopleLimit = screen.getPeopleLimit();
+            int canApplyNum = screen.getCanApplyNum();
+            double hotPercent = screen.getHotPercent();
+            String groupDate = screen.getGroupDate();
+            String filePath = screen.getFilePath();
+            String selectPlace = screen.getSelectPlace();
+            String placeInfomation = screen.getPlaceInfomation();
+            int month = Integer.parseInt(screen.getGroupDate().split("[.]")[0]);
+            int day = Integer.parseInt(screen.getGroupDate().split("[.]")[1].split(" ")[0]);
+            LocalDate target = LocalDate.of(LocalDate.now().getYear(), month, day);
+            Long countingday = ChronoUnit.DAYS.between(LocalDate.now(), target);
+            String dday = countingday.toString();
+            boolean allowtype = screen.isAllowtype();
+            AllScreenResponseDto allScreenResponseDto =
+                    new AllScreenResponseDto(screenId, title, createdUsername, peopleLimit, canApplyNum, hotPercent, groupDate, filePath, selectPlace, placeInfomation, dday,allowtype);
+            allScreenResponseDtoList.add(allScreenResponseDto);
+        }
+        return allScreenResponseDtoList;
+    }
+
+
+    @Transactional
+    public String denyScreen(Long screenId, UserDetailsImpl userDetails) {
+        Screen screen = screenRepository.findByScreenId(screenId);
+        if (screen.getScreenCreatedUser().getUserid().equals(userDetails.getUser().getUserid())) {
+            if (screen.isAllowtype()) {
+                screen.setAllowtype(false);
+                return "모임 확정 완료. 이제부터 모집을 하지 못합니다.";
+            } else {
+                screen.setAllowtype(true);
+                return "모임 확정취소 완료. 이제부터 모집을 다시 할 수 있습니다.";
+            }
+        } else {
+            throw new IllegalArgumentException("모임장만 확정이 가능합니다");
+        }
+    }
 }

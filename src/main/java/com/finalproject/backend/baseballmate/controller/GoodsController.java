@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.text.ParseException;
 import java.util.List;
+import java.util.Random;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,25 +31,22 @@ public class GoodsController {
     private final GoodsService goodsService;
     private String commonPath = "/images";
     private final FileService fileService;
-
+    String[] picturelist = {"basic0.jpg","basic1.jpg","basic2.jpg","basic3.jpg","basic4.jpg","basic5.jpg","basic6.jpg","basic7.jpg","basic8.jpg","basic9.jpg"};
+    Random random = new Random();
     // 굿즈생성
     @PostMapping("/goods")
     public GoodsResponseDto postGoods(
-
-            @RequestParam(value = "file",required = false) MultipartFile files,
-
-            GoodsRequestDto requestDto)
-//            @AuthenticationPrincipal UserDetailsImpl userDetails)
-    {
-//        if(userDetails == null)
-//        {
-//            throw new IllegalArgumentException("로그인 한 사용자만 등록 가능합니다");
-//        }
+            @RequestPart(value = "file",required = false) MultipartFile files,
+            @RequestPart GoodsRequestDto requestDto,
+            @AuthenticationPrincipal UserDetailsImpl userDetails){
+        if(userDetails == null)
+        {
+            throw new IllegalArgumentException("로그인 한 사용자만 등록 가능합니다");
+        }
 
         try
         {
-
-            String filename = "basic.jpg";
+            String filename = picturelist[random.nextInt(10)+1];
             if (files != null) {
                 String origFilename = files.getOriginalFilename();
                 filename = new MD5Generator(origFilename).toString() + ".jpg";
@@ -64,16 +62,15 @@ public class GoodsController {
                         e.getStackTrace();
                     }
                 }
-                String filePath = savePath + "\\" + filename;// 이경로는 우분투랑 윈도우랑 다르니까 주의해야댐 우분투 : / 윈도우 \\ 인것같음.
+                String filePath = savePath + "/" + filename;// 이경로는 우분투랑 윈도우랑 다르니까 주의해야댐 우분투 : / 윈도우 \\ 인것같음.
                 files.transferTo(new File(filePath));
             }
-            requestDto.setGoodsImg(filename);
-
-//            User loginUser = userDetails.getUser();
-//            String loginedUsername = userDetails.getUser().getUsername();
-            User loginUser = userRepository.findByUsername("aaa").orElseThrow(
-                    ()-> new IllegalArgumentException("유저찾을수 없슴")
-            );
+            requestDto.setFilePath(filename);
+            User loginUser = userDetails.getUser();
+            String loginedUsername = userDetails.getUser().getUsername();
+//            User loginUser = userRepository.findByUsername("aaa").orElseThrow(
+//                    ()-> new IllegalArgumentException("유저찾을수 없슴")
+//            );
             goodsService.createGoods(loginUser, requestDto);
             GoodsResponseDto goodsResponseDto = new GoodsResponseDto("success","등록완료");
             return goodsResponseDto;

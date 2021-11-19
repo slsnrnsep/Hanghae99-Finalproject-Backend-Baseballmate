@@ -83,17 +83,40 @@ public class UserContorller {
     @RequestMapping(value = "/users/{id}", method = RequestMethod.PATCH, consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public List<Map<String, String>> updateUserInfo(
             @PathVariable("id") Long id,
-            @RequestPart(required = false) UserUpdateRequestDto requestDto,
             @RequestPart(required = false, value = "file") MultipartFile file,
+            UserUpdateRequestDto requestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails) throws UnsupportedEncodingException, NoSuchAlgorithmException {
 
 
         List<Map<String, String>> responseList = userService.partialUpdateUserInfo(id, file, requestDto, userDetails);
+
         return responseList;
 
     }
 
+    @PostMapping("/user/myteam")
+    public MyteamRequestDto selectMyteam(@RequestBody MyteamRequestDto myteam, @AuthenticationPrincipal UserDetailsImpl userDetails)
+    {
+        if(userDetails == null)
+        {
+            throw new IllegalArgumentException("로그인 한 사용자만 사용 가능합니다");
+        }
 
+        User user = userRepository.findByUserid(userDetails.getUser().getUserid())
+                .orElseThrow(()-> new IllegalArgumentException("로그인 정보를 찾을 수 없습니다."));
+
+        if(myteam.getMyteam() == null)
+        {
+            throw new IllegalArgumentException("구단선택을 null로 했습니다");
+        }
+
+        user.setMyselectTeam(myteam.getMyteam());
+
+        userRepository.save(user);
+
+        MyteamRequestDto myteamRequestDto = new MyteamRequestDto(user.getMyselectTeam());
+        return myteamRequestDto;
+    }
 
     @PostMapping("/user/logincheck")
     public LoginCheckResponseDto loginCheck(@AuthenticationPrincipal UserDetailsImpl userDetails)

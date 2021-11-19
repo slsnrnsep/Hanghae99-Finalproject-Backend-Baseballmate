@@ -1,4 +1,4 @@
-package com.finalproject.backend.baseballmate.requestDto;
+package com.finalproject.backend.baseballmate.responseDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,4 +19,5 @@ public class AllScreenResponseDto {
     private String selectPlace;
     private String placeInfomation;
     private String dday;
+    private boolean allowtype;
 }

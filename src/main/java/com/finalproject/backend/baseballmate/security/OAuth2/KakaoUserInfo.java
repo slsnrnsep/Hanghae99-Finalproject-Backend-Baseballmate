@@ -1,4 +1,4 @@
-package com.finalproject.backend.baseballmate.OAuth2;
+package com.finalproject.backend.baseballmate.security.OAuth2;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

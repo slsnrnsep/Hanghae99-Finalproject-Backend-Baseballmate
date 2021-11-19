@@ -13,10 +13,10 @@ public class AllGoodsResponseDto {
     private Long goodsId;
     private String userName;
     private String goodsName;
-    private int goodsPrice;
+    private String goodsContent;
     private String goodsImg;
     private String dayBefore;
 //  private int likecount;
 //  private int commentcount;
-
+    private String goodsUserPicture;
 }

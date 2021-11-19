@@ -50,13 +50,14 @@ public class GroupService {
             String groupDate = group.getGroupDate();
             String filePath = group.getFilePath();
             String selectTeam = group.getSelectTeam();
+            boolean allowtype = group.isAllowtype();
             int month = Integer.parseInt(group.getGroupDate().split("[.]")[0]);
             int day = Integer.parseInt(group.getGroupDate().split("[.]")[1].split(" ")[0]);
             LocalDate target = LocalDate.of(LocalDate.now().getYear(),month,day);
             Long countingday = ChronoUnit.DAYS.between(LocalDate.now(),target);
             String dday = countingday.toString();
             AllGroupResponseDto allGroupResponseDto =
-                    new AllGroupResponseDto(groupId, title, createdUsername, peopleLimit, canApplyNum, hotPercent, stadium, groupDate, filePath,selectTeam,dday);
+                    new AllGroupResponseDto(groupId, title, createdUsername, peopleLimit, canApplyNum, hotPercent, stadium, groupDate, filePath,selectTeam,dday,allowtype);
 
             allGroupResponseDtoList.add(allGroupResponseDto);
         }
@@ -80,13 +81,14 @@ public class GroupService {
             String groupDate = group.getGroupDate();
             String filePath = group.getFilePath();
             String selectTeam = group.getSelectTeam();
+            boolean allowtype = group.isAllowtype();
             int month = Integer.parseInt(group.getGroupDate().split("[.]")[0]);
             int day = Integer.parseInt(group.getGroupDate().split("[.]")[1].split(" ")[0]);
             LocalDate target = LocalDate.of(LocalDate.now().getYear(),month,day);
             Long countingday = ChronoUnit.DAYS.between(LocalDate.now(),target);
             String dday = countingday.toString();
             AllGroupResponseDto allGroupResponseDto =
-                    new AllGroupResponseDto(groupId, title, createdUsername, peopleLimit, canApplyNum, hotPercent, stadium, groupDate, filePath,selectTeam,dday);
+                    new AllGroupResponseDto(groupId, title, createdUsername, peopleLimit, canApplyNum, hotPercent, stadium, groupDate, filePath,selectTeam,dday,allowtype);
 
             allGroupResponseDtoList.add(allGroupResponseDto);
         }
@@ -121,8 +123,9 @@ public class GroupService {
             LocalDate target = LocalDate.of(LocalDate.now().getYear(),month,day);
             Long countingday = ChronoUnit.DAYS.between(LocalDate.now(),target);
             String dday = countingday.toString();
+            boolean allowtype = group.isAllowtype();
             AllGroupResponseDto allGroupResponseDto =
-                    new AllGroupResponseDto(groupId, title, createdUsername, peopleLimit, canApplyNum, hotPercent, stadium, groupDate, filePath,selectTeam,dday);
+                    new AllGroupResponseDto(groupId, title, createdUsername, peopleLimit, canApplyNum, hotPercent, stadium, groupDate, filePath,selectTeam,dday,allowtype);
 
             allGroupResponseDtoList.add(allGroupResponseDto);
         }
@@ -156,8 +159,9 @@ public class GroupService {
             LocalDate target = LocalDate.of(LocalDate.now().getYear(),month,day);
             Long countingday = ChronoUnit.DAYS.between(LocalDate.now(),target);
             String dday = countingday.toString();
+            boolean allowtype = group.isAllowtype();
             AllGroupResponseDto allGroupResponseDto =
-                    new AllGroupResponseDto(groupId, title, createdUsername, peopleLimit, canApplyNum, hotPercent, stadium, groupDate, filePath,selectTeam,dday);
+                    new AllGroupResponseDto(groupId, title, createdUsername, peopleLimit, canApplyNum, hotPercent, stadium, groupDate, filePath,selectTeam,dday,allowtype);
 
             allGroupResponseDtoList.add(allGroupResponseDto);
         }
@@ -187,18 +191,17 @@ public class GroupService {
             LocalDate target = LocalDate.of(LocalDate.now().getYear(),month,day);
             Long countingday = ChronoUnit.DAYS.between(LocalDate.now(),target);
             String dday = countingday.toString();
-
+            boolean allowtype = group.isAllowtype();
             AllGroupResponseDto allGroupResponseDto =
-                    new AllGroupResponseDto(groupId, title, createdUsername, peopleLimit, canApplyNum, hotPercent, stadium, groupDate, filePath, selectTeam,dday);
+                    new AllGroupResponseDto(groupId, title, createdUsername, peopleLimit, canApplyNum, hotPercent, stadium, groupDate, filePath, selectTeam,dday,allowtype);
 
             allGroupResponseDtoList.add(allGroupResponseDto);
         }
 
         return allGroupResponseDtoList;
     }
-
     // 핫한 모임 조회(hotPercent순) - 메인 페이지용
-    public List<HotGroupResponseDto> getHotGroups() {
+    public List<HotGroupResponseDto> getHotGroups2() {
         List<Group> hotGroupList = groupRepository.findTop5ByOrderByHotPercentDesc();
         List<HotGroupResponseDto> hotGroupResponseDtoList = new ArrayList<>();
 
@@ -221,9 +224,44 @@ public class GroupService {
             LocalDate target = LocalDate.of(LocalDate.now().getYear(),month,day);
             Long countingday = ChronoUnit.DAYS.between(LocalDate.now(),target);
             String dday = countingday.toString();
-
+            boolean allowtype = group.isAllowtype();
             HotGroupResponseDto hotGroupResponseDto =
-                    new HotGroupResponseDto(groupId, createdUsername, title, peopleLimit, canApplyNum, hotPercent, stadium, groupDate,filePath,selectTeam,dday);
+                    new HotGroupResponseDto(groupId, createdUsername, title, peopleLimit, canApplyNum, hotPercent, stadium, groupDate,filePath,selectTeam,dday,allowtype);
+
+            hotGroupResponseDtoList.add(hotGroupResponseDto);
+        }
+        return hotGroupResponseDtoList;
+    }
+
+
+
+    // 핫한 내가 응원하는 모임 조회(hotPercent순) - 메인 페이지용
+    public List<HotGroupResponseDto> getHotGroups(String team) {
+        List<Group> hotGroupList = groupRepository.searchTeamHotgroup(team);
+        List<HotGroupResponseDto> hotGroupResponseDtoList = new ArrayList<>();
+
+        for(int i=0; i< hotGroupList.size(); i++) {
+            Group group = hotGroupList.get(i);
+
+            Long groupId = group.getGroupId();
+            String createdUsername = group.getCreatedUsername();
+            String title = group.getTitle();
+            int peopleLimit = group.getPeopleLimit();
+            int canApplyNum = group.getCanApplyNum();
+            double hotPercent = group.getHotPercent();
+            String stadium = group.getStadium();
+            String groupDate = group.getGroupDate();
+            String filePath =group.getFilePath();
+            String selectTeam = group.getSelectTeam();
+
+            int month = Integer.parseInt(group.getGroupDate().split("[.]")[0]);
+            int day = Integer.parseInt(group.getGroupDate().split("[.]")[1].split(" ")[0]);
+            LocalDate target = LocalDate.of(LocalDate.now().getYear(),month,day);
+            Long countingday = ChronoUnit.DAYS.between(LocalDate.now(),target);
+            String dday = countingday.toString();
+            boolean allowtype = group.isAllowtype();
+            HotGroupResponseDto hotGroupResponseDto =
+                    new HotGroupResponseDto(groupId, createdUsername, title, peopleLimit, canApplyNum, hotPercent, stadium, groupDate,filePath,selectTeam,dday,allowtype);
 
             hotGroupResponseDtoList.add(hotGroupResponseDto);
         }
@@ -277,7 +315,7 @@ public class GroupService {
         String stadium = group.getStadium();
         String groupDate = group.getGroupDate();
         String filePath = group.getFilePath();
-        List<GroupComment> groupcommentList = groupCommentRepository.findAllByGroup_GroupIdOrderByCreatedAtDesc(id);
+        List<GroupComment> groupcommentList = groupCommentRepository.findAllByGroup_GroupIdOrderByModifiedAtDesc(id);
         List<Map<String, String>> appliedUserInfo = appliedUsers;
 
         // D - day 계산
@@ -286,9 +324,9 @@ public class GroupService {
         LocalDate target = LocalDate.of(LocalDate.now().getYear(),month,day);
         Long countingday = ChronoUnit.DAYS.between(LocalDate.now(),target);
         String dday = countingday.toString();
-
+        boolean allowtype = group.isAllowtype();
         GroupDetailResponseDto groupdetailResponseDto =
-                new GroupDetailResponseDto(groupId, createdUserName, createdUserId, createdUserProfileImg, title, content, peopleLimit, nowAppliedNum, canApplyNum, hotPercent, stadium , groupDate, filePath, dday, appliedUserInfo, groupcommentList);
+                new GroupDetailResponseDto(groupId, createdUserName, createdUserId, createdUserProfileImg, title, content, peopleLimit, nowAppliedNum, canApplyNum, hotPercent, stadium , groupDate, filePath, dday,allowtype, appliedUserInfo, groupcommentList);
 
         return groupdetailResponseDto;
     }
@@ -375,6 +413,10 @@ public class GroupService {
 //        }
 //        System.out.println("모임 참여 시 취소자 명단 리스트 : " + canceledUserList);
 //        System.out.println("모임 참여 시 취소자 명단 리스트 : " + canceledUserInxList);
+        if(!appliedGroup.isAllowtype())
+        {
+            throw new IllegalArgumentException("모임이 모집을 마감하였습니다.");
+        }
 
         if (userDetails == null) {
             throw new IllegalArgumentException("로그인 한 사용자만 신청할 수 있습니다.");
@@ -391,8 +433,10 @@ public class GroupService {
                     // 취소 리스트에서 참가 신청한 유저 찾기
                     for (int i=0; i< canceledLists.size(); i++) {
                         CanceledList canceledList = canceledLists.get(i);
+
                         // 참가 신청하는 모임의 취소 유저 리스트에 이름이 있지 않을 경우 -> 이 경우에만 참가 신청 가능
-                        if (canceledList.getCanceledUser().getId() == loginedUser.getId()) {
+                        if (canceledList.getCanceledUser().getId().equals(loginedUser.getId()))
+                        {
                             throw new IllegalArgumentException("취소후 재참가는 불가합니다.");
                         }
                         else {
@@ -464,48 +508,75 @@ public class GroupService {
         User loginedUser = userDetails.getUser();
         Long loginedUserIndex = userDetails.getUser().getId();
 
-        // groupid에 속하는 applieduserindex들을 모아놓고 해당 인덱스에 현재 로그인 한 유저의 인덱스가 있는지 검사
-        List<Long> appliedUserIndexList = new ArrayList<>();
-        for (int j=0; j<groupApplicationList.size(); j++) {
-            GroupApplication groupApplication = groupApplicationList.get(j);
-            Long appliedUserIndex = groupApplication.getAppliedUser().getId();
-            appliedUserIndexList.add(appliedUserIndex);
+        List<Long> testlist = new ArrayList<>();
+
+        for(int j=0; j<groupApplicationList.size();j++)
+        {
+            testlist.add(groupApplicationList.get(j).getAppliedUser().getId());
         }
-        if (!appliedUserIndexList.contains(loginedUserIndex)) {
-            throw new IllegalArgumentException("참가 신청한 이력이 존재하지 않습니다.");
+
+        if(!testlist.contains(loginedUserIndex))
+        {
+            throw new IllegalArgumentException("참여신청 기록이 없습니다.");
         }
+
 
         for(int i=0; i<groupApplicationList.size(); i++) {
             // 참가 신청 취소를 요청한 groupid를 가진 groupapplication하나씩 빼오기
             GroupApplication groupApplication = groupApplicationList.get(i);
 
-            // 해당 group의 nowappliednum, hotpercent 수정
-            // 현재 참여 신청 인원 1 감소
-            int nowAppliedNum = groupApplication.getAppliedGroup().getNowAppliedNum();
-            int updatedAppliedNum = nowAppliedNum - 1;
-            groupApplication.getAppliedGroup().setNowAppliedNum(updatedAppliedNum);
+            // 참가 신청 취소를 요청하는 모임에 대한 신청 내역들이 있고
+            if(groupApplication != null && groupApplication.getAppliedUser().getId().equals(loginedUserIndex)) {
+                // 로그인 한 유저가 참가 신청을 했던 유저와 같다면
 
-            // 현재 참여 신청 가능한 인원 1 감소
-            int nowCanApplyNum = groupApplication.getAppliedGroup().getCanApplyNum();
-            int updatedCanApplyNum = nowCanApplyNum + 1;
-            groupApplication.getAppliedGroup().setCanApplyNum(updatedCanApplyNum);
+                // 해당 group의 nowappliednum, hotpercent 수정
+                // 현재 참여 신청 인원 1 감소
+                int nowAppliedNum = groupApplication.getAppliedGroup().getNowAppliedNum();
+                int updatedAppliedNum = nowAppliedNum - 1;
+                groupApplication.getAppliedGroup().setNowAppliedNum(updatedAppliedNum);
 
-            // 인기도 값 수정
-            int peopleLimit = groupApplication.getAppliedGroup().getPeopleLimit();
-            double updatedHotPercent = ((double) updatedAppliedNum / (double) peopleLimit * 100.0);
-            groupApplication.getAppliedGroup().setHotPercent(updatedHotPercent);
+                // 현재 참여 신청 가능한 인원 1 감소
+                int nowCanApplyNum = groupApplication.getAppliedGroup().getCanApplyNum();
+                int updatedCanApplyNum = nowCanApplyNum + 1;
+                groupApplication.getAppliedGroup().setCanApplyNum(updatedCanApplyNum);
 
-            // 참가 신청 이력 삭제하기
-            groupApplicationRepository.delete(groupApplication);
+                // 인기도 값 수정
+                int peopleLimit = groupApplication.getAppliedGroup().getPeopleLimit();
+                double updatedHotPercent = ((double) updatedAppliedNum / (double) peopleLimit * 100.0);
+                groupApplication.getAppliedGroup().setHotPercent(updatedHotPercent);
 
-            // 취소 리스트에 추가하기
-            CanceledList canceledList = new CanceledList(loginedUser, group);
-            canceledListRepository.save(canceledList);
+
+//                    groupApplicationRepository.findByAppliedGroupAndAppliedUser(group, loginedUser)
+//                    groupApplicationRepository.deleteById(groupApplication2.getId());
+
+                // 참가 신청 이력 삭제하기
+                groupApplicationRepository.delete(groupApplication);
+
+                // 취소 리스트에 추가하기
+                CanceledList canceledList = new CanceledList(loginedUser, group);
+                canceledListRepository.save(canceledList);
+
+            }
         }
+
 
     }
 
-
+    @Transactional
+    public String denyGroup(Long groupId, UserDetailsImpl userDetails) {
+        Group group = groupRepository.findByGroupId(groupId);
+        if (group.getCreatedUser().getUserid().equals(userDetails.getUser().getUserid())) {
+            if (group.isAllowtype()) {
+                group.setAllowtype(false);
+                return "모임 확정 완료. 이제부터 모집을 하지 못합니다.";
+            } else {
+                group.setAllowtype(true);
+                return "모임 확정취소 완료. 이제부터 모집을 다시 할 수 있습니다.";
+            }
+        } else {
+            throw new IllegalArgumentException("모임장만 확정이 가능합니다");
+        }
+    }
 }
 
 

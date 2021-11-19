@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface ScreenApplicationRepository extends JpaRepository<ScreenApplication, Long> {
     List<ScreenApplication> findAll();
-//    List<ScreenApplication> findAllByAppliedUser(User user);
+    List<ScreenApplication> findAllByAppliedUser(User user);
     ScreenApplication findByAppliedScreenAndAndAppliedUser(Screen screen, User user);
     ScreenApplication findByAppliedScreenScreenIdAndAppliedUserId(Long appliedScreenId,Long userId);
     List<ScreenApplication> findAllByAppliedScreen(Screen screen);

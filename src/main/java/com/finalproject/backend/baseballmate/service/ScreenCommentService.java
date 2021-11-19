@@ -23,10 +23,10 @@ public class ScreenCommentService {
     public void createComment(ScreenCommentRequestDto commentRequestDto, Long screenId, User loginedUser) {
         String loginedUsername = loginedUser.getUsername();
         String loginedUserId = loginedUser.getUserid();
-
+        String loginedUserPicture = loginedUser.getPicture();
         Long loginedUserIndex = loginedUser.getId();
         Screen screen = screenRepository.findByScreenId(screenId);
-        ScreenComment screenComment = new ScreenComment(commentRequestDto, screen, loginedUsername, loginedUserIndex, loginedUserId);
+        ScreenComment screenComment = new ScreenComment(commentRequestDto, screen, loginedUsername, loginedUserIndex, loginedUserId, loginedUserPicture);
         screenCommentRepository.save(screenComment);
         screen.getScreenCommentList().add(screenComment);
 

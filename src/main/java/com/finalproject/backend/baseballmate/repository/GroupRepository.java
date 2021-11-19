@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface GroupRepository extends JpaRepository<Group, Long> {
+public interface GroupRepository extends JpaRepository<Group, Long>,GroupRepositoryCustom {
     List<Group> findAllByOrderByCreatedAtDesc();
     Group findByGroupId(Long groupId);
     List<Group> findTop5ByOrderByHotPercentDesc();
