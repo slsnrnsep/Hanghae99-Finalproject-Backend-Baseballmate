@@ -7,6 +7,7 @@ import java.util.List;
 
 import static com.finalproject.backend.baseballmate.model.QGroup.*;
 
+
 public class GroupRepositoryImpl implements GroupRepositoryCustom{
 
     private final JPAQueryFactory queryFactory;
@@ -19,7 +20,6 @@ public class GroupRepositoryImpl implements GroupRepositoryCustom{
 
     @Override
     public List<Group> searchTeamHotgroup(String myteam) {
-
         return queryFactory
                 .selectFrom(group)
                 .where(group.selectTeam.eq(myteam))
