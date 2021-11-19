@@ -51,13 +51,14 @@ public class GroupService {
             String groupDate = group.getGroupDate();
             String filePath = group.getFilePath();
             String selectTeam = group.getSelectTeam();
+            boolean allowtype = group.isAllowtype();
             int month = Integer.parseInt(group.getGroupDate().split("[.]")[0]);
             int day = Integer.parseInt(group.getGroupDate().split("[.]")[1].split(" ")[0]);
             LocalDate target = LocalDate.of(LocalDate.now().getYear(),month,day);
             Long countingday = ChronoUnit.DAYS.between(LocalDate.now(),target);
             String dday = countingday.toString();
             AllGroupResponseDto allGroupResponseDto =
-                    new AllGroupResponseDto(groupId, title, createdUsername, peopleLimit, canApplyNum, hotPercent, stadium, groupDate, filePath,selectTeam,dday);
+                    new AllGroupResponseDto(groupId, title, createdUsername, peopleLimit, canApplyNum, hotPercent, stadium, groupDate, filePath,selectTeam,dday,allowtype);
 
             allGroupResponseDtoList.add(allGroupResponseDto);
         }
@@ -81,13 +82,14 @@ public class GroupService {
             String groupDate = group.getGroupDate();
             String filePath = group.getFilePath();
             String selectTeam = group.getSelectTeam();
+            boolean allowtype = group.isAllowtype();
             int month = Integer.parseInt(group.getGroupDate().split("[.]")[0]);
             int day = Integer.parseInt(group.getGroupDate().split("[.]")[1].split(" ")[0]);
             LocalDate target = LocalDate.of(LocalDate.now().getYear(),month,day);
             Long countingday = ChronoUnit.DAYS.between(LocalDate.now(),target);
             String dday = countingday.toString();
             AllGroupResponseDto allGroupResponseDto =
-                    new AllGroupResponseDto(groupId, title, createdUsername, peopleLimit, canApplyNum, hotPercent, stadium, groupDate, filePath,selectTeam,dday);
+                    new AllGroupResponseDto(groupId, title, createdUsername, peopleLimit, canApplyNum, hotPercent, stadium, groupDate, filePath,selectTeam,dday,allowtype);
 
             allGroupResponseDtoList.add(allGroupResponseDto);
         }
@@ -122,8 +124,9 @@ public class GroupService {
             LocalDate target = LocalDate.of(LocalDate.now().getYear(),month,day);
             Long countingday = ChronoUnit.DAYS.between(LocalDate.now(),target);
             String dday = countingday.toString();
+            boolean allowtype = group.isAllowtype();
             AllGroupResponseDto allGroupResponseDto =
-                    new AllGroupResponseDto(groupId, title, createdUsername, peopleLimit, canApplyNum, hotPercent, stadium, groupDate, filePath,selectTeam,dday);
+                    new AllGroupResponseDto(groupId, title, createdUsername, peopleLimit, canApplyNum, hotPercent, stadium, groupDate, filePath,selectTeam,dday,allowtype);
 
             allGroupResponseDtoList.add(allGroupResponseDto);
         }
@@ -157,8 +160,9 @@ public class GroupService {
             LocalDate target = LocalDate.of(LocalDate.now().getYear(),month,day);
             Long countingday = ChronoUnit.DAYS.between(LocalDate.now(),target);
             String dday = countingday.toString();
+            boolean allowtype = group.isAllowtype();
             AllGroupResponseDto allGroupResponseDto =
-                    new AllGroupResponseDto(groupId, title, createdUsername, peopleLimit, canApplyNum, hotPercent, stadium, groupDate, filePath,selectTeam,dday);
+                    new AllGroupResponseDto(groupId, title, createdUsername, peopleLimit, canApplyNum, hotPercent, stadium, groupDate, filePath,selectTeam,dday,allowtype);
 
             allGroupResponseDtoList.add(allGroupResponseDto);
         }
@@ -188,9 +192,9 @@ public class GroupService {
             LocalDate target = LocalDate.of(LocalDate.now().getYear(),month,day);
             Long countingday = ChronoUnit.DAYS.between(LocalDate.now(),target);
             String dday = countingday.toString();
-
+            boolean allowtype = group.isAllowtype();
             AllGroupResponseDto allGroupResponseDto =
-                    new AllGroupResponseDto(groupId, title, createdUsername, peopleLimit, canApplyNum, hotPercent, stadium, groupDate, filePath, selectTeam,dday);
+                    new AllGroupResponseDto(groupId, title, createdUsername, peopleLimit, canApplyNum, hotPercent, stadium, groupDate, filePath, selectTeam,dday,allowtype);
 
             allGroupResponseDtoList.add(allGroupResponseDto);
         }
@@ -221,9 +225,9 @@ public class GroupService {
             LocalDate target = LocalDate.of(LocalDate.now().getYear(),month,day);
             Long countingday = ChronoUnit.DAYS.between(LocalDate.now(),target);
             String dday = countingday.toString();
-
+            boolean allowtype = group.isAllowtype();
             HotGroupResponseDto hotGroupResponseDto =
-                    new HotGroupResponseDto(groupId, createdUsername, title, peopleLimit, canApplyNum, hotPercent, stadium, groupDate,filePath,selectTeam,dday);
+                    new HotGroupResponseDto(groupId, createdUsername, title, peopleLimit, canApplyNum, hotPercent, stadium, groupDate,filePath,selectTeam,dday,allowtype);
 
             hotGroupResponseDtoList.add(hotGroupResponseDto);
         }
@@ -256,9 +260,9 @@ public class GroupService {
             LocalDate target = LocalDate.of(LocalDate.now().getYear(),month,day);
             Long countingday = ChronoUnit.DAYS.between(LocalDate.now(),target);
             String dday = countingday.toString();
-
+            boolean allowtype = group.isAllowtype();
             HotGroupResponseDto hotGroupResponseDto =
-                    new HotGroupResponseDto(groupId, createdUsername, title, peopleLimit, canApplyNum, hotPercent, stadium, groupDate,filePath,selectTeam,dday);
+                    new HotGroupResponseDto(groupId, createdUsername, title, peopleLimit, canApplyNum, hotPercent, stadium, groupDate,filePath,selectTeam,dday,allowtype);
 
             hotGroupResponseDtoList.add(hotGroupResponseDto);
         }
@@ -321,9 +325,9 @@ public class GroupService {
         LocalDate target = LocalDate.of(LocalDate.now().getYear(),month,day);
         Long countingday = ChronoUnit.DAYS.between(LocalDate.now(),target);
         String dday = countingday.toString();
-
+        boolean allowtype = group.isAllowtype();
         GroupDetailResponseDto groupdetailResponseDto =
-                new GroupDetailResponseDto(groupId, createdUserName, createdUserId, createdUserProfileImg, title, content, peopleLimit, nowAppliedNum, canApplyNum, hotPercent, stadium , groupDate, filePath, dday, appliedUserInfo, groupcommentList);
+                new GroupDetailResponseDto(groupId, createdUserName, createdUserId, createdUserProfileImg, title, content, peopleLimit, nowAppliedNum, canApplyNum, hotPercent, stadium , groupDate, filePath, dday,allowtype, appliedUserInfo, groupcommentList);
 
         return groupdetailResponseDto;
     }
@@ -413,6 +417,10 @@ public class GroupService {
 //        }
 //        System.out.println("모임 참여 시 취소자 명단 리스트 : " + canceledUserList);
 //        System.out.println("모임 참여 시 취소자 명단 리스트 : " + canceledUserInxList);
+        if(!appliedGroup.isAllowtype())
+        {
+            throw new IllegalArgumentException("모임이 모집을 마감하였습니다.");
+        }
 
         if (userDetails == null) {
             throw new IllegalArgumentException("로그인 한 사용자만 신청할 수 있습니다.");
@@ -565,7 +573,21 @@ public class GroupService {
 
     }
 
-
+    @Transactional
+    public String denyGroup(Long groupId, UserDetailsImpl userDetails) {
+        Group group = groupRepository.findByGroupId(groupId);
+        if (group.getCreatedUser().getUserid().equals(userDetails.getUser().getUserid())) {
+            if (group.isAllowtype()) {
+                group.setAllowtype(false);
+                return "모임 확정 완료. 이제부터 모집을 하지 못합니다.";
+            } else {
+                group.setAllowtype(true);
+                return "모임 확정취소 완료. 이제부터 모집을 다시 할 수 있습니다.";
+            }
+        } else {
+            throw new IllegalArgumentException("모임장만 확정이 가능합니다");
+        }
+    }
 }
 
 

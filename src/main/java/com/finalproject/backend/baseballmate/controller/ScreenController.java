@@ -47,6 +47,14 @@ public class ScreenController {
         return msgResponseDto;
     }
 
+    //스야모임 확정내기
+    @PatchMapping("/screen/{screenId}/applications")
+    public MsgResponseDto denyGroup(@PathVariable Long screenId, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        String msg = screenService.denyScreen(screenId, userDetails);
+        MsgResponseDto msgResponseDto = new MsgResponseDto("success", msg);
+        return msgResponseDto;
+    }
+
     @DeleteMapping("/screen/{screenId}/applications")
     public MsgResponseDto cancleApply(
             @PathVariable Long screenId,

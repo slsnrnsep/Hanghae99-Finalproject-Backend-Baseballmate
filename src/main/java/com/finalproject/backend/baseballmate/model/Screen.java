@@ -72,6 +72,9 @@ public class Screen extends Timestamped{
     @Column
     private String placeInfomation;
 
+    @Column
+    private boolean allowtype;
+
     @JsonBackReference
     @OneToMany(mappedBy = "screen", cascade = CascadeType.ALL)
     private List<ScreenComment> screenCommentList = new ArrayList<>();
@@ -108,6 +111,7 @@ public class Screen extends Timestamped{
         this.selectPlace = requestDto.getSelectPlace();
         this.filePath = requestDto.getFilePath();
         this.placeInfomation = requestDto.getPlaceInfomation();
+        this.allowtype = true;
     }
 
     // 스크린모임 수정 메소드

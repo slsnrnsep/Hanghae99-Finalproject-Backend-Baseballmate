@@ -26,6 +26,7 @@ public class GroupDetailResponseDto {
     private String groupDate; // 모임 날짜
     private String filePath;
     private String dday;
+    private boolean allowtype;
     private List<Map<String, String>> appliedUserInfo;
     List<GroupComment> groupCommentList;
 
