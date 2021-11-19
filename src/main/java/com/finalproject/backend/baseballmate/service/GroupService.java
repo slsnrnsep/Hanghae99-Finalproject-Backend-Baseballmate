@@ -1,5 +1,6 @@
 package com.finalproject.backend.baseballmate.service;
 
+import com.finalproject.backend.baseballmate.chat.ChatRoomService;
 import com.finalproject.backend.baseballmate.model.*;
 import com.finalproject.backend.baseballmate.repository.*;
 import com.finalproject.backend.baseballmate.requestDto.AlarmRequestDto;
@@ -34,6 +35,7 @@ public class GroupService {
     private final GroupCommentRepository groupCommentRepository;
     private String commonPath = "/images"; // 파일 저장할 기본 경로 변수 설정, 초기화
     private final AlarmService alarmService;
+    private final ChatRoomService chatRoomService;
 
     // 모임 전체 조회(등록 순)
     public List<AllGroupResponseDto> getAllGroups() {
@@ -521,7 +523,6 @@ public class GroupService {
         // groupApplication에서 해당 groupid에 속하는 groupApplication들을 찾아오기
         List<GroupApplication> groupApplicationList = groupApplicationRepository.findAllByAppliedGroup(group);
 
-//        List<GroupApplication> groupApplicationList = group.getGroupApplications();
         // 로그인 한 유저의 유저 객체와 인덱스 값 빼오기
         User loginedUser = userDetails.getUser();
         Long loginedUserIndex = userDetails.getUser().getId();
@@ -547,32 +548,32 @@ public class GroupService {
             if(groupApplication != null && groupApplication.getAppliedUser().getId().equals(loginedUserIndex)) {
                 // 로그인 한 유저가 참가 신청을 했던 유저와 같다면
 
-                    // 해당 group의 nowappliednum, hotpercent 수정
-                    // 현재 참여 신청 인원 1 감소
-                    int nowAppliedNum = groupApplication.getAppliedGroup().getNowAppliedNum();
-                    int updatedAppliedNum = nowAppliedNum - 1;
-                    groupApplication.getAppliedGroup().setNowAppliedNum(updatedAppliedNum);
+                // 해당 group의 nowappliednum, hotpercent 수정
+                // 현재 참여 신청 인원 1 감소
+                int nowAppliedNum = groupApplication.getAppliedGroup().getNowAppliedNum();
+                int updatedAppliedNum = nowAppliedNum - 1;
+                groupApplication.getAppliedGroup().setNowAppliedNum(updatedAppliedNum);
 
-                    // 현재 참여 신청 가능한 인원 1 감소
-                    int nowCanApplyNum = groupApplication.getAppliedGroup().getCanApplyNum();
-                    int updatedCanApplyNum = nowCanApplyNum + 1;
-                    groupApplication.getAppliedGroup().setCanApplyNum(updatedCanApplyNum);
+                // 현재 참여 신청 가능한 인원 1 감소
+                int nowCanApplyNum = groupApplication.getAppliedGroup().getCanApplyNum();
+                int updatedCanApplyNum = nowCanApplyNum + 1;
+                groupApplication.getAppliedGroup().setCanApplyNum(updatedCanApplyNum);
 
-                    // 인기도 값 수정
-                    int peopleLimit = groupApplication.getAppliedGroup().getPeopleLimit();
-                    double updatedHotPercent = ((double) updatedAppliedNum / (double) peopleLimit * 100.0);
-                    groupApplication.getAppliedGroup().setHotPercent(updatedHotPercent);
+                // 인기도 값 수정
+                int peopleLimit = groupApplication.getAppliedGroup().getPeopleLimit();
+                double updatedHotPercent = ((double) updatedAppliedNum / (double) peopleLimit * 100.0);
+                groupApplication.getAppliedGroup().setHotPercent(updatedHotPercent);
 
 
 //                    groupApplicationRepository.findByAppliedGroupAndAppliedUser(group, loginedUser)
 //                    groupApplicationRepository.deleteById(groupApplication2.getId());
 
-                    // 참가 신청 이력 삭제하기
-                    groupApplicationRepository.delete(groupApplication);
+                // 참가 신청 이력 삭제하기
+                groupApplicationRepository.delete(groupApplication);
 
-                    // 취소 리스트에 추가하기
-                    CanceledList canceledList = new CanceledList(loginedUser, group);
-                    canceledListRepository.save(canceledList);
+                // 취소 리스트에 추가하기
+                CanceledList canceledList = new CanceledList(loginedUser, group);
+                canceledListRepository.save(canceledList);
 
             }
         }
@@ -586,6 +587,8 @@ public class GroupService {
         if (group.getCreatedUser().getUserid().equals(userDetails.getUser().getUserid())) {
             if (group.isAllowtype()) {
                 group.setAllowtype(false);
+                // 확정되면 채팅방 형성되게
+//                chatRoomService.createChatRoom(userDetails.getUser());
                 return "모임 확정 완료. 이제부터 모집을 하지 못합니다.";
             } else {
                 group.setAllowtype(true);

@@ -236,6 +236,10 @@ public class UserService {
         return addressEnums;
     }
 
+    // 채팅방 관련.
+    public User getUser(Long id) {
+        return userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("회원이 아닙니다."));
+    }
 }
 
 // 클래스 묶는 중괄호 밖으로 빼놓음

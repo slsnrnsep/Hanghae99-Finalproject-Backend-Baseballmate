@@ -1,11 +1,11 @@
 package com.finalproject.backend.baseballmate.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.finalproject.backend.baseballmate.chat.ChatRoom;
 import com.finalproject.backend.baseballmate.requestDto.GroupRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.web.bind.annotation.CookieValue;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -68,13 +68,18 @@ public class Group extends Timestamped{
     private String selectTeam;
 
     @Column
-    private boolean allowtype;
+    private boolean allowtype; // false이면 확정된 모임
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "userIndex")
 //    private User userIndex; // user테이블의 id값
 
 //    @Column
 //    private String baseballTeam; // 구단 이름
+
+    // 모임에 해당하는 채팅방
+    @OneToOne
+    @JoinColumn(name="ChatRoom_id")
+    private ChatRoom chatRoom;
 
     // 모임을 취소했던 유저 리스트
     @JsonManagedReference
