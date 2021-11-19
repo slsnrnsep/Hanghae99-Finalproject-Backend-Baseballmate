@@ -38,6 +38,7 @@ public class UserService {
     private final AuthenticationManager authenticationManager;
     private static final String Pass_Salt = "AAABnv/xRVklrnYxKZ0aHgTBcXukeZygoC";
     private String commonPath = "/images"; // 파일 저장할 기본 경로 변수 설정, 초기화
+    private final AlarmService alarmService;
 
 //    @Value("${app.auth.tokenSecret}")
 //    private String secretKey;
@@ -47,24 +48,28 @@ public class UserService {
         String password = userRequestDto.getPassword();
         String userid = userRequestDto.getUserid();
 
-//        Optional<User> check = userRepository.findByUsername(username);
+        Optional<User> check = userRepository.findByUsername(username);
         String pattern = "^[a-zA-Z0-9]*$";
 
         password = passwordEncoder.encode(userRequestDto.getPassword());
 
-        User user = userRepository.findByPhoneNumber(userRequestDto.getPhonenumber()).orElseThrow(
-                ()-> new IllegalArgumentException("휴대폰에 맞는 유저정보를 찾을 수 없습니다.")
-        );
-        user.setUserid(userid);
-        user.setUsername(username);
-        user.setPassword(password);
-        user.setPhoneNumber(userRequestDto.getPhonenumber()+"/"+user.getRanNum());
-        user.setAddress("전국");
-        user.setPicture("sample.png");
+//        User user = userRepository.findByPhoneNumber(userRequestDto.getPhonenumber()).orElseThrow(
+//                ()-> new IllegalArgumentException("휴대폰에 맞는 유저정보를 찾을 수 없습니다.")
+//        );
+//        user.setUserid(userid);
+//        user.setUsername(username);
+//        user.setPassword(password);
+//        user.setPhoneNumber(userRequestDto.getPhonenumber()+"/"+user.getRanNum());
+//        user.setAddress("전국");
+//        user.setPicture("sample.png");
 
-//        User user = new User(userid,username,password, userRequestDto.getPhonenumber());
+        User user = new User(userid,username,password, userRequestDto.getPhonenumber());
         userRepository.save(user);
-
+        AlarmRequestDto alarmRequestDto = new AlarmRequestDto();
+        String signupAlarm = "안녕하세요" + user.getUsername() + "님! 가입을 환영합니다";
+        alarmRequestDto.setUserId(user.getId());
+        alarmRequestDto.setContents(signupAlarm);
+        alarmService.createAlarm(alarmRequestDto);
     }
 
     public void passwordCheck(String password) {
