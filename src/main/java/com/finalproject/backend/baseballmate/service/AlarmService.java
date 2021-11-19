@@ -23,7 +23,7 @@ import java.util.Map;
 public class AlarmService {
 
     private final AlarmRepository alarmRepository;
-    private final UserService userService;
+//    private final UserService userService;
 
 //    public User findAlarmUser(Authentication authentication){
 //        return userService.findCurUser(authentication).orElseThrow(
@@ -33,9 +33,9 @@ public class AlarmService {
 
     // 알람조회
    @Transactional
-    public List<Alarm> getAlarm(User user) {
-
-        List<Alarm> alarmList =  alarmRepository.findByUserIdOrderByCreatedAtDesc(user);
+    public List<Alarm> getAlarm(UserDetailsImpl userDetails) {
+        Long userId = userDetails.getUser().getId();
+        List<Alarm> alarmList =  alarmRepository.findByUserIdOrderByCreatedAtDesc(userId);
 
         for(Alarm alarm : alarmList){
             AlarmSaveDto alarmSaveDto = new AlarmSaveDto();
@@ -52,23 +52,57 @@ public class AlarmService {
        alarmRepository.save(alarm);
     }
 
-    // 알람 삭제
-    public Map<String, String> deleteAlarm( UserDetailsImpl userDetails, Long alarmId) {
-        Map<String, String> map = new HashMap<>();
 
+
+    // 알람 삭제
+    public void deleteAlarm(UserDetailsImpl userDetails, Long alarmId) {
         Alarm alarm = alarmRepository.findById(alarmId).orElseThrow(
                 () -> new IllegalArgumentException("해당 알람이 존재하지 않습니다")
         );
-        String loginUser = userDetails.getUser().getUserid();
-        Long userId = alarm.getUserId();
 
-        if(!loginUser.equals(userId)){
-            throw new IllegalArgumentException("자신의 알람만 삭제할 수 있습니다");
+        Long loginUser = userDetails.getUser().getId();
+        Long userId = alarm.getId();
+
+        if(alarm != null){
+            userId = alarm.getId();
+
+            if(!loginUser.equals(userId)){
+                throw new IllegalArgumentException("삭제권한이 없습니다");
+            }
+            alarmRepository.deleteById(alarmId);
+        } else {
+            throw new NullPointerException("해당 게시글이 존재하지 않습니다.");
         }
-        alarmRepository.deleteById(alarmId);
-        map.put("msg", "Success");
-        return map;
     }
+
+    // 알람 삭제 2
+//    public Map<String, String> deleteAlarm(UserDetailsImpl userDetails, Long alarmId) {
+//        Map<String, String> map = new HashMap<>();
+//
+//        Alarm alarm = alarmRepository.findById(alarmId).orElseThrow(
+//                () -> new IllegalArgumentException("해당 알람이 존재하지 않습니다")
+//        );
+//
+//        String loginUser = userDetails.getUser().getUserid();
+//        String userId = "";
+//
+//
+//        if(alarm != null){
+//            userId = alarm.getUserId().toString();
+//
+//            if(!loginUser.equals(userId)){
+//                throw new IllegalArgumentException("삭제권한이 없습니다");
+//            }
+//        }
+////        if(!loginUser.equals(userId)){
+////            throw new IllegalArgumentException("자신의 알람만 삭제할 수 있습니다");
+////        }
+//        alarmRepository.deleteById(alarmId);
+//        map.put("msg", "Success");
+//        return map;
+//    }
+
+
     // 읽지 않은 알람 카운드
     public Integer unreadAlarm(UserDetailsImpl userDetails) {
         Long userId = userDetails.getUser().getId();
@@ -92,4 +126,8 @@ public class AlarmService {
         alarmRequestDto.setContents(commentAlarm);
         createAlarm(alarmRequestDto);
     }
+
+//    public Map<String, Object> deleteAlarm(User user) {
+//       alarmRepository
+//    }
 }
