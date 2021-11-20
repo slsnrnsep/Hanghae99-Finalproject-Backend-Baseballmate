@@ -73,7 +73,7 @@ public class MainController {
     }
 
     @GetMapping("/update/kbodata")
-    @Scheduled(cron = "0 30 * * * *")
+//    @Scheduled(cron = "0 30 * * * *")
     public String updatekbodata() throws IOException {
         List<MatchInfomation> matchInfomationList = matchDataService.crawlingKBODatas();
         matchDataService.updateKBODatas(matchInfomationList);
