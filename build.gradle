@@ -58,6 +58,7 @@ dependencies {
 
     //스프링 웹소켓
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
+    implementation 'org.springframework.boot:spring-boot-starter-freemarker'
     //스프링 redis
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     //embedded redis
