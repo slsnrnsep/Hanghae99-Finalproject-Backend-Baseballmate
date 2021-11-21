@@ -1,8 +1,11 @@
 package com.finalproject.backend.baseballmate.requestDto;
 
+import com.finalproject.backend.baseballmate.model.CommunityComment;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor

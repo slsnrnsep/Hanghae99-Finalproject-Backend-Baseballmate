@@ -1,7 +1,9 @@
 package com.finalproject.backend.baseballmate.service;
 
 import com.finalproject.backend.baseballmate.model.Community;
+import com.finalproject.backend.baseballmate.model.CommunityComment;
 import com.finalproject.backend.baseballmate.model.User;
+import com.finalproject.backend.baseballmate.repository.CommunityCommentRepository;
 import com.finalproject.backend.baseballmate.repository.CommunityRepository;
 import com.finalproject.backend.baseballmate.requestDto.AllCommunityDto;
 import com.finalproject.backend.baseballmate.requestDto.CommunityRequestDto;
@@ -26,6 +28,7 @@ public class CommunityService {
 
     private final CommunityRepository communityRepository;
     private String commonPath = "/images"; // 파일 저장할 기본 경로 변수 설정, 초기화
+    private final CommunityCommentRepository communityCommentRepository;
 
     @Transactional
     public Community createCommunity(User loginedUser, CommunityRequestDto requestDto) {
@@ -65,12 +68,14 @@ public class CommunityService {
 
         String userName = community.getUserName();
         String title = community.getTitle();
+        String content = community.getContent();
         String communityUserPicture = community.getCommunityUserPicture();
         String filePath = community.getFilePath();
         String myTeam = community.getMyTeam();
+        List<CommunityComment> communityCommentList = communityCommentRepository.findAllByCommunity_CommunityIdOrderByModifiedAtDesc(communityId);
 
         CommunityDetailResponseDto communityDetailResponseDto =
-                new CommunityDetailResponseDto(userName, title, communityUserPicture, filePath, myTeam);
+                new CommunityDetailResponseDto(userName, title, content, communityUserPicture, filePath, myTeam, communityCommentList);
         return communityDetailResponseDto;
     }
 
