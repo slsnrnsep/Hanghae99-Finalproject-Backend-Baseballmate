@@ -29,6 +29,7 @@ public class GoodsComment extends Timestamped {
     @Column
     private Long commentUserIndex;
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "goodsId")
     private Goods goods;

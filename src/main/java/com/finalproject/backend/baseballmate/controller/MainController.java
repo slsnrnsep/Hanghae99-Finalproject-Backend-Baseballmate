@@ -6,12 +6,10 @@ import com.finalproject.backend.baseballmate.repository.GroupRepository;
 import com.finalproject.backend.baseballmate.repository.MatchRepository;
 import com.finalproject.backend.baseballmate.repository.TimeLineRepository;
 import com.finalproject.backend.baseballmate.responseDto.AllGoodsResponseDto;
+import com.finalproject.backend.baseballmate.responseDto.AllScreenResponseDto;
 import com.finalproject.backend.baseballmate.responseDto.AllTimeLineResponseDto;
 import com.finalproject.backend.baseballmate.responseDto.HotGroupResponseDto;
-import com.finalproject.backend.baseballmate.service.GoodsService;
-import com.finalproject.backend.baseballmate.service.GroupService;
-import com.finalproject.backend.baseballmate.service.MatchDataService;
-import com.finalproject.backend.baseballmate.service.TimeLineService;
+import com.finalproject.backend.baseballmate.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
@@ -43,6 +41,7 @@ public class MainController {
     private final GoodsService goodsService;
     private final MatchRepository matchRepository;
     private final MatchDataService matchDataService;
+    private final ScreenService screenService;
 
     //관리자만 사용가능해야합니다(강제로 KBODATA를 DB에 쌓음)
     //현재 서버가 가동될 때마다 저장하도록 기능구현 되어있음
@@ -108,6 +107,7 @@ public class MainController {
         List<AllGoodsResponseDto> nowGoods = goodsService.getnowGoods(number);
         return nowGoods;
     }
+
 
     @GetMapping("/images/{file}")
     public ResponseEntity<Resource> display(

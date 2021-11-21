@@ -21,4 +21,6 @@ public interface GroupRepository extends JpaRepository<Group, Long>,GroupReposit
     List<Group> findAllByCreatedUser(User user);
 
     Page<Group> findBySelectTeam(String selectTeam, Pageable pageable);
+
+
 }
