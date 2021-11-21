@@ -122,6 +122,14 @@ public class User {
 
     public void deleteScreenCommentLikes(ScreenCommentLikes likes){this.screenCommentLikes.remove(likes);}
 
+    // 커뮤니티 종하요 생성자
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private final List<CommunityLikes> communityLikes = new ArrayList<>();
+
+    public void addCommunityLikes(CommunityLikes likes) {this.communityLikes.add(likes);}
+
+    public void deleteCommunityLikes(CommunityLikes likes) {this.communityLikes.remove(likes);}
+
 
     // goods 좋아요 생성자
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)

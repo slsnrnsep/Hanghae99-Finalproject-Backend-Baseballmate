@@ -34,10 +34,10 @@ public class GoodsController {
     String[] picturelist = {"basic0.jpg","basic1.jpg","basic2.jpg","basic3.jpg","basic4.jpg","basic5.jpg","basic6.jpg","basic7.jpg","basic8.jpg","basic9.jpg"};
     Random random = new Random();
     // 굿즈생성
-    @PostMapping("/goods")
+    @PostMapping( "/goods")
     public GoodsResponseDto postGoods(
             @RequestPart(value = "file",required = false) MultipartFile files,
-            @RequestPart GoodsRequestDto requestDto,
+            GoodsRequestDto requestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails){
         if(userDetails == null)
         {
@@ -47,6 +47,7 @@ public class GoodsController {
         try
         {
             String filename = picturelist[random.nextInt(10)+1];
+//            String filename = "basic.jpg";
             if (files != null) {
                 String origFilename = files.getOriginalFilename();
                 filename = new MD5Generator(origFilename).toString() + ".jpg";
