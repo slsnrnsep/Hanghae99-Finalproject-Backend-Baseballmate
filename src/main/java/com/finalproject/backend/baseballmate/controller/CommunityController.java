@@ -32,7 +32,9 @@ public class CommunityController {
     private final FileService fileService;
     String[] picturelist = {"basic0.jpg","basic1.jpg","basic2.jpg","basic3.jpg","basic4.jpg","basic5.jpg","basic6.jpg","basic7.jpg","basic8.jpg","basic9.jpg"};
     Random random = new Random();
-    @PostMapping("community")
+
+
+    @PostMapping("/community")
     public MsgResponseDto postCommunity(
             @RequestPart(value = "file",required = false) MultipartFile files,
             CommunityRequestDto requestDto,
