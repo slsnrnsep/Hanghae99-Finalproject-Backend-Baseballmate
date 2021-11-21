@@ -18,6 +18,7 @@ public class Community extends Timestamped{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "community_id")
     private Long communityId;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -42,6 +43,26 @@ public class Community extends Timestamped{
     @Column
     private String myTeam;
 
+    //종아요
+    @JsonBackReference
+    @OneToMany(mappedBy = "communitylikes", cascade = CascadeType.ALL)
+    private List<CommunityLikes> communityLikesList;
+
+    @Column(columnDefinition = "integer default 0")
+    private int communitylikeCount;
+
+    public void addLikes(CommunityLikes like) {
+        this.communityLikesList.add(like);
+        this.communitylikeCount += 1;
+    }
+
+    public void deleteLikes(CommunityLikes like) {
+        this.communityLikesList.remove(like);
+        this.communitylikeCount -= 1;
+    }
+
+
+    //코멘트
     @JsonBackReference
     @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE)
     private List<CommunityComment> communityCommentList = new ArrayList<>();
