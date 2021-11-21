@@ -77,7 +77,7 @@ public class StompHandler implements ChannelInterceptor {
             // 저장했던 sessionId 로 유저 객체를 받아옴
             User user = chatRoomService.chkSessionUser(sessionId);
             String username = user.getUsername();
-            chatMessageService.sendChatMessage(ChatMessage.builder()
+            chatMessageService. sendChatMessage(ChatMessage.builder()
                     .type(ChatMessage.MessageType.QUIT)
                     .roomId(roomId)
                     .sender(user)

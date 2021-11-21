@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="/webjars/bootstrap/4.3.1/dist/css/bootstrap.min.css">
     <style>
         [v-cloak] {
-            /*display: none;*/
+            display: none;
         }
     </style>
 </head>
@@ -46,10 +46,10 @@
         integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
         crossorigin="anonymous"></script>
 <script>
-    //alert(document.title);
+    alert(document.title);
     // websocket & stomp initialize
     var username = $('name').val()
-    var sock = new SockJS("http://localhost:8080/chatting");
+    var sock = new SockJS("/chatting");
     var ws = Stomp.over(sock);
     var reconnect = 0;
     // vue.js
@@ -58,25 +58,24 @@
         data: {
             roomId: '',
             room: {},
-            senderId: '',
+            sender: '',
             message: '',
             asd: '',
             messages: []
         },
         created() {
-
             this.findRoom();
         },
         methods: {
             findRoom: function() {
-                axios.get("http://localhost:8080/api/chat/room"+37).then(response => { this.room = response.data; });
+                axios.get('/api/chat/room/'+117).then(response => { this.room = response.data; });
             },
             sendMessage: function() {
-                ws.send("http://localhost:8080/pub/message",{},JSON.stringify({type:'TALK', roomId:37, senderId:55, asd:"this is asd",message:this.message}));
+                ws.send("/pub/message", {token:"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJmcm9udEBuYXZlci5jb20iLCJ1c2VySWQiOjU1LCJ1c2VybmFtZSI6Iu2FjOyKpO2KuOycoOyggCIsInBpY3R1cmUiOiI2MmI0NmQxMzMxNTRhM2VjOWMwMjgyYWUwMDdjZjZhNWpwZyIsImlhdCI6MTYzNzQ3OTgzMCwiZXhwIjoxNjM3NTY2MjMwfQ.kw-8C-Odp7tnqo4E9weRZzaSoyKrV_rIBT-9jGUbFY4"}, JSON.stringify({type:'TALK', roomId:117, senderId:55,message:this.message}));
                 this.message = '';
             },
             recvMessage: function(recv) {
-                this.messages.unshift({"type":recv.type,"senderId":recv.senderId,"message":recv.message, "asd":recv.asd})
+                this.message.unshift({"type":recv.type,"senderId":recv.senderId,"message":recv.message})
             }
         }
     });
@@ -85,17 +84,16 @@
         // pub/sub event
         //각각 connect,subscribe 헤더
 
-        ws.connect({token:"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJmcm9udEBuYXZlci5jb20iLCJ1c2VySWQiOjU1LCJ1c2VybmFtZSI6Iu2FjOyKpO2KuOycoOyggCIsInBpY3R1cmUiOiI1ODVmYTU5YjZhZjA5NGVmOWMxYjkwY2IxNGVhNjNjZmpwZyIsImlhdCI6MTYzNzQwNDIzMSwiZXhwIjoxNjM3NDkwNjMxfQ.u1V3UWeVTb0lktdquq99d4FnbF6y2n0c-C6MR1WbY_0"}, function(frame) {
-            ws.subscribe({toekn:"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJmcm9udEBuYXZlci5jb20iLCJ1c2VySWQiOjU1LCJ1c2VybmFtZSI6Iu2FjOyKpO2KuOycoOyggCIsInBpY3R1cmUiOiI1ODVmYTU5YjZhZjA5NGVmOWMxYjkwY2IxNGVhNjNjZmpwZyIsImlhdCI6MTYzNzQwNDIzMSwiZXhwIjoxNjM3NDkwNjMxfQ.u1V3UWeVTb0lktdquq99d4FnbF6y2n0c-C6MR1WbY_0"},"http://localhost:8080/sub/api/chat/rooms/"+37, function(message) {
+        ws.connect({token:"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJmcm9udEBuYXZlci5jb20iLCJ1c2VySWQiOjU1LCJ1c2VybmFtZSI6Iu2FjOyKpO2KuOycoOyggCIsInBpY3R1cmUiOiI2MmI0NmQxMzMxNTRhM2VjOWMwMjgyYWUwMDdjZjZhNWpwZyIsImlhdCI6MTYzNzQ3OTgzMCwiZXhwIjoxNjM3NTY2MjMwfQ.kw-8C-Odp7tnqo4E9weRZzaSoyKrV_rIBT-9jGUbFY4"}, function(frame) {
+            ws.subscribe("/sub/api/chat/rooms/"+117, function(message) {
                 var recv = JSON.parse(message.body);
                 vm.recvMessage(recv)
-            });
-            ws.send({token:"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJmcm9udEBuYXZlci5jb20iLCJ1c2VySWQiOjU1LCJ1c2VybmFtZSI6Iu2FjOyKpO2KuOycoOyggCIsInBpY3R1cmUiOiI1ODVmYTU5YjZhZjA5NGVmOWMxYjkwY2IxNGVhNjNjZmpwZyIsImlhdCI6MTYzNzQwNDIzMSwiZXhwIjoxNjM3NDkwNjMxfQ.u1V3UWeVTb0lktdquq99d4FnbF6y2n0c-C6MR1WbY_0"},"/pub/message", JSON.stringify({type:'ENTER', roomId:37, senderId:55}));
+            },{token:"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJmcm9udEBuYXZlci5jb20iLCJ1c2VySWQiOjU1LCJ1c2VybmFtZSI6Iu2FjOyKpO2KuOycoOyggCIsInBpY3R1cmUiOiI2MmI0NmQxMzMxNTRhM2VjOWMwMjgyYWUwMDdjZjZhNWpwZyIsImlhdCI6MTYzNzQ3OTgzMCwiZXhwIjoxNjM3NTY2MjMwfQ.kw-8C-Odp7tnqo4E9weRZzaSoyKrV_rIBT-9jGUbFY4"});
         }, function(error) {
             if(reconnect++ <= 5) {
                 setTimeout(function() {
                     console.log("connection reconnect");
-                    sock = new SockJS("http://localhost:8080/chatting");
+                    sock = new SockJS("/chatting");
                     ws = Stomp.over(sock);
                     connect();
                 },10*1000);

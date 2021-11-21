@@ -44,12 +44,12 @@ public class User {
 
     // 참여 신청한 모임
     @JsonManagedReference
-    @OneToMany(mappedBy = "appliedGroup",cascade = CascadeType.ALL) // groupapplication을 역참조하여 내가 참여 신청한 모임들 리스트 가져오기
+    @OneToMany(mappedBy = "appliedGroup",cascade = CascadeType.ALL,fetch = FetchType.EAGER) // groupapplication을 역참조하여 내가 참여 신청한 모임들 리스트 가져오기
     private List<GroupApplication> appliedGroup = new ArrayList<>();
     // 최종 타입이 groupapplication이 아니고 group이어야 할텐데 함수를 써서 가져오기
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "canceledGroup", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "canceledGroup", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private List<CanceledList> canceledLists = new ArrayList<>();
 
     @JsonManagedReference
