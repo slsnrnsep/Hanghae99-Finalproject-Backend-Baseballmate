@@ -1,5 +1,6 @@
 package com.finalproject.backend.baseballmate.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,10 +15,12 @@ public class GoodsLikes {
     @GeneratedValue
     private Long id;
 
+    @JsonBackReference
     @JoinColumn(name = "goods_id")
     @ManyToOne
     private Goods goods;
 
+    @JsonBackReference
     @JoinColumn(name = "user_id")
     @ManyToOne
     private User user;

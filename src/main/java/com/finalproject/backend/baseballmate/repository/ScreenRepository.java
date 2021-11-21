@@ -15,6 +15,7 @@ public interface ScreenRepository extends JpaRepository<Screen, Long> {
     List<Screen> findAllByOrderByCreatedAtDesc();
     Screen findByScreenId(Long screenId);
     List<Screen> findAllByScreenCreatedUser(User user);
+    List<Screen> findAllByOrderByHotPercentDesc();
 
     Page<Screen> findByPlaceInfomation(String location, Pageable pageable);
 }

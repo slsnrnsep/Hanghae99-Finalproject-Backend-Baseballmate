@@ -130,7 +130,7 @@ public class User {
 
     public void deleteCommunityLikes(CommunityLikes likes) {this.communityLikes.remove(likes);}
 
-
+    @JsonManagedReference
     // goods 좋아요 생성자
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private final List<GoodsLikes> goodsLikes = new ArrayList<>();
