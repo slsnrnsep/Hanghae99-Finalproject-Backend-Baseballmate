@@ -31,11 +31,11 @@ public class ChatMessage {
     @Column
     private String message; // 메시지
 
-//    @ManyToOne
-//    private User sender; // 메시지 보낸 유저의 인덱스
+    @ManyToOne
+    private User sender; // 메시지 보낸 유저의 인덱스
 
-    @Column
-    private Long senderId;
+//    @Column
+//    private Long senderId;
 
     @Column
     private String userEmail; // 메시지 보낸 사람의 이름
@@ -44,7 +44,7 @@ public class ChatMessage {
     public ChatMessage(MessageType type, String roomId, String message, User sender) {
         this.type = type;
         this.roomId = roomId;
-        this.senderId = sender.getId();
+        this.sender = sender;
         this.userEmail = sender.getUserid();
         this.message = message;
     }
@@ -53,7 +53,7 @@ public class ChatMessage {
     public ChatMessage(ChatMessageRequestDto chatMessageRequestDto, UserService userService) {
         this.type = chatMessageRequestDto.getType();
         this.roomId = chatMessageRequestDto.getRoomId();
-        this.senderId =  chatMessageRequestDto.getSenderId();
+        this.sender =  userService.getUser(chatMessageRequestDto.getSenderId());
         this.message = chatMessageRequestDto.getMessage();
     }
 
