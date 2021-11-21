@@ -5,6 +5,7 @@ import com.finalproject.backend.baseballmate.repository.*;
 import com.finalproject.backend.baseballmate.responseDto.AllGroupResponseDto;
 import com.finalproject.backend.baseballmate.responseDto.AllScreenResponseDto;
 import com.finalproject.backend.baseballmate.requestDto.ScreenRequestDto;
+import com.finalproject.backend.baseballmate.responseDto.HotScreenResponseDto;
 import com.finalproject.backend.baseballmate.responseDto.ScreenDetailResponseDto;
 import com.finalproject.backend.baseballmate.security.UserDetailsImpl;
 import com.finalproject.backend.baseballmate.util.MD5Generator;
@@ -18,6 +19,7 @@ import javax.transaction.Transactional;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -463,5 +465,73 @@ public class ScreenService {
         } else {
             throw new IllegalArgumentException("모임장만 확정이 가능합니다");
         }
+    }
+    // 스야 최신순 조회
+    @Transactional
+    public List<AllScreenResponseDto> getnowScreen(int number) throws ParseException
+    {
+        List<Screen> screenList = screenRepository.findAllByOrderByCreatedAtDesc();
+        List<AllScreenResponseDto> data = new ArrayList<>();
+
+        if(screenList.size()<=number){
+            number = screenList.size();
+        }
+        for(int i = 0; i<screenList.size(); i++){
+            Screen screen = screenList.get(i);
+
+            Long id = screen.getScreenId();
+            String title = screen.getTitle();
+            String createdUsername = screen.getCreatedUsername();
+            int peopleLimit = screen.getPeopleLimit();
+            int canApplyNum = screen.getCanApplyNum();
+            double hotPercent = screen.getHotPercent();
+            String groupDate = screen.getGroupDate();
+            String filePath = screen.getFilePath();
+            String selectPlace = screen.getSelectPlace();
+            String placeInfomation = screen.getPlaceInfomation();
+            int month = Integer.parseInt(screen.getGroupDate().split("[.]")[0]);
+            int day = Integer.parseInt(screen.getGroupDate().split("[.]")[1].split(" ")[0]);
+            LocalDate target = LocalDate.of(LocalDate.now().getYear(),month,day);
+            Long countingday = ChronoUnit.DAYS.between(LocalDate.now(),target);
+            String dday = countingday.toString();
+            boolean allowtype = screen.isAllowtype();
+            AllScreenResponseDto allScreenResponseDto =
+                    new AllScreenResponseDto(id, title, createdUsername, peopleLimit, canApplyNum, hotPercent, groupDate, filePath, selectPlace, placeInfomation, dday, allowtype);
+            data.add(allScreenResponseDto);
+        }
+        return data;
+    }
+    // 스야 인기순 조회
+    public List<HotScreenResponseDto> getHotScreen() {
+        List<Screen> hotScreenList = screenRepository.findAllByOrderByHotPercentDesc();
+        List<HotScreenResponseDto> hotScreenResponseDtoList = new ArrayList<>();
+
+        for(int i = 0; i<hotScreenList.size(); i++){
+            Screen screen = hotScreenList.get(i);
+
+            Long id = screen.getScreenId();
+            String title = screen.getTitle();
+            String createdUsername = screen.getCreatedUsername();
+            int peopleLimit = screen.getPeopleLimit();
+            int canApplyNum = screen.getCanApplyNum();
+            double hotPercent = screen.getHotPercent();
+            String groupDate = screen.getGroupDate();
+            String filePath = screen.getFilePath();
+            String selectPlace = screen.getSelectPlace();
+            String placeInfomation = screen.getPlaceInfomation();
+
+            int month = Integer.parseInt(screen.getGroupDate().split("[.]")[0]);
+            int day = Integer.parseInt(screen.getGroupDate().split("[.]")[1].split(" ")[0]);
+            LocalDate target = LocalDate.of(LocalDate.now().getYear(),month,day);
+            Long countingday = ChronoUnit.DAYS.between(LocalDate.now(),target);
+            String dday = countingday.toString();
+            boolean allowtype = screen.isAllowtype();
+
+            HotScreenResponseDto hotScreenResponseDto =
+                    new HotScreenResponseDto(id, title, createdUsername, peopleLimit, canApplyNum, hotPercent, groupDate, filePath, selectPlace, placeInfomation, dday, allowtype);
+
+            hotScreenResponseDtoList.add(hotScreenResponseDto);
+        }
+        return hotScreenResponseDtoList;
     }
 }

@@ -2,11 +2,8 @@ package com.finalproject.backend.baseballmate.controller;
 
 import com.finalproject.backend.baseballmate.model.User;
 import com.finalproject.backend.baseballmate.repository.ScreenRepository;
-import com.finalproject.backend.baseballmate.responseDto.AllScreenResponseDto;
+import com.finalproject.backend.baseballmate.responseDto.*;
 import com.finalproject.backend.baseballmate.requestDto.ScreenRequestDto;
-import com.finalproject.backend.baseballmate.responseDto.MsgResponseDto;
-import com.finalproject.backend.baseballmate.responseDto.ScreenDetailResponseDto;
-import com.finalproject.backend.baseballmate.responseDto.ScreenResponseDto;
 import com.finalproject.backend.baseballmate.security.UserDetailsImpl;
 import com.finalproject.backend.baseballmate.service.FileService;
 import com.finalproject.backend.baseballmate.service.ScreenService;
@@ -24,6 +21,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.security.NoSuchAlgorithmException;
+import java.text.ParseException;
 import java.util.List;
 import java.util.Random;
 
@@ -157,4 +155,19 @@ public class ScreenController {
         MsgResponseDto msgResponseDto = new MsgResponseDto("success", "삭제 완료");
         return msgResponseDto;
     }
+
+    // 스야 조회(최신 등록 순)
+    @GetMapping(path = "/screen", params = "count")
+    public List<AllScreenResponseDto> getnowScreen(@RequestParam("count") int number) throws ParseException
+    {
+        List<AllScreenResponseDto> nowScreen = screenService.getnowScreen(number);
+        return nowScreen;
+    }
+    // 스야 조회(인기 순)
+    @GetMapping("/groups/hotscreen")
+    public List<HotScreenResponseDto> getHotScreenList(){
+        List<HotScreenResponseDto> hotScreenResponseDtos = screenService.getHotScreen();
+        return hotScreenResponseDtos;
+    }
+
 }
