@@ -24,6 +24,7 @@ public class RedisSubscriber {
             message.setRoomId(chatMessage.getRoomId());
             message.setSenderId(chatMessage.getSenderId());
             message.setMessage(chatMessage.getMessage());
+            message.setUserEmail(chatMessage.getUserEmail());
             chatMessageRepository.save(message);
         } catch (Exception e) {
             log.error("Exception {}", e);

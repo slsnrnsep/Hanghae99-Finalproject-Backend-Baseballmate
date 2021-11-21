@@ -1,5 +1,7 @@
 package com.finalproject.backend.baseballmate.chat;
 
+import com.finalproject.backend.baseballmate.model.User;
+import com.finalproject.backend.baseballmate.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,6 +20,7 @@ public class ChatMessageService {
     private final ChatMessageQueryRepository chatMessageQueryRepository;
     private final ChannelTopic channelTopic;
     private final RedisTemplate redisTemplate;
+    private final UserRepository userRepository;
 //    private final BanUserListService banUserListService;
     private final ChatRoomService chatRoomService;
 
@@ -35,12 +38,15 @@ public class ChatMessageService {
     // 메세지의 type 을 확인하고 그에따라 작업을 분기시킴
     public void sendChatMessage(ChatMessage chatMessageRequestDto) {
         // 채팅방 입장시
+        User user = userRepository.findById(chatMessageRequestDto.getSenderId()).orElseThrow(
+                ()-> new IllegalArgumentException("(채팅방) 유저인덱스를 찾을 수 없습니다")
+        );
         if (ChatMessage.MessageType.ENTER.equals(chatMessageRequestDto.getType())) {
-            chatMessageRequestDto.setMessage(chatMessageRequestDto.getSenderId()+ "님이 들어왔어요.");
+            chatMessageRequestDto.setMessage("ID: "+user.getId()+"  "+user.getUsername()+ "님이 들어왔어요.");
 //            chatMessageRequestDto.setSender(chatMessageRequestDto.getSender());
             // 채팅방 퇴장시
         } else if (ChatMessage.MessageType.QUIT.equals(chatMessageRequestDto.getType())) {
-            chatMessageRequestDto.setMessage(chatMessageRequestDto.getSenderId() + "님이 자리를 비웠어요.");
+            chatMessageRequestDto.setMessage("ID: "+user.getId()+"  "+user.getUsername() + "님이 자리를 비웠어요.");
 //            chatMessageRequestDto.setSender(chatMessageRequestDto.getSender());
             // 채팅방 강퇴시
 //        } else if (ChatMessage.MessageType.BAN.equals(chatMessageRequestDto.getType())){

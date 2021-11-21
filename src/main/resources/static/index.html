@@ -49,7 +49,7 @@
     alert(document.title);
     // websocket & stomp initialize
     var username = $('name').val()
-    var sock = new SockJS("/chatting");
+    var sock = new SockJS("https://54.180.148.132:8080/chatting");
     var ws = Stomp.over(sock);
     var reconnect = 0;
     // vue.js
@@ -68,10 +68,10 @@
         },
         methods: {
             findRoom: function() {
-                axios.get('/api/chat/room/'+117).then(response => { this.room = response.data; });
+                axios.get('https://54.180.148.132:8080/api/chat/room/'+117).then(response => { this.room = response.data; });
             },
             sendMessage: function() {
-                ws.send("/pub/message", {token:"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJmcm9udEBuYXZlci5jb20iLCJ1c2VySWQiOjU1LCJ1c2VybmFtZSI6Iu2FjOyKpO2KuOycoOyggCIsInBpY3R1cmUiOiI2MmI0NmQxMzMxNTRhM2VjOWMwMjgyYWUwMDdjZjZhNWpwZyIsImlhdCI6MTYzNzQ3OTgzMCwiZXhwIjoxNjM3NTY2MjMwfQ.kw-8C-Odp7tnqo4E9weRZzaSoyKrV_rIBT-9jGUbFY4"}, JSON.stringify({type:'TALK', roomId:117, senderId:55,message:this.message}));
+                ws.send("https://54.180.148.132:8080/pub/message", {token:"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJmcm9udEBuYXZlci5jb20iLCJ1c2VySWQiOjU1LCJ1c2VybmFtZSI6Iu2FjOyKpO2KuOycoOyggCIsInBpY3R1cmUiOiI2MmI0NmQxMzMxNTRhM2VjOWMwMjgyYWUwMDdjZjZhNWpwZyIsImlhdCI6MTYzNzUxMTg0NiwiZXhwIjoxNjM3NTk4MjQ2fQ.YAonOmgAFTd-IMwrKFdOdivckuJXcVgi9gNpj2OXw1s"}, JSON.stringify({type:'TALK', roomId:117, senderId:55,message:this.message}));
                 this.message = '';
             },
             recvMessage: function(recv) {
@@ -84,16 +84,16 @@
         // pub/sub event
         //각각 connect,subscribe 헤더
 
-        ws.connect({token:"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJmcm9udEBuYXZlci5jb20iLCJ1c2VySWQiOjU1LCJ1c2VybmFtZSI6Iu2FjOyKpO2KuOycoOyggCIsInBpY3R1cmUiOiI2MmI0NmQxMzMxNTRhM2VjOWMwMjgyYWUwMDdjZjZhNWpwZyIsImlhdCI6MTYzNzQ3OTgzMCwiZXhwIjoxNjM3NTY2MjMwfQ.kw-8C-Odp7tnqo4E9weRZzaSoyKrV_rIBT-9jGUbFY4"}, function(frame) {
-            ws.subscribe("/sub/api/chat/rooms/"+117, function(message) {
+        ws.connect({token:"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJmcm9udEBuYXZlci5jb20iLCJ1c2VySWQiOjU1LCJ1c2VybmFtZSI6Iu2FjOyKpO2KuOycoOyggCIsInBpY3R1cmUiOiI2MmI0NmQxMzMxNTRhM2VjOWMwMjgyYWUwMDdjZjZhNWpwZyIsImlhdCI6MTYzNzUxMTg0NiwiZXhwIjoxNjM3NTk4MjQ2fQ.YAonOmgAFTd-IMwrKFdOdivckuJXcVgi9gNpj2OXw1s"}, function(frame) {
+            ws.subscribe("https://54.180.148.132:8080/sub/api/chat/rooms/"+117, function(message) {
                 var recv = JSON.parse(message.body);
                 vm.recvMessage(recv)
-            },{token:"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJmcm9udEBuYXZlci5jb20iLCJ1c2VySWQiOjU1LCJ1c2VybmFtZSI6Iu2FjOyKpO2KuOycoOyggCIsInBpY3R1cmUiOiI2MmI0NmQxMzMxNTRhM2VjOWMwMjgyYWUwMDdjZjZhNWpwZyIsImlhdCI6MTYzNzQ3OTgzMCwiZXhwIjoxNjM3NTY2MjMwfQ.kw-8C-Odp7tnqo4E9weRZzaSoyKrV_rIBT-9jGUbFY4"});
+            },{token:"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJmcm9udEBuYXZlci5jb20iLCJ1c2VySWQiOjU1LCJ1c2VybmFtZSI6Iu2FjOyKpO2KuOycoOyggCIsInBpY3R1cmUiOiI2MmI0NmQxMzMxNTRhM2VjOWMwMjgyYWUwMDdjZjZhNWpwZyIsImlhdCI6MTYzNzUxMTg0NiwiZXhwIjoxNjM3NTk4MjQ2fQ.YAonOmgAFTd-IMwrKFdOdivckuJXcVgi9gNpj2OXw1s"});
         }, function(error) {
             if(reconnect++ <= 5) {
                 setTimeout(function() {
                     console.log("connection reconnect");
-                    sock = new SockJS("/chatting");
+                    sock = new SockJS("https://54.180.148.132:8080/chatting");
                     ws = Stomp.over(sock);
                     connect();
                 },10*1000);
