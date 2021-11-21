@@ -16,13 +16,16 @@ import javax.transaction.Transactional;
 public class ChatMessageService {
 
     private final ChatMessageQueryRepository chatMessageQueryRepository;
+    private final ChatMessageRepository chatMessageRepository;
     private final ChannelTopic channelTopic;
     private final RedisTemplate redisTemplate;
 //    private final BanUserListService banUserListService;
     private final ChatRoomService chatRoomService;
+    private final ChatMessage chatMessage = new ChatMessage();
 
 
     // 메세지의 헤더에서 추출한 정보로 roomId 를 확인하고 리턴
+    @Transactional
     public String getRoomId(String destination) {
         int lastIndex = destination.lastIndexOf('/');
         if (lastIndex != -1) {
@@ -33,15 +36,28 @@ public class ChatMessageService {
     }
 
     // 메세지의 type 을 확인하고 그에따라 작업을 분기시킴
+    @Transactional
     public void sendChatMessage(ChatMessage chatMessageRequestDto) {
         // 채팅방 입장시
         if (ChatMessage.MessageType.ENTER.equals(chatMessageRequestDto.getType())) {
             chatMessageRequestDto.setMessage(chatMessageRequestDto.getSender().getUsername()+ "님이 들어왔어요.");
             chatMessageRequestDto.setSender(chatMessageRequestDto.getSender());
+            chatMessage.setMessage(chatMessageRequestDto.getMessage());
+            chatMessage.setSender(chatMessageRequestDto.getSender());
+            chatMessage.setRoomId(chatMessageRequestDto.getRoomId());
+            chatMessage.setType(ChatMessage.MessageType.ENTER);
+            chatMessage.setUserEmail(chatMessageRequestDto.getUserEmail());
+            chatMessageRepository.save(chatMessage);
             // 채팅방 퇴장시
         } else if (ChatMessage.MessageType.QUIT.equals(chatMessageRequestDto.getType())) {
             chatMessageRequestDto.setMessage(chatMessageRequestDto.getSender().getUsername() + "님이 자리를 비웠어요.");
             chatMessageRequestDto.setSender(chatMessageRequestDto.getSender());
+            chatMessage.setMessage(chatMessageRequestDto.getMessage());
+            chatMessage.setSender(chatMessageRequestDto.getSender());
+            chatMessage.setRoomId(chatMessageRequestDto.getRoomId());
+            chatMessage.setType(ChatMessage.MessageType.QUIT);
+            chatMessage.setUserEmail(chatMessageRequestDto.getUserEmail());
+            chatMessageRepository.save(chatMessage);
             // 채팅방 강퇴시
 //        } else if (ChatMessage.MessageType.BAN.equals(chatMessageRequestDto.getType())){
 //            Long userId = Long.parseLong(chatMessageRequestDto.getMessage());

@@ -1,12 +1,11 @@
 package com.finalproject.backend.baseballmate.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.finalproject.backend.baseballmate.chat.ChatMessage;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.stereotype.Service;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -67,6 +66,10 @@ public class User {
     @JsonManagedReference
     @OneToMany(mappedBy = "cancledScreen", cascade = CascadeType.ALL)
     private List<CanceledScreenList> canceledScreenLists = new ArrayList<>();
+
+    @JsonManagedReference
+    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL)
+    private List<ChatMessage> chatMessageList = new ArrayList<>();
 
     @Column(nullable = true)
     private Long kakaoId;

@@ -32,6 +32,7 @@ public class ChatMessage {
     private String message; // 메시지
 
     @ManyToOne
+    @JoinColumn(name = "ChatSenderUserInx")
     private User sender; // 메시지 보낸 유저의 인덱스
 
 //    @Column
