@@ -40,24 +40,24 @@ public class ChatMessageService {
     public void sendChatMessage(ChatMessage chatMessageRequestDto) {
         // 채팅방 입장시
         if (ChatMessage.MessageType.ENTER.equals(chatMessageRequestDto.getType())) {
-            chatMessageRequestDto.setMessage(chatMessageRequestDto.getSender().getUsername()+ "님이 들어왔어요.");
-            chatMessageRequestDto.setSender(chatMessageRequestDto.getSender());
-            chatMessage.setMessage(chatMessageRequestDto.getMessage());
-            chatMessage.setSender(chatMessageRequestDto.getSender());
-            chatMessage.setRoomId(chatMessageRequestDto.getRoomId());
-            chatMessage.setType(ChatMessage.MessageType.ENTER);
-            chatMessage.setUserEmail(chatMessageRequestDto.getUserEmail());
-            chatMessageRepository.save(chatMessage);
+            chatMessageRequestDto.setMessage(chatMessageRequestDto.getSenderId() + "님이 들어왔어요.");
+//            chatMessageRequestDto.setSender(chatMessageRequestDto.getSender());
+//            chatMessage.setMessage(chatMessageRequestDto.getMessage());
+//            chatMessage.setSender(chatMessageRequestDto.getSender());
+//            chatMessage.setRoomId(chatMessageRequestDto.getRoomId());
+//            chatMessage.setType(ChatMessage.MessageType.ENTER);
+//            chatMessage.setUserEmail(chatMessageRequestDto.getUserEmail());
+//            chatMessageRepository.save(chatMessage);
             // 채팅방 퇴장시
         } else if (ChatMessage.MessageType.QUIT.equals(chatMessageRequestDto.getType())) {
-            chatMessageRequestDto.setMessage(chatMessageRequestDto.getSender().getUsername() + "님이 자리를 비웠어요.");
-            chatMessageRequestDto.setSender(chatMessageRequestDto.getSender());
-            chatMessage.setMessage(chatMessageRequestDto.getMessage());
-            chatMessage.setSender(chatMessageRequestDto.getSender());
-            chatMessage.setRoomId(chatMessageRequestDto.getRoomId());
-            chatMessage.setType(ChatMessage.MessageType.QUIT);
-            chatMessage.setUserEmail(chatMessageRequestDto.getUserEmail());
-            chatMessageRepository.save(chatMessage);
+            chatMessageRequestDto.setMessage(chatMessageRequestDto.getSenderId() + "님이 자리를 비웠어요.");
+//            chatMessageRequestDto.setSender(chatMessageRequestDto.getSender());
+//            chatMessage.setMessage(chatMessageRequestDto.getMessage());
+//            chatMessage.setSender(chatMessageRequestDto.getSender());
+//            chatMessage.setRoomId(chatMessageRequestDto.getRoomId());
+//            chatMessage.setType(ChatMessage.MessageType.QUIT);
+//            chatMessage.setUserEmail(chatMessageRequestDto.getUserEmail());
+//            chatMessageRepository.save(chatMessage);
             // 채팅방 강퇴시
 //        } else if (ChatMessage.MessageType.BAN.equals(chatMessageRequestDto.getType())){
 //            Long userId = Long.parseLong(chatMessageRequestDto.getMessage());

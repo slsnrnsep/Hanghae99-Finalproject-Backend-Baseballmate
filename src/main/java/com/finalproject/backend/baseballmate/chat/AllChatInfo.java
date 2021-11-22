@@ -1,5 +1,6 @@
 package com.finalproject.backend.baseballmate.chat;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.finalproject.backend.baseballmate.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,12 +19,13 @@ public class AllChatInfo {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @ManyToOne
+    @JsonBackReference
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-
-    @ManyToOne
+    @JsonBackReference
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_id")
     private ChatRoom chatRoom;
 

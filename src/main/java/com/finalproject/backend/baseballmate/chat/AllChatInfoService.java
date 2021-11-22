@@ -24,6 +24,12 @@ public class AllChatInfoService {
                 .collect(Collectors.toList());
     }
 
+    // 채팅방 입장 시 allchatinfo에 저장
+    public void saveAllChatInfo(User user, ChatRoom chatRoom) {
+        AllChatInfo allChatInfo = new AllChatInfo(user, chatRoom);
+        allChatInfoRepository.save(allChatInfo);
+    }
+
     // 채팅방 나가기
     public void deleteAllChatInfo(Long roomId, UserDetailsImpl userDetails) {
         AllChatInfo allChatInfo = allChatInfoQueryRepository.findByChatRoom_IdAndUser_Id(roomId, userDetails.getUser().getId());

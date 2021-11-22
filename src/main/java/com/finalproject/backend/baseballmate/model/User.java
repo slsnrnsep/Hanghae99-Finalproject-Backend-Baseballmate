@@ -1,7 +1,6 @@
 package com.finalproject.backend.baseballmate.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.finalproject.backend.baseballmate.chat.ChatMessage;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -67,9 +66,9 @@ public class User {
     @OneToMany(mappedBy = "cancledScreen", cascade = CascadeType.ALL)
     private List<CanceledScreenList> canceledScreenLists = new ArrayList<>();
 
-    @JsonManagedReference
-    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL)
-    private List<ChatMessage> chatMessageList = new ArrayList<>();
+//    @JsonManagedReference
+//    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL)
+//    private List<ChatMessage> chatMessageList = new ArrayList<>();
 
     @Column(nullable = true)
     private Long kakaoId;
