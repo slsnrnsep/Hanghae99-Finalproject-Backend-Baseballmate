@@ -1,5 +1,6 @@
 package com.finalproject.backend.baseballmate.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.finalproject.backend.baseballmate.chat.ChatRoom;
 import com.finalproject.backend.baseballmate.requestDto.GroupRequestDto;
@@ -24,6 +25,7 @@ public class Group extends Timestamped{
     private Long groupId; // 모임 고유번호, pk
 
     // 유저 아이디값이 들어감
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "createdUser")
     private User createdUser;

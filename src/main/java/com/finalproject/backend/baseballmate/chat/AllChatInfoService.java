@@ -20,7 +20,7 @@ public class AllChatInfoService {
     public List<User> getUser(Long roomId) {
         return allChatInfoQueryRepository.findAllByChatRoom_Id(roomId)
                 .stream()
-                .map(AllChatInfo::getUser)
+                .map(AllChatInfo::getEnteredUser)
                 .collect(Collectors.toList());
     }
 

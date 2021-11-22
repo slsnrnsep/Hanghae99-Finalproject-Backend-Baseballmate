@@ -1,6 +1,5 @@
 package com.finalproject.backend.baseballmate.chat;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.finalproject.backend.baseballmate.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,12 +18,12 @@ public class AllChatInfo {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @JsonBackReference
+//    @JsonBackReference -> jsonignore 사용하려면 이거 없어야 조회가 됨
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private User user;
+    private User enteredUser;
 
-    @JsonBackReference
+//    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_id")
     private ChatRoom chatRoom;
@@ -33,7 +32,7 @@ public class AllChatInfo {
     private Long lastMessageId;
 
     public AllChatInfo(User user, ChatRoom chatRoom) {
-        this.user = user;
+        this.enteredUser = user;
         this.chatRoom = chatRoom;
         this.lastMessageId = 0L;
     }

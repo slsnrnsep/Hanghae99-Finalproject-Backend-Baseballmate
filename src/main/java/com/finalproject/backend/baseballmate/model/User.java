@@ -1,6 +1,7 @@
 package com.finalproject.backend.baseballmate.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.finalproject.backend.baseballmate.chat.AllChatInfo;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,12 +28,15 @@ public class User {
     @Column(nullable = false, unique = false)
     private String username;
 
+    @JsonIgnore
     private String password;
 
     private String myselectTeam;
 
+    @JsonIgnore
     private int ranNum;
 
+    @JsonIgnore
     @Column
     private String phoneNumber;
 
@@ -41,35 +45,47 @@ public class User {
 //    private List<Group> groupList = new ArrayList<Group>();
 
     // 참여 신청한 모임
-    @JsonManagedReference
+//    @JsonManagedReference
+    @JsonIgnore
     @OneToMany(mappedBy = "appliedGroup",cascade = CascadeType.ALL) // groupapplication을 역참조하여 내가 참여 신청한 모임들 리스트 가져오기
     private List<GroupApplication> appliedGroup = new ArrayList<>();
     // 최종 타입이 groupapplication이 아니고 group이어야 할텐데 함수를 써서 가져오기
 
-    @JsonManagedReference
+    //    @JsonManagedReference
+    @JsonIgnore
     @OneToMany(mappedBy = "canceledGroup", cascade = CascadeType.ALL)
     private List<CanceledList> canceledLists = new ArrayList<>();
 
-    @JsonManagedReference
+    //    @JsonManagedReference
+    @JsonIgnore
     @OneToMany(mappedBy = "createdUser", cascade = CascadeType.ALL)
     private List<Group> createdGroupList = new ArrayList<>();
 
-    @JsonManagedReference
+    //    @JsonManagedReference
+    @JsonIgnore
     @OneToMany(mappedBy = "appliedUser",cascade = CascadeType.ALL)
     private List<ScreenApplication> appliedSecreen = new ArrayList<>();
 
-    @JsonManagedReference
+    //    @JsonManagedReference
+    @JsonIgnore
     @OneToMany(mappedBy = "screenCreatedUser", cascade = CascadeType.ALL)
     private List<Screen> createdScreenList = new ArrayList<>();
 
-    @JsonManagedReference
+    //    @JsonManagedReference
+    @JsonIgnore
     @OneToMany(mappedBy = "cancledScreen", cascade = CascadeType.ALL)
     private List<CanceledScreenList> canceledScreenLists = new ArrayList<>();
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "enteredUser", cascade = CascadeType.ALL)
+    private List<AllChatInfo> allChatInfoList = new ArrayList<>();
+
 //    @JsonManagedReference
+//    @JsonIgnore
 //    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL)
 //    private List<ChatMessage> chatMessageList = new ArrayList<>();
 
+    @JsonIgnore
     @Column(nullable = true)
     private Long kakaoId;
 
@@ -87,6 +103,7 @@ public class User {
     @Column(nullable = true)
     private String address;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private final List<TimeLineLikes> timeLineLikes = new ArrayList<>();
 
@@ -95,6 +112,7 @@ public class User {
     public void deleteLikes(TimeLineLikes likes) {this.timeLineLikes.remove(likes);
     }
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     private final List<GroupLikes> groupLikes = new ArrayList<>();
 
@@ -102,6 +120,7 @@ public class User {
 
     public void deleteGroupLikes(GroupLikes likes) {this.groupLikes.remove(likes);}
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     private final List<GroupCommentLikes> groupCommentLikes = new ArrayList<>();
 
@@ -110,6 +129,7 @@ public class User {
     public void deleteGroupCommentLikes(GroupCommentLikes likes) {this.groupCommentLikes.remove(likes);}
 
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     private final List<ScreenLikes> screenLikes = new ArrayList<>();
 
@@ -117,6 +137,7 @@ public class User {
 
     public void deleteScreenLikes(ScreenLikes likes){this.screenLikes.remove(likes);}
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     private final List<ScreenCommentLikes> screenCommentLikes = new ArrayList<>();
 
@@ -126,6 +147,7 @@ public class User {
 
 
     // goods 좋아요 생성자
+    @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private final List<GoodsLikes> goodsLikes = new ArrayList<>();
 
@@ -137,6 +159,7 @@ public class User {
         this.goodsLikes.remove(likes);
     }
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     private final List<GoodsCommentLikes> goodsCommentLikes = new ArrayList<>();
 

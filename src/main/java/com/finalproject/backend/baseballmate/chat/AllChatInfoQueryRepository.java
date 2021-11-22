@@ -17,7 +17,7 @@ public class AllChatInfoQueryRepository {
         return queryFactory.selectFrom(allChatInfo)
                 .where(allChatInfo.chatRoom.eq(chatRoom))
                 .join(allChatInfo.chatRoom)
-                .join(allChatInfo.user)
+                .join(allChatInfo.enteredUser)
                 .fetchJoin()
                 .fetchCount();
     }
@@ -25,9 +25,9 @@ public class AllChatInfoQueryRepository {
     public AllChatInfo findByChatRoom_IdAndUser_Id(Long roomId, Long userId){
         return queryFactory.selectFrom(allChatInfo)
                 .where(allChatInfo.chatRoom.id.eq(roomId))
-                .where(allChatInfo.user.id.eq(userId))
+                .where(allChatInfo.enteredUser.id.eq(userId))
                 .join(allChatInfo.chatRoom)
-                .join(allChatInfo.user)
+                .join(allChatInfo.enteredUser)
                 .fetchJoin()
                 .fetchOne();
     }
@@ -36,17 +36,17 @@ public class AllChatInfoQueryRepository {
         return queryFactory.selectFrom(allChatInfo)
                 .where(allChatInfo.chatRoom.id.eq(roomId))
                 .join(allChatInfo.chatRoom)
-                .join(allChatInfo.user)
+                .join(allChatInfo.enteredUser)
                 .fetchJoin()
                 .fetch();
     }
 
     public List<AllChatInfo> findAllByUserIdOrderByIdDesc(Long userId){
         return queryFactory.selectFrom(allChatInfo)
-                .where(allChatInfo.user.id.eq(userId))
+                .where(allChatInfo.enteredUser.id.eq(userId))
                 .orderBy(allChatInfo.id.desc())
                 .join(allChatInfo.chatRoom)
-                .join(allChatInfo.user)
+                .join(allChatInfo.enteredUser)
                 .fetchJoin()
                 .fetch();
     }
