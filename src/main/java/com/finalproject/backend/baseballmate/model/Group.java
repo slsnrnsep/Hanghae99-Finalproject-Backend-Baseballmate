@@ -81,7 +81,7 @@ public class Group extends Timestamped{
     // 모임에 해당하는 채팅방
     @OneToOne
     @JoinColumn(name="ChatRoom_id")
-    private ChatRoom chatRoom;
+    private ChatRoom chatGroupRoom;
 
     // 모임을 취소했던 유저 리스트
     @JsonManagedReference

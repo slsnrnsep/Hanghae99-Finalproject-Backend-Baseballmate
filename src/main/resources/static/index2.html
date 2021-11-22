@@ -71,7 +71,7 @@
                 axios.get('/api/chat/room/'+117).then(response => { this.room = response.data; });
             },
             sendMessage: function() {
-                ws.send("/pub/message", {token:"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJmcm9udEBuYXZlci5jb20iLCJ1c2VySWQiOjU1LCJ1c2VybmFtZSI6Iu2FjOyKpO2KuOycoOyggCIsInBpY3R1cmUiOiI2MmI0NmQxMzMxNTRhM2VjOWMwMjgyYWUwMDdjZjZhNWpwZyIsImlhdCI6MTYzNzU1NTIyNSwiZXhwIjoxNjM3NjQxNjI1fQ.71v86oMxle8T8_XeRKfXjTNNUwjyi4DiwyT6KHmrW54"}, JSON.stringify({type:'TALK', roomId:117, senderId:2,message:this.message}));
+                ws.send("/pub/message", {token:"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJmcm9udEBuYXZlci5jb20iLCJ1c2VySWQiOjU1LCJ1c2VybmFtZSI6Iu2FjOyKpO2KuOycoOyggCIsInBpY3R1cmUiOiI2MmI0NmQxMzMxNTRhM2VjOWMwMjgyYWUwMDdjZjZhNWpwZyIsImlhdCI6MTYzNzU1NTIyNSwiZXhwIjoxNjM3NjQxNjI1fQ.71v86oMxle8T8_XeRKfXjTNNUwjyi4DiwyT6KHmrW54"}, JSON.stringify({type:'TALK', roomId:117, senderId:55,message:this.message}));
                 this.message = '';
             },
             recvMessage: function(recv) {

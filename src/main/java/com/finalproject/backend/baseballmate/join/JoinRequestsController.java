@@ -43,5 +43,35 @@ public class JoinRequestsController {
     public List<MyAwaitRequestJoinResponseDto> myAwaitRequestJoinList(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         return joinRequestsService.myAwaitRequestJoinList(userDetails);
     }
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    @ApiOperation(value = "스크린 입장 신청", notes = "스크린 입장 신청")
+    @GetMapping("/screen/join/request/{postId}")
+    public String requestJoin2(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long postId) {
+        return joinRequestsService.requestJoin2(userDetails, postId);
+    }
+
+    @ApiOperation(value = "스크린 입장 신청 취소", notes = "스크린 입장 신청 취소")
+    @DeleteMapping("/screen/join/request/{id}")
+    public String requestJoinCancel2(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long id) {
+        return joinRequestsService.requestJoinCancel2(userDetails, id);
+    }
+
+    @ApiOperation(value = "스크린 입장 신청 목록", notes = "스크린 입장 신청 목록")
+    @GetMapping("/screen/join/request/list")
+    public List<UserInfoAndPostResponseDto> requestJoinList2(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return joinRequestsService.requestJoinList2(userDetails);
+    }
+
+    @ApiOperation(value = "스크린 입장 신청 승인/비승인", notes = "스크린 입장 신청 승인/비승인")
+    @GetMapping("/screen/join/request/accept/{joinRequestId}")
+    public String acceptJoinRequest2(@PathVariable Long joinRequestId, @RequestParam(value = "accept") boolean tOrF) {
+        return joinRequestsService.acceptJoinRequest2(joinRequestId, tOrF);
+    }
+
+    @ApiOperation(value = "나의 스크린 입장 신청 대기 목록", notes = "나의 스크린 입장 신청 대기 목록")
+    @GetMapping("/screen/join/request/await")
+    public List<MyAwaitRequestJoinResponseDto> myAwaitRequestJoinList2(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return joinRequestsService.myAwaitRequestJoinList2(userDetails);
+    }
 
 }

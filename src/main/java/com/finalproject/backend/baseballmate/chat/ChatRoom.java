@@ -1,6 +1,7 @@
 package com.finalproject.backend.baseballmate.chat;
 
 import com.finalproject.backend.baseballmate.model.Group;
+import com.finalproject.backend.baseballmate.model.Screen;
 import com.finalproject.backend.baseballmate.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -39,8 +40,11 @@ public class ChatRoom implements Serializable {
     @Column
     private boolean chatValid;
 
-    @OneToOne(mappedBy = "chatRoom")
+    @OneToOne(mappedBy = "chatGroupRoom")
     private Group group;
+
+    @OneToOne(mappedBy = "chatScreenRoom")
+    private Screen screen;
 
     public ChatRoom(String uuid, User user) {
         this.roomUuid = uuid;
