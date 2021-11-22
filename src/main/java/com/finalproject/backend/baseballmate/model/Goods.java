@@ -51,6 +51,7 @@ public class Goods extends Timestamped {
     @Column
     private String userAddress;
 
+
     @Column
     private Long userId;
 
@@ -63,7 +64,9 @@ public class Goods extends Timestamped {
     private List<GoodsComment> goodsCommentList = new ArrayList<>();
 
     // 굿즈 등록 생성자
+
     public Goods(User loginUser, GoodsRequestDto requestDto, String goodsUserPicture, String myTeam, String userAddress, Long userId, String usertype){
+
         this.createdUser = loginUser;
         this.userName = loginUser.getUsername();
         this.goodsName = requestDto.getGoodsName();
