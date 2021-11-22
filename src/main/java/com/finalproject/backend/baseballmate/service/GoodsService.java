@@ -32,7 +32,9 @@ public class GoodsService {
     @Transactional
     public Goods createGoods(User loginUser, GoodsRequestDto requestDto) {
         String goodsUserPicture = loginUser.getPicture();
-        Goods goods = new Goods(loginUser, requestDto, goodsUserPicture);
+        String myTeam = loginUser.getMyselectTeam();
+        String userAddress = loginUser.getAddress();
+        Goods goods = new Goods(loginUser, requestDto, goodsUserPicture, myTeam, userAddress);
         goodsRepository.save(goods);
         return goods;
     }
@@ -55,9 +57,11 @@ public class GoodsService {
 //            int likeCount = goods.getLikeCount();
             List<GoodsComment> goodsCommentList = goodsCommentRepository.findAllByGoods_IdOrderByModifiedAtDesc(id);
             List<GoodsLikes> goodsLikesList = goodsLikesRepository.findAllByGoods_Id(id);
+            String myTeam = goods.getMyTeam();
+            String userAddress = goods.getUserAddress();
 
             AllGoodsResponseDto responseDto =
-                    new AllGoodsResponseDto(id,userName ,goodsName,goodsContent,filePath,dayBefore, goodsUserPicture, goodsCommentList,goodsLikesList);
+                    new AllGoodsResponseDto(id,userName ,goodsName,goodsContent,filePath,dayBefore, goodsUserPicture, goodsCommentList,goodsLikesList, myTeam, userAddress);
             data.add(responseDto);
         }
         return data;
@@ -84,9 +88,11 @@ public class GoodsService {
 //            int likeCount = goods.getLikeCount();
             List<GoodsComment> goodsCommentList = goodsCommentRepository.findAllByGoods_IdOrderByModifiedAtDesc(id);
             List<GoodsLikes> goodsLikesList = goodsLikesRepository.findAllByGoods_Id(id);
+            String myTeam = goods.getMyTeam();
+            String userAddress = goods.getUserAddress();
 
             AllGoodsResponseDto responseDto =
-                    new AllGoodsResponseDto(id, userName, goodsName,goodsContent,filePath,dayBefore, goodsUserPicture, goodsCommentList,goodsLikesList);
+                    new AllGoodsResponseDto(id, userName, goodsName,goodsContent,filePath,dayBefore, goodsUserPicture, goodsCommentList,goodsLikesList, myTeam, userAddress);
             data.add(responseDto);
         }
         return data;

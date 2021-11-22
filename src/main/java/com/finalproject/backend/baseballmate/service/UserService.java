@@ -47,6 +47,7 @@ public class UserService {
         String username = userRequestDto.getUsername();
         String password = userRequestDto.getPassword();
         String userid = userRequestDto.getUserid();
+        String myteam = userRequestDto.getMyteam();
 
         Optional<User> check = userRepository.findByUsername(username);
         String pattern = "^[a-zA-Z0-9]*$";
