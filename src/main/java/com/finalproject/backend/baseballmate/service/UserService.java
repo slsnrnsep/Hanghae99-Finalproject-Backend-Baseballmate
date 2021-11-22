@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -68,6 +69,8 @@ public class UserService {
 //        User user = new User(userid,username,password, userRequestDto.getPhonenumber());
 
         userRepository.save(user);
+
+//        User loginedUser = userDetails.getUser();
         AlarmRequestDto alarmRequestDto = new AlarmRequestDto();
         String signupAlarm = "안녕하세요" + user.getUsername() + "님! 가입을 환영합니다";
         alarmRequestDto.setUserId(user.getId());
