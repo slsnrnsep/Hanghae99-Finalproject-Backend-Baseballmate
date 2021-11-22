@@ -67,13 +67,13 @@ public class Community extends Timestamped{
     @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE)
     private List<CommunityComment> communityCommentList = new ArrayList<>();
 
-    public Community(User loginedUser, CommunityRequestDto requestDto, String communityUserPicture){
+    public Community(User loginedUser, CommunityRequestDto requestDto, String communityUserPicture, String myTeam){
         this.createdUser = loginedUser;
         this.userName = loginedUser.getUsername();
         this.title = requestDto.getTitle();
         this.content = requestDto.getTitle();
         this.filePath = requestDto.getFilePath();
-        this.myTeam = requestDto.getMyTeam();
+        this.myTeam = myTeam;
         this.communityUserPicture = communityUserPicture;
     }
 

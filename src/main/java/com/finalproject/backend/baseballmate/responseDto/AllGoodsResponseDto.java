@@ -24,4 +24,6 @@ public class AllGoodsResponseDto {
     private String goodsUserPicture;
     List<GoodsComment> goodsCommentList;
     List<GoodsLikes> goodsLikesList;
+    String myTeam;
+    String userAddress;
 }

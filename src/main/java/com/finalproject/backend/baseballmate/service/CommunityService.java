@@ -33,7 +33,8 @@ public class CommunityService {
     @Transactional
     public Community createCommunity(User loginedUser, CommunityRequestDto requestDto) {
         String communityUserPicture = loginedUser.getPicture();
-        Community community = new Community(loginedUser, requestDto, communityUserPicture);
+        String myTeam = loginedUser.getMyselectTeam();
+        Community community = new Community(loginedUser, requestDto, communityUserPicture, myTeam);
         communityRepository.save(community);
         return community;
     }
