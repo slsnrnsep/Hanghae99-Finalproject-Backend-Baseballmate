@@ -20,8 +20,14 @@ public class AllChatInfoService {
     public List<User> getUser(Long roomId) {
         return allChatInfoQueryRepository.findAllByChatRoom_Id(roomId)
                 .stream()
-                .map(AllChatInfo::getUser)
+                .map(AllChatInfo::getEnteredUser)
                 .collect(Collectors.toList());
+    }
+
+    // 채팅방 입장 시 allchatinfo에 저장
+    public void saveAllChatInfo(User user, ChatRoom chatRoom) {
+        AllChatInfo allChatInfo = new AllChatInfo(user, chatRoom);
+        allChatInfoRepository.save(allChatInfo);
     }
 
     // 채팅방 나가기
