@@ -2,6 +2,7 @@ package com.finalproject.backend.baseballmate.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.finalproject.backend.baseballmate.chat.ChatRoom;
 import com.finalproject.backend.baseballmate.requestDto.ScreenRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -74,6 +75,10 @@ public class Screen extends Timestamped{
 
     @Column
     private boolean allowtype;
+
+    @OneToOne
+    @JoinColumn(name="ChatRoom_id")
+    private ChatRoom chatScreenRoom;
 
     @JsonBackReference
     @OneToMany(mappedBy = "screen", cascade = CascadeType.ALL)

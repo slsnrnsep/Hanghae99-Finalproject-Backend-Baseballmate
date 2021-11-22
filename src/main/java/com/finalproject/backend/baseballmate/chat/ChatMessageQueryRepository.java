@@ -20,8 +20,8 @@ public class ChatMessageQueryRepository {
         QueryResults<ChatMessage> result = queryFactory.selectFrom(chatMessage)
                 .where(chatMessage.roomId.eq(roomId))
                 .orderBy(chatMessage.id.desc())
-                .join(chatMessage.sender)
-                .fetchJoin()
+//                .join(chatMessage.sender)
+//                .fetchJoin()
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetchResults();
@@ -32,7 +32,7 @@ public class ChatMessageQueryRepository {
         return queryFactory.selectFrom(chatMessage)
                 .where(chatMessage.roomId.eq(roomId))
                 .where(chatMessage.type.eq(type))
-                .join(chatMessage.sender)
+//                .join(chatMessage.sender)
                 .fetchJoin()
                 .fetchCount();
     }
