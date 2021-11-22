@@ -2,8 +2,10 @@ package com.finalproject.backend.baseballmate.service;
 
 import com.finalproject.backend.baseballmate.model.Goods;
 import com.finalproject.backend.baseballmate.model.GoodsComment;
+import com.finalproject.backend.baseballmate.model.GoodsLikes;
 import com.finalproject.backend.baseballmate.model.User;
 import com.finalproject.backend.baseballmate.repository.GoodsCommentRepository;
+import com.finalproject.backend.baseballmate.repository.GoodsLikesRepository;
 import com.finalproject.backend.baseballmate.repository.GoodsRepository;
 import com.finalproject.backend.baseballmate.requestDto.GoodsDetailRequestDto;
 import com.finalproject.backend.baseballmate.requestDto.GoodsRequestDto;
@@ -25,6 +27,7 @@ import java.util.List;
 public class GoodsService {
     private final GoodsRepository goodsRepository;
     private final GoodsCommentRepository goodsCommentRepository;
+    private final GoodsLikesRepository goodsLikesRepository;
 
     @Transactional
     public Goods createGoods(User loginUser, GoodsRequestDto requestDto) {
@@ -50,9 +53,11 @@ public class GoodsService {
             String dayBefore = getDayBefore(goods);
             String goodsUserPicture = goods.getGoodsUserPicture();
 //            int likeCount = goods.getLikeCount();
+            List<GoodsComment> goodsCommentList = goodsCommentRepository.findAllByGoods_IdOrderByModifiedAtDesc(id);
+            List<GoodsLikes> goodsLikesList = goodsLikesRepository.findAllByGoods_Id(id);
 
             AllGoodsResponseDto responseDto =
-                    new AllGoodsResponseDto(id,userName ,goodsName,goodsContent,filePath,dayBefore, goodsUserPicture);
+                    new AllGoodsResponseDto(id,userName ,goodsName,goodsContent,filePath,dayBefore, goodsUserPicture, goodsCommentList,goodsLikesList);
             data.add(responseDto);
         }
         return data;
@@ -77,9 +82,11 @@ public class GoodsService {
             String dayBefore = getDayBefore(goods);
             String goodsUserPicture = goods.getGoodsUserPicture();
 //            int likeCount = goods.getLikeCount();
+            List<GoodsComment> goodsCommentList = goodsCommentRepository.findAllByGoods_IdOrderByModifiedAtDesc(id);
+            List<GoodsLikes> goodsLikesList = goodsLikesRepository.findAllByGoods_Id(id);
 
             AllGoodsResponseDto responseDto =
-                    new AllGoodsResponseDto(id, userName, goodsName,goodsContent,filePath,dayBefore, goodsUserPicture);
+                    new AllGoodsResponseDto(id, userName, goodsName,goodsContent,filePath,dayBefore, goodsUserPicture, goodsCommentList,goodsLikesList);
             data.add(responseDto);
         }
         return data;

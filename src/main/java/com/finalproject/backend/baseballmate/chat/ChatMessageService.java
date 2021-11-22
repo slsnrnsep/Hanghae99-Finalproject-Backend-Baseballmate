@@ -1,5 +1,7 @@
 package com.finalproject.backend.baseballmate.chat;
 
+import com.finalproject.backend.baseballmate.model.User;
+import com.finalproject.backend.baseballmate.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,6 +21,7 @@ public class ChatMessageService {
     private final ChatMessageRepository chatMessageRepository;
     private final ChannelTopic channelTopic;
     private final RedisTemplate redisTemplate;
+    private final UserRepository userRepository;
 //    private final BanUserListService banUserListService;
     private final ChatRoomService chatRoomService;
     private final ChatMessage chatMessage = new ChatMessage();
@@ -39,8 +42,12 @@ public class ChatMessageService {
     @Transactional
     public void sendChatMessage(ChatMessage chatMessageRequestDto) {
         // 채팅방 입장시
+        User user = userRepository.findById(chatMessageRequestDto.getSenderId()).orElseThrow(
+                ()-> new IllegalArgumentException("(채팅방) 유저인덱스를 찾을 수 없습니다")
+        );
         if (ChatMessage.MessageType.ENTER.equals(chatMessageRequestDto.getType())) {
-            chatMessageRequestDto.setMessage(chatMessageRequestDto.getSenderId() + "님이 들어왔어요.");
+            chatMessageRequestDto.setMessage("ID: "+user.getId()+"  "+user.getUsername()+ "님이 들어왔어요.");
+//            chatMessageRequestDto.setMessage(chatMessageRequestDto.getSenderId() + "님이 들어왔어요.");
 //            chatMessageRequestDto.setSender(chatMessageRequestDto.getSender());
 //            chatMessage.setMessage(chatMessageRequestDto.getMessage());
 //            chatMessage.setSender(chatMessageRequestDto.getSender());
@@ -50,7 +57,7 @@ public class ChatMessageService {
 //            chatMessageRepository.save(chatMessage);
             // 채팅방 퇴장시
         } else if (ChatMessage.MessageType.QUIT.equals(chatMessageRequestDto.getType())) {
-            chatMessageRequestDto.setMessage(chatMessageRequestDto.getSenderId() + "님이 자리를 비웠어요.");
+            chatMessageRequestDto.setMessage("ID: "+user.getId()+"  "+user.getUsername() + "님이 자리를 비웠어요.");
 //            chatMessageRequestDto.setSender(chatMessageRequestDto.getSender());
 //            chatMessage.setMessage(chatMessageRequestDto.getMessage());
 //            chatMessage.setSender(chatMessageRequestDto.getSender());

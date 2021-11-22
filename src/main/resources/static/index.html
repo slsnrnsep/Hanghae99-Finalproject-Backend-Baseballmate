@@ -68,10 +68,10 @@
         },
         methods: {
             findRoom: function() {
-                axios.get('/api/chat/room/'+117).then(response => { this.room = response.data; });
+                axios.get('api/chat/room/'+117).then(response => { this.room = response.data; });
             },
             sendMessage: function() {
-                ws.send("/pub/message", {token:"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJuYXZlckBuYXZlci5jb20iLCJ1c2VySWQiOjIsInVzZXJuYW1lIjoi64Sk7J2067KEIiwicGljdHVyZSI6InNhbXBsZS5wbmciLCJpYXQiOjE2Mzc1NTQ5NTcsImV4cCI6MTYzNzY0MTM1N30.mJHEbFMp8vTsO39Mk5BARr2C3yPfkAXigifUy1mnyNY"}, JSON.stringify({type:'TALK', roomId:117, senderId:55,message:this.message}));
+                ws.send("/pub/message", {token:"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJuYXZlckBuYXZlci5jb20iLCJ1c2VySWQiOjIsInVzZXJuYW1lIjoi64Sk7J2067KEIiwicGljdHVyZSI6InNhbXBsZS5wbmciLCJpYXQiOjE2Mzc1NTg0OTcsImV4cCI6MTYzNzY0NDg5N30.x8rf9NBs3ziLHvE5F6TX17HGdhMWFVG0BM7Cz4KMYv0"}, JSON.stringify({type:'TALK', roomId:117, senderId:2,message:this.message}));
                 this.message = '';
             },
             recvMessage: function(recv) {
@@ -84,11 +84,11 @@
         // pub/sub event
         //각각 connect,subscribe 헤더
 
-        ws.connect({token:"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJuYXZlckBuYXZlci5jb20iLCJ1c2VySWQiOjIsInVzZXJuYW1lIjoi64Sk7J2067KEIiwicGljdHVyZSI6InNhbXBsZS5wbmciLCJpYXQiOjE2Mzc1NTQ5NTcsImV4cCI6MTYzNzY0MTM1N30.mJHEbFMp8vTsO39Mk5BARr2C3yPfkAXigifUy1mnyNY"}, function(frame) {
+        ws.connect({token:"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJuYXZlckBuYXZlci5jb20iLCJ1c2VySWQiOjIsInVzZXJuYW1lIjoi64Sk7J2067KEIiwicGljdHVyZSI6InNhbXBsZS5wbmciLCJpYXQiOjE2Mzc1NTg0OTcsImV4cCI6MTYzNzY0NDg5N30.x8rf9NBs3ziLHvE5F6TX17HGdhMWFVG0BM7Cz4KMYv0"}, function(frame) {
             ws.subscribe("/sub/api/chat/rooms/"+117, function(message) {
                 var recv = JSON.parse(message.body);
                 vm.recvMessage(recv)
-            },{token:"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJuYXZlckBuYXZlci5jb20iLCJ1c2VySWQiOjIsInVzZXJuYW1lIjoi64Sk7J2067KEIiwicGljdHVyZSI6InNhbXBsZS5wbmciLCJpYXQiOjE2Mzc1NTQ5NTcsImV4cCI6MTYzNzY0MTM1N30.mJHEbFMp8vTsO39Mk5BARr2C3yPfkAXigifUy1mnyNY"});
+            },{token:"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJuYXZlckBuYXZlci5jb20iLCJ1c2VySWQiOjIsInVzZXJuYW1lIjoi64Sk7J2067KEIiwicGljdHVyZSI6InNhbXBsZS5wbmciLCJpYXQiOjE2Mzc1NTg0OTcsImV4cCI6MTYzNzY0NDg5N30.x8rf9NBs3ziLHvE5F6TX17HGdhMWFVG0BM7Cz4KMYv0"});
         }, function(error) {
             if(reconnect++ <= 5) {
                 setTimeout(function() {

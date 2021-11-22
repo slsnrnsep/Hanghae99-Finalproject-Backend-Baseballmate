@@ -1,32 +1,32 @@
 package com.finalproject.backend.baseballmate.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Getter
-@NoArgsConstructor
 @Entity
-public class GoodsLikes {
+@NoArgsConstructor
+public class CommunityLikes {
 
-    @Id
     @GeneratedValue
+    @Id
     private Long id;
 
-    @JsonBackReference
-    @JoinColumn(name = "goods_id")
+    @JoinColumn(name = "community_id")
     @ManyToOne
-    private Goods goods;
+    private Community communitylikes;
 
-    @JsonBackReference
     @JoinColumn(name = "user_id")
     @ManyToOne
     private User user;
 
-    public GoodsLikes(Goods goods, User user){
-        this.goods = goods;
+    public CommunityLikes(Community community, User user)
+    {
+        this.communitylikes = community;
         this.user = user;
     }
+
+
 }

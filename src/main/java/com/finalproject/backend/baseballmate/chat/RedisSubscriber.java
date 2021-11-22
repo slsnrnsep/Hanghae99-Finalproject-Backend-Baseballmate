@@ -26,6 +26,7 @@ public class RedisSubscriber {
             message.setSenderName(chatMessage.getSenderName());
             message.setSenderImage(chatMessage.getSenderImage());
             message.setMessage(chatMessage.getMessage());
+            message.setUserEmail(chatMessage.getUserEmail());
             chatMessageRepository.save(message);
         } catch (Exception e) {
             log.error("Exception {}", e);
