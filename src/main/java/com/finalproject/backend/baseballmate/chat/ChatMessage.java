@@ -2,7 +2,6 @@ package com.finalproject.backend.baseballmate.chat;
 
 import com.finalproject.backend.baseballmate.model.Timestamped;
 import com.finalproject.backend.baseballmate.model.User;
-import com.finalproject.backend.baseballmate.service.UserService;
 import lombok.*;
 
 import javax.persistence.*;
@@ -52,10 +51,11 @@ public class ChatMessage extends Timestamped {
     }
 
     @Builder
-    public ChatMessage(ChatMessageRequestDto chatMessageRequestDto, UserService userService) {
+    public ChatMessage(ChatMessageRequestDto chatMessageRequestDto, User sender) {
         this.type = chatMessageRequestDto.getType();
         this.roomId = chatMessageRequestDto.getRoomId();
         this.senderId =  chatMessageRequestDto.getSenderId();
+        this.userEmail = sender.getUserid();
         this.message = chatMessageRequestDto.getMessage();
     }
 
