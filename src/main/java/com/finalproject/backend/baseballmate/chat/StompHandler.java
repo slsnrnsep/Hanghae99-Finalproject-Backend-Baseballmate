@@ -47,8 +47,6 @@ public class StompHandler implements ChannelInterceptor {
             System.out.println("구독 요청");
             String roomId = chatMessageService.getRoomId(Optional.ofNullable((String)message.getHeaders().get("simpDestination")).orElse("InvalidRoomId"));
             // 채팅방을 구독한 클라이언트 sessionId를 roomId와 맵핑 -> 후에 어떤 채팅방에 어떤 세션이 있는지 알기 위함
-            ChatRoom subscribedChatRoom = chatRoomRepository.findById(Long.parseLong(roomId))
-                    .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 채팅방입니다."));
             System.out.println("해당 룸 ID:" +roomId);
             String sessionId = (String) message.getHeaders().get("simpSessionId");
 

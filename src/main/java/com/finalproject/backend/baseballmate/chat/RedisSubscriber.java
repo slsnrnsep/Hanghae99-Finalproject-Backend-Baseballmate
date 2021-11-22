@@ -23,6 +23,8 @@ public class RedisSubscriber {
             message.setType(chatMessage.getType());
             message.setRoomId(chatMessage.getRoomId());
             message.setSenderId(chatMessage.getSenderId());
+            message.setSenderName(chatMessage.getSenderName());
+            message.setSenderImage(chatMessage.getSenderImage());
             message.setMessage(chatMessage.getMessage());
             message.setUserEmail(chatMessage.getUserEmail());
             chatMessageRepository.save(message);

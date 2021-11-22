@@ -1,5 +1,6 @@
 package com.finalproject.backend.baseballmate.chat;
 
+import com.finalproject.backend.baseballmate.model.User;
 import com.finalproject.backend.baseballmate.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -14,7 +15,8 @@ public class ChatMessageController {
 
     @MessageMapping("/message")
     public void message(@RequestBody ChatMessageRequestDto messageRequestDto) {
-        ChatMessage chatMessage = new ChatMessage(messageRequestDto, userService);
+        User sender =  userService.getUser(messageRequestDto.getSenderId()); //getuser querydsl로 찾아오도록 바꾸기
+        ChatMessage chatMessage = new ChatMessage(messageRequestDto, sender);
         chatMessageService.sendChatMessage(chatMessage);
     }
 }
