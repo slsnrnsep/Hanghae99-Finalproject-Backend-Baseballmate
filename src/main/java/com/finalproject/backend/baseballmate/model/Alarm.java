@@ -20,6 +20,11 @@ public class Alarm extends Timestamped{
     @Column
     private Long userId;
 
+    // 유저 아이디값이 들어감
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "createdUser")
+    private User alarmCreatedUser;
+
     @Column
     private String contents;
 

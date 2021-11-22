@@ -63,8 +63,9 @@ public class AlarmService {
         Long loginUser = userDetails.getUser().getId();
         Long userId = alarm.getId();
 
+
         if(alarm != null){
-            userId = alarm.getId();
+            userId = alarm.getUserId();
 
             if(!loginUser.equals(userId)){
                 throw new IllegalArgumentException("삭제권한이 없습니다");
@@ -120,7 +121,8 @@ public class AlarmService {
    }
 
    // 알람메이커 모임 생성자
-    public void alarmCreateUser(String commentAlarm, Group CreatedUser){
+    public void alarmCreateUser(String commentAlarm, Group CreatedUser
+    ){
         AlarmRequestDto alarmRequestDto = new AlarmRequestDto();
         alarmRequestDto.setUserId(CreatedUser.getCreatedUser().getId());
         alarmRequestDto.setContents(commentAlarm);
