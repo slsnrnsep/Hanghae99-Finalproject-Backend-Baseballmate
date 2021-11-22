@@ -1,5 +1,6 @@
 package com.finalproject.backend.baseballmate.chat;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.finalproject.backend.baseballmate.model.Group;
 import com.finalproject.backend.baseballmate.model.Screen;
 import com.finalproject.backend.baseballmate.model.User;
@@ -32,23 +33,27 @@ public class ChatRoom implements Serializable {
     private String roomName;
 
     @Column
-    private Long ownUserId; //방장 인덱스스
+    private Long ownUserId; //방장 인덱스
 
     @Column
     private int userCount; //채팅방 인원수
 
     @Column
-    private boolean chatValid;
+    private boolean chatValid; // 채팅방 이용가능 여부
 
-    @OneToOne(mappedBy = "chatGroupRoom")
+    @JsonIgnore
+    @OneToOne
+    @JoinColumn(name="GroupInx")
     private Group group;
 
     @OneToOne(mappedBy = "chatScreenRoom")
     private Screen screen;
 
-    public ChatRoom(String uuid, User user) {
+    public ChatRoom(String uuid, Group group, User user) {
         this.roomUuid = uuid;
+        this.roomName = group.getTitle();
         this.ownUserId = user.getId();
+        this.group = group;
         this.chatValid = true;
     }
 

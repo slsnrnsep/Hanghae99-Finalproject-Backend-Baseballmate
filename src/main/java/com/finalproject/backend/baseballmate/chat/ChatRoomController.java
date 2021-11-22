@@ -19,11 +19,11 @@ public class ChatRoomController {
     private final ChatMessageService chatMessageService;
 
     // 채팅방 만들기(모임 확정지은 모임장만 가능)
-    @PostMapping("/chat/rooms")
-    public ChatRoom createRoom(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+    @PostMapping("/chat/{groupId}")
+    public ChatRoomCreateResponseDto createRoom(@PathVariable Long groupId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         User user = userDetails.getUser();
-        ChatRoom createdChatRoom = chatRoomService.createChatRoom(user);
-        return createdChatRoom;
+        ChatRoomCreateResponseDto chatRoomCreateResponseDto = chatRoomService.createChatRoom(groupId, user);
+        return chatRoomCreateResponseDto;
     }
 
     // 사용자별 채팅방 목록 조회
