@@ -51,13 +51,19 @@ public class Goods extends Timestamped {
     @Column
     private String userAddress;
 
+    @Column
+    private Long userId;
+
+    @Column
+    private String usertype;
+
     // comment와 연관관계
     @JsonManagedReference
     @OneToMany(mappedBy = "goods", cascade = CascadeType.REMOVE)
     private List<GoodsComment> goodsCommentList = new ArrayList<>();
 
     // 굿즈 등록 생성자
-    public Goods(User loginUser, GoodsRequestDto requestDto, String goodsUserPicture, String myTeam, String userAddress){
+    public Goods(User loginUser, GoodsRequestDto requestDto, String goodsUserPicture, String myTeam, String userAddress, Long userId, String usertype){
         this.createdUser = loginUser;
         this.userName = loginUser.getUsername();
         this.goodsName = requestDto.getGoodsName();
@@ -66,6 +72,8 @@ public class Goods extends Timestamped {
         this.goodsUserPicture = goodsUserPicture;
         this.myTeam = myTeam;
         this.userAddress = userAddress;
+        this.userId = userId;
+        this.usertype = usertype;
     }
 
     // 굿즈 업데이트 생성자

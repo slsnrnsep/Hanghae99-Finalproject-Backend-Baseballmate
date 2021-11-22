@@ -28,7 +28,17 @@ public class GoodsCommentService {
         Goods goods = goodsRepository.findById(goodsid).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 아이디입니다")
         );
-        GoodsComment goodsComment = new GoodsComment(loginedUsername,requestDto,goods,loginUsered,loginUserIndex);
+        String loginedUserPicture = loginUser.getPicture();
+        String usertype = "";
+        if(loginUser.getKakaoId() == null)
+        {
+            usertype = "normal";
+        }
+        else
+        {
+            usertype = "kakao";
+        }
+        GoodsComment goodsComment = new GoodsComment(loginedUsername,requestDto,goods,loginUsered,loginUserIndex,loginedUserPicture,usertype);
         goodsCommentRepository.save(goodsComment);
 
     }
