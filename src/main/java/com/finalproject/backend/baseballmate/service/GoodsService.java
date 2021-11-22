@@ -34,6 +34,7 @@ public class GoodsService {
         String goodsUserPicture = loginUser.getPicture();
         String myTeam = loginUser.getMyselectTeam();
         String userAddress = loginUser.getAddress();
+
         Long userId = loginUser.getId();
         String usertype = "";
         if(loginUser.getKakaoId() == null)
@@ -69,6 +70,7 @@ public class GoodsService {
             List<GoodsLikes> goodsLikesList = goodsLikesRepository.findAllByGoods_Id(id);
             String myTeam = goods.getMyTeam();
             String userAddress = goods.getUserAddress();
+
             Long userId = goods.getUserId();
             String usertype = goods.getUsertype();
 
