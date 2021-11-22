@@ -26,4 +26,6 @@ public class AllGoodsResponseDto {
     List<GoodsLikes> goodsLikesList;
     String myTeam;
     String userAddress;
+    Long userId;
+    String usertype;
 }

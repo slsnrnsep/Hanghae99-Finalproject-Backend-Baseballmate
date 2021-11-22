@@ -29,6 +29,12 @@ public class GoodsComment extends Timestamped {
     @Column
     private Long commentUserIndex;
 
+    @Column
+    private String commentUserPicture;
+
+    @Column
+    private String usertype;
+
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "goodsId")
@@ -51,12 +57,14 @@ public class GoodsComment extends Timestamped {
         this.goodsCommentlikeCount -= 1;
     }
 
-    public GoodsComment(String userName,GoodsCommentRequestDto requestDto, Goods goods,String loginedUserId,Long loginedUserIndex){
+    public GoodsComment(String userName,GoodsCommentRequestDto requestDto, Goods goods,String loginedUserId,Long loginedUserIndex, String loginedUserPicture, String usertype){
         this.userName = userName;
         this.comment = requestDto.getComment();
         this.goods = goods;
         this.commentUserId = loginedUserId;
         this.commentUserIndex = loginedUserIndex;
+        this.commentUserPicture = loginedUserPicture;
+        this.usertype = usertype;
     }
 
     public void updateComment(GoodsCommentRequestDto requestDto) {

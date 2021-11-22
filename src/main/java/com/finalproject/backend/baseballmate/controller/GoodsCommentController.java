@@ -67,7 +67,7 @@ public class GoodsCommentController {
     @DeleteMapping("/goods/{goodsId}/comment/{commentId}")
     public GoodsCommentResponseDto deleteComment(
             @PathVariable("goodsId") Long goodsId,
-            @PathVariable("goodsCommentId") Long id,
+            @PathVariable("commentId") Long id,
             @AuthenticationPrincipal UserDetailsImpl userDetails)
     {
         if(userDetails == null){

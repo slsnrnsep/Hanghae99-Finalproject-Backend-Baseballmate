@@ -2,9 +2,11 @@ package com.finalproject.backend.baseballmate.chat;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 public class ChatMessageRequestDto {
     private ChatMessage.MessageType type;
     private String roomId;

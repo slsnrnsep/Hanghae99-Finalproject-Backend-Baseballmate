@@ -39,7 +39,7 @@ public class GroupComment extends Timestamped{
     @JoinColumn(name = "groupId")
     private Group group;
 
-    @JsonBackReference
+    @JsonBackReference // jsonmanagereference로 바꾸기
     @OneToMany(mappedBy = "groupComment",cascade = CascadeType.ALL)
     private List<GroupCommentLikes> groupcommentlikesList;
 
