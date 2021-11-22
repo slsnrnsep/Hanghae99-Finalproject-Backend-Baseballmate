@@ -39,11 +39,13 @@ public class ChatRoomService {
 
     //채팅방생성
     @Transactional
-    public ChatRoom createChatRoom(User user) {
+    public ChatRoomCreateResponseDto createChatRoom(Long groupId, User user) {
         String uuid = UUID.randomUUID().toString();
-        ChatRoom chatRoom = new ChatRoom(uuid, user);
+        Group group = groupRepository.findByGroupId(groupId);
+        ChatRoom chatRoom = new ChatRoom(uuid, group, user);
         chatRoomRepository.save(chatRoom);
-        return chatRoom;
+        ChatRoomCreateResponseDto chatRoomCreateResponseDto = new ChatRoomCreateResponseDto(chatRoom, group);
+        return chatRoomCreateResponseDto;
     }
 
     public boolean newMessage(UserDetailsImpl userDetails) {

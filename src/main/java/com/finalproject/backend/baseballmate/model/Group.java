@@ -79,8 +79,7 @@ public class Group extends Timestamped{
 //    private String baseballTeam; // 구단 이름
 
     // 모임에 해당하는 채팅방
-    @OneToOne
-    @JoinColumn(name="ChatRoom_id")
+    @OneToOne(mappedBy = "group")
     private ChatRoom chatRoom;
 
     // 모임을 취소했던 유저 리스트
