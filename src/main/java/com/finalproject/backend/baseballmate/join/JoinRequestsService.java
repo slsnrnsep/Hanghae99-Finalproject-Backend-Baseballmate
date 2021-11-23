@@ -1,6 +1,6 @@
 package com.finalproject.backend.baseballmate.join;
 
-import com.finalproject.backend.baseballmate.chat.*;
+import com.finalproject.backend.baseballmate.groupChat.*;
 import com.finalproject.backend.baseballmate.model.Group;
 import com.finalproject.backend.baseballmate.model.Screen;
 import com.finalproject.backend.baseballmate.model.User;
