@@ -45,4 +45,5 @@ public class ChatRoomController {
     public void quitChat(@PathVariable Long postId,@AuthenticationPrincipal UserDetailsImpl userDetails){
         chatRoomService.quitChat(postId,userDetails);
     }
+
 }
