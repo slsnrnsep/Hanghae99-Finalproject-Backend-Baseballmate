@@ -38,11 +38,11 @@ public class AlarmController {
     @DeleteMapping("/alarm/{alarmId}")
     public MsgResponseDto deleteAlarm(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable("alarmId") Long alarmId){
         if(userDetails == null)
-        {
-            throw new IllegalArgumentException("로그인 하신 후 이용해주세요.");
-        }
+            {
+                throw new IllegalArgumentException("로그인 하신 후 이용해주세요.");
+            }
         alarmService.deleteAlarm(userDetails, alarmId);
-        MsgResponseDto msgResponseDto = new MsgResponseDto("success","삭제 성공");
+            MsgResponseDto msgResponseDto = new MsgResponseDto("success","삭제 성공");
         return msgResponseDto;
     }
 

@@ -1,4 +1,4 @@
-package com.finalproject.backend.baseballmate.chat;
+package com.finalproject.backend.baseballmate.groupChat;
 
 import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -8,7 +8,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
-import static com.finalproject.backend.baseballmate.chat.QChatMessage.chatMessage;
+import static com.finalproject.backend.baseballmate.groupChat.QChatMessage.chatMessage;
 
 
 @RequiredArgsConstructor
