@@ -137,7 +137,7 @@ public class JoinRequestsService {
         );
 
 
-        ChatRoom chatRoom = chatRoomRepository.findByGroup_GroupId(postId);
+        ChatRoom chatRoom = chatRoomRepository.findByGroupGroupId(postId);
         AllChatInfo allChatInfo = new AllChatInfo(user, chatRoom);
         allChatInfoRepository.save(allChatInfo);
         joinRequestsRepository.delete(joinRequests);
@@ -285,7 +285,7 @@ public class JoinRequestsService {
         );
 
 
-        ChatRoom chatRoom = chatRoomRepository.findByScreen_ScreenId(postId);
+        ChatRoom chatRoom = chatRoomRepository.findByScreenScreenId(postId);
         AllChatInfo allChatInfo = new AllChatInfo(user, chatRoom);
         allChatInfoRepository.save(allChatInfo);
         joinRequestsRepository.delete(joinRequests);
