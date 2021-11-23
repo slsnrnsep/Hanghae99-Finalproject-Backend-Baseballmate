@@ -2,7 +2,7 @@ package com.finalproject.backend.baseballmate.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.finalproject.backend.baseballmate.chat.ChatRoom;
+import com.finalproject.backend.baseballmate.groupChat.ChatRoom;
 import com.finalproject.backend.baseballmate.requestDto.GroupRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,10 +1,9 @@
 package com.finalproject.backend.baseballmate.service;
 
-import com.finalproject.backend.baseballmate.chat.ChatRoomService;
+import com.finalproject.backend.baseballmate.groupChat.ChatRoomService;
 import com.finalproject.backend.baseballmate.join.JoinRequests;
 import com.finalproject.backend.baseballmate.model.*;
 import com.finalproject.backend.baseballmate.repository.*;
-import com.finalproject.backend.baseballmate.requestDto.AlarmRequestDto;
 import com.finalproject.backend.baseballmate.requestDto.GroupRequestDto;
 import com.finalproject.backend.baseballmate.responseDto.AllGroupResponseDto;
 import com.finalproject.backend.baseballmate.responseDto.GroupDetailResponseDto;

@@ -1,6 +1,6 @@
 package com.finalproject.backend.baseballmate.join;
 
-import com.finalproject.backend.baseballmate.chat.*;
+import com.finalproject.backend.baseballmate.groupChat.*;
 import com.finalproject.backend.baseballmate.model.Group;
 import com.finalproject.backend.baseballmate.model.Screen;
 import com.finalproject.backend.baseballmate.model.User;
@@ -42,7 +42,7 @@ public class JoinRequestsService {
             User user = group.getCreatedUser();
             Long ownUserId = user.getId();
             JoinRequests joinRequests = new JoinRequests(userId, postId, ownUserId);
-            if(group.getChatGroupRoom()==null)
+            if(group.getChatRoom()==null)
             {
                 joinRequestsRepository.save(joinRequests);
                 AlarmRequestDto alarmRequestDto = new AlarmRequestDto();
@@ -54,7 +54,7 @@ public class JoinRequestsService {
             }
             else
             {
-                Long roomId = group.getChatGroupRoom().getId();
+                Long roomId = group.getChatRoom().getId();
                 // 신청하려는 방과 자신의 아이디가 이미 AllChatInfo DB에 있는지 확인
                 if (allChatInfoQueryRepository.findByChatRoom_IdAndUser_Id(roomId, userId) == null) {
                     joinRequestsRepository.save(joinRequests);

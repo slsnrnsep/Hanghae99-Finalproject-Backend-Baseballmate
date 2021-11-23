@@ -2,8 +2,8 @@ package com.finalproject.backend.baseballmate.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.finalproject.backend.baseballmate.chat.ChatRoom;
 import com.finalproject.backend.baseballmate.requestDto.ScreenRequestDto;
+import com.finalproject.backend.baseballmate.screenChat.ScreenChatRoom;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -76,10 +76,6 @@ public class Screen extends Timestamped{
     @Column
     private boolean allowtype;
 
-    @OneToOne
-    @JoinColumn(name="ChatRoom_id")
-    private ChatRoom chatScreenRoom;
-
     @JsonBackReference
     @OneToMany(mappedBy = "screen", cascade = CascadeType.ALL)
     private List<ScreenComment> screenCommentList = new ArrayList<>();
@@ -91,6 +87,10 @@ public class Screen extends Timestamped{
 
     @Column(columnDefinition = "integer default 0")
     private int screenlikeCount;
+
+    // 스크린모임에 해당하는 채팅방
+    @OneToOne(mappedBy = "screenGroup")
+    private ScreenChatRoom screenChatRoom;
 
     public void addLikes(ScreenLikes like){
         this.screenLikesList.add(like);
