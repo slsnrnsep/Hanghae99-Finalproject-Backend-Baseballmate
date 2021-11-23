@@ -126,7 +126,7 @@ public class ChatRoomService {
         if (group == null) {
             throw new IllegalArgumentException("존재하지 않는 게시글입니다.");
         }
-        Long roomId = group.getChatGroupRoom().getId();
+        Long roomId = group.getChatRoom().getId();
         if (isChatRoomOwner(group, userDetails)) {
             // 확정된 모임이고 글쓴이면 게시글, 채팅방 아예 삭제 -> 채팅방 남겨둘지 말지 결정해서 정하기
             deleteAllChatInfo(roomId, userDetails);
@@ -139,7 +139,7 @@ public class ChatRoomService {
 
     // 채팅방 주인 확인
     static boolean isChatRoomOwner(Group group, UserDetailsImpl userDetails) {
-        Long roomOwnerId = group.getChatGroupRoom().getOwnUserId();
+        Long roomOwnerId = group.getChatRoom().getOwnUserId();
         Long userId = userDetails.getUser().getId();
         return roomOwnerId.equals(userId);
     }
