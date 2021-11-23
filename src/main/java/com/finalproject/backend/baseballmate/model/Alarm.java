@@ -20,6 +20,11 @@ public class Alarm extends Timestamped{
     @Column
     private Long userId;
 
+    // 유저 아이디값이 들어감
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "createdUser")
+    private User alarmCreatedUser;
+
     @Column
     private String contents;
 
@@ -27,10 +32,13 @@ public class Alarm extends Timestamped{
     @Column
     private Boolean alarmStatus;
 
+    private Long joinRequestId;
+
     public Alarm(AlarmRequestDto alarmRequestDto){
         this.userId = alarmRequestDto.getUserId();
         this.contents = alarmRequestDto.getContents();
         this.alarmStatus = false;
+        this.joinRequestId = alarmRequestDto.getJoinRequestId();
     }
 
     public void updateAlarm(AlarmSaveDto alarmSaveDto) {

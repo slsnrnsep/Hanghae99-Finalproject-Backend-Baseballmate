@@ -32,7 +32,20 @@ public class GoodsService {
     @Transactional
     public Goods createGoods(User loginUser, GoodsRequestDto requestDto) {
         String goodsUserPicture = loginUser.getPicture();
-        Goods goods = new Goods(loginUser, requestDto, goodsUserPicture);
+        String myTeam = loginUser.getMyselectTeam();
+        String userAddress = loginUser.getAddress();
+
+        Long userId = loginUser.getId();
+        String usertype = "";
+        if(loginUser.getKakaoId() == null)
+        {
+            usertype = "normal";
+        }
+        else
+        {
+            usertype = "kakao";
+        }
+        Goods goods = new Goods(loginUser, requestDto, goodsUserPicture, myTeam, userAddress, userId,usertype);
         goodsRepository.save(goods);
         return goods;
     }
@@ -55,9 +68,14 @@ public class GoodsService {
 //            int likeCount = goods.getLikeCount();
             List<GoodsComment> goodsCommentList = goodsCommentRepository.findAllByGoods_IdOrderByModifiedAtDesc(id);
             List<GoodsLikes> goodsLikesList = goodsLikesRepository.findAllByGoods_Id(id);
+            String myTeam = goods.getMyTeam();
+            String userAddress = goods.getUserAddress();
+
+            Long userId = goods.getUserId();
+            String usertype = goods.getUsertype();
 
             AllGoodsResponseDto responseDto =
-                    new AllGoodsResponseDto(id,userName ,goodsName,goodsContent,filePath,dayBefore, goodsUserPicture, goodsCommentList,goodsLikesList);
+                    new AllGoodsResponseDto(id,userName ,goodsName,goodsContent,filePath,dayBefore, goodsUserPicture, goodsCommentList,goodsLikesList, myTeam, userAddress, userId,usertype);
             data.add(responseDto);
         }
         return data;
@@ -84,9 +102,13 @@ public class GoodsService {
 //            int likeCount = goods.getLikeCount();
             List<GoodsComment> goodsCommentList = goodsCommentRepository.findAllByGoods_IdOrderByModifiedAtDesc(id);
             List<GoodsLikes> goodsLikesList = goodsLikesRepository.findAllByGoods_Id(id);
+            String myTeam = goods.getMyTeam();
+            String userAddress = goods.getUserAddress();
+            Long userId = goods.getUserId();
+            String usertype = goods.getUsertype();
 
             AllGoodsResponseDto responseDto =
-                    new AllGoodsResponseDto(id, userName, goodsName,goodsContent,filePath,dayBefore, goodsUserPicture, goodsCommentList,goodsLikesList);
+                    new AllGoodsResponseDto(id, userName, goodsName,goodsContent,filePath,dayBefore, goodsUserPicture, goodsCommentList,goodsLikesList, myTeam, userAddress,userId,usertype);
             data.add(responseDto);
         }
         return data;

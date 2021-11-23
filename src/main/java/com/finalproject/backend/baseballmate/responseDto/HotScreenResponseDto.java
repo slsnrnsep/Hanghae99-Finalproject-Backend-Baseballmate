@@ -8,16 +8,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 public class HotScreenResponseDto {
-    private Long groupId;
+    private Long screenId;
     private String title;
     private String createdUsername;
     private int peopleLimit;
     private int canApplyNum;
     private double hotPercent;
-    private String stadium;
     private String groupDate;
     private String filePath;
-    private String selectTeam;
+    private String selectPlace;
+    private String placeInfomation;
     private String dday;
     private boolean allowtype;
     // private LocalDateTime createdAt;

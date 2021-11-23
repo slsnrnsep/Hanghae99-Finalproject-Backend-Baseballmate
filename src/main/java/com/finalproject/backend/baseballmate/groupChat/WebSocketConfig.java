@@ -1,6 +1,5 @@
 package com.finalproject.backend.baseballmate.groupChat;
 
-import com.finalproject.backend.baseballmate.screenChat.ScreenStompHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.ChannelRegistration;
@@ -15,13 +14,12 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     private final StompHandler stompHandler;
-    private final ScreenStompHandler screenStompHandler;
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        // 구독하고 있는 클라이언트에게 메시지 전달
+        // 구독하고 있는 클라이언트에게 메시지 전달, /sub/api/chat/rooms/117 이런식으로 117번 채팅방의 멤버들한테 메시지 보낼 때 쓰임
         registry.enableSimpleBroker("/sub");
-        // 서버에서 클라이언트로부터 메시지를 받을 api의 prefix
+        // 서버에서 클라이언트로부터 메시지를 받을 api의 prefix, pub/message로 메시지 보낼 때 쓰임
         registry.setApplicationDestinationPrefixes("/pub");
     }
 

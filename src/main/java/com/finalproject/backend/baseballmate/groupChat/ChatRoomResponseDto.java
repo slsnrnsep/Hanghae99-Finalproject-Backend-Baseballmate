@@ -12,6 +12,7 @@ public class ChatRoomResponseDto {
     private final Long headCountChat;
     private final boolean chatValid;
     private final boolean newMessage;
+    private final String chatRoomImage;
 
     public ChatRoomResponseDto(ChatRoom chatRoom, Group group, Long headCountChat, boolean newMessage) {
         this.title = group.getTitle();
@@ -21,5 +22,6 @@ public class ChatRoomResponseDto {
         this.headCountChat = headCountChat;
         this.chatValid = chatRoom.isChatValid();
         this.newMessage = newMessage;
+        this.chatRoomImage = chatRoom.getChatRoomImage();
     }
 }

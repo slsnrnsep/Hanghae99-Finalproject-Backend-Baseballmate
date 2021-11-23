@@ -25,6 +25,13 @@ public class ChatRoomController {
         ChatRoomCreateResponseDto chatRoomCreateResponseDto = chatRoomService.createChatRoom(groupId, user);
         return chatRoomCreateResponseDto;
     }
+    // 채팅방 만들기(모임 확정지은 모임장만 가능)
+    @PostMapping("/chat/screen/{screenId}")
+    public ChatRoomCreateResponseDto createRoom2(@PathVariable Long screenId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        User user = userDetails.getUser();
+        ChatRoomCreateResponseDto chatRoomCreateResponseDto = chatRoomService.createChatRoom2(screenId, user);
+        return chatRoomCreateResponseDto;
+    }
 
     // 사용자별 채팅방 목록 조회
     @ApiOperation(value = "사용자별 채팅방 목록 조회", notes = "사용자별 채팅방 목록 조회")
@@ -32,6 +39,7 @@ public class ChatRoomController {
     public List<ChatRoomResponseDto> getOnesChatRoom(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         return chatRoomService.getOnesChatRoom(userDetails.getUser());
     }
+
 
     // 해당 채팅방의 메세지 조회
     @ApiOperation(value = "해당 채팅방의 메세지 조회", notes = "해당 채팅방의 메세지 조회")
@@ -45,4 +53,5 @@ public class ChatRoomController {
     public void quitChat(@PathVariable Long postId,@AuthenticationPrincipal UserDetailsImpl userDetails){
         chatRoomService.quitChat(postId,userDetails);
     }
+
 }
