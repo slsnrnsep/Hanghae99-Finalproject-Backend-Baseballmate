@@ -11,6 +11,7 @@ public class ChatRoomCreateResponseDto {
     private final Long roomId;
     private final Long groupId;
     private final boolean chatValid;
+    private final String chatRoomIamge;
 
     public ChatRoomCreateResponseDto(ChatRoom chatRoom, Group group) {
         this.chatRoomName = group.getTitle();
@@ -18,6 +19,7 @@ public class ChatRoomCreateResponseDto {
         this.roomId = chatRoom.getId();
         this.groupId = group.getGroupId();
         this.chatValid = chatRoom.isChatValid();
+        this.chatRoomIamge = chatRoom.getChatRoomImage();
     }
 
     public ChatRoomCreateResponseDto(ChatRoom chatRoom, Screen group) {
@@ -26,5 +28,6 @@ public class ChatRoomCreateResponseDto {
         this.roomId = chatRoom.getId();
         this.groupId = group.getScreenId();
         this.chatValid = chatRoom.isChatValid();
+        this.chatRoomIamge = chatRoom.getChatRoomImage();
     }
 }

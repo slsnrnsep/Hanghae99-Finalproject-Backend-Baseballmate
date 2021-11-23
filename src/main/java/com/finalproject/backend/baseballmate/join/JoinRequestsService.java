@@ -283,7 +283,7 @@ public class JoinRequestsService {
         );
 
 
-        ChatRoom chatRoom = chatRoomRepository.findByGroup_GroupId(postId);
+        ChatRoom chatRoom = chatRoomRepository.findByScreen_ScreenId(postId);
         AllChatInfo allChatInfo = new AllChatInfo(user, chatRoom);
         allChatInfoRepository.save(allChatInfo);
         joinRequestsRepository.delete(joinRequests);

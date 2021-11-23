@@ -54,4 +54,9 @@ public class ChatRoomController {
         chatRoomService.quitChat(postId,userDetails);
     }
 
+    @DeleteMapping("/chat/screen/quit/{postId}")
+    public void quitChat2(@PathVariable Long postId,@AuthenticationPrincipal UserDetailsImpl userDetails){
+        chatRoomService.quitChat2(postId,userDetails);
+    }
+
 }

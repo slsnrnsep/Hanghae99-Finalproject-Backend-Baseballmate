@@ -80,24 +80,48 @@ public class ChatRoomService {
         List<AllChatInfo> allChatInfoList = allChatInfoQueryRepository.findAllByUserIdOrderByIdDesc(user.getId());
         for (AllChatInfo allChatInfo : allChatInfoList) {
             ChatRoom chatRoom = allChatInfo.getChatRoom();
-            Group group = chatRoom.getGroup();
-            Long headCountChat = allChatInfoQueryRepository.countAllByChatRoom(chatRoom);
-            String chatRoomId = Long.toString(chatRoom.getId());
-            Long myLastMessageId = allChatInfo.getLastMessageId();
-            ChatMessage newLastMessage = chatMessageQueryRepository.findbyRoomIdAndTalk(chatRoomId);
-            Long newLastMessageId = 0L;
-            if (newLastMessage != null) {
-                newLastMessageId = newLastMessage.getId();
-            }
+            if(chatRoom.getGroup()==null)
+            {
+                Screen screen = chatRoom.getScreen();
+                Long headCountChat = allChatInfoQueryRepository.countAllByChatRoom(chatRoom);
+                String chatRoomId = Long.toString(chatRoom.getId());
+                Long myLastMessageId = allChatInfo.getLastMessageId();
+                ChatMessage newLastMessage = chatMessageQueryRepository.findbyRoomIdAndTalk(chatRoomId);
+                Long newLastMessageId = 0L;
+                if (newLastMessage != null) {
+                    newLastMessageId = newLastMessage.getId();
+                }
 
-            // myLastMessageId 와 newLastMessageId 를 비교하여 현재 채팅방에 새 메세지가 있는지 여부를 함께 내려줌
-            ChatRoomResponseDto responseDto;
-            if (myLastMessageId < newLastMessageId) {
-                responseDto = new ChatRoomResponseDto(chatRoom, group, headCountChat, true);
-            } else {
-                responseDto = new ChatRoomResponseDto(chatRoom, group, headCountChat, false);
+                // myLastMessageId 와 newLastMessageId 를 비교하여 현재 채팅방에 새 메세지가 있는지 여부를 함께 내려줌
+                ChatRoomResponseDto responseDto;
+                if (myLastMessageId < newLastMessageId) {
+                    responseDto = new ChatRoomResponseDto(chatRoom, screen, headCountChat, true);
+                } else {
+                    responseDto = new ChatRoomResponseDto(chatRoom, screen, headCountChat, false);
+                }
+                responseDtoList.add(responseDto);
             }
-            responseDtoList.add(responseDto);
+            if(chatRoom.getScreen()==null)
+            {
+                Group group = chatRoom.getGroup();
+                Long headCountChat = allChatInfoQueryRepository.countAllByChatRoom(chatRoom);
+                String chatRoomId = Long.toString(chatRoom.getId());
+                Long myLastMessageId = allChatInfo.getLastMessageId();
+                ChatMessage newLastMessage = chatMessageQueryRepository.findbyRoomIdAndTalk(chatRoomId);
+                Long newLastMessageId = 0L;
+                if (newLastMessage != null) {
+                    newLastMessageId = newLastMessage.getId();
+                }
+
+                // myLastMessageId 와 newLastMessageId 를 비교하여 현재 채팅방에 새 메세지가 있는지 여부를 함께 내려줌
+                ChatRoomResponseDto responseDto;
+                if (myLastMessageId < newLastMessageId) {
+                    responseDto = new ChatRoomResponseDto(chatRoom, group, headCountChat, true);
+                } else {
+                    responseDto = new ChatRoomResponseDto(chatRoom, group, headCountChat, false);
+                }
+                responseDtoList.add(responseDto);
+            }
         }
         return responseDtoList;
     }
@@ -153,9 +177,35 @@ public class ChatRoomService {
         }
     }
 
+    // 채팅방 나가기
+    @Transactional
+    public void quitChat2(Long groupId, UserDetailsImpl userDetails) {
+        Screen group = screenRepository.findByScreenId(groupId);
+        if (group == null) {
+            throw new IllegalArgumentException("존재하지 않는 게시글입니다.");
+        }
+        Long roomId = group.getScreenChatRoom().getId();
+        if (isChatRoomOwner2(group, userDetails)) {
+            // 확정된 모임이고 글쓴이면 게시글, 채팅방 아예 삭제 -> 채팅방 남겨둘지 말지 결정해서 정하기
+            deleteAllChatInfo(roomId, userDetails);
+        } else {
+            // 일반 유저일 때 채팅방 나가기
+            AllChatInfo allChatInfo = allChatInfoQueryRepository.findByChatRoom_IdAndUser_Id(roomId, userDetails.getUser().getId());
+            allChatInfoRepository.delete(allChatInfo);
+        }
+    }
+
+
     // 채팅방 주인 확인
     static boolean isChatRoomOwner(Group group, UserDetailsImpl userDetails) {
         Long roomOwnerId = group.getChatRoom().getOwnUserId();
+        Long userId = userDetails.getUser().getId();
+        return roomOwnerId.equals(userId);
+    }
+
+    // 채팅방 주인 확인
+    static boolean isChatRoomOwner2(Screen group, UserDetailsImpl userDetails) {
+        Long roomOwnerId = group.getScreenChatRoom().getOwnUserId();
         Long userId = userDetails.getUser().getId();
         return roomOwnerId.equals(userId);
     }
