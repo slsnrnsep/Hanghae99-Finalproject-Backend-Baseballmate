@@ -54,7 +54,10 @@ public class GoodsService {
     }
 
     @Transactional
-    public List<AllGoodsResponseDto> getGoods() throws ParseException {
+    public List<AllGoodsResponseDto> getGoods(UserDetailsImpl userDetails) throws ParseException {
+        User user = userRepository.findById(userDetails.getUser().getId()).orElseThrow(
+                () -> new IllegalArgumentException("로그인 정보를 찾을 수 없습니다")
+        );
         List<Goods> goodsList = goodsRepository.findAllByOrderByCreatedAtDesc();
 
         List<AllGoodsResponseDto> data = new ArrayList<>();
@@ -70,7 +73,7 @@ public class GoodsService {
             String goodsUserPicture = goods.getGoodsUserPicture();
 //            int likeCount = goods.getLikeCount();
             List<GoodsComment> goodsCommentList = goodsCommentRepository.findAllByGoods_IdOrderByModifiedAtDesc(id);
-            List<GoodsLikes> goodsLikesList = goodsLikesRepository.findAllByGoods_Id(id);
+            List<GoodsLikes> goodsLikesList = goodsLikesRepository.findAllByGoods_IdAndUserId(goods.getId(), user.getId());
             String myTeam = goods.getMyTeam();
             String userAddress = goods.getUserAddress();
 

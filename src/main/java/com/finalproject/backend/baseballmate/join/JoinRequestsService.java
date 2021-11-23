@@ -2,6 +2,7 @@ package com.finalproject.backend.baseballmate.join;
 
 import com.finalproject.backend.baseballmate.groupChat.*;
 import com.finalproject.backend.baseballmate.model.Group;
+import com.finalproject.backend.baseballmate.model.Screen;
 import com.finalproject.backend.baseballmate.model.User;
 import com.finalproject.backend.baseballmate.repository.GroupRepository;
 import com.finalproject.backend.baseballmate.repository.ScreenRepository;
@@ -181,7 +182,6 @@ public class JoinRequestsService {
 
 
     //유저 신청정보 저장
-<<<<<<< HEAD
     public String requestJoin2(UserDetailsImpl userDetails, Long postId) {
         Long userId = userDetails.getUser().getId();
         // 신청하려는 방과 자신의 아이디가 이미 JoinRequests DB에 있는지 확인
@@ -303,7 +303,7 @@ public class JoinRequestsService {
         joinRequestsRepository.delete(joinRequests);
         return "참가신청 취소가 완료되었습니다";
     }
-=======
+
 //    public String requestJoin2(UserDetailsImpl userDetails, Long postId) {
 //        Long userId = userDetails.getUser().getId();
 //        // 신청하려는 방과 자신의 아이디가 이미 JoinRequests DB에 있는지 확인
@@ -424,7 +424,7 @@ public class JoinRequestsService {
 //        joinRequestsRepository.delete(joinRequests);
 //        return "참가신청 취소가 완료되었습니다";
 //    }
->>>>>>> e20c445424f14094f817aa03878b9af877ce0f29
+
 
 
 }

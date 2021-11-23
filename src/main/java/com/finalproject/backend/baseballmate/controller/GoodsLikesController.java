@@ -1,5 +1,6 @@
 package com.finalproject.backend.baseballmate.controller;
 
+import com.finalproject.backend.baseballmate.model.User;
 import com.finalproject.backend.baseballmate.requestDto.GoodsLikesReqeustDto;
 import com.finalproject.backend.baseballmate.security.UserDetailsImpl;
 import com.finalproject.backend.baseballmate.service.GoodsLikesService;
@@ -26,8 +27,8 @@ public class GoodsLikesController {
         {
             throw new IllegalArgumentException("로그인한 사용자만 가능한 기능입니다");
         }
-
-        boolean goodsLiked = goodsLikesService.goodsLiked(goodsId, goodsLikesReqeustDto, userDetails);
+        User loginUser = userDetails.getUser();
+        boolean goodsLiked = goodsLikesService.goodsLiked(goodsId, goodsLikesReqeustDto, userDetails, loginUser);
 
         if(goodsLiked)
         {
