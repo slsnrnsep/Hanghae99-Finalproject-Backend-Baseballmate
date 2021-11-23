@@ -1,4 +1,4 @@
-package com.finalproject.backend.baseballmate.chat;
+package com.finalproject.backend.baseballmate.groupChat;
 
 import com.finalproject.backend.baseballmate.model.User;
 import lombok.AllArgsConstructor;

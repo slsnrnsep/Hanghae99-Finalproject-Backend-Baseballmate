@@ -32,10 +32,16 @@ public class Alarm extends Timestamped{
     @Column
     private Boolean alarmStatus;
 
+    private Long joinRequestId;
+
+    private String alarmType;
+
     public Alarm(AlarmRequestDto alarmRequestDto){
         this.userId = alarmRequestDto.getUserId();
         this.contents = alarmRequestDto.getContents();
         this.alarmStatus = false;
+        this.joinRequestId = alarmRequestDto.getJoinRequestId();
+        this.alarmType = alarmRequestDto.getAlarmType();
     }
 
     public void updateAlarm(AlarmSaveDto alarmSaveDto) {

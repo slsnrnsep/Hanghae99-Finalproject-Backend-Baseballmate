@@ -9,6 +9,7 @@ import com.finalproject.backend.baseballmate.responseDto.AllGoodsResponseDto;
 import com.finalproject.backend.baseballmate.responseDto.AllScreenResponseDto;
 import com.finalproject.backend.baseballmate.responseDto.AllTimeLineResponseDto;
 import com.finalproject.backend.baseballmate.responseDto.HotGroupResponseDto;
+import com.finalproject.backend.baseballmate.security.UserDetailsImpl;
 import com.finalproject.backend.baseballmate.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.FileSystemResource;
@@ -17,6 +18,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -102,9 +104,9 @@ public class MainController {
     }
     //굿즈 조회(최신 등록 순)
     @GetMapping(path="/goods",params = "count")
-    public List<AllGoodsResponseDto> getnowGoods(@RequestParam("count") int number) throws ParseException
+    public List<AllGoodsResponseDto> getnowGoods(@RequestParam("count") int number, @AuthenticationPrincipal UserDetailsImpl userDetails) throws ParseException
     {
-        List<AllGoodsResponseDto> nowGoods = goodsService.getnowGoods(number);
+        List<AllGoodsResponseDto> nowGoods = goodsService.getnowGoods(number,userDetails);
         return nowGoods;
     }
 

@@ -1,4 +1,4 @@
-package com.finalproject.backend.baseballmate.chat;
+package com.finalproject.backend.baseballmate.groupChat;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.finalproject.backend.baseballmate.model.Group;
@@ -33,6 +33,9 @@ public class ChatRoom implements Serializable {
     private String roomName;
 
     @Column
+    private String chatRoomImage; // 채팅방 사진
+
+    @Column
     private Long ownUserId; //방장 인덱스
 
     @Column
@@ -46,17 +49,27 @@ public class ChatRoom implements Serializable {
     @JoinColumn(name="GroupInx")
     private Group group;
 
-    @OneToOne(mappedBy = "chatScreenRoom")
+    @JsonIgnore
+    @OneToOne
+    @JoinColumn(name="ScreenInx")
     private Screen screen;
 
     public ChatRoom(String uuid, Group group, User user) {
         this.roomUuid = uuid;
         this.roomName = group.getTitle();
+        this.chatRoomImage = group.getFilePath();
         this.ownUserId = user.getId();
         this.group = group;
         this.chatValid = true;
     }
-
+    public ChatRoom(String uuid, Screen group, User user) {
+        this.roomUuid = uuid;
+        this.roomName = group.getTitle();
+        this.chatRoomImage = group.getFilePath();
+        this.ownUserId = user.getId();
+        this.screen = group;
+        this.chatValid = true;
+    }
     public void updatechatValid(boolean chatValid) {
         this.chatValid = chatValid;
     }

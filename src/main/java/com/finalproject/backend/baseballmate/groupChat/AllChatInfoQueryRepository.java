@@ -1,4 +1,4 @@
-package com.finalproject.backend.baseballmate.chat;
+package com.finalproject.backend.baseballmate.groupChat;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static com.finalproject.backend.baseballmate.chat.QAllChatInfo.allChatInfo;
+import static com.finalproject.backend.baseballmate.groupChat.QAllChatInfo.allChatInfo;
 
 @RequiredArgsConstructor
 @Repository

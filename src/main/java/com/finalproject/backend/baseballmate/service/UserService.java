@@ -55,18 +55,18 @@ public class UserService {
 
         password = passwordEncoder.encode(userRequestDto.getPassword());
 
+//
+//        User user = userRepository.findByPhoneNumber(userRequestDto.getPhonenumber()).orElseThrow(
+//                ()-> new IllegalArgumentException("휴대폰에 맞는 유저정보를 찾을 수 없습니다.")
+//        );
+//        user.setUserid(userid);
+//        user.setUsername(username);
+//        user.setPassword(password);
+//        user.setPhoneNumber(userRequestDto.getPhonenumber()+"#"+user.getRanNum());
+//        user.setAddress("전국");
+//        user.setPicture("sample.png");
 
-        User user = userRepository.findByPhoneNumber(userRequestDto.getPhonenumber()).orElseThrow(
-                ()-> new IllegalArgumentException("휴대폰에 맞는 유저정보를 찾을 수 없습니다.")
-        );
-        user.setUserid(userid);
-        user.setUsername(username);
-        user.setPassword(password);
-        user.setPhoneNumber(userRequestDto.getPhonenumber()+"#"+user.getRanNum());
-        user.setAddress("전국");
-        user.setPicture("sample.png");
-
-//        User user = new User(userid,username,password, userRequestDto.getPhonenumber());
+        User user = new User(userid,username,password, userRequestDto.getPhonenumber());
 
         userRepository.save(user);
 
@@ -75,6 +75,7 @@ public class UserService {
         String signupAlarm = "안녕하세요" + user.getUsername() + "님! 가입을 환영합니다";
         alarmRequestDto.setUserId(user.getId());
         alarmRequestDto.setContents(signupAlarm);
+        alarmRequestDto.setAlarmType("Normal");
         alarmService.createAlarm(alarmRequestDto);
     }
 
