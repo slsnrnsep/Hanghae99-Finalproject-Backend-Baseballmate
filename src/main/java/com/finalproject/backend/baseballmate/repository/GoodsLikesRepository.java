@@ -10,4 +10,5 @@ public interface GoodsLikesRepository extends JpaRepository<GoodsLikes, Long> {
     Optional<GoodsLikes> findByGoodsIdAndUserId(Long goodsId, Long UserId);
     List<GoodsLikes> findAllByUserId(Long UserId);
     List<GoodsLikes> findAllByGoods_Id(Long goodsId);
+    List<GoodsLikes> findAllByGoods_IdAndUserId(Long goodId, Long UserId);
 }

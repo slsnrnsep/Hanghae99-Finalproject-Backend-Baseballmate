@@ -52,6 +52,7 @@ public class ChatRoomService {
         ChatRoomCreateResponseDto chatRoomCreateResponseDto = new ChatRoomCreateResponseDto(chatRoom, group);
         return chatRoomCreateResponseDto;
     }
+
     //채팅방생성
     @Transactional
     public ChatRoomCreateResponseDto createChatRoom2(Long groupId, User user) {
@@ -64,6 +65,7 @@ public class ChatRoomService {
         ChatRoomCreateResponseDto chatRoomCreateResponseDto = new ChatRoomCreateResponseDto(chatRoom, group);
         return chatRoomCreateResponseDto;
     }
+
     public boolean newMessage(UserDetailsImpl userDetails) {
         List<ChatRoomResponseDto> chatRoomResponseDtoList = getOnesChatRoom(userDetails.getUser());
         for (ChatRoomResponseDto chatRoomListResponseDto : chatRoomResponseDtoList) {
