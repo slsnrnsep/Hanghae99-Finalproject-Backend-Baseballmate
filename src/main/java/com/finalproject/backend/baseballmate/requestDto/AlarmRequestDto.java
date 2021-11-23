@@ -14,4 +14,5 @@ public class AlarmRequestDto {
     private Long userId;
     private String contents;
     private Long joinRequestId;
+    private String alarmType;
 }

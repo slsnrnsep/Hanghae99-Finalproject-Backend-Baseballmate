@@ -14,6 +14,7 @@ public class ChatRoomResponseDto {
     private final boolean chatValid;
     private final boolean newMessage;
     private final String chatRoomIamge;
+    private final String chatRoomtype;
 
     public ChatRoomResponseDto(ChatRoom chatRoom, Group group, Long headCountChat, boolean newMessage) {
         this.title = group.getTitle();
@@ -24,6 +25,7 @@ public class ChatRoomResponseDto {
         this.chatValid = chatRoom.isChatValid();
         this.newMessage = newMessage;
         this.chatRoomIamge = chatRoom.getChatRoomImage();
+        this.chatRoomtype = "group";
     }
 
     public ChatRoomResponseDto(ChatRoom chatRoom, Screen group, Long headCountChat, boolean newMessage) {
@@ -35,5 +37,6 @@ public class ChatRoomResponseDto {
         this.chatValid = chatRoom.isChatValid();
         this.newMessage = newMessage;
         this.chatRoomIamge = chatRoom.getChatRoomImage();
+        this.chatRoomtype = "screen";
     }
 }
