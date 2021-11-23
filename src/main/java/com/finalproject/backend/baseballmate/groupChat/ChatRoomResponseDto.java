@@ -24,6 +24,7 @@ public class ChatRoomResponseDto {
         this.headCountChat = headCountChat;
         this.chatValid = chatRoom.isChatValid();
         this.newMessage = newMessage;
+
         this.chatRoomIamge = chatRoom.getChatRoomImage();
         this.chatRoomtype = "group";
     }

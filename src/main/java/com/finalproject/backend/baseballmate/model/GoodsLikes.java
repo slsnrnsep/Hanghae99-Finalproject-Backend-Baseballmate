@@ -25,8 +25,12 @@ public class GoodsLikes {
     @ManyToOne
     private User user;
 
-    public GoodsLikes(Goods goods, User user){
+    @Column
+    private Long userIdGoods;
+
+    public GoodsLikes(Goods goods, User user, Long userIdGoods){
         this.goods = goods;
         this.user = user;
+        this.userIdGoods = userIdGoods;
     }
 }
