@@ -1,6 +1,5 @@
 package com.finalproject.backend.baseballmate.screenChat;
 
-import com.finalproject.backend.baseballmate.groupChat.*;
 import com.finalproject.backend.baseballmate.model.User;
 import com.finalproject.backend.baseballmate.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +39,7 @@ public class AllScreenChatInfoService {
     // 채팅방 접속 종료시 해당 채팅방의 마지막 TALK 타입 메시지의 id를 저장
     @Transactional
     public void updateReadMessage(User user,String roomId){
-        Long lastMessageId = screenChatMessageQueryRepository.findbyRoomIdAndTalk(roomId).getId();
+        Long lastMessageId = screenChatMessageQueryRepository.findByRoomIdAndTalk(roomId).getId();
         AllScreenChatInfo allScreenChatInfo = allScreenChatInfoQueryRepository.findByChatRoom_IdAndUser_Id(Long.parseLong(roomId),user.getId());
         allScreenChatInfo.updateLastMessageId(lastMessageId);
     }
