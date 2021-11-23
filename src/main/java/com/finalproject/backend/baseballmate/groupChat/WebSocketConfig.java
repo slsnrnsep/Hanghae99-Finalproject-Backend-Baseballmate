@@ -1,6 +1,5 @@
 package com.finalproject.backend.baseballmate.groupChat;
 
-import com.finalproject.backend.baseballmate.screenChat.ScreenStompHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.ChannelRegistration;
@@ -15,7 +14,6 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     private final StompHandler stompHandler;
-    private final ScreenStompHandler screenStompHandler;
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {

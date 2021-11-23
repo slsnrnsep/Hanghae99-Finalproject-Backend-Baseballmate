@@ -51,8 +51,6 @@ public class GroupController {
         URLDecoder.decode(selectTeam,"UTF-8");
         List<AllGroupResponseDto> groupResponseDtos = groupService.showGroupsByTeam(selectTeam,pageRequest);
         return groupResponseDtos;
-
-
     }
 
     // 모임 생성

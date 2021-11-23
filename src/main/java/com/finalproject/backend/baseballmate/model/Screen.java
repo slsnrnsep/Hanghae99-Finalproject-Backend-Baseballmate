@@ -2,11 +2,12 @@ package com.finalproject.backend.baseballmate.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.finalproject.backend.baseballmate.groupChat.ChatRoom;
 import com.finalproject.backend.baseballmate.requestDto.ScreenRequestDto;
-import com.finalproject.backend.baseballmate.screenChat.ScreenChatRoom;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.apache.commons.collections.functors.ChainedTransformer;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -89,8 +90,8 @@ public class Screen extends Timestamped{
     private int screenlikeCount;
 
     // 스크린모임에 해당하는 채팅방
-    @OneToOne(mappedBy = "screenGroup")
-    private ScreenChatRoom screenChatRoom;
+    @OneToOne(mappedBy = "screen")
+    private ChatRoom screenChatRoom;
 
     public void addLikes(ScreenLikes like){
         this.screenLikesList.add(like);

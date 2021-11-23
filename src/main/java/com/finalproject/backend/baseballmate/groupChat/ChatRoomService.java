@@ -1,8 +1,10 @@
 package com.finalproject.backend.baseballmate.groupChat;
 
 import com.finalproject.backend.baseballmate.model.Group;
+import com.finalproject.backend.baseballmate.model.Screen;
 import com.finalproject.backend.baseballmate.model.User;
 import com.finalproject.backend.baseballmate.repository.GroupRepository;
+import com.finalproject.backend.baseballmate.repository.ScreenRepository;
 import com.finalproject.backend.baseballmate.repository.UserRepository;
 import com.finalproject.backend.baseballmate.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +37,7 @@ public class ChatRoomService {
     private final UserRepository userRepository;
     private final ChatMessageQueryRepository chatMessageQueryRepository;
     private final GroupRepository groupRepository;
+    private final ScreenRepository screenRepository;
 
 
     //채팅방생성
@@ -44,10 +47,23 @@ public class ChatRoomService {
         Group group = groupRepository.findByGroupId(groupId);
         ChatRoom chatRoom = new ChatRoom(uuid, group, user);
         chatRoomRepository.save(chatRoom);
+        AllChatInfo allChatInfo = new AllChatInfo(user, chatRoom);
+        allChatInfoRepository.save(allChatInfo);
         ChatRoomCreateResponseDto chatRoomCreateResponseDto = new ChatRoomCreateResponseDto(chatRoom, group);
         return chatRoomCreateResponseDto;
     }
-
+    //채팅방생성
+    @Transactional
+    public ChatRoomCreateResponseDto createChatRoom2(Long groupId, User user) {
+        String uuid = UUID.randomUUID().toString();
+        Screen group = screenRepository.findByScreenId(groupId);
+        ChatRoom chatRoom = new ChatRoom(uuid, group, user);
+        chatRoomRepository.save(chatRoom);
+        AllChatInfo allChatInfo = new AllChatInfo(user, chatRoom);
+        allChatInfoRepository.save(allChatInfo);
+        ChatRoomCreateResponseDto chatRoomCreateResponseDto = new ChatRoomCreateResponseDto(chatRoom, group);
+        return chatRoomCreateResponseDto;
+    }
     public boolean newMessage(UserDetailsImpl userDetails) {
         List<ChatRoomResponseDto> chatRoomResponseDtoList = getOnesChatRoom(userDetails.getUser());
         for (ChatRoomResponseDto chatRoomListResponseDto : chatRoomResponseDtoList) {

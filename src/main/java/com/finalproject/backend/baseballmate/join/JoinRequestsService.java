@@ -189,7 +189,7 @@ public class JoinRequestsService {
             User user = group.getScreenCreatedUser();
             Long ownUserId = user.getId();
             JoinRequests joinRequests = new JoinRequests(userId, postId, ownUserId);
-            if(group.getChatScreenRoom()==null)
+            if(group.getScreenChatRoom()==null)
             {
                 joinRequestsRepository.save(joinRequests);
                 AlarmRequestDto alarmRequestDto = new AlarmRequestDto();
@@ -202,7 +202,7 @@ public class JoinRequestsService {
             }
             else
             {
-                Long roomId = group.getChatScreenRoom().getId();
+                Long roomId = group.getScreenChatRoom().getId();
                 // 신청하려는 방과 자신의 아이디가 이미 AllChatInfo DB에 있는지 확인
                 if (allChatInfoQueryRepository.findByChatRoom_IdAndUser_Id(roomId, userId) == null) {
                     joinRequestsRepository.save(joinRequests);
