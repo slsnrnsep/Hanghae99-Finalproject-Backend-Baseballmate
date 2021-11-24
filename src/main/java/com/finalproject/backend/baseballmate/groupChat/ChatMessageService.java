@@ -93,4 +93,16 @@ public class ChatMessageService {
         return chatMessageQueryRepository.findByRoomIdOrderByIdDesc(roomId, pageable);
     }
 
+    // 테스트용 채팅 메시지 집어넣기
+    public ChatMessage testChat(String message) {
+        ChatMessage testMessage = new ChatMessage();
+        testMessage.setType(ChatMessage.MessageType.TALK);
+        testMessage.setRoomId("1");
+        testMessage.setSenderName("testUser");
+        testMessage.setSenderImage("testImage");
+        testMessage.setMessage(message);
+        chatMessageRepository.save(testMessage);
+        return testMessage;
+    }
+
 }

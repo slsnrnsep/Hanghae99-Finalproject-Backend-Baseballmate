@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor
-public class Alarm extends Timestamped{
+public class Alarm extends Timestamped_12H{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

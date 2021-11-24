@@ -13,7 +13,7 @@ public class ChatRoomResponseDto {
     private final Long headCountChat;
     private final boolean chatValid;
     private final boolean newMessage;
-    private final String chatRoomIamge;
+    private final String chatRoomImage;
     private final String chatRoomtype;
 
     public ChatRoomResponseDto(ChatRoom chatRoom, Group group, Long headCountChat, boolean newMessage) {
@@ -25,7 +25,7 @@ public class ChatRoomResponseDto {
         this.chatValid = chatRoom.isChatValid();
         this.newMessage = newMessage;
 
-        this.chatRoomIamge = chatRoom.getChatRoomImage();
+        this.chatRoomImage = chatRoom.getChatRoomImage();
         this.chatRoomtype = "group";
     }
 
@@ -37,7 +37,7 @@ public class ChatRoomResponseDto {
         this.headCountChat = headCountChat;
         this.chatValid = chatRoom.isChatValid();
         this.newMessage = newMessage;
-        this.chatRoomIamge = chatRoom.getChatRoomImage();
+        this.chatRoomImage = chatRoom.getChatRoomImage();
         this.chatRoomtype = "screen";
     }
 }

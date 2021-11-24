@@ -114,6 +114,8 @@ public class CommunityController {
             return msgResponseDto;
         }
     }
+
+
     @DeleteMapping("/community/{communityId}")
     public MsgResponseDto deleteCommunity(
             @PathVariable Long communityId,
