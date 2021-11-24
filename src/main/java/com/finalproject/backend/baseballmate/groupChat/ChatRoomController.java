@@ -61,4 +61,10 @@ public class ChatRoomController {
         chatRoomService.quitChat2(screenId,userDetails);
     }
 
+
+    // 채팅 메시지 테스트용 api
+    @PostMapping("/test/chat/message")
+    public ChatMessage testingChat(@RequestBody String message) {
+        return (chatMessageService.testChat(message));
+    }
 }
