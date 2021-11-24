@@ -21,13 +21,13 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 public abstract class Timestamped_12H {
     @CreatedDate
-    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss a")
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm a")
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateDeserializer.class)
     private LocalDateTime createdAt;
 
     @LastModifiedDate
-    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss a")
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm a")
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateDeserializer.class)
     private LocalDateTime modifiedAt;
