@@ -23,6 +23,7 @@ public class AllChatInfoController {
         return allChatInfoService.getUser(roomId);
     }
 
+    // 유저 강퇴하기
     @ApiOperation(value = "채팅방 유저목록", notes = "채팅방 유저목록")
     @DeleteMapping("/chat/user/{roomId}")
     public void deleteAllChatInfo(@PathVariable Long roomId, @AuthenticationPrincipal UserDetailsImpl userDetails){
