@@ -132,7 +132,6 @@ public class JoinRequestsService {
         Long postId = joinRequests.getPostId();
         if (!tOrF) {
             joinRequestsRepository.delete(joinRequests);
-            groupService.cancelApplication2(postId,joinRequests);
             return "거절되었습니다";
         }
         User user = userRepository.findById(joinRequests.getUserId()).orElseThrow(
@@ -280,7 +279,6 @@ public class JoinRequestsService {
         Long postId = joinRequests.getPostId();
         if (!tOrF) {
             joinRequestsRepository.delete(joinRequests);
-            screenService.cancleApplication2(postId,joinRequests);
             return "거절되었습니다";
         }
         User user = userRepository.findById(joinRequests.getUserId()).orElseThrow(
