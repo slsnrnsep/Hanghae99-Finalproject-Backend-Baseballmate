@@ -278,7 +278,7 @@ public class GroupService {
     public Group createGroup(GroupRequestDto requestDto, User loginedUser) {
         Group Group = new Group(requestDto, loginedUser);
         groupRepository.save(Group);
-
+        chatRoomService.createChatRoom(Group.getGroupId(), loginedUser);
         return Group;
     }
 
