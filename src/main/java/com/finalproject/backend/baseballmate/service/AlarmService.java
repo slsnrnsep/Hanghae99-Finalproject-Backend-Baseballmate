@@ -36,7 +36,7 @@ public class AlarmService {
     public List<Alarm> getAlarm(UserDetailsImpl userDetails) {
         Long userId = userDetails.getUser().getId();
         List<Alarm> alarmList =  alarmRepository.findByUserIdOrderByCreatedAtDesc(userId);
-
+//        alarmList.get(i).getCreatedAt();
         for(Alarm alarm : alarmList){
             AlarmSaveDto alarmSaveDto = new AlarmSaveDto();
             alarmSaveDto.setAlarmStatus(true);

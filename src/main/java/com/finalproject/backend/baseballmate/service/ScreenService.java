@@ -1,5 +1,6 @@
 package com.finalproject.backend.baseballmate.service;
 
+import com.finalproject.backend.baseballmate.groupChat.ChatRoomService;
 import com.finalproject.backend.baseballmate.join.JoinRequests;
 import com.finalproject.backend.baseballmate.model.*;
 import com.finalproject.backend.baseballmate.repository.*;
@@ -36,12 +37,14 @@ public class ScreenService {
     private String commonPath = "/images";
     private final UserRepository userRepository;
     private final CanceledScreenListRepository canceledScreenListRepository;
+    private final ChatRoomService chatRoomService;
 
 
     @Transactional
     public Screen createScreen(ScreenRequestDto requestDto, User loginedUser) {
         Screen screen = new Screen(requestDto, loginedUser);
         screenRepository.save(screen);
+        chatRoomService.createChatRoom2(screen.getScreenId(), loginedUser);
         return screen;
     }
 

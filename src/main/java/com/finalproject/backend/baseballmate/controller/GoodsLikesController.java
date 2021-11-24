@@ -1,5 +1,6 @@
 package com.finalproject.backend.baseballmate.controller;
 
+import com.finalproject.backend.baseballmate.model.GoodsLikes;
 import com.finalproject.backend.baseballmate.model.User;
 import com.finalproject.backend.baseballmate.requestDto.GoodsLikesReqeustDto;
 import com.finalproject.backend.baseballmate.security.UserDetailsImpl;

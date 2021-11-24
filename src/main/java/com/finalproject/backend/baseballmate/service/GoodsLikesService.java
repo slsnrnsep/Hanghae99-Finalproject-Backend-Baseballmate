@@ -30,6 +30,7 @@ public class GoodsLikesService {
                 () -> new IllegalArgumentException("상품이 존재하지 않습니다.")
         );
         Long userIdGoods = loginUser.getId();
+
         if(goodsLikesReqeustDto.getIsLiked().equals("true")){
             GoodsLikes goodsLikes = goodsLikesRepository.findByGoodsIdAndUserId(goods.getId(), user.getId()).orElseThrow(
                     () ->new IllegalArgumentException("해당 굿즈의 좋아요 이력이 없습니다.")
@@ -44,6 +45,7 @@ public class GoodsLikesService {
                 return true;
             }
             GoodsLikes goodsLikes = goodsLikesRepository.save(new GoodsLikes(goods, user, userIdGoods));
+//            Long userIdGoods = goodsLikes.getGoods().getUserId();
             user.addGoodsLikes(goodsLikes);
             goods.addGoodsLikes(goodsLikes);
             return true;

@@ -86,9 +86,9 @@ public class GoodsController {
 
     // 굿즈 전체조회
     @GetMapping("/goods")
-    public List<AllGoodsResponseDto> getGoods(@AuthenticationPrincipal UserDetailsImpl userDetails) throws ParseException
+    public List<AllGoodsResponseDto> getGoods() throws ParseException
     {
-        List<AllGoodsResponseDto> allGoods = goodsService.getGoods(userDetails);
+        List<AllGoodsResponseDto> allGoods = goodsService.getGoods();
         return allGoods;
     }
 

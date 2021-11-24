@@ -24,9 +24,14 @@ public class JoinRequests {
     @Column(nullable = false)
     private Long ownUserId;
 
-    public JoinRequests(Long userId,Long postId,Long ownUserId) {
+    @Column(nullable = false)
+    private String grouptype;
+
+    public JoinRequests(Long userId,Long postId,Long ownUserId,String grouptype) {
         this.userId = userId;
         this.postId = postId;
         this.ownUserId = ownUserId;
+        this.grouptype = grouptype;
     }
+
 }
