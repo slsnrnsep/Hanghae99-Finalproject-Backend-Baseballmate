@@ -20,6 +20,7 @@ public class AllChatInfoQueryRepository {
                 .join(allChatInfo.enteredUser)
                 .fetchJoin()
                 .fetchCount();
+
     }
 
     public AllChatInfo findByChatRoom_IdAndUser_Id(Long roomId, Long userId){
@@ -30,6 +31,7 @@ public class AllChatInfoQueryRepository {
                 .join(allChatInfo.enteredUser)
                 .fetchJoin()
                 .fetchOne();
+
     }
 
     public List<AllChatInfo> findAllByChatRoom_Id(Long roomId){

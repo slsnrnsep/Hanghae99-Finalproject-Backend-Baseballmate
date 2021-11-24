@@ -33,6 +33,7 @@ public class JoinRequestsService {
     private final AlarmService alarmService;
     private final GroupService groupService;
     private final ScreenService screenService;
+    private final JoinRequestQueryRepository joinRequestQueryRepository;
 
     //유저 신청정보 저장
     public String requestJoin(UserDetailsImpl userDetails, Long postId) {
@@ -42,7 +43,7 @@ public class JoinRequestsService {
             Group group = groupRepository.findByGroupId(postId);
             User user = group.getCreatedUser();
             Long ownUserId = user.getId();
-            JoinRequests joinRequests = new JoinRequests(userId, postId, ownUserId);
+            JoinRequests joinRequests = new JoinRequests(userId, postId, ownUserId,"group");
             if(group.getChatRoom()==null)
             {
                 joinRequestsRepository.save(joinRequests);
@@ -51,6 +52,7 @@ public class JoinRequestsService {
                 alarmRequestDto.setUserId(user.getId());
                 alarmRequestDto.setContents(signupAlarm);
                 alarmRequestDto.setJoinRequestId(joinRequests.getId());
+                alarmRequestDto.setAlarmType("Group");
                 alarmService.createAlarm(alarmRequestDto);
                 return "신청완료";
             }
@@ -80,7 +82,7 @@ public class JoinRequestsService {
     //유저 신청정보 불러오기
     public List<UserInfoAndPostResponseDto> requestJoinList(UserDetailsImpl userDetails) {
         Long userId = userDetails.getUser().getId();
-        List<JoinRequests> joinRequestsList = joinRequestsRepository.findByOwnUserId(userId);
+        List<JoinRequests> joinRequestsList = joinRequestQueryRepository.findtypebyUserId(userId,"group");
         List<UserInfoAndPostResponseDto> userInfoAndPostResponseDtoList = new ArrayList<>();
 
         for (JoinRequests joinRequests : joinRequestsList) {
@@ -138,14 +140,14 @@ public class JoinRequestsService {
         );
 
 
-        ChatRoom chatRoom = chatRoomRepository.findByGroup_GroupId(postId);
+        ChatRoom chatRoom = chatRoomRepository.findByGroupGroupId(postId);
         AllChatInfo allChatInfo = new AllChatInfo(user, chatRoom);
         allChatInfoRepository.save(allChatInfo);
         joinRequestsRepository.delete(joinRequests);
         groupService.applyGroup2(postId,joinRequests);
         return "승인되었습니다";
 
-        }
+    }
 
 
     // 채팅방 인원수 제한
@@ -189,7 +191,7 @@ public class JoinRequestsService {
             Screen group = screenRepository.findByScreenId(postId);
             User user = group.getScreenCreatedUser();
             Long ownUserId = user.getId();
-            JoinRequests joinRequests = new JoinRequests(userId, postId, ownUserId);
+            JoinRequests joinRequests = new JoinRequests(userId, postId, ownUserId,"screen");
             if(group.getScreenChatRoom()==null)
             {
                 joinRequestsRepository.save(joinRequests);
@@ -198,6 +200,7 @@ public class JoinRequestsService {
                 alarmRequestDto.setUserId(user.getId());
                 alarmRequestDto.setContents(signupAlarm);
                 alarmRequestDto.setJoinRequestId(joinRequests.getId());
+                alarmRequestDto.setAlarmType("Screen");
                 alarmService.createAlarm(alarmRequestDto);
                 return "신청완료";
             }
@@ -227,7 +230,7 @@ public class JoinRequestsService {
     //유저 신청정보 불러오기
     public List<UserInfoAndPostResponseDto> requestJoinList2(UserDetailsImpl userDetails) {
         Long userId = userDetails.getUser().getId();
-        List<JoinRequests> joinRequestsList = joinRequestsRepository.findByOwnUserId(userId);
+        List<JoinRequests> joinRequestsList = joinRequestQueryRepository.findtypebyUserId(userId,"screen");
         List<UserInfoAndPostResponseDto> userInfoAndPostResponseDtoList = new ArrayList<>();
 
         for (JoinRequests joinRequests : joinRequestsList) {
@@ -285,7 +288,7 @@ public class JoinRequestsService {
         );
 
 
-        ChatRoom chatRoom = chatRoomRepository.findByScreen_ScreenId(postId);
+        ChatRoom chatRoom = chatRoomRepository.findByScreenScreenId(postId);
         AllChatInfo allChatInfo = new AllChatInfo(user, chatRoom);
         allChatInfoRepository.save(allChatInfo);
         joinRequestsRepository.delete(joinRequests);
@@ -303,8 +306,5 @@ public class JoinRequestsService {
         joinRequestsRepository.delete(joinRequests);
         return "참가신청 취소가 완료되었습니다";
     }
-
-
-
 
 }
