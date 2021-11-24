@@ -1,6 +1,6 @@
 package com.finalproject.backend.baseballmate.groupChat;
 
-import com.finalproject.backend.baseballmate.model.Timestamped;
+import com.finalproject.backend.baseballmate.model.Timestamped_12H;
 import com.finalproject.backend.baseballmate.model.User;
 import lombok.*;
 
@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChatMessage extends Timestamped {
+public class ChatMessage extends Timestamped_12H {
     // 메시지 타입 : 입장, 채팅, 퇴장
     public enum MessageType {
         ENTER, TALK, QUIT, BAN, BREAK

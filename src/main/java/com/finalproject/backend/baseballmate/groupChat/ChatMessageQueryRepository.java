@@ -19,7 +19,7 @@ public class ChatMessageQueryRepository {
     public Page<ChatMessage> findByRoomIdOrderByIdDesc(String roomId, Pageable pageable) {
         QueryResults<ChatMessage> result = queryFactory.selectFrom(chatMessage)
                 .where(chatMessage.roomId.eq(roomId))
-                .orderBy(chatMessage.id.desc())
+                .orderBy(chatMessage.id.asc())
 //                .join(chatMessage.sender)
 //                .fetchJoin()
                 .offset(pageable.getOffset())

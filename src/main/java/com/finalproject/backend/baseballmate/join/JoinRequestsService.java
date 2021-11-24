@@ -146,7 +146,7 @@ public class JoinRequestsService {
         groupService.applyGroup2(postId,joinRequests);
         return "승인되었습니다";
 
-        }
+    }
 
 
     // 채팅방 인원수 제한
@@ -304,6 +304,5 @@ public class JoinRequestsService {
         joinRequestsRepository.delete(joinRequests);
         return "참가신청 취소가 완료되었습니다";
     }
-
 
 }

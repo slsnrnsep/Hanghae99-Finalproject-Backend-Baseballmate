@@ -48,15 +48,23 @@ public class ChatRoomController {
         return chatMessageService.getChatMessageByRoomId(roomId, pageable);
     }
 
+    // 직관모임 채팅방 나가기
     @ApiOperation(value = "해당 채팅방 나가기", notes = "해당 채팅방 나가기")
-    @DeleteMapping("/chat/quit/{postId}")
-    public void quitChat(@PathVariable Long postId,@AuthenticationPrincipal UserDetailsImpl userDetails){
-        chatRoomService.quitChat(postId,userDetails);
+    @DeleteMapping("/chat/quit/{groupId}")
+    public void quitChat(@PathVariable Long groupId,@AuthenticationPrincipal UserDetailsImpl userDetails){
+        chatRoomService.quitChat(groupId,userDetails);
     }
 
-    @DeleteMapping("/chat/screen/quit/{postId}")
-    public void quitChat2(@PathVariable Long postId,@AuthenticationPrincipal UserDetailsImpl userDetails){
-        chatRoomService.quitChat2(postId,userDetails);
+    // 스야모임 채팅방 나가기
+    @DeleteMapping("/chat/screen/quit/{screenId}")
+    public void quitChat2(@PathVariable Long screenId,@AuthenticationPrincipal UserDetailsImpl userDetails){
+        chatRoomService.quitChat2(screenId,userDetails);
     }
 
+
+    // 채팅 메시지 테스트용 api
+    @PostMapping("/test/chat/message")
+    public ChatMessage testingChat(@RequestBody String message) {
+        return (chatMessageService.testChat(message));
+    }
 }
