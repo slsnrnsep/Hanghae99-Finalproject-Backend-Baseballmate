@@ -33,6 +33,7 @@ public class JoinRequestsService {
     private final AlarmService alarmService;
     private final GroupService groupService;
     private final ScreenService screenService;
+    private final JoinRequestQueryRepository joinRequestQueryRepository;
 
     //유저 신청정보 저장
     public String requestJoin(UserDetailsImpl userDetails, Long postId) {
@@ -42,7 +43,7 @@ public class JoinRequestsService {
             Group group = groupRepository.findByGroupId(postId);
             User user = group.getCreatedUser();
             Long ownUserId = user.getId();
-            JoinRequests joinRequests = new JoinRequests(userId, postId, ownUserId);
+            JoinRequests joinRequests = new JoinRequests(userId, postId, ownUserId,"group");
             if(group.getChatRoom()==null)
             {
                 joinRequestsRepository.save(joinRequests);
@@ -81,7 +82,7 @@ public class JoinRequestsService {
     //유저 신청정보 불러오기
     public List<UserInfoAndPostResponseDto> requestJoinList(UserDetailsImpl userDetails) {
         Long userId = userDetails.getUser().getId();
-        List<JoinRequests> joinRequestsList = joinRequestsRepository.findByOwnUserId(userId);
+        List<JoinRequests> joinRequestsList = joinRequestQueryRepository.findtypebyUserId(userId,"group");
         List<UserInfoAndPostResponseDto> userInfoAndPostResponseDtoList = new ArrayList<>();
 
         for (JoinRequests joinRequests : joinRequestsList) {
@@ -190,7 +191,7 @@ public class JoinRequestsService {
             Screen group = screenRepository.findByScreenId(postId);
             User user = group.getScreenCreatedUser();
             Long ownUserId = user.getId();
-            JoinRequests joinRequests = new JoinRequests(userId, postId, ownUserId);
+            JoinRequests joinRequests = new JoinRequests(userId, postId, ownUserId,"screen");
             if(group.getScreenChatRoom()==null)
             {
                 joinRequestsRepository.save(joinRequests);
@@ -229,7 +230,7 @@ public class JoinRequestsService {
     //유저 신청정보 불러오기
     public List<UserInfoAndPostResponseDto> requestJoinList2(UserDetailsImpl userDetails) {
         Long userId = userDetails.getUser().getId();
-        List<JoinRequests> joinRequestsList = joinRequestsRepository.findByOwnUserId(userId);
+        List<JoinRequests> joinRequestsList = joinRequestQueryRepository.findtypebyUserId(userId,"screen");
         List<UserInfoAndPostResponseDto> userInfoAndPostResponseDtoList = new ArrayList<>();
 
         for (JoinRequests joinRequests : joinRequestsList) {
