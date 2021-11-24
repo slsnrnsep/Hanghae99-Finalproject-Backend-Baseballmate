@@ -96,7 +96,7 @@ public class PhoneService {
 
     public void confirmNumChk(PhoneRequstDto requstDto) {
 
-        User user = userRepository.findByPhoneNumber(requstDto.getPhoneNumber()).orElseThrow(
+        User user = userRepository.findByPhoneNumber(requstDto.getPhoneNumber()+"#"+requstDto.getRanNum()).orElseThrow(
                 () -> new IllegalArgumentException("사용자 정보가 일치하지 않습니다")
         );
 

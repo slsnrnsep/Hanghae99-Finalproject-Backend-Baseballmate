@@ -48,7 +48,7 @@ public class JoinRequestsService {
             {
                 joinRequestsRepository.save(joinRequests);
                 AlarmRequestDto alarmRequestDto = new AlarmRequestDto();
-                String signupAlarm = user.getUsername() + "님! "+userDetails.getUser().getUsername()+" 님이 내가 만든 모임 : " +group.getTitle()+" 에 참여신청을 하셨습니다.";
+                String signupAlarm = user.getUsername() + "님! "+userDetails.getUser().getUsername()+" 님께서* 내가 만든 모임 : " +group.getTitle()+" 에 *참여신청을 하셨습니다.";
                 alarmRequestDto.setUserId(user.getId());
                 alarmRequestDto.setContents(signupAlarm);
                 alarmRequestDto.setJoinRequestId(joinRequests.getId());
@@ -63,7 +63,7 @@ public class JoinRequestsService {
                 if (allChatInfoQueryRepository.findByChatRoom_IdAndUser_Id(roomId, userId) == null) {
                     joinRequestsRepository.save(joinRequests);
                     AlarmRequestDto alarmRequestDto = new AlarmRequestDto();
-                    String signupAlarm = user.getUsername() + "님! "+userDetails.getUser().getUsername()+" 님이 내가 만든 모임 : " +group.getTitle()+" 에 참여신청을 하셨습니다.";
+                    String signupAlarm = user.getUsername() + "님! "+userDetails.getUser().getUsername()+" 님께서* 내가 만든 모임 : " +group.getTitle()+" 에 *참여신청을 하셨습니다.";
                     alarmRequestDto.setUserId(user.getId());
                     alarmRequestDto.setContents(signupAlarm);
                     alarmRequestDto.setJoinRequestId(joinRequests.getId());
@@ -179,7 +179,7 @@ public class JoinRequestsService {
             Group group=groupRepository.findByGroupId(joinRequests.getId());
             joinRequestsRepository.delete(joinRequests);
             AlarmRequestDto alarmRequestDto = new AlarmRequestDto();
-            String signupAlarm = group.getCreatedUser().getUsername() + "님! "+userDetails.getUser().getUsername()+" 님이 내가 만든 모임 : " +group.getTitle()+" 에 했던 신청을 취소 하셨습니다.";
+            String signupAlarm = group.getCreatedUser().getUsername() + "님! "+userDetails.getUser().getUsername()+" 님께서* 내가 만든 모임 : " +group.getTitle()+" 에 했던 *신청을 취소 하셨습니다.";
             alarmRequestDto.setUserId(group.getCreatedUser().getId());
             alarmRequestDto.setContents(signupAlarm);
             alarmRequestDto.setJoinRequestId(joinRequests.getId());
@@ -216,7 +216,7 @@ public class JoinRequestsService {
             {
                 joinRequestsRepository.save(joinRequests);
                 AlarmRequestDto alarmRequestDto = new AlarmRequestDto();
-                String signupAlarm = user.getUsername() + "님! "+userDetails.getUser().getUsername()+" 님이 내가 만든 스크린 야구모임 : " +group.getTitle()+" 에 참여신청을 하셨습니다.";
+                String signupAlarm = user.getUsername() + "님! "+userDetails.getUser().getUsername()+" 님께서* 내가 만든 스크린 야구모임 : " +group.getTitle()+" 에 *참여신청을 하셨습니다.";
                 alarmRequestDto.setUserId(user.getId());
                 alarmRequestDto.setContents(signupAlarm);
                 alarmRequestDto.setJoinRequestId(joinRequests.getId());
@@ -231,7 +231,7 @@ public class JoinRequestsService {
                 if (allChatInfoQueryRepository.findByChatRoom_IdAndUser_Id(roomId, userId) == null) {
                     joinRequestsRepository.save(joinRequests);
                     AlarmRequestDto alarmRequestDto = new AlarmRequestDto();
-                    String signupAlarm = user.getUsername() + "님! "+userDetails.getUser().getUsername()+" 님이 내가 만든 스크린 야구모임 : " +group.getTitle()+" 에 참여신청을 하셨습니다.";
+                    String signupAlarm = user.getUsername() + "님! "+userDetails.getUser().getUsername()+" 님께서* 내가 만든 스크린 야구모임 : " +group.getTitle()+" 에 *참여신청을 하셨습니다.";
                     alarmRequestDto.setUserId(user.getId());
                     alarmRequestDto.setContents(signupAlarm);
                     alarmRequestDto.setJoinRequestId(joinRequests.getId());
@@ -334,7 +334,7 @@ public class JoinRequestsService {
             Screen group=screenRepository.findByScreenId(joinRequests.getId());
             joinRequestsRepository.delete(joinRequests);
             AlarmRequestDto alarmRequestDto = new AlarmRequestDto();
-            String signupAlarm = group.getScreenCreatedUser().getUsername() + "님! "+userDetails.getUser().getUsername()+" 님이 내가 만든 모임 : " +group.getTitle()+" 에 했던 신청을 취소 하셨습니다.";
+            String signupAlarm = group.getScreenCreatedUser().getUsername() + "님! "+userDetails.getUser().getUsername()+" 님께서* 내가 만든 모임 : " +group.getTitle()+" 에 했던 *신청을 취소 하셨습니다.";
             alarmRequestDto.setUserId(group.getScreenCreatedUser().getId());
             alarmRequestDto.setContents(signupAlarm);
             alarmRequestDto.setJoinRequestId(joinRequests.getId());
