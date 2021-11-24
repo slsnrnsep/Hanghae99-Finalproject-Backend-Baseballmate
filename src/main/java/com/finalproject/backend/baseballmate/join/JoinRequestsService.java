@@ -51,6 +51,7 @@ public class JoinRequestsService {
                 alarmRequestDto.setUserId(user.getId());
                 alarmRequestDto.setContents(signupAlarm);
                 alarmRequestDto.setJoinRequestId(joinRequests.getId());
+                alarmRequestDto.setAlarmType("Group");
                 alarmService.createAlarm(alarmRequestDto);
                 return "신청완료";
             }
@@ -198,6 +199,7 @@ public class JoinRequestsService {
                 alarmRequestDto.setUserId(user.getId());
                 alarmRequestDto.setContents(signupAlarm);
                 alarmRequestDto.setJoinRequestId(joinRequests.getId());
+                alarmRequestDto.setAlarmType("Screen");
                 alarmService.createAlarm(alarmRequestDto);
                 return "신청완료";
             }

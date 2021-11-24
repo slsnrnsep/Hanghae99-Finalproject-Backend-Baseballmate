@@ -28,4 +28,5 @@ public class AllGoodsResponseDto {
     String userAddress;
     Long userId;
     String usertype;
+
 }
