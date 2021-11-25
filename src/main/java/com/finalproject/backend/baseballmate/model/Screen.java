@@ -91,9 +91,8 @@ public class Screen extends Timestamped{
     private int screenlikeCount;
 
     // 스크린모임에 해당하는 채팅방
-    @JsonIgnore
+
     @OneToOne
-    @JoinColumn(name="screeninx")
     private ChatRoom screenChatRoom;
 
     public void addLikes(ScreenLikes like){

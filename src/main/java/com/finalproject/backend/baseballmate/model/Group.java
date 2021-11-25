@@ -80,9 +80,7 @@ public class Group extends Timestamped{
 //    private String baseballTeam; // 구단 이름
 
     // 모임에 해당하는 채팅방
-    @JsonIgnore
     @OneToOne
-    @JoinColumn(name="groupinx")
     private ChatRoom groupChatRoom;
 
     // 모임을 취소했던 유저 리스트

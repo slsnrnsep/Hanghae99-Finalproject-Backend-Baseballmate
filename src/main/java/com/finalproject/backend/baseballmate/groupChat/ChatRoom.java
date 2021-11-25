@@ -45,11 +45,11 @@ public class ChatRoom implements Serializable {
     private boolean chatValid; // 채팅방 이용가능 여부
 
 
-    @OneToOne(mappedBy = "groupChatRoom",cascade = CascadeType.ALL)
+
     private Group groupinx;
 
 
-    @OneToOne(mappedBy = "screenChatRoom",cascade = CascadeType.ALL)
+
     private Screen screeninx;
 
     public ChatRoom(String uuid, Group group, User user) {
