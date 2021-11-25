@@ -44,12 +44,14 @@ public class ChatRoom implements Serializable {
     @Column
     private boolean chatValid; // 채팅방 이용가능 여부
 
-
-
+    @JsonIgnore
+    @OneToOne
+    @JoinColumn(name="GroupID")
     private Group groupinx;
 
-
-
+    @JsonIgnore
+    @OneToOne
+    @JoinColumn(name="ScreenID")
     private Screen screeninx;
 
     public ChatRoom(String uuid, Group group, User user) {

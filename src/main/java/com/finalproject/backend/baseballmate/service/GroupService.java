@@ -499,8 +499,7 @@ public class GroupService {
 //                    String commentAlarm = loginedUser + "님 께서" + group.getTitle() + "모임에 지원하셨습니다";
 //                    alarmService.alarmAppliedUser(commentAlarm,appliedGroup, user);
                 }
-                String commentAlarm = loginUser + "님 께서" + appliedGroup.getTitle() + "모임에 지원하셨습니다";
-                alarmService.alarmCreateUser(commentAlarm, appliedGroup);
+
 
             } else {
                 throw new IllegalArgumentException("모임을 만들었거나 참가이력이 있습니다."); // 모임을 만든 사람이 요청하는 경우 or 참가 이력이 있는 경우
@@ -682,8 +681,7 @@ public class GroupService {
 //                    String commentAlarm = loginedUser + "님 께서" + group.getTitle() + "모임에 지원하셨습니다";
 //                    alarmService.alarmAppliedUser(commentAlarm,appliedGroup, user);
                 }
-                String commentAlarm = loginedUser.getUsername() + "님 께서" + appliedGroup.getTitle() + "모임에 지원하셨습니다";
-                alarmService.alarmCreateUser(commentAlarm, appliedGroup);
+
 
             } else {
                 throw new IllegalArgumentException("모임을 만들었거나 참가이력이 있습니다."); // 모임을 만든 사람이 요청하는 경우 or 참가 이력이 있는 경우

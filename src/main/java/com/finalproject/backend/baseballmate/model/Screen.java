@@ -92,7 +92,7 @@ public class Screen extends Timestamped{
 
     // 스크린모임에 해당하는 채팅방
 
-    @OneToOne
+    @OneToOne(mappedBy = "screeninx")
     private ChatRoom screenChatRoom;
 
     public void addLikes(ScreenLikes like){

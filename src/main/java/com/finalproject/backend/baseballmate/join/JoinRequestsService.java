@@ -54,6 +54,12 @@ public class JoinRequestsService {
                 alarmRequestDto.setJoinRequestId(joinRequests.getId());
                 alarmRequestDto.setAlarmType("Group");
                 alarmService.createAlarm(alarmRequestDto);
+                String signupAlarm2 = userDetails.getUser().getUsername()+" 님께서는* "+user.getUsername()+"께서 만든 모임 : " +group.getTitle()+" 에 *참여신청을 하셨습니다.";
+                alarmRequestDto.setUserId(joinRequests.getUserId());
+                alarmRequestDto.setContents(signupAlarm2);
+                alarmRequestDto.setJoinRequestId(joinRequests.getId());
+                alarmRequestDto.setAlarmType("Normal");
+                alarmService.createAlarm(alarmRequestDto);
                 return "신청완료";
             }
             else
@@ -68,6 +74,12 @@ public class JoinRequestsService {
                     alarmRequestDto.setContents(signupAlarm);
                     alarmRequestDto.setJoinRequestId(joinRequests.getId());
                     alarmRequestDto.setAlarmType("Group");
+                    alarmService.createAlarm(alarmRequestDto);
+                    String signupAlarm2 = userDetails.getUser().getUsername()+" 님께서는* "+user.getUsername()+"께서 만든 모임 : " +group.getTitle()+" 에 *참여신청을 하셨습니다.";
+                    alarmRequestDto.setUserId(joinRequests.getUserId());
+                    alarmRequestDto.setContents(signupAlarm2);
+                    alarmRequestDto.setJoinRequestId(joinRequests.getId());
+                    alarmRequestDto.setAlarmType("Normal");
                     alarmService.createAlarm(alarmRequestDto);
                     return "신청완료";
                 } else {
@@ -222,6 +234,12 @@ public class JoinRequestsService {
                 alarmRequestDto.setJoinRequestId(joinRequests.getId());
                 alarmRequestDto.setAlarmType("Screen");
                 alarmService.createAlarm(alarmRequestDto);
+                String signupAlarm2 = userDetails.getUser().getUsername()+" 님께서는* "+user.getUsername()+"께서 만든 모임 : " +group.getTitle()+" 에 *참여신청을 하셨습니다.";
+                alarmRequestDto.setUserId(joinRequests.getUserId());
+                alarmRequestDto.setContents(signupAlarm2);
+                alarmRequestDto.setJoinRequestId(joinRequests.getId());
+                alarmRequestDto.setAlarmType("Normal");
+                alarmService.createAlarm(alarmRequestDto);
                 return "신청완료";
             }
             else
@@ -236,6 +254,12 @@ public class JoinRequestsService {
                     alarmRequestDto.setContents(signupAlarm);
                     alarmRequestDto.setJoinRequestId(joinRequests.getId());
                     alarmRequestDto.setAlarmType("Screen");
+                    alarmService.createAlarm(alarmRequestDto);
+                    String signupAlarm2 = userDetails.getUser().getUsername()+" 님께서는* "+user.getUsername()+"께서 만든 모임 : " +group.getTitle()+" 에 *참여신청을 하셨습니다.";
+                    alarmRequestDto.setUserId(joinRequests.getUserId());
+                    alarmRequestDto.setContents(signupAlarm2);
+                    alarmRequestDto.setJoinRequestId(joinRequests.getId());
+                    alarmRequestDto.setAlarmType("Normal");
                     alarmService.createAlarm(alarmRequestDto);
                     return "신청완료";
                 } else {
