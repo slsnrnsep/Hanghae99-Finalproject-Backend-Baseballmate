@@ -335,6 +335,7 @@ public class JoinRequestsService {
         AllChatInfo allChatInfo = new AllChatInfo(user, chatRoom);
         allChatInfoRepository.save(allChatInfo);
         joinRequestsRepository.delete(joinRequests);
+
         screenService.applyScreen2(postId,joinRequests);
         return "승인되었습니다";
 

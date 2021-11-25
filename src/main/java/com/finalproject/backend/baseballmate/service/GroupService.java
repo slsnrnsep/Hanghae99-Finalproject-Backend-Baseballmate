@@ -37,6 +37,9 @@ public class GroupService {
     private final AlarmService alarmService;
     private final ChatRoomService chatRoomService;
     private final UserRepository userRepository;
+    String[] picturelist = {"basic0.jpg","basic1.jpg","basic2.jpg","basic3.jpg","basic4.jpg","basic5.jpg","basic6.jpg","basic7.jpg","basic8.jpg","basic9.jpg"};
+    Random random = new Random();
+
 
     // 모임 전체 조회(등록 순)
     public List<AllGroupResponseDto> getAllGroups() {
@@ -376,6 +379,12 @@ public class GroupService {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                group.setFilePath(filename);
+
+            }
+            if(file == null)
+            {
+                String filename = picturelist[random.nextInt(10)+1];
                 group.setFilePath(filename);
 
             }
