@@ -1,6 +1,7 @@
 package com.finalproject.backend.baseballmate.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.finalproject.backend.baseballmate.groupChat.ChatRoom;
 import com.finalproject.backend.baseballmate.requestDto.ScreenRequestDto;
@@ -90,7 +91,9 @@ public class Screen extends Timestamped{
     private int screenlikeCount;
 
     // 스크린모임에 해당하는 채팅방
-    @OneToOne(mappedBy = "screen")
+    @JsonIgnore
+    @OneToOne
+    @JoinColumn(name="screeninx")
     private ChatRoom screenChatRoom;
 
     public void addLikes(ScreenLikes like){

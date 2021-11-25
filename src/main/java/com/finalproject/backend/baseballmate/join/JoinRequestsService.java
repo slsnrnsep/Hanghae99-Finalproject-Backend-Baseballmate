@@ -44,7 +44,7 @@ public class JoinRequestsService {
             User user = group.getCreatedUser();
             Long ownUserId = user.getId();
             JoinRequests joinRequests = new JoinRequests(userId, postId, ownUserId,"group");
-            if(group.getChatRoom()==null)
+            if(group.getGroupChatRoom()==null)
             {
                 joinRequestsRepository.save(joinRequests);
                 AlarmRequestDto alarmRequestDto = new AlarmRequestDto();
@@ -58,7 +58,7 @@ public class JoinRequestsService {
             }
             else
             {
-                Long roomId = group.getChatRoom().getId();
+                Long roomId = group.getGroupChatRoom().getId();
                 // 신청하려는 방과 자신의 아이디가 이미 AllChatInfo DB에 있는지 확인
                 if (allChatInfoQueryRepository.findByChatRoom_IdAndUser_Id(roomId, userId) == null) {
                     joinRequestsRepository.save(joinRequests);
@@ -139,7 +139,7 @@ public class JoinRequestsService {
         );
 
 
-        ChatRoom chatRoom = chatRoomRepository.findByGroupGroupId(postId);
+        ChatRoom chatRoom = chatRoomRepository.findByGroupinxGroupId(postId);
         AllChatInfo allChatInfo = new AllChatInfo(user, chatRoom);
         allChatInfoRepository.save(allChatInfo);
         joinRequestsRepository.delete(joinRequests);
@@ -155,7 +155,7 @@ public class JoinRequestsService {
     public Boolean checkDuplicate(User user, Long postId) {
         List<AllChatInfo> allChatInfos = allChatInfoQueryRepository.findAllByUserIdOrderByIdDesc(user.getId());
         for (AllChatInfo allChatInfo : allChatInfos) {
-            if (allChatInfo.getChatRoom().getGroup().getGroupId().equals(postId)) {
+            if (allChatInfo.getChatRoom().getGroupinx().getGroupId().equals(postId)) {
                 return true;
             }
         }
@@ -307,7 +307,7 @@ public class JoinRequestsService {
         );
 
 
-        ChatRoom chatRoom = chatRoomRepository.findByScreenScreenId(postId);
+        ChatRoom chatRoom = chatRoomRepository.findByScreeninxScreenId(postId);
         AllChatInfo allChatInfo = new AllChatInfo(user, chatRoom);
         allChatInfoRepository.save(allChatInfo);
         joinRequestsRepository.delete(joinRequests);

@@ -56,7 +56,7 @@ public class UserService {
         password = passwordEncoder.encode(userRequestDto.getPassword());
 
 
-        User user = userRepository.findByPhoneNumber(userRequestDto.getPhonenumber()).orElseThrow(
+        User user = userRepository.findByPhoneNumber(userRequestDto.getPhonenumber()+"#"+userRequestDto.getRanNum()).orElseThrow(
                 ()-> new IllegalArgumentException("휴대폰에 맞는 유저정보를 찾을 수 없습니다.")
         );
         user.setUserid(userid);

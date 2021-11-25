@@ -16,7 +16,7 @@ public class ChatRoomQueryRepository {
     public List<ChatRoom> findAllByChatValidFalse(){
         return queryFactory.selectFrom(chatRoom)
                 .where(chatRoom.chatValid.eq(false))
-                .join(chatRoom.group)
+                .join(chatRoom.groupinx)
                 .fetchJoin()
                 .fetch();
     }

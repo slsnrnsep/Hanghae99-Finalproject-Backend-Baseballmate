@@ -82,9 +82,9 @@ public class ChatRoomService {
         List<AllChatInfo> allChatInfoList = allChatInfoQueryRepository.findAllByUserIdOrderByIdDesc(user.getId());
         for (AllChatInfo allChatInfo : allChatInfoList) {
             ChatRoom chatRoom = allChatInfo.getChatRoom();
-            if(chatRoom.getGroup()==null)
+            if(chatRoom.getGroupinx()==null)
             {
-                Screen screen = chatRoom.getScreen();
+                Screen screen = chatRoom.getScreeninx();
                 Long headCountChat = allChatInfoQueryRepository.countAllByChatRoom(chatRoom);
                 String chatRoomId = Long.toString(chatRoom.getId());
                 Long myLastMessageId = allChatInfo.getLastMessageId();
@@ -103,9 +103,9 @@ public class ChatRoomService {
                 }
                 responseDtoList.add(responseDto);
             }
-            if(chatRoom.getScreen()==null)
+            if(chatRoom.getScreeninx()==null)
             {
-                Group group = chatRoom.getGroup();
+                Group group = chatRoom.getGroupinx();
                 Long headCountChat = allChatInfoQueryRepository.countAllByChatRoom(chatRoom);
                 String chatRoomId = Long.toString(chatRoom.getId());
                 Long myLastMessageId = allChatInfo.getLastMessageId();
@@ -168,7 +168,7 @@ public class ChatRoomService {
         if (group == null) {
             throw new IllegalArgumentException("존재하지 않는 게시글입니다.");
         }
-        Long roomId = group.getChatRoom().getId();
+        Long roomId = group.getGroupChatRoom().getId();
         if (isChatRoomOwner(group, userDetails)) {
             // 확정된 모임이고 글쓴이면 게시글, 채팅방 아예 삭제 -> 채팅방 남겨둘지 말지 결정해서 정하기
             deleteAllChatInfo(roomId, userDetails);
@@ -200,7 +200,7 @@ public class ChatRoomService {
 
     // 채팅방 주인 확인
     static boolean isChatRoomOwner(Group group, UserDetailsImpl userDetails) {
-        Long roomOwnerId = group.getChatRoom().getOwnUserId();
+        Long roomOwnerId = group.getGroupChatRoom().getOwnUserId();
         Long userId = userDetails.getUser().getId();
         return roomOwnerId.equals(userId);
     }

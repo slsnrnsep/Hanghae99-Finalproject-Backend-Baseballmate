@@ -1,6 +1,7 @@
 package com.finalproject.backend.baseballmate.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.finalproject.backend.baseballmate.groupChat.ChatRoom;
 import com.finalproject.backend.baseballmate.requestDto.GroupRequestDto;
@@ -79,8 +80,10 @@ public class Group extends Timestamped{
 //    private String baseballTeam; // 구단 이름
 
     // 모임에 해당하는 채팅방
-    @OneToOne(mappedBy = "group")
-    private ChatRoom chatRoom;
+    @JsonIgnore
+    @OneToOne
+    @JoinColumn(name="groupinx")
+    private ChatRoom groupChatRoom;
 
     // 모임을 취소했던 유저 리스트
     @JsonManagedReference
