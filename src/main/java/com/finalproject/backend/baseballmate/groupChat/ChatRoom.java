@@ -46,20 +46,20 @@ public class ChatRoom implements Serializable {
 
     @JsonIgnore
     @OneToOne
-    @JoinColumn(name="GroupInx")
-    private Group group;
+    @JoinColumn(name="GroupID")
+    private Group groupinx;
 
     @JsonIgnore
     @OneToOne
-    @JoinColumn(name="ScreenInx")
-    private Screen screen;
+    @JoinColumn(name="ScreenID")
+    private Screen screeninx;
 
     public ChatRoom(String uuid, Group group, User user) {
         this.roomUuid = uuid;
         this.roomName = group.getTitle();
         this.chatRoomImage = group.getFilePath();
         this.ownUserId = user.getId();
-        this.group = group;
+        this.groupinx = group;
         this.chatValid = true;
     }
     public ChatRoom(String uuid, Screen group, User user) {
@@ -67,7 +67,7 @@ public class ChatRoom implements Serializable {
         this.roomName = group.getTitle();
         this.chatRoomImage = group.getFilePath();
         this.ownUserId = user.getId();
-        this.screen = group;
+        this.screeninx = group;
         this.chatValid = true;
     }
     public void updatechatValid(boolean chatValid) {
