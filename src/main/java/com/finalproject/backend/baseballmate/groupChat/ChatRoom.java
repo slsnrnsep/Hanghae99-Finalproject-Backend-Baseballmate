@@ -1,6 +1,7 @@
 package com.finalproject.backend.baseballmate.groupChat;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.finalproject.backend.baseballmate.model.Group;
 import com.finalproject.backend.baseballmate.model.Screen;
 import com.finalproject.backend.baseballmate.model.User;
@@ -11,6 +12,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -53,6 +56,10 @@ public class ChatRoom implements Serializable {
     @OneToOne
     @JoinColumn(name="ScreenInx")
     private Screen screen;
+
+    @JsonManagedReference
+    @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL)
+    private List<AllChatInfo> allChatInfoList = new ArrayList<>();
 
     public ChatRoom(String uuid, Group group, User user) {
         this.roomUuid = uuid;

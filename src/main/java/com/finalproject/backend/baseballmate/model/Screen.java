@@ -7,7 +7,6 @@ import com.finalproject.backend.baseballmate.requestDto.ScreenRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.apache.commons.collections.functors.ChainedTransformer;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -90,7 +89,7 @@ public class Screen extends Timestamped{
     private int screenlikeCount;
 
     // 스크린모임에 해당하는 채팅방
-    @OneToOne(mappedBy = "screen")
+    @OneToOne(mappedBy = "screen", cascade = CascadeType.ALL, orphanRemoval = true)
     private ChatRoom screenChatRoom;
 
     public void addLikes(ScreenLikes like){

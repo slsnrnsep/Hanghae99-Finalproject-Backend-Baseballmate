@@ -2,16 +2,17 @@ package com.finalproject.backend.baseballmate.controller;
 
 import com.finalproject.backend.baseballmate.model.*;
 import com.finalproject.backend.baseballmate.repository.*;
-import com.finalproject.backend.baseballmate.requestDto.*;
+import com.finalproject.backend.baseballmate.requestDto.HeaderDto;
+import com.finalproject.backend.baseballmate.requestDto.MyteamRequestDto;
+import com.finalproject.backend.baseballmate.requestDto.UserRequestDto;
+import com.finalproject.backend.baseballmate.requestDto.UserUpdateRequestDto;
 import com.finalproject.backend.baseballmate.responseDto.LoginCheckResponseDto;
 import com.finalproject.backend.baseballmate.responseDto.MsgResponseDto;
-import com.finalproject.backend.baseballmate.responseDto.UserResponseDto;
 import com.finalproject.backend.baseballmate.security.JwtTokenProvider;
 import com.finalproject.backend.baseballmate.security.UserDetailsImpl;
 import com.finalproject.backend.baseballmate.service.FileService;
 import com.finalproject.backend.baseballmate.service.LoginResponseDto;
 import com.finalproject.backend.baseballmate.service.UserService;
-import com.finalproject.backend.baseballmate.util.MD5Generator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -19,12 +20,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.awt.*;
-import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
