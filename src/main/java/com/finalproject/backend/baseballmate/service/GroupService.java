@@ -312,6 +312,7 @@ public class GroupService {
                 appliedUsers.add(i, userInfo);
             }
         }
+
         Long groupId = group.getGroupId();
         String createdUserName = group.getCreatedUsername();
         String createdUserId = group.getCreatedUser().getUserid();
