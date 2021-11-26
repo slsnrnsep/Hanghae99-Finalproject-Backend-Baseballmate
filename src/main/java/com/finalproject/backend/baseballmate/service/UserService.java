@@ -72,7 +72,7 @@ public class UserService {
 
 //        User loginedUser = userDetails.getUser();
         AlarmRequestDto alarmRequestDto = new AlarmRequestDto();
-        String signupAlarm = "안녕하세요" + user.getUsername() + "님! 가입을 환영합니다";
+        String signupAlarm = "안녕하세요 " + user.getUsername() + "님! 가입을 환영합니다";
         alarmRequestDto.setUserId(user.getId());
         alarmRequestDto.setContents(signupAlarm);
         alarmRequestDto.setAlarmType("Normal");
