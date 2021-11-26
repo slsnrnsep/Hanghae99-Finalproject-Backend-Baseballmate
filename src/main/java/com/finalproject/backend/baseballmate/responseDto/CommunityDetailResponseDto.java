@@ -13,7 +13,6 @@ import java.util.List;
 public class CommunityDetailResponseDto {
 //    private Long communityId;
     private String userName;
-    private String title;
     private String content;
     private String communityUserPicture;
     private String filePath;

@@ -1,6 +1,7 @@
 package com.finalproject.backend.baseballmate.groupChat;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.finalproject.backend.baseballmate.model.Group;
 import com.finalproject.backend.baseballmate.model.Screen;
 import com.finalproject.backend.baseballmate.model.User;
@@ -11,6 +12,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -47,19 +50,23 @@ public class ChatRoom implements Serializable {
     @JsonIgnore
     @OneToOne
     @JoinColumn(name="GroupID")
-    private Group groupinx;
+    private Group group;
 
     @JsonIgnore
     @OneToOne
     @JoinColumn(name="ScreenID")
-    private Screen screeninx;
+    private Screen screen;
+
+    @JsonManagedReference
+    @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL)
+    private List<AllChatInfo> allChatInfoList = new ArrayList<>();
 
     public ChatRoom(String uuid, Group group, User user) {
         this.roomUuid = uuid;
         this.roomName = group.getTitle();
         this.chatRoomImage = group.getFilePath();
         this.ownUserId = user.getId();
-        this.groupinx = group;
+        this.group = group;
         this.chatValid = true;
     }
     public ChatRoom(String uuid, Screen group, User user) {
@@ -67,7 +74,7 @@ public class ChatRoom implements Serializable {
         this.roomName = group.getTitle();
         this.chatRoomImage = group.getFilePath();
         this.ownUserId = user.getId();
-        this.screeninx = group;
+        this.screen = group;
         this.chatValid = true;
     }
     public void updatechatValid(boolean chatValid) {

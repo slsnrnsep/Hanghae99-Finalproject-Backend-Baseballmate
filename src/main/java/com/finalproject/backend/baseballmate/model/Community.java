@@ -28,8 +28,6 @@ public class Community extends Timestamped{
     @Column(nullable = false)
     private String userName;
 
-    @Column(nullable = false)
-    private String title; // 게시글 제목
 
     @Column(nullable = false)
     private String content; // 게시글 내용
@@ -70,15 +68,13 @@ public class Community extends Timestamped{
     public Community(User loginedUser, CommunityRequestDto requestDto, String communityUserPicture, String myTeam){
         this.createdUser = loginedUser;
         this.userName = loginedUser.getUsername();
-        this.title = requestDto.getTitle();
-        this.content = requestDto.getTitle();
+        this.content = requestDto.getContent();
         this.filePath = requestDto.getFilePath();
         this.myTeam = myTeam;
         this.communityUserPicture = communityUserPicture;
     }
 
     public void updateCommunity(CommunityRequestDto requestDto) {
-        this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
     }
 }
