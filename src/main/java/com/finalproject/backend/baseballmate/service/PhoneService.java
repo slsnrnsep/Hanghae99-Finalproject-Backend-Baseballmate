@@ -44,7 +44,7 @@ public class PhoneService {
         // 4 params(to, from, type, text) are mandatory. must be filled
         HashMap<String, String> params = new HashMap<>();
         params.put("to", phoneNumber);    // 수신전화번호
-        params.put("from", "01090029710");    // 발신전화번호. 테스트시에는 발신,수신 둘다 본인 번호로 하면 됨
+        params.put("from", "07080955816");    // 발신전화번호. 테스트시에는 발신,수신 둘다 본인 번호로 하면 됨
         params.put("type", "SMS");
         params.put("text", "[MEETBALL 회원가입]\n 인증번호는: " + "["+ranNum+"]" +"입니다.");
         params.put("app_version", "test app 1.2"); // application name and version
@@ -76,7 +76,7 @@ public class PhoneService {
         // 4 params(to, from, type, text) are mandatory. must be filled
         HashMap<String, String> params = new HashMap<>();
         params.put("to", phoneNumber);    // 수신전화번호
-        params.put("from", "01090029710");    // 발신전화번호. 테스트시에는 발신,수신 둘다 본인 번호로 하면 됨
+        params.put("from", "07080955816");    // 발신전화번호. 테스트시에는 발신,수신 둘다 본인 번호로 하면 됨
         params.put("type", "SMS");
         params.put("text", textmsg);
         params.put("app_version", "test app 1.2"); // application name and version

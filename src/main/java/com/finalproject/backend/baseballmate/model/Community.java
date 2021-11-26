@@ -29,7 +29,7 @@ public class Community extends Timestamped{
     private String userName;
 
 
-    @Column(nullable = false)
+    @Column(nullable = false,length = 1000)
     private String content; // 게시글 내용
 
     @Column
