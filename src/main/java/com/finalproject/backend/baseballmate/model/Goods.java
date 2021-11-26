@@ -29,7 +29,7 @@ public class Goods extends Timestamped {
     @Column
     private String goodsName;
 
-    @Column
+    @Column(length = 1000)
     private String goodsContent;
 
     @Column

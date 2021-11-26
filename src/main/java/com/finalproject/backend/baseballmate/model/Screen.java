@@ -1,7 +1,6 @@
 package com.finalproject.backend.baseballmate.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.finalproject.backend.baseballmate.groupChat.ChatRoom;
 import com.finalproject.backend.baseballmate.requestDto.ScreenRequestDto;
@@ -33,7 +32,7 @@ public class Screen extends Timestamped{
     @Column
     private String title; // 모임글의 제목
 
-    @Column
+    @Column(length = 1000)
     private String content; // 모임글의 내용
 
     @Column
@@ -44,12 +43,12 @@ public class Screen extends Timestamped{
 
     // 스야모임을 취소한 유저 리스트
     @JsonManagedReference
-    @OneToMany(mappedBy = "cancledScreen", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "cancledScreen", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CanceledScreenList> canceledScreenLists = new ArrayList<>();
 
     // 참가 신청한 유저와 해당 모임 정보
     @JsonManagedReference
-    @OneToMany(mappedBy = "appliedScreen")
+    @OneToMany(mappedBy = "appliedScreen", cascade = CascadeType.ALL)
     private List<ScreenApplication> screenApplications = new ArrayList<>();
 
 //    @JsonManagedReference
@@ -78,12 +77,12 @@ public class Screen extends Timestamped{
     private boolean allowtype;
 
     @JsonBackReference
-    @OneToMany(mappedBy = "screen", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "screen", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ScreenComment> screenCommentList = new ArrayList<>();
 
     // 스크린 야구 모임 좋아요
     @JsonManagedReference
-    @OneToMany(mappedBy = "screenlikes",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "screenlikes",cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ScreenLikes> screenLikesList;
 
     @Column(columnDefinition = "integer default 0")

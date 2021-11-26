@@ -13,5 +13,4 @@ public class CommunityRequestDto {
     private String content;
     private String filePath;
     private String myTeam;
-
 }
