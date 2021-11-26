@@ -1,5 +1,6 @@
 package com.finalproject.backend.baseballmate.groupChat;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.finalproject.backend.baseballmate.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,8 +24,8 @@ public class AllChatInfo {
     @JoinColumn(name = "user_id")
     private User enteredUser;
 
-//    @JsonBackReference
-    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonBackReference
+    @ManyToOne
     @JoinColumn(name = "room_id")
     private ChatRoom chatRoom;
 

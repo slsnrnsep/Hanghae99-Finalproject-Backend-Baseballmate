@@ -219,5 +219,9 @@ public class ChatRoomService {
         chatRoom.updatechatValid(false);
     }
 
+    public void setGroupNull(Long roomId) {
+        ChatRoom chatRoom = chatRoomRepository.findById(roomId).orElseThrow(() -> new IllegalArgumentException(""));
+        chatRoom.setGroup(null);
+    }
 
 }

@@ -1,5 +1,7 @@
 package com.finalproject.backend.baseballmate.service;
 
+import com.finalproject.backend.baseballmate.groupChat.ChatRoom;
+import com.finalproject.backend.baseballmate.groupChat.ChatRoomRepository;
 import com.finalproject.backend.baseballmate.groupChat.ChatRoomService;
 import com.finalproject.backend.baseballmate.join.JoinRequests;
 import com.finalproject.backend.baseballmate.model.*;
@@ -39,7 +41,7 @@ public class GroupService {
     private final UserRepository userRepository;
     String[] picturelist = {"basic0.jpg","basic1.jpg","basic2.jpg","basic3.jpg","basic4.jpg","basic5.jpg","basic6.jpg","basic7.jpg","basic8.jpg","basic9.jpg"};
     Random random = new Random();
-
+    private final ChatRoomRepository chatRoomRepository;
 
     // 모임 전체 조회(등록 순)
     public List<AllGroupResponseDto> getAllGroups() {
@@ -396,17 +398,20 @@ public class GroupService {
     }
 
     //모임 게시글 삭제하기
+    @Transactional
     public void deleteGroup(Long groupId, UserDetailsImpl userDetails) {
         String loginedUserId = userDetails.getUser().getUserid();
         String createdUserId = "";
 
         Group group = groupRepository.findByGroupId(groupId);
+        ChatRoom chatRoom = chatRoomRepository.findByGroup(group);
         if(group != null) {
             createdUserId = group.getCreatedUser().getUserid();
 
             if(!loginedUserId.equals(createdUserId)) {
                 throw new IllegalArgumentException("삭제 권한이 없습니다.");
             }
+            chatRoomRepository.delete(chatRoom);
             groupRepository.deleteById(groupId);
         } else {
             throw new NullPointerException("해당 게시글이 존재하지 않습니다.");
@@ -771,6 +776,11 @@ public class GroupService {
         }
 
 
+    }
+
+    // 연관관계 엮어있는 객체 null로 바꾸기
+    public void deleteObjects(Group group) {
+        group.getChatRoom().setGroup(null);
     }
 }
 
