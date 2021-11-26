@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface GoodsCommentRepository extends JpaRepository<GoodsComment, Long> {
     List<GoodsComment> findAllByGoodsId(Long goodsId);
-    List<GoodsComment> findAllByGoods_IdOrderByModifiedAtDesc(Long goodsId);
+    List<GoodsComment> findAllByGoods_IdOrderByModifiedAtAsc(Long goodsId);
 
 }
