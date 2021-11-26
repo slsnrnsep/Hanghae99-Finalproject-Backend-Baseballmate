@@ -8,5 +8,6 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
 //    ChatRoom findById(Long chatRoomId);
 
     ChatRoom findByScreenScreenId(Long screenId);
+
     ChatRoom findByGroup(Group group);
 }

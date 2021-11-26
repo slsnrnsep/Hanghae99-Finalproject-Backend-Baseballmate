@@ -15,13 +15,15 @@ public class UserRequestDto {
     private String myteam;
 //    private String picture;
     private String phonenumber;
+    private int ranNum;
 
-    public UserRequestDto(String username, String userid , String password,String myteam){
+    public UserRequestDto(String username, String userid , String password,String myteam,int ranNum){
 
         this.username = username;
         this.userid = userid;
         this.password = password;
         this.myteam = myteam;
+        this.ranNum = ranNum;
     }
 
 }

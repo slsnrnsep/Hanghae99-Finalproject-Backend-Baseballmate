@@ -39,6 +39,8 @@ public class GroupService {
     private final AlarmService alarmService;
     private final ChatRoomService chatRoomService;
     private final UserRepository userRepository;
+    String[] picturelist = {"basic0.jpg","basic1.jpg","basic2.jpg","basic3.jpg","basic4.jpg","basic5.jpg","basic6.jpg","basic7.jpg","basic8.jpg","basic9.jpg"};
+    Random random = new Random();
     private final ChatRoomRepository chatRoomRepository;
 
     // 모임 전체 조회(등록 순)
@@ -382,6 +384,12 @@ public class GroupService {
                 group.setFilePath(filename);
 
             }
+            if(file == null)
+            {
+                String filename = picturelist[random.nextInt(10)+1];
+                group.setFilePath(filename);
+
+            }
             group.updateGroup(requestDto);
             groupRepository.save(group);
         } else {
@@ -505,8 +513,7 @@ public class GroupService {
 //                    String commentAlarm = loginedUser + "님 께서" + group.getTitle() + "모임에 지원하셨습니다";
 //                    alarmService.alarmAppliedUser(commentAlarm,appliedGroup, user);
                 }
-                String commentAlarm = loginUser + "님 께서" + appliedGroup.getTitle() + "모임에 지원하셨습니다";
-                alarmService.alarmCreateUser(commentAlarm, appliedGroup);
+
 
             } else {
                 throw new IllegalArgumentException("모임을 만들었거나 참가이력이 있습니다."); // 모임을 만든 사람이 요청하는 경우 or 참가 이력이 있는 경우
@@ -688,8 +695,7 @@ public class GroupService {
 //                    String commentAlarm = loginedUser + "님 께서" + group.getTitle() + "모임에 지원하셨습니다";
 //                    alarmService.alarmAppliedUser(commentAlarm,appliedGroup, user);
                 }
-                String commentAlarm = loginedUser.getUsername() + "님 께서" + appliedGroup.getTitle() + "모임에 지원하셨습니다";
-                alarmService.alarmCreateUser(commentAlarm, appliedGroup);
+
 
             } else {
                 throw new IllegalArgumentException("모임을 만들었거나 참가이력이 있습니다."); // 모임을 만든 사람이 요청하는 경우 or 참가 이력이 있는 경우

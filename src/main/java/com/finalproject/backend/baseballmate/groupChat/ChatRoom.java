@@ -49,12 +49,12 @@ public class ChatRoom implements Serializable {
 
     @JsonIgnore
     @OneToOne
-    @JoinColumn(name="GroupInx")
+    @JoinColumn(name="GroupID")
     private Group group;
 
     @JsonIgnore
     @OneToOne
-    @JoinColumn(name="ScreenInx")
+    @JoinColumn(name="ScreenID")
     private Screen screen;
 
     @JsonManagedReference

@@ -49,14 +49,13 @@ public class CommunityService {
 
             Long communityId = community.getCommunityId();
             String userName = community.getUserName();
-            String title = community.getTitle();
             String content = community.getContent();
             String communityUserPicture = community.getCommunityUserPicture();
             String filePath = community.getFilePath();
             String myTeam = community.getMyTeam();
 
             AllCommunityDto communityDto =
-                    new AllCommunityDto(communityId, userName, title, content, communityUserPicture, filePath, myTeam);
+                    new AllCommunityDto(communityId, userName, content, communityUserPicture, filePath, myTeam);
             data.add(communityDto);
         }
         return data;
@@ -68,7 +67,6 @@ public class CommunityService {
         );
 
         String userName = community.getUserName();
-        String title = community.getTitle();
         String content = community.getContent();
         String communityUserPicture = community.getCommunityUserPicture();
         String filePath = community.getFilePath();
@@ -76,7 +74,7 @@ public class CommunityService {
         List<CommunityComment> communityCommentList = communityCommentRepository.findAllByCommunity_CommunityIdOrderByModifiedAtDesc(communityId);
 
         CommunityDetailResponseDto communityDetailResponseDto =
-                new CommunityDetailResponseDto(userName, title, content, communityUserPicture, filePath, myTeam, communityCommentList);
+                new CommunityDetailResponseDto(userName, content, communityUserPicture, filePath, myTeam, communityCommentList);
         return communityDetailResponseDto;
     }
 

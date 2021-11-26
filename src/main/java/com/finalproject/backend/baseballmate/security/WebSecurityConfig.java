@@ -52,6 +52,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user/logincheck").permitAll()
                 .antMatchers("/user/**").permitAll()
                 .antMatchers("/user/myteam").permitAll()
+                .antMatchers("/user/kakao/callback").permitAll()
                 .antMatchers("/user").anonymous() // 로그인, 회원가입 관련은 비인증 유저만 접근 가
                 .anyRequest().permitAll() // 나머지 요청은 누구나 접근 가능
                 .and()
