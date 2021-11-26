@@ -56,7 +56,7 @@ public class UserService {
         password = passwordEncoder.encode(userRequestDto.getPassword());
 
 
-        User user = userRepository.findByPhoneNumber(userRequestDto.getPhonenumber()).orElseThrow(
+        User user = userRepository.findByPhoneNumber(userRequestDto.getPhonenumber()+"#"+userRequestDto.getRanNum()).orElseThrow(
                 ()-> new IllegalArgumentException("휴대폰에 맞는 유저정보를 찾을 수 없습니다.")
         );
         user.setUserid(userid);
@@ -72,7 +72,7 @@ public class UserService {
 
 //        User loginedUser = userDetails.getUser();
         AlarmRequestDto alarmRequestDto = new AlarmRequestDto();
-        String signupAlarm = "안녕하세요" + user.getUsername() + "님! 가입을 환영합니다";
+        String signupAlarm = "안녕하세요 " + user.getUsername() + "님! 가입을 환영합니다";
         alarmRequestDto.setUserId(user.getId());
         alarmRequestDto.setContents(signupAlarm);
         alarmRequestDto.setAlarmType("Normal");
@@ -186,9 +186,12 @@ public class UserService {
         // 카카오 OAuth2 를 통해 카카오 사용자 정보 조회
         KakaoUserInfo userInfo = kakaoOAuth2.getUserInfo(authorizedCode);
 
+        String[] ranpre = {"살아가는","기쁜","센치한","고난의","무야호","해맑은","야구하는","내가바로","도전하는","인상적인"};
+        String[] ransuf = {"연어","무말랭이","파도","디카프리오","아니아냐그란데","피카츄","프로도","김치찌개","댕댕이","반죽" };
+        Random random = new Random();
 
         Long kakaoId = userInfo.getId();
-        String nickname = userInfo.getNickname();
+        String nickname = ranpre[random.nextInt(10)+1]+ransuf[random.nextInt(10)+1];
         String password = kakaoId + Pass_Salt;
 
         //nullable = true

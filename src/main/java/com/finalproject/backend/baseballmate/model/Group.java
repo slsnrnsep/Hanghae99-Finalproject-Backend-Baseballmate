@@ -1,6 +1,7 @@
 package com.finalproject.backend.baseballmate.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.finalproject.backend.baseballmate.groupChat.ChatRoom;
 import com.finalproject.backend.baseballmate.requestDto.GroupRequestDto;
@@ -36,7 +37,7 @@ public class Group extends Timestamped{
     @Column
     private String title; // 모임글의 제목
 
-    @Column
+    @Column(length = 1000)
     private String content; // 모임글의 내용
 
     @Column
@@ -78,22 +79,22 @@ public class Group extends Timestamped{
 //    @Column
 //    private String baseballTeam; // 구단 이름
 
-    // 모임에 해당하는 채팅방
-    @OneToOne(mappedBy = "group")
+//     모임에 해당하는 채팅방
+    @OneToOne(mappedBy = "group", cascade = CascadeType.ALL, orphanRemoval = true)
     private ChatRoom chatRoom;
 
     // 모임을 취소했던 유저 리스트
     @JsonManagedReference
-    @OneToMany(mappedBy = "canceledGroup", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "canceledGroup", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CanceledList> canceledLists = new ArrayList<>();
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "group", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<GroupComment> groupCommentList = new ArrayList<>();
 
     // 좋아요
     @JsonManagedReference
-    @OneToMany(mappedBy = "grouplikes",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "grouplikes",cascade = CascadeType.ALL, orphanRemoval = true)
     private List<GroupLikes> grouplikesList;
 
     @Column(columnDefinition = "integer default 0")

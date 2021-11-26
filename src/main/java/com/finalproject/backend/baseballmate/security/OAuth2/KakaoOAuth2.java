@@ -5,6 +5,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -32,7 +33,8 @@ public class KakaoOAuth2 {
         // HttpBody 오브젝트 생성
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", "authorization_code");
-        params.add("client_id", "b631c07985004c604dbf87eed681b185");
+        params.add("client_id", "adeabe34386650e24339f52721b118e5");
+        //태웅님 카카오 개발자 restapi key: b631c07985004c604dbf87eed681b185
         params.add("code", authorizedCode);
 
 
@@ -43,9 +45,9 @@ public class KakaoOAuth2 {
         //에서의 redirect_uri를 의미합니다. 보낸것과, 여기서 사용하는것이 같아야합니다.
 
         //프론트 로컬 용
-        params.add("redirect_uri", "http://localhost:3000/user/kakao/callback");
+//        params.add("redirect_uri", "http://localhost:3000/user/kakao/callback");
         params.add("redirect_uri", "http://meetball.shop/user/kakao/callback");
-        params.add("redirect_uri", "http://54.180.148.132:8080/user/kakao/callback");
+//        params.add("redirect_uri", "http://54.180.148.132:8080/user/kakao/callback");
         //최종 배포용
 //        params.add("redirect_uri", "");
         //백엔드 로컬 테스트용
@@ -55,6 +57,7 @@ public class KakaoOAuth2 {
 
         // HttpHeader와 HttpBody를 하나의 오브젝트에 담기
         RestTemplate rt = new RestTemplate();
+        rt.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
         HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest =
                 new HttpEntity<>(params, headers);
 
@@ -83,6 +86,7 @@ public class KakaoOAuth2 {
 
         // HttpHeader와 HttpBody를 하나의 오브젝트에 담기
         RestTemplate rt = new RestTemplate();
+        rt.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
         HttpEntity<MultiValueMap<String, String>> kakaoProfileRequest = new HttpEntity<>(headers);
 
         // Http 요청하기 - Post방식으로 - 그리고 response 변수의 응답 받음.
@@ -101,6 +105,6 @@ public class KakaoOAuth2 {
         if(!body.getJSONObject("kakao_account").getJSONObject("profile").getBoolean("is_default_image")){
             picture = body.getJSONObject("kakao_account").getJSONObject("profile").getString("profile_image_url");
         }
-        return new KakaoUserInfo(id, email, nickname, picture);
+        return new KakaoUserInfo(id,email ,nickname, picture);
     }
 }

@@ -10,9 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CommunityRequestDto {
-    private String title;
     private String content;
     private String filePath;
     private String myTeam;
-
 }

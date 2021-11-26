@@ -1,12 +1,13 @@
 package com.finalproject.backend.baseballmate.service;
 
+import com.finalproject.backend.baseballmate.groupChat.ChatRoom;
+import com.finalproject.backend.baseballmate.groupChat.ChatRoomRepository;
 import com.finalproject.backend.baseballmate.groupChat.ChatRoomService;
 import com.finalproject.backend.baseballmate.join.JoinRequests;
 import com.finalproject.backend.baseballmate.model.*;
 import com.finalproject.backend.baseballmate.repository.*;
-import com.finalproject.backend.baseballmate.responseDto.AllGroupResponseDto;
-import com.finalproject.backend.baseballmate.responseDto.AllScreenResponseDto;
 import com.finalproject.backend.baseballmate.requestDto.ScreenRequestDto;
+import com.finalproject.backend.baseballmate.responseDto.AllScreenResponseDto;
 import com.finalproject.backend.baseballmate.responseDto.HotScreenResponseDto;
 import com.finalproject.backend.baseballmate.responseDto.ScreenDetailResponseDto;
 import com.finalproject.backend.baseballmate.security.UserDetailsImpl;
@@ -38,7 +39,9 @@ public class ScreenService {
     private final UserRepository userRepository;
     private final CanceledScreenListRepository canceledScreenListRepository;
     private final ChatRoomService chatRoomService;
-
+    String[] picturelist = {"basic0.jpg","basic1.jpg","basic2.jpg","basic3.jpg","basic4.jpg","basic5.jpg","basic6.jpg","basic7.jpg","basic8.jpg","basic9.jpg"};
+    Random random = new Random();
+    private final ChatRoomRepository chatRoomRepository;
 
     @Transactional
     public Screen createScreen(ScreenRequestDto requestDto, User loginedUser) {
@@ -165,19 +168,21 @@ public class ScreenService {
         return screenDetailResponseDto;
     }
 
-    // 스크린 야구 모임 수정
+    // 스크린 야구 모임 삭제
     @Transactional
     public void deleteScreen(Long screenId, UserDetailsImpl userDetails) {
         String loginedUserId = userDetails.getUser().getUserid();
         String createdUserId = "";
 
         Screen screen = screenRepository.findByScreenId(screenId);
+        ChatRoom chatRoom = chatRoomRepository.findByScreen(screen);
         if (screen != null) {
             createdUserId = screen.getScreenCreatedUser().getUserid();
 
             if (!loginedUserId.equals(createdUserId)) {
                 throw new IllegalArgumentException("삭제 권한이 없습니다");
             }
+            chatRoomRepository.delete(chatRoom);
             screenRepository.deleteById(screenId);
         } else {
             throw new IllegalArgumentException("해당 게시글이 존재하지 않습니다");
@@ -349,6 +354,11 @@ public class ScreenService {
                 }
                 screen.setFilePath(filename);
 
+            }
+            if(file == null)
+            {
+                String filename = picturelist[random.nextInt(10)+1];
+                screen.setFilePath(filename);
             }
             screen.updateScreen(requestDto);
             screenRepository.save(screen);

@@ -18,12 +18,12 @@ public class ScreenApplication {
     private Long id;
 
     @JsonBackReference
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "appliedUserId")
     private User appliedUser; // 모임에 지원한 지원자
 
     @JsonBackReference
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "appliedScreenId")
     private Screen appliedScreen; // 지원자가 지원한 모임
 
