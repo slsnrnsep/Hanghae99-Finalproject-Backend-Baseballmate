@@ -31,7 +31,7 @@ public class CommunityCommentController {
         return msgResponseDto;
     }
     // 커뮤 내 댓글 수정
-    @PutMapping("/community/{community}/comment/{commentId}")
+    @PutMapping("/community/{communityId}/comment/{commentId}")
     public MsgResponseDto updateComment(
             @PathVariable("communityId") Long communityId,
             @PathVariable("commentId") Long commentId,
