@@ -20,7 +20,7 @@ public class ScreenCommnetLikesService {
     private final ScreenCommentLikesRepository screenCommentLikesRepository;
     private final UserRepository userRepository;
     private final ScreenCommentRepository screenCommentRepository;
-
+    private final AlarmService alarmService;
 
     @Transactional
     public boolean screenCommentLikes(Long screencommentId, LikesRequestDto likesRequestDto, UserDetailsImpl userDetails) {
@@ -47,6 +47,10 @@ public class ScreenCommnetLikesService {
             ScreenCommentLikes likes = screenCommentLikesRepository.save(new ScreenCommentLikes(screenComment,user));
             user.addScreenCommentLikes(likes);
             screenComment.addLikes(likes);
+            User alarmuser = userRepository.findById(screenComment.getCommentUserIndex()).orElseThrow(
+                    () -> new IllegalArgumentException("로그인한 사용자 정보를 찾을 수 없습니다")
+            );
+            alarmService.alarmMethod(alarmuser,user.getUsername(),screenComment.getComment(),"댓글","좋아요를 표시했습니다!",screenComment.getScreen().getScreenId());
             return true;
         }
     }

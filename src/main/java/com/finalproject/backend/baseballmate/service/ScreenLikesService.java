@@ -20,6 +20,7 @@ public class ScreenLikesService {
     private final UserRepository userRepository;
     private final ScreenRepository screenRepository;
     private final ScreenLikesRepository screenLikesRepository;
+    private final AlarmService alarmService;
 
     @Transactional
     public boolean screenLikes(Long screenId, LikesRequestDto likesRequestDto, UserDetailsImpl userDetails) {
@@ -45,6 +46,7 @@ public class ScreenLikesService {
             ScreenLikes likes = screenLikesRepository.save(new ScreenLikes(screen, user));
             user.addScreenLikes(likes);
             screen.addLikes(likes);
+            alarmService.alarmMethod(screen.getScreenCreatedUser(), user.getUsername(), screen.getTitle(),"스야모임","좋아요를 표시하셨습니다!",screenId);
             return true;
         }
     }

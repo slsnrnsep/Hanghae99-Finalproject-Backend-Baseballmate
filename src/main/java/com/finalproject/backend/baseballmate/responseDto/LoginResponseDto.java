@@ -1,4 +1,4 @@
-package com.finalproject.backend.baseballmate.service;
+package com.finalproject.backend.baseballmate.responseDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

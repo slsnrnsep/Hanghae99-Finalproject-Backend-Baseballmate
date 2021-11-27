@@ -133,12 +133,24 @@ public class JoinRequestsService {
         List<JoinRequests> joinRequestsList = joinRequestsRepository.findByUserId(userId);
         List<MyAwaitRequestJoinResponseDto> myAwaitRequestJoinResponseDtoList = new ArrayList<>();
         for (JoinRequests joinRequests : joinRequestsList) {
-            Group post = groupRepository.getById(joinRequests.getPostId());
-            MyAwaitRequestJoinResponseDto myAwaitRequestJoinResponseDto = MyAwaitRequestJoinResponseDto.builder()
-                    .joinRequestId(joinRequests.getId())
-                    .postTitle(post.getTitle())
-                    .build();
-            myAwaitRequestJoinResponseDtoList.add(myAwaitRequestJoinResponseDto);
+            if(joinRequests.getGrouptype().contentEquals("screen"))
+            {
+                Screen post = screenRepository.getById(joinRequests.getPostId());
+                MyAwaitRequestJoinResponseDto myAwaitRequestJoinResponseDto = MyAwaitRequestJoinResponseDto.builder()
+                        .joinRequestId(joinRequests.getId())
+                        .postTitle(post.getTitle())
+                        .build();
+                myAwaitRequestJoinResponseDtoList.add(myAwaitRequestJoinResponseDto);
+            }
+            else{
+                Group post = groupRepository.getById(joinRequests.getPostId());
+                MyAwaitRequestJoinResponseDto myAwaitRequestJoinResponseDto = MyAwaitRequestJoinResponseDto.builder()
+                        .joinRequestId(joinRequests.getId())
+                        .postTitle(post.getTitle())
+                        .build();
+                myAwaitRequestJoinResponseDtoList.add(myAwaitRequestJoinResponseDto);
+            }
+
         }
         return myAwaitRequestJoinResponseDtoList;
     }
