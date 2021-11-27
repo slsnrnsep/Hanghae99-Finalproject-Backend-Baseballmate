@@ -36,7 +36,7 @@ public class Group extends Timestamped{
     @Column
     private String title; // 모임글의 제목
 
-    @Column
+    @Column(length = 1000)
     private String content; // 모임글의 내용
 
     @Column

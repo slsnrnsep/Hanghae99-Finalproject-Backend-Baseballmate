@@ -11,7 +11,7 @@ import com.finalproject.backend.baseballmate.responseDto.MsgResponseDto;
 import com.finalproject.backend.baseballmate.security.JwtTokenProvider;
 import com.finalproject.backend.baseballmate.security.UserDetailsImpl;
 import com.finalproject.backend.baseballmate.service.FileService;
-import com.finalproject.backend.baseballmate.service.LoginResponseDto;
+import com.finalproject.backend.baseballmate.responseDto.LoginResponseDto;
 import com.finalproject.backend.baseballmate.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;

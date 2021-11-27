@@ -18,6 +18,7 @@ public class ScreenCommentService {
 
     private final ScreenCommentRepository screenCommentRepository;
     private final ScreenRepository screenRepository;
+    private final AlarmService alarmService;
 
     @Transactional
     public void createComment(ScreenCommentRequestDto commentRequestDto, Long screenId, User loginedUser) {
@@ -29,6 +30,8 @@ public class ScreenCommentService {
         ScreenComment screenComment = new ScreenComment(commentRequestDto, screen, loginedUsername, loginedUserIndex, loginedUserId, loginedUserPicture);
         screenCommentRepository.save(screenComment);
         screen.getScreenCommentList().add(screenComment);
+
+        alarmService.alarmMethod(screen.getScreenCreatedUser(),loginedUsername,screen.getTitle(),"스야모임","댓글을 남기셨습니다.",screenId);
 
     }
     @Transactional

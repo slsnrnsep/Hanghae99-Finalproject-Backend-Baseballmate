@@ -16,6 +16,7 @@ public class GroupLikesService {
     private final GroupLikesRepository groupLikesRepository;
     private final UserRepository userRepository;
     private final GroupRepository groupRepository;
+    private final AlarmService alarmService;
 
     @Transactional
     public boolean groupLikes(Long groupId, LikesRequestDto reqeustDto, UserDetailsImpl userDetails)
@@ -44,8 +45,8 @@ public class GroupLikesService {
             }
             GroupLikes likes = groupLikesRepository.save(new GroupLikes(group, user));
             user.addGroupLikes(likes);
-
             group.addLikes(likes);
+            alarmService.alarmMethod(group.getCreatedUser(), user.getUsername(), group.getTitle(),"모임","좋아요를 표시하셨습니다!",groupId);
             return true;
         }
 

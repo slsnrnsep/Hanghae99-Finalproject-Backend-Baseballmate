@@ -20,6 +20,7 @@ public class GoodsLikesService {
     private final GoodsLikesRepository goodsLikesRepository;
     private final UserRepository userRepository;
     private final GoodsRepository goodsRepository;
+    private final AlarmService alarmService;
 
     @Transactional
     public boolean goodsLiked(Long goodsId, GoodsLikesReqeustDto goodsLikesReqeustDto, UserDetailsImpl userDetails, User loginUser) {
@@ -38,6 +39,7 @@ public class GoodsLikesService {
             user.deleteGoodsLikes(goodsLikes);
             goods.deleteGoodsLikes(goodsLikes);
             goodsLikesRepository.delete(goodsLikes);
+//            alarmService.alarmMethod(goods.getCreatedUser(), loginUser.getUsername(), goods.getGoodsName(),"굿즈","좋아요를 취소하셨습니다!",goodsId);
             return false;
         }else{
             if(goodsLikesRepository.findByGoodsIdAndUserId(goods.getId(), user.getId()).isPresent())
@@ -48,6 +50,7 @@ public class GoodsLikesService {
 //            Long userIdGoods = goodsLikes.getGoods().getUserId();
             user.addGoodsLikes(goodsLikes);
             goods.addGoodsLikes(goodsLikes);
+            alarmService.alarmMethod(goods.getCreatedUser(), loginUser.getUsername(), goods.getGoodsName(),"굿즈자랑","좋아요를 표시하셨습니다!",goodsId);
             return true;
         }
 

@@ -20,6 +20,7 @@ public class CommunityLikesService {
     private final CommunityLikesRepository communityLikesRepository;
     private final UserRepository userRepository;
     private final CommunityRepository communityRepository;
+    private final AlarmService alarmService;
 
     @Transactional
     public boolean communityLiked(Long communityId, CommunityLikesRequestDto requestDto, UserDetailsImpl userDetails)
@@ -49,6 +50,8 @@ public class CommunityLikesService {
             CommunityLikes likes = communityLikesRepository.save(new CommunityLikes(community, user));
             user.addCommunityLikes(likes);
             community.addLikes(likes);
+
+            alarmService.alarmMethod(community.getCreatedUser(),user.getUsername(),community.getContent(),"커뮤니티","좋아요를 표시하셨습니다!",communityId);
             return true;
         }
     }
