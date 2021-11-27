@@ -33,7 +33,7 @@ public class KakaoOAuth2 {
         // HttpBody 오브젝트 생성
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", "authorization_code");
-        params.add("client_id", "adeabe34386650e24339f52721b118e5");
+        params.add("client_id", "094b053e3ccc9c06aa9832ddf7f20045");
         //태웅님 카카오 개발자 restapi key: b631c07985004c604dbf87eed681b185
         params.add("code", authorizedCode);
 
