@@ -17,4 +17,6 @@ public class AllCommunityDto {
     private String communityUserPicture;
     private String filePath;
     private String myTeam;
+    private String dayBefore;
+//    List<CommunityComment> communityCommentList;
 }
