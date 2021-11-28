@@ -17,6 +17,7 @@ public class GroupCommentLikesService {
     private final GroupCommentLikesRepository groupCommentLikesRepository;
     private final UserRepository userRepository;
     private final GroupCommentRepository groupCommentRepository;
+    private final AlarmService alarmService;
 
     @Transactional
     public boolean groupCommentLikes(Long groupcommentId, LikesRequestDto reqeustDto, UserDetailsImpl userDetails)
@@ -46,6 +47,11 @@ public class GroupCommentLikesService {
             GroupCommentLikes likes = groupCommentLikesRepository.save(new GroupCommentLikes(groupComment, user));
             user.addGroupCommentLikes(likes);
             groupComment.addLikes(likes);
+
+            User alarmuser = userRepository.findById(groupComment.getCommentUserIndex()).orElseThrow(
+                    () -> new IllegalArgumentException("로그인한 사용자 정보를 찾을 수 없습니다")
+            );
+            alarmService.alarmMethod(alarmuser,user.getUsername(),groupComment.getComment(),"댓글","좋아요를 표시했습니다!",groupComment.getGroup().getGroupId());
             return true;
         }
     }

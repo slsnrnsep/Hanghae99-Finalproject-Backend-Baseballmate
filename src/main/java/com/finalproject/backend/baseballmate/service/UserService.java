@@ -186,13 +186,15 @@ public class UserService {
         // 카카오 OAuth2 를 통해 카카오 사용자 정보 조회
         KakaoUserInfo userInfo = kakaoOAuth2.getUserInfo(authorizedCode);
 
-        String[] ranpre = {"살아가는","기쁜","센치한","고난의","무야호","해맑은","야구하는","내가바로","도전하는","인상적인"};
-        String[] ransuf = {"연어","무말랭이","파도","디카프리오","아니아냐그란데","피카츄","프로도","김치찌개","댕댕이","반죽" };
+        String[] ranpre = {"살아가는","눈물의","센치한","고난의","무야호","해맑은","야구하는","내가바로","도전하는","인상적인"};
+        String[] ransuf = {"연어","고등어","파도","조각상","키보드","피카츄","프로도","두부","댕댕이","반죽" };
         Random random = new Random();
+
 
         Long kakaoId = userInfo.getId();
         String nickname = ranpre[random.nextInt(10)+1]+ransuf[random.nextInt(10)+1];
         String password = kakaoId + Pass_Salt;
+
 
         //nullable = true
         String picture = userInfo.getPicture();

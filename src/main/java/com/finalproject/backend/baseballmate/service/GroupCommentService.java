@@ -20,7 +20,7 @@ import java.util.Optional;
 public class GroupCommentService {
     private final GroupCommentRepository groupCommentRepository;
     private final GroupRepository groupRepository;
-
+    private final AlarmService alarmService;
     // 모임 게시글 내 댓글 생성
     // 우선 파라미터로 게시글 id 가져옴 -> 후에 연관관계 이용해서 리팩토링 필요
     @Transactional
@@ -40,6 +40,8 @@ public class GroupCommentService {
         groupCommentRepository.save(groupComment);
         // 연관관계가 있는 group 테이블의 댓글 리스트에 생성한 댓글 인스턴스 추가
         group.getGroupCommentList().add(groupComment);
+
+        alarmService.alarmMethod(group.getCreatedUser(),loginedUsername,group.getTitle(),"모임","댓글을 남기셨습니다.",groupId);
    }
 
    @Transactional

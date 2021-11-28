@@ -17,6 +17,7 @@ import javax.transaction.Transactional;
 public class GoodsCommentService {
     private final GoodsCommentRepository goodsCommentRepository;
     private final GoodsRepository goodsRepository;
+    private final AlarmService alarmService;
 
     @Transactional // loginUsered , loginedUsername
     public void createComment(User loginUser, GoodsCommentRequestDto requestDto, Long goodsid) {
@@ -38,9 +39,10 @@ public class GoodsCommentService {
         {
             usertype = "kakao";
         }
+
         GoodsComment goodsComment = new GoodsComment(loginedUsername,requestDto,goods,loginUsered,loginUserIndex,loginedUserPicture,usertype);
         goodsCommentRepository.save(goodsComment);
-
+        alarmService.alarmMethod(goods.getCreatedUser(),loginedUsername,goods.getGoodsName(),"굿즈자랑","댓글을 남기셨습니다.",goodsid);
     }
 
     public void updateGoodsComment(UserDetailsImpl userDetails, Long id, GoodsCommentRequestDto requestDto) {

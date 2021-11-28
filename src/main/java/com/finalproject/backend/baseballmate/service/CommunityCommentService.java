@@ -19,6 +19,7 @@ public class CommunityCommentService {
 
     private final CommunityRepository communityRepository;
     private final CommunityCommentRepository communityCommentRepository;
+    private final AlarmService alarmService;
 
     @Transactional
     public void createComment(CommunityCommentRequestDto commentRequestDto, Long communityId, User loginedUser) {
@@ -34,6 +35,8 @@ public class CommunityCommentService {
         CommunityComment communityComment = new CommunityComment(commentRequestDto, community,loginedUserIndex,loginedUserId, loginedUsername,loginedUserPicture);
         communityCommentRepository.save(communityComment);
         community.getCommunityCommentList().add(communityComment);
+
+        alarmService.alarmMethod(community.getCreatedUser(),loginedUsername,community.getContent(),"커뮤니티","댓글을 남기셨습니다.",communityId);
     }
 
 

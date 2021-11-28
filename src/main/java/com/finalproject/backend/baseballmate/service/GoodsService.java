@@ -31,7 +31,6 @@ public class GoodsService {
     private final GoodsLikesRepository goodsLikesRepository;
     private final UserRepository userRepository;
 
-
     @Transactional
     public Goods createGoods(User loginUser, GoodsRequestDto requestDto) {
         String goodsUserPicture = loginUser.getPicture();
