@@ -16,7 +16,7 @@ public class CommunityComment extends Timestamped{
 
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
-    private Long communityCommentId;
+    private Long commentId;
 
     @Column
     private String commentUsername;

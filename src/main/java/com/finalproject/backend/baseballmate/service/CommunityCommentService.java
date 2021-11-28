@@ -45,7 +45,7 @@ public class CommunityCommentService {
         String loginedUserId = userDetails.getUser().getUserid();
         String commentUserId = "";
 
-        CommunityComment communityComment = communityCommentRepository.findByCommunityCommentId(commentId);
+        CommunityComment communityComment = communityCommentRepository.findByCommentId(commentId);
         if(communityComment != null){
             commentUserId = communityComment.getCommentUserId();
 
@@ -64,7 +64,7 @@ public class CommunityCommentService {
         String loginedUserId = userDetails.getUser().getUserid();
         String commentUserId = "";
 
-        CommunityComment communityComment = communityCommentRepository.findByCommunityCommentId(commentId);
+        CommunityComment communityComment = communityCommentRepository.findByCommentId(commentId);
         if(communityComment != null){
             commentUserId = communityComment.getCommentUserId();
 
