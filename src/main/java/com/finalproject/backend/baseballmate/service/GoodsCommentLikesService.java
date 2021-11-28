@@ -51,7 +51,7 @@ public class GoodsCommentLikesService {
             User alarmuser = userRepository.findById(goodsComment.getCommentUserIndex()).orElseThrow(
                     () -> new IllegalArgumentException("로그인한 사용자 정보를 찾을 수 없습니다")
             );
-            alarmService.alarmMethod(alarmuser,user.getUsername(),goodsComment.getComment(),"댓글","좋아요를 표시했습니다!",goodsComment.getGoods().getId());
+            alarmService.alarmMethod(alarmuser,user.getUsername(),goodsComment.getComment(),"댓글","좋아요를 표시했습니다!",goodsComment.getGoods().getId(),"goods");
             return true;
         }
     }

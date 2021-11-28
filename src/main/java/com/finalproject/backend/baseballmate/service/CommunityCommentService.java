@@ -36,7 +36,7 @@ public class CommunityCommentService {
         communityCommentRepository.save(communityComment);
         community.getCommunityCommentList().add(communityComment);
 
-        alarmService.alarmMethod(community.getCreatedUser(),loginedUsername,community.getContent(),"커뮤니티","댓글을 남기셨습니다.",communityId);
+        alarmService.alarmMethod(community.getCreatedUser(),loginedUsername,community.getContent(),"커뮤니티","댓글을 남기셨습니다.",communityId,"community");
     }
 
 

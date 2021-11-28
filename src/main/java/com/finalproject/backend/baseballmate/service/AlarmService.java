@@ -129,13 +129,14 @@ public class AlarmService {
         createAlarm(alarmRequestDto);
     }
 
-    public void alarmMethod(User alarmuser,String target,String title,String type,String msg,Long postid){
+    public void alarmMethod(User alarmuser,String target,String title,String type,String msg,Long postid,String normaltype){
         AlarmRequestDto alarmRequestDto = new AlarmRequestDto();
         String signupAlarm = alarmuser.getUsername() + "님! "+target+" 님께서  작성한 "+type +" : '" +title+"'에 "+msg;
         alarmRequestDto.setUserId(alarmuser.getId());
         alarmRequestDto.setContents(signupAlarm);
         alarmRequestDto.setPostId(postid);
         alarmRequestDto.setAlarmType("Normal");
+        alarmRequestDto.setNormalType(normaltype);
         createAlarm(alarmRequestDto);
     }
 

@@ -46,7 +46,7 @@ public class ScreenLikesService {
             ScreenLikes likes = screenLikesRepository.save(new ScreenLikes(screen, user));
             user.addScreenLikes(likes);
             screen.addLikes(likes);
-            alarmService.alarmMethod(screen.getScreenCreatedUser(), user.getUsername(), screen.getTitle(),"스야모임","좋아요를 표시하셨습니다!",screenId);
+            alarmService.alarmMethod(screen.getScreenCreatedUser(), user.getUsername(), screen.getTitle(),"스야모임","좋아요를 표시하셨습니다!",screenId,"screen");
             return true;
         }
     }

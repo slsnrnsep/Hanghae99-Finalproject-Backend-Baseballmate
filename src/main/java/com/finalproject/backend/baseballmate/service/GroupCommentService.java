@@ -41,7 +41,7 @@ public class GroupCommentService {
         // 연관관계가 있는 group 테이블의 댓글 리스트에 생성한 댓글 인스턴스 추가
         group.getGroupCommentList().add(groupComment);
 
-        alarmService.alarmMethod(group.getCreatedUser(),loginedUsername,group.getTitle(),"모임","댓글을 남기셨습니다.",groupId);
+        alarmService.alarmMethod(group.getCreatedUser(),loginedUsername,group.getTitle(),"모임","댓글을 남기셨습니다.",groupId,"group");
    }
 
    @Transactional

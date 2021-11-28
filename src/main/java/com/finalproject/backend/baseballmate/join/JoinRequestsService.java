@@ -57,16 +57,17 @@ public class JoinRequestsService {
             {
                 joinRequestsRepository.save(joinRequests);
                 AlarmRequestDto alarmRequestDto = new AlarmRequestDto();
-                String signupAlarm = user.getUsername() + "님! "+userDetails.getUser().getUsername()+" 님께서* 내가 만든 모임 : '" +group.getTitle()+"' 에 *참여신청을 하셨습니다.";
+                String signupAlarm = userDetails.getUser().getUsername()+" 님께서* " +group.getTitle()+"' 에 *참여 신청을 하셨습니다.";
                 alarmRequestDto.setUserId(user.getId());
                 alarmRequestDto.setContents(signupAlarm);
                 alarmRequestDto.setJoinRequestId(joinRequests.getId());
                 alarmRequestDto.setAlarmType("Group");
                 alarmService.createAlarm(alarmRequestDto);
-                String signupAlarm2 = userDetails.getUser().getUsername()+" 님께서는* "+user.getUsername()+"께서 만든 모임 : '" +group.getTitle()+"' 에 *참여신청을 하셨습니다.";
+                String signupAlarm2 = user.getUsername()+"께서 만든 모임 : '" +group.getTitle()+"' 에 *참여신청을 하셨습니다. 방장의 승인여부를 기다려주세요.";
                 alarmRequestDto.setUserId(joinRequests.getUserId());
                 alarmRequestDto.setContents(signupAlarm2);
-                alarmRequestDto.setJoinRequestId(joinRequests.getId());
+                alarmRequestDto.setPostId(postId);
+                alarmRequestDto.setNormalType("group");
                 alarmRequestDto.setAlarmType("Normal");
                 alarmService.createAlarm(alarmRequestDto);
                 return "신청완료";
@@ -78,16 +79,17 @@ public class JoinRequestsService {
                 if (allChatInfoQueryRepository.findByChatRoom_IdAndUser_Id(roomId, userId) == null) {
                     joinRequestsRepository.save(joinRequests);
                     AlarmRequestDto alarmRequestDto = new AlarmRequestDto();
-                    String signupAlarm = user.getUsername() + "님! "+userDetails.getUser().getUsername()+" 님께서* 내가 만든 모임 : '" +group.getTitle()+"' 에 *참여신청을 하셨습니다.";
+                    String signupAlarm = userDetails.getUser().getUsername()+" 님께서* " +group.getTitle()+"' 에 *참여신청을 하셨습니다.";
                     alarmRequestDto.setUserId(user.getId());
                     alarmRequestDto.setContents(signupAlarm);
                     alarmRequestDto.setJoinRequestId(joinRequests.getId());
                     alarmRequestDto.setAlarmType("Group");
                     alarmService.createAlarm(alarmRequestDto);
-                    String signupAlarm2 = userDetails.getUser().getUsername()+" 님께서는* "+user.getUsername()+"께서 만든 모임 : '" +group.getTitle()+"' 에 *참여신청을 하셨습니다.*방장의 승인여부를 기다려주세요.";
+                    String signupAlarm2 =user.getUsername()+"께서 만든 모임 : '" +group.getTitle()+"' 에 *참여신청을 하셨습니다. 방장의 승인여부를 기다려주세요.";
                     alarmRequestDto.setUserId(joinRequests.getUserId());
                     alarmRequestDto.setContents(signupAlarm2);
-                    alarmRequestDto.setJoinRequestId(joinRequests.getId());
+                    alarmRequestDto.setPostId(postId);
+                    alarmRequestDto.setNormalType("group");
                     alarmRequestDto.setAlarmType("Normal");
                     alarmService.createAlarm(alarmRequestDto);
                     return "신청완료";
@@ -171,11 +173,12 @@ public class JoinRequestsService {
         if (!tOrF) {
 
             AlarmRequestDto alarmRequestDto = new AlarmRequestDto();
-            String signupAlarm = user.getUsername() + "님! "+group.getCreatedUser().getUsername()+" 님께서  만든 모임 : '" +group.getTitle()+"' 에 했던 신청이 거절되셨습니다.* 다른 모임을 찾아보시겠어요?";
+            String signupAlarm = "'" +group.getTitle()+"' 에 했던 신청이 거절되셨습니다.* 다른 모임을 찾아보시겠어요?";
             alarmRequestDto.setUserId(user.getId());
             alarmRequestDto.setContents(signupAlarm);
-            alarmRequestDto.setJoinRequestId(joinRequests.getPostId());
+            alarmRequestDto.setPostId(joinRequests.getPostId());
             alarmRequestDto.setAlarmType("Normal");
+            alarmRequestDto.setNormalType("group");
             alarmService.createAlarm(alarmRequestDto);
             joinRequestsRepository.delete(joinRequests);
             return "거절되었습니다";
@@ -185,11 +188,12 @@ public class JoinRequestsService {
         AllChatInfo allChatInfo = new AllChatInfo(user, chatRoom);
         allChatInfoRepository.save(allChatInfo);
         AlarmRequestDto alarmRequestDto = new AlarmRequestDto();
-        String signupAlarm = user.getUsername() + "님! "+group.getCreatedUser().getUsername()+" 님께서  만든 모임 : '" +group.getTitle()+"' 에 했던 신청이 승인 되셨습니다.* 지금 이동하여 대화를 나눠보세요!";
+        String signupAlarm = "'" +group.getTitle()+"' 에 했던 신청이 승인 되셨습니다.* 지금 이동하여 대화를 나눠보세요!";
         alarmRequestDto.setUserId(user.getId());
         alarmRequestDto.setContents(signupAlarm);
-        alarmRequestDto.setJoinRequestId(joinRequests.getPostId());
+        alarmRequestDto.setPostId(joinRequests.getPostId());
         alarmRequestDto.setAlarmType("Normal");
+        alarmRequestDto.setNormalType("group");
         alarmService.createAlarm(alarmRequestDto);
         joinRequestsRepository.delete(joinRequests);
         groupService.applyGroup2(postId,joinRequests);
@@ -228,11 +232,12 @@ public class JoinRequestsService {
             Group group=groupRepository.findByGroupId(joinRequests.getPostId());
             joinRequestsRepository.delete(joinRequests);
             AlarmRequestDto alarmRequestDto = new AlarmRequestDto();
-            String signupAlarm = group.getCreatedUser().getUsername() + "님! "+userDetails.getUser().getUsername()+" 님께서* 내가 만든 모임 : '" +group.getTitle()+"' 에 했던 *신청을 취소 하셨습니다.";
+            String signupAlarm = userDetails.getUser().getUsername()+" 님께서* '" +group.getTitle()+"' 에 *했던 신청을 취소 하셨습니다.";
             alarmRequestDto.setUserId(group.getCreatedUser().getId());
             alarmRequestDto.setContents(signupAlarm);
-            alarmRequestDto.setJoinRequestId(joinRequests.getId());
+            alarmRequestDto.setPostId(joinRequests.getPostId());
             alarmRequestDto.setAlarmType("Normal");
+            alarmRequestDto.setNormalType("group");
             alarmService.createAlarm(alarmRequestDto);
 
             return "참가신청 취소가 완료되었습니다";
@@ -276,17 +281,18 @@ public class JoinRequestsService {
             {
                 joinRequestsRepository.save(joinRequests);
                 AlarmRequestDto alarmRequestDto = new AlarmRequestDto();
-                String signupAlarm = user.getUsername() + "님! "+userDetails.getUser().getUsername()+" 님께서* 내가 만든 스크린 야구모임 : '" +group.getTitle()+"' 에 *참여신청을 하셨습니다.";
+                String signupAlarm = userDetails.getUser().getUsername()+" 님께서* " +group.getTitle()+"' 에 *참여 신청을 하셨습니다.";
                 alarmRequestDto.setUserId(user.getId());
                 alarmRequestDto.setContents(signupAlarm);
                 alarmRequestDto.setJoinRequestId(joinRequests.getId());
                 alarmRequestDto.setAlarmType("Screen");
                 alarmService.createAlarm(alarmRequestDto);
-                String signupAlarm2 = userDetails.getUser().getUsername()+" 님께서는* "+user.getUsername()+"께서 만든 모임 : '" +group.getTitle()+"' 에 *참여신청을 하셨습니다.*방장의 승인여부를 기다려주세요.";
+                String signupAlarm2 =  user.getUsername()+"께서 만든 모임 : '" +group.getTitle()+"' 에 *참여신청을 하셨습니다. 방장의 승인여부를 기다려주세요.";
                 alarmRequestDto.setUserId(joinRequests.getUserId());
                 alarmRequestDto.setContents(signupAlarm2);
-                alarmRequestDto.setJoinRequestId(joinRequests.getId());
+                alarmRequestDto.setPostId(joinRequests.getPostId());
                 alarmRequestDto.setAlarmType("Normal");
+                alarmRequestDto.setNormalType("screen");
                 alarmService.createAlarm(alarmRequestDto);
                 return "신청완료";
             }
@@ -297,17 +303,18 @@ public class JoinRequestsService {
                 if (allChatInfoQueryRepository.findByChatRoom_IdAndUser_Id(roomId, userId) == null) {
                     joinRequestsRepository.save(joinRequests);
                     AlarmRequestDto alarmRequestDto = new AlarmRequestDto();
-                    String signupAlarm = user.getUsername() + "님! "+userDetails.getUser().getUsername()+" 님께서* 내가 만든 스크린 야구모임 : '" +group.getTitle()+"' 에 *참여신청을 하셨습니다.";
+                    String signupAlarm = userDetails.getUser().getUsername()+" 님께서* " +group.getTitle()+"' 에 *참여 신청을 하셨습니다.";
                     alarmRequestDto.setUserId(user.getId());
                     alarmRequestDto.setContents(signupAlarm);
                     alarmRequestDto.setJoinRequestId(joinRequests.getId());
                     alarmRequestDto.setAlarmType("Screen");
                     alarmService.createAlarm(alarmRequestDto);
-                    String signupAlarm2 = userDetails.getUser().getUsername()+" 님께서는* "+user.getUsername()+"께서 만든 모임 : '" +group.getTitle()+"' 에 *참여신청을 하셨습니다.";
+                    String signupAlarm2 = user.getUsername()+"께서 만든 모임 : '" +group.getTitle()+"' 에 *참여신청을 하셨습니다. 방장의 승인여부를 기다려주세요.";
                     alarmRequestDto.setUserId(joinRequests.getUserId());
                     alarmRequestDto.setContents(signupAlarm2);
-                    alarmRequestDto.setJoinRequestId(joinRequests.getId());
+                    alarmRequestDto.setPostId(joinRequests.getPostId());
                     alarmRequestDto.setAlarmType("Normal");
+                    alarmRequestDto.setNormalType("screen");
                     alarmService.createAlarm(alarmRequestDto);
                     return "신청완료";
                 } else {
@@ -377,11 +384,12 @@ public class JoinRequestsService {
         Screen group = screenRepository.findByScreenId(joinRequests.getPostId());
         if (!tOrF) {
             AlarmRequestDto alarmRequestDto = new AlarmRequestDto();
-            String signupAlarm = user.getUsername() + "님! "+group.getScreenCreatedUser().getUsername()+" 님께서  만든 모임 : '" +group.getTitle()+"' 에 했던 신청이 에 했던 신청이 거절되셨습니다.* 다른 모임을 찾아보시겠어요?";
+            String signupAlarm =  "'" +group.getTitle()+"' 에 했던 신청이 거절되셨습니다.* 다른 모임을 찾아보시겠어요?";
             alarmRequestDto.setUserId(user.getId());
             alarmRequestDto.setContents(signupAlarm);
-            alarmRequestDto.setJoinRequestId(joinRequests.getPostId());
+            alarmRequestDto.setPostId(joinRequests.getPostId());
             alarmRequestDto.setAlarmType("Normal");
+            alarmRequestDto.setNormalType("screen");
             alarmService.createAlarm(alarmRequestDto);
             joinRequestsRepository.delete(joinRequests);
             return "거절되었습니다";
@@ -392,11 +400,12 @@ public class JoinRequestsService {
         allChatInfoRepository.save(allChatInfo);
 
         AlarmRequestDto alarmRequestDto = new AlarmRequestDto();
-        String signupAlarm = user.getUsername() + "님! "+group.getScreenCreatedUser().getUsername()+" 님께서  만든 모임 : '" +group.getTitle()+"' 에 했던 신청이 승인 되셨습니다.* 지금 이동하여 대화를 나눠보세요!";
+        String signupAlarm = "'" +group.getTitle()+"' 에 했던 신청이 승인 되셨습니다.* 지금 이동하여 대화를 나눠보세요!";
         alarmRequestDto.setUserId(user.getId());
         alarmRequestDto.setContents(signupAlarm);
-        alarmRequestDto.setJoinRequestId(joinRequests.getPostId());
+        alarmRequestDto.setPostId(joinRequests.getPostId());
         alarmRequestDto.setAlarmType("Normal");
+        alarmRequestDto.setNormalType("screen");
         alarmService.createAlarm(alarmRequestDto);
         joinRequestsRepository.delete(joinRequests);
         screenService.applyScreen2(postId,joinRequests);
@@ -422,11 +431,12 @@ public class JoinRequestsService {
             Screen group =screenRepository.findByScreenId(joinRequests.getPostId());
             joinRequestsRepository.delete(joinRequests);
             AlarmRequestDto alarmRequestDto = new AlarmRequestDto();
-            String signupAlarm = group.getScreenCreatedUser().getUsername() + "님! "+userDetails.getUser().getUsername()+" 님께서* 내가 만든 모임 : '" +group.getTitle()+"' 에 했던 *신청을 취소 하셨습니다.";
+            String signupAlarm = userDetails.getUser().getUsername()+" 님께서* '" +group.getTitle()+"' 에 *했던 신청을 취소 하셨습니다.";
             alarmRequestDto.setUserId(group.getScreenCreatedUser().getId());
             alarmRequestDto.setContents(signupAlarm);
-            alarmRequestDto.setJoinRequestId(joinRequests.getId());
+            alarmRequestDto.setPostId(joinRequests.getPostId());
             alarmRequestDto.setAlarmType("Normal");
+            alarmRequestDto.setNormalType("screen");
             alarmService.createAlarm(alarmRequestDto);
 
             return "참가신청 취소가 완료되었습니다";
