@@ -8,7 +8,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static com.finalproject.backend.baseballmate.groupChat.QAllChatInfo.allChatInfo;
+import static com.finalproject.backend.baseballmate.model.QAllChatInfo.allChatInfo;
+
 
 @RequiredArgsConstructor
 @Repository

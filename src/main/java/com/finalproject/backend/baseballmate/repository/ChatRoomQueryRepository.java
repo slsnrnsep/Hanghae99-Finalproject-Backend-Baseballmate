@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static com.finalproject.backend.baseballmate.groupChat.QChatRoom.chatRoom;
+import static com.finalproject.backend.baseballmate.model.QChatRoom.chatRoom;
 
 @RequiredArgsConstructor
 @Repository

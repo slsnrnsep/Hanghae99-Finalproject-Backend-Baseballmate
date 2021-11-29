@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static com.finalproject.backend.baseballmate.join.QJoinRequests.*;
+import static com.finalproject.backend.baseballmate.model.QJoinRequests.*;
 
 @Repository
 @RequiredArgsConstructor

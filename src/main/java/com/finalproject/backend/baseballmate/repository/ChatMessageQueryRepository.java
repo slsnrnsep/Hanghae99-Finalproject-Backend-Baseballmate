@@ -9,7 +9,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
-import static com.finalproject.backend.baseballmate.groupChat.QChatMessage.chatMessage;
+import static com.finalproject.backend.baseballmate.model.QChatMessage.chatMessage;
 
 
 @RequiredArgsConstructor
