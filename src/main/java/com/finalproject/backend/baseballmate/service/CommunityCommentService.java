@@ -32,7 +32,7 @@ public class CommunityCommentService {
         String loginedUserPicture = loginedUser.getPicture();
 
         Community community = communityRepository.findByCommunityId(communityId);
-        CommunityComment communityComment = new CommunityComment(commentRequestDto, community,loginedUserIndex, loginedUsername, loginedUserId,loginedUserPicture);
+        CommunityComment communityComment = new CommunityComment(commentRequestDto, community,loginedUserIndex,loginedUserId, loginedUsername,loginedUserPicture);
         communityCommentRepository.save(communityComment);
         community.getCommunityCommentList().add(communityComment);
 
@@ -45,7 +45,7 @@ public class CommunityCommentService {
         String loginedUserId = userDetails.getUser().getUserid();
         String commentUserId = "";
 
-        CommunityComment communityComment = communityCommentRepository.findByCommunityCommentId(commentId);
+        CommunityComment communityComment = communityCommentRepository.findByCommentId(commentId);
         if(communityComment != null){
             commentUserId = communityComment.getCommentUserId();
 
@@ -64,7 +64,7 @@ public class CommunityCommentService {
         String loginedUserId = userDetails.getUser().getUserid();
         String commentUserId = "";
 
-        CommunityComment communityComment = communityCommentRepository.findByCommunityCommentId(commentId);
+        CommunityComment communityComment = communityCommentRepository.findByCommentId(commentId);
         if(communityComment != null){
             commentUserId = communityComment.getCommentUserId();
 
