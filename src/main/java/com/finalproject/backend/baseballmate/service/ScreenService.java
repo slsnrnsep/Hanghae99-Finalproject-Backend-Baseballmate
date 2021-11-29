@@ -39,7 +39,7 @@ public class ScreenService {
     private final UserRepository userRepository;
     private final CanceledScreenListRepository canceledScreenListRepository;
     private final ChatRoomService chatRoomService;
-    String[] picturelist = {"basic0.jpg","basic1.jpg","basic2.jpg","basic3.jpg","basic4.jpg","basic5.jpg","basic6.jpg","basic7.jpg","basic8.jpg","basic9.jpg"};
+    String[] picturelist = {"screen0.jpg","screen1.jpg","screen2.jpg","screen3.jpg","screen4.jpg","screen5.jpg","screen6.jpg","screen7.jpg","screen8.jpg","screen9.jpg"};
     Random random = new Random();
     private final ChatRoomRepository chatRoomRepository;
 
