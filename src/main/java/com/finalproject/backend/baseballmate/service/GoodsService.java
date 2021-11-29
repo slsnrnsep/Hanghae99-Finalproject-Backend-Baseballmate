@@ -69,7 +69,7 @@ public class GoodsService {
             String dayBefore = getDayBefore(goods);
             String goodsUserPicture = goods.getGoodsUserPicture();
 //            int likeCount = goods.getLikeCount();
-            List<GoodsComment> goodsCommentList = goodsCommentRepository.findAllByGoods_IdOrderByModifiedAtAsc(id);
+            List<GoodsComment> goodsCommentList = goodsCommentRepository.findAllByGoods_IdOrderByCreatedAtAsc(id);
             List<GoodsLikes> goodsLikesList = goodsLikesRepository.findAllByGoods_Id(goods.getId());
             String myTeam = goods.getMyTeam();
             String userAddress = goods.getUserAddress();
@@ -106,7 +106,7 @@ public class GoodsService {
             String dayBefore = getDayBefore(goods);
             String goodsUserPicture = goods.getGoodsUserPicture();
 //            int likeCount = goods.getLikeCount();
-            List<GoodsComment> goodsCommentList = goodsCommentRepository.findAllByGoods_IdOrderByModifiedAtAsc(id);
+            List<GoodsComment> goodsCommentList = goodsCommentRepository.findAllByGoods_IdOrderByCreatedAtAsc(id);
             List<GoodsLikes> goodsLikesList = goodsLikesRepository.findAllByGoods_IdAndUserId(goods.getId(), user.getId());
             String myTeam = goods.getMyTeam();
             String userAddress = goods.getUserAddress();

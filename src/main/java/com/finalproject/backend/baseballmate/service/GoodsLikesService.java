@@ -50,7 +50,7 @@ public class GoodsLikesService {
 //            Long userIdGoods = goodsLikes.getGoods().getUserId();
             user.addGoodsLikes(goodsLikes);
             goods.addGoodsLikes(goodsLikes);
-            alarmService.alarmMethod(goods.getCreatedUser(), loginUser.getUsername(), goods.getGoodsName(),"굿즈자랑","좋아요를 표시하셨습니다!",goodsId);
+            alarmService.alarmMethod(goods.getCreatedUser(), loginUser.getUsername(), goods.getGoodsName(),"굿즈자랑","좋아요를 표시하셨습니다!",goodsId,"goods");
             return true;
         }
 

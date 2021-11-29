@@ -89,6 +89,12 @@ public class ChatMessageService {
     public Page<ChatMessage> getChatMessageByRoomId(String roomId, Pageable pageable) {
         int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1);
         Sort sort = Sort.by(Sort.Direction.ASC, "createdAt" );
+        Long counting = chatMessageQueryRepository.countAllByRoomIdAndType(roomId, ChatMessage.MessageType.TALK);
+        if(counting>=150)
+        {
+            Long page2 = counting/150;
+            page = page2.intValue();
+        }
         pageable = PageRequest.of(page, 150, sort );
         return chatMessageQueryRepository.findByRoomIdOrderByIdDesc(roomId, pageable);
     }

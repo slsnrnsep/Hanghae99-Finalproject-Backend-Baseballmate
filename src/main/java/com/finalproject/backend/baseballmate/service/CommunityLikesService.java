@@ -51,7 +51,7 @@ public class CommunityLikesService {
             user.addCommunityLikes(likes);
             community.addLikes(likes);
 
-            alarmService.alarmMethod(community.getCreatedUser(),user.getUsername(),community.getContent(),"커뮤니티","좋아요를 표시하셨습니다!",communityId);
+            alarmService.alarmMethod(community.getCreatedUser(),user.getUsername(),community.getContent(),"커뮤니티","좋아요를 표시하셨습니다!",communityId,"community");
             return true;
         }
     }

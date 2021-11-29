@@ -1,6 +1,7 @@
 package com.finalproject.backend.baseballmate.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.finalproject.backend.baseballmate.requestDto.CommunityRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -42,7 +43,7 @@ public class Community extends Timestamped{
     private String myTeam;
 
     //종아요
-    @JsonBackReference
+    @JsonManagedReference
     @OneToMany(mappedBy = "communitylikes", cascade = CascadeType.ALL)
     private List<CommunityLikes> communityLikesList;
 

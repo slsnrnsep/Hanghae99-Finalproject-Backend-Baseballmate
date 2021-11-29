@@ -31,7 +31,7 @@ public class ScreenCommentService {
         screenCommentRepository.save(screenComment);
         screen.getScreenCommentList().add(screenComment);
 
-        alarmService.alarmMethod(screen.getScreenCreatedUser(),loginedUsername,screen.getTitle(),"스야모임","댓글을 남기셨습니다.",screenId);
+        alarmService.alarmMethod(screen.getScreenCreatedUser(),loginedUsername,screen.getTitle(),"스야모임","댓글을 남기셨습니다.",screenId,"screen");
 
     }
     @Transactional

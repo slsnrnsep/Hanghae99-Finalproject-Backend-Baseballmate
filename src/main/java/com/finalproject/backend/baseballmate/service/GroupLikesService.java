@@ -46,7 +46,7 @@ public class GroupLikesService {
             GroupLikes likes = groupLikesRepository.save(new GroupLikes(group, user));
             user.addGroupLikes(likes);
             group.addLikes(likes);
-            alarmService.alarmMethod(group.getCreatedUser(), user.getUsername(), group.getTitle(),"모임","좋아요를 표시하셨습니다!",groupId);
+            alarmService.alarmMethod(group.getCreatedUser(), user.getUsername(), group.getTitle(),"모임","좋아요를 표시하셨습니다!",groupId,"group");
             return true;
         }
 
