@@ -63,7 +63,7 @@ public class JoinRequestsService {
                 alarmRequestDto.setJoinRequestId(joinRequests.getId());
                 alarmRequestDto.setAlarmType("Group");
                 alarmService.createAlarm(alarmRequestDto);
-                String signupAlarm2 = user.getUsername()+"께서 만든 모임 : '" +group.getTitle()+"' 에 *참여신청을 하셨습니다. 방장의 승인여부를 기다려주세요.";
+                String signupAlarm2 = user.getUsername()+"께서 만든 모임 : '" +group.getTitle()+"' 에 참여신청을 하셨습니다. *방장의 승인여부를 기다려주세요.";
                 alarmRequestDto.setUserId(joinRequests.getUserId());
                 alarmRequestDto.setContents(signupAlarm2);
                 alarmRequestDto.setPostId(postId);
@@ -85,7 +85,7 @@ public class JoinRequestsService {
                     alarmRequestDto.setJoinRequestId(joinRequests.getId());
                     alarmRequestDto.setAlarmType("Group");
                     alarmService.createAlarm(alarmRequestDto);
-                    String signupAlarm2 =user.getUsername()+"께서 만든 모임 : '" +group.getTitle()+"' 에 *참여신청을 하셨습니다. 방장의 승인여부를 기다려주세요.";
+                    String signupAlarm2 =user.getUsername()+"께서 만든 모임 : '" +group.getTitle()+"' 에 참여신청을 하셨습니다. *방장의 승인여부를 기다려주세요.";
                     alarmRequestDto.setUserId(joinRequests.getUserId());
                     alarmRequestDto.setContents(signupAlarm2);
                     alarmRequestDto.setPostId(postId);

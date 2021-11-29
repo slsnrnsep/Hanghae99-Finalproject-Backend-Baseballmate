@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface GroupCommentRepository extends JpaRepository<GroupComment,Long> {
-    List<GroupComment> findAllByGroup_GroupIdOrderByModifiedAtDesc(Long groupId);
+    List<GroupComment> findAllByGroup_GroupIdOrderByCreatedAtAsc(Long groupId);
+
     GroupComment findByGroupCommentId(Long groupCommentId);
 }

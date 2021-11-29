@@ -152,7 +152,7 @@ public class ScreenService {
         String groupDate = screen.getGroupDate();
         String filePath = screen.getFilePath();
         String placeInfomation = screen.getPlaceInfomation();
-        List<ScreenComment> screenCommentList = screenCommentRepository.findAllByScreenScreenIdOrderByModifiedAtDesc(id);
+        List<ScreenComment> screenCommentList = screenCommentRepository.findAllByScreenScreenIdOrderByCreatedAtAsc(id);
         List<Map<String, String>> appliedUserInfo = appliedUsers;
 
         // D - day 계산

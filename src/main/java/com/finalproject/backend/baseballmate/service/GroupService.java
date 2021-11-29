@@ -326,7 +326,7 @@ public class GroupService {
         String stadium = group.getStadium();
         String groupDate = group.getGroupDate();
         String filePath = group.getFilePath();
-        List<GroupComment> groupcommentList = groupCommentRepository.findAllByGroup_GroupIdOrderByModifiedAtDesc(id);
+        List<GroupComment> groupcommentList = groupCommentRepository.findAllByGroup_GroupIdOrderByCreatedAtAsc(id);
         List<Map<String, String>> appliedUserInfo = appliedUsers;
 
         // D - day 계산
