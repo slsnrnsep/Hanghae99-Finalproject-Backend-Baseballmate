@@ -32,6 +32,7 @@ public class JoinRequestsService {
     private final JoinRequestQueryRepository joinRequestQueryRepository;
     private final CanceledListRepository canceledListRepository;
     private final CanceledScreenListRepository canceledScreenListRepository;
+    private final AlarmRepository alarmRepository;
 
     //유저 신청정보 저장
     public String requestJoin(UserDetailsImpl userDetails, Long postId) {
@@ -135,24 +136,18 @@ public class JoinRequestsService {
         List<JoinRequests> joinRequestsList = joinRequestsRepository.findByUserId(userId);
         List<MyAwaitRequestJoinResponseDto> myAwaitRequestJoinResponseDtoList = new ArrayList<>();
         for (JoinRequests joinRequests : joinRequestsList) {
-            if(joinRequests.getGrouptype().contentEquals("screen"))
+            if(joinRequests.getGrouptype().contentEquals("group"))
             {
-                Screen post = screenRepository.getById(joinRequests.getPostId());
-                MyAwaitRequestJoinResponseDto myAwaitRequestJoinResponseDto = MyAwaitRequestJoinResponseDto.builder()
-                        .joinRequestId(joinRequests.getId())
-                        .postTitle(post.getTitle())
-                        .build();
-                myAwaitRequestJoinResponseDtoList.add(myAwaitRequestJoinResponseDto);
-            }
-            else{
                 Group post = groupRepository.getById(joinRequests.getPostId());
                 MyAwaitRequestJoinResponseDto myAwaitRequestJoinResponseDto = MyAwaitRequestJoinResponseDto.builder()
                         .joinRequestId(joinRequests.getId())
                         .postTitle(post.getTitle())
+                        .userName(userDetails.getUser().getUsername())
+                        .userId(userDetails.getUser().getUserid())
+                        .postId(joinRequests.getPostId())
                         .build();
                 myAwaitRequestJoinResponseDtoList.add(myAwaitRequestJoinResponseDto);
             }
-
         }
         return myAwaitRequestJoinResponseDtoList;
     }
@@ -239,6 +234,9 @@ public class JoinRequestsService {
             alarmRequestDto.setAlarmType("Normal");
             alarmRequestDto.setNormalType("group");
             alarmService.createAlarm(alarmRequestDto);
+
+            Alarm targetAlarm = alarmRepository.findByAlarmTypeAndJoinRequestId("Group",joinRequests.getId());
+            alarmRepository.deleteById(targetAlarm.getId());
 
             return "참가신청 취소가 완료되었습니다";
         }
@@ -359,12 +357,17 @@ public class JoinRequestsService {
         List<JoinRequests> joinRequestsList = joinRequestsRepository.findByUserId(userId);
         List<MyAwaitRequestJoinResponseDto> myAwaitRequestJoinResponseDtoList = new ArrayList<>();
         for (JoinRequests joinRequests : joinRequestsList) {
-            Screen post = screenRepository.getById(joinRequests.getPostId());
-            MyAwaitRequestJoinResponseDto myAwaitRequestJoinResponseDto = MyAwaitRequestJoinResponseDto.builder()
-                    .joinRequestId(joinRequests.getId())
-                    .postTitle(post.getTitle())
-                    .build();
-            myAwaitRequestJoinResponseDtoList.add(myAwaitRequestJoinResponseDto);
+            if (joinRequests.getGrouptype().contentEquals("screen")) {
+                Screen post = screenRepository.getById(joinRequests.getPostId());
+                MyAwaitRequestJoinResponseDto myAwaitRequestJoinResponseDto = MyAwaitRequestJoinResponseDto.builder()
+                        .joinRequestId(joinRequests.getId())
+                        .postTitle(post.getTitle())
+                        .userName(userDetails.getUser().getUsername())
+                        .userId(userDetails.getUser().getUserid())
+                        .postId(joinRequests.getPostId())
+                        .build();
+                myAwaitRequestJoinResponseDtoList.add(myAwaitRequestJoinResponseDto);
+            }
         }
         return myAwaitRequestJoinResponseDtoList;
     }
@@ -438,6 +441,9 @@ public class JoinRequestsService {
             alarmRequestDto.setAlarmType("Normal");
             alarmRequestDto.setNormalType("screen");
             alarmService.createAlarm(alarmRequestDto);
+
+            Alarm targetAlarm = alarmRepository.findByAlarmTypeAndJoinRequestId("Screen",joinRequests.getId());
+            alarmRepository.deleteById(targetAlarm.getId());
 
             return "참가신청 취소가 완료되었습니다";
         }

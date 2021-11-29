@@ -3,7 +3,9 @@ package com.finalproject.backend.baseballmate.service;
 import com.finalproject.backend.baseballmate.groupChat.ChatRoom;
 import com.finalproject.backend.baseballmate.groupChat.ChatRoomRepository;
 import com.finalproject.backend.baseballmate.groupChat.ChatRoomService;
+import com.finalproject.backend.baseballmate.join.JoinRequestQueryRepository;
 import com.finalproject.backend.baseballmate.join.JoinRequests;
+import com.finalproject.backend.baseballmate.join.JoinRequestsRepository;
 import com.finalproject.backend.baseballmate.model.*;
 import com.finalproject.backend.baseballmate.repository.*;
 import com.finalproject.backend.baseballmate.requestDto.ScreenRequestDto;
@@ -39,9 +41,10 @@ public class ScreenService {
     private final UserRepository userRepository;
     private final CanceledScreenListRepository canceledScreenListRepository;
     private final ChatRoomService chatRoomService;
-    String[] picturelist = {"basic0.jpg","basic1.jpg","basic2.jpg","basic3.jpg","basic4.jpg","basic5.jpg","basic6.jpg","basic7.jpg","basic8.jpg","basic9.jpg"};
+    String[] picturelist = {"screen0.jpg","screen1.jpg","screen2.jpg","screen3.jpg","screen4.jpg","screen5.jpg","screen6.jpg","screen7.jpg","screen8.jpg","screen9.jpg"};
     Random random = new Random();
     private final ChatRoomRepository chatRoomRepository;
+    private final JoinRequestQueryRepository joinRequestQueryRepository;
 
     @Transactional
     public Screen createScreen(ScreenRequestDto requestDto, User loginedUser) {
@@ -184,6 +187,7 @@ public class ScreenService {
             }
             chatRoomRepository.delete(chatRoom);
             screenRepository.deleteById(screenId);
+            joinRequestQueryRepository.findBydeletescreen(screenId);
         } else {
             throw new IllegalArgumentException("해당 게시글이 존재하지 않습니다");
         }

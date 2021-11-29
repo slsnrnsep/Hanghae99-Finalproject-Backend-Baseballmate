@@ -27,4 +27,19 @@ public class JoinRequestQueryRepository{
                 .orderBy(joinRequests.id.desc())
                 .fetch();
     }
+
+    public void findBydeletegroup(Long groupId) {
+        queryFactory.delete(joinRequests)
+                .where(joinRequests.grouptype.eq("group"))
+                .where(joinRequests.postId.eq(groupId))
+                .execute();
+
+    }
+
+    public void findBydeletescreen(Long screenId) {
+        queryFactory.delete(joinRequests)
+                .where(joinRequests.grouptype.eq("screen"))
+                .where(joinRequests.postId.eq(screenId))
+                .execute();
+    }
 }

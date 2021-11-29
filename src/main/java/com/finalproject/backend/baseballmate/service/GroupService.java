@@ -3,7 +3,9 @@ package com.finalproject.backend.baseballmate.service;
 import com.finalproject.backend.baseballmate.groupChat.ChatRoom;
 import com.finalproject.backend.baseballmate.groupChat.ChatRoomRepository;
 import com.finalproject.backend.baseballmate.groupChat.ChatRoomService;
+import com.finalproject.backend.baseballmate.join.JoinRequestQueryRepository;
 import com.finalproject.backend.baseballmate.join.JoinRequests;
+import com.finalproject.backend.baseballmate.join.JoinRequestsRepository;
 import com.finalproject.backend.baseballmate.model.*;
 import com.finalproject.backend.baseballmate.repository.*;
 import com.finalproject.backend.baseballmate.requestDto.GroupRequestDto;
@@ -42,6 +44,7 @@ public class GroupService {
     String[] picturelist = {"basic0.jpg","basic1.jpg","basic2.jpg","basic3.jpg","basic4.jpg","basic5.jpg","basic6.jpg","basic7.jpg","basic8.jpg","basic9.jpg"};
     Random random = new Random();
     private final ChatRoomRepository chatRoomRepository;
+    private final JoinRequestQueryRepository joinRequestQueryRepository;
 
     // 모임 전체 조회(등록 순)
     public List<AllGroupResponseDto> getAllGroups() {
@@ -414,9 +417,12 @@ public class GroupService {
             }
             chatRoomRepository.delete(chatRoom);
             groupRepository.deleteById(groupId);
+            joinRequestQueryRepository.findBydeletegroup(groupId);
         } else {
             throw new NullPointerException("해당 게시글이 존재하지 않습니다.");
         }
+
+
     }
 
     // 모임 참여하기
