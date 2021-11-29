@@ -1,5 +1,6 @@
 package com.finalproject.backend.baseballmate.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -10,14 +11,16 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class CommunityLikes {
 
-    @GeneratedValue
     @Id
+    @GeneratedValue
     private Long id;
 
+    @JsonBackReference
     @JoinColumn(name = "community_id")
     @ManyToOne
     private Community communitylikes;
 
+    @JsonBackReference
     @JoinColumn(name = "user_id")
     @ManyToOne
     private User user;
