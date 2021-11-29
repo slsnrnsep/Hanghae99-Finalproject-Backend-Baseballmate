@@ -1,6 +1,5 @@
 package com.finalproject.backend.baseballmate.controller;
 
-import com.finalproject.backend.baseballmate.model.Goods;
 import com.finalproject.backend.baseballmate.model.User;
 import com.finalproject.backend.baseballmate.repository.GoodsRepository;
 import com.finalproject.backend.baseballmate.repository.UserRepository;
@@ -11,7 +10,7 @@ import com.finalproject.backend.baseballmate.responseDto.GoodsResponseDto;
 import com.finalproject.backend.baseballmate.security.UserDetailsImpl;
 import com.finalproject.backend.baseballmate.service.FileService;
 import com.finalproject.backend.baseballmate.service.GoodsService;
-import com.finalproject.backend.baseballmate.util.MD5Generator;
+import com.finalproject.backend.baseballmate.utils.MD5Generator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;

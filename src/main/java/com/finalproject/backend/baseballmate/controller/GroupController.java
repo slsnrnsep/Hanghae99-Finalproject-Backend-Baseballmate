@@ -1,6 +1,5 @@
 package com.finalproject.backend.baseballmate.controller;
 
-import com.finalproject.backend.baseballmate.model.Group;
 import com.finalproject.backend.baseballmate.model.User;
 import com.finalproject.backend.baseballmate.repository.GroupRepository;
 import com.finalproject.backend.baseballmate.requestDto.GroupRequestDto;
@@ -9,7 +8,7 @@ import com.finalproject.backend.baseballmate.responseDto.GroupDetailResponseDto;
 import com.finalproject.backend.baseballmate.responseDto.MsgResponseDto;
 import com.finalproject.backend.baseballmate.security.UserDetailsImpl;
 import com.finalproject.backend.baseballmate.service.GroupService;
-import com.finalproject.backend.baseballmate.util.MD5Generator;
+import com.finalproject.backend.baseballmate.utils.MD5Generator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -21,7 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Random;

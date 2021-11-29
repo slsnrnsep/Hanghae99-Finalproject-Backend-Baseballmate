@@ -8,7 +8,7 @@ import com.finalproject.backend.baseballmate.requestDto.AllCommunityDto;
 import com.finalproject.backend.baseballmate.requestDto.CommunityRequestDto;
 import com.finalproject.backend.baseballmate.responseDto.CommunityDetailResponseDto;
 import com.finalproject.backend.baseballmate.security.UserDetailsImpl;
-import com.finalproject.backend.baseballmate.util.MD5Generator;
+import com.finalproject.backend.baseballmate.utils.MD5Generator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

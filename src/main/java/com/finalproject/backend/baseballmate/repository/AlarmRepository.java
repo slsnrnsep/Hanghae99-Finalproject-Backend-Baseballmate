@@ -9,6 +9,7 @@ import java.util.List;
 public interface AlarmRepository extends JpaRepository<Alarm, Long> {
     List<Alarm> findByUserIdOrderByCreatedAtDesc(Long userId);
     Alarm findByAlarmTypeAndJoinRequestId(String type, Long joinId);
+    Alarm findByAlarmTypeAndPostId(String type, Long joinId);
     Integer countAlarmByUserIdAndAlarmStatus(Long userId, Boolean alarmStatus);
 
 }

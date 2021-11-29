@@ -1,11 +1,9 @@
 package com.finalproject.backend.baseballmate.service;
 
-import com.finalproject.backend.baseballmate.groupChat.ChatRoom;
-import com.finalproject.backend.baseballmate.groupChat.ChatRoomRepository;
-import com.finalproject.backend.baseballmate.groupChat.ChatRoomService;
-import com.finalproject.backend.baseballmate.join.JoinRequestQueryRepository;
-import com.finalproject.backend.baseballmate.join.JoinRequests;
-import com.finalproject.backend.baseballmate.join.JoinRequestsRepository;
+import com.finalproject.backend.baseballmate.model.ChatRoom;
+import com.finalproject.backend.baseballmate.repository.ChatRoomRepository;
+import com.finalproject.backend.baseballmate.repository.JoinRequestQueryRepository;
+import com.finalproject.backend.baseballmate.model.JoinRequests;
 import com.finalproject.backend.baseballmate.model.*;
 import com.finalproject.backend.baseballmate.repository.*;
 import com.finalproject.backend.baseballmate.requestDto.ScreenRequestDto;
@@ -13,7 +11,7 @@ import com.finalproject.backend.baseballmate.responseDto.AllScreenResponseDto;
 import com.finalproject.backend.baseballmate.responseDto.HotScreenResponseDto;
 import com.finalproject.backend.baseballmate.responseDto.ScreenDetailResponseDto;
 import com.finalproject.backend.baseballmate.security.UserDetailsImpl;
-import com.finalproject.backend.baseballmate.util.MD5Generator;
+import com.finalproject.backend.baseballmate.utils.MD5Generator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -45,6 +43,7 @@ public class ScreenService {
     Random random = new Random();
     private final ChatRoomRepository chatRoomRepository;
     private final JoinRequestQueryRepository joinRequestQueryRepository;
+    private final AlarmRepository alarmRepository;
 
     @Transactional
     public Screen createScreen(ScreenRequestDto requestDto, User loginedUser) {
@@ -188,6 +187,9 @@ public class ScreenService {
             chatRoomRepository.delete(chatRoom);
             screenRepository.deleteById(screenId);
             joinRequestQueryRepository.findBydeletescreen(screenId);
+
+            Alarm targetAlarm = alarmRepository.findByAlarmTypeAndPostId("Screen",screenId);
+            alarmRepository.deleteById(targetAlarm.getId());
         } else {
             throw new IllegalArgumentException("해당 게시글이 존재하지 않습니다");
         }
