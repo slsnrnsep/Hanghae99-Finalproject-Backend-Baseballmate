@@ -32,6 +32,7 @@ public class JoinRequestsService {
     private final JoinRequestQueryRepository joinRequestQueryRepository;
     private final CanceledListRepository canceledListRepository;
     private final CanceledScreenListRepository canceledScreenListRepository;
+    private final AlarmRepository alarmRepository;
 
     //유저 신청정보 저장
     public String requestJoin(UserDetailsImpl userDetails, Long postId) {
@@ -233,6 +234,9 @@ public class JoinRequestsService {
             alarmRequestDto.setAlarmType("Normal");
             alarmRequestDto.setNormalType("group");
             alarmService.createAlarm(alarmRequestDto);
+
+            Alarm targetAlarm = alarmRepository.findByAlarmTypeAndJoinRequestId("Group",joinRequests.getId());
+            alarmRepository.deleteById(targetAlarm.getId());
 
             return "참가신청 취소가 완료되었습니다";
         }
@@ -437,6 +441,9 @@ public class JoinRequestsService {
             alarmRequestDto.setAlarmType("Normal");
             alarmRequestDto.setNormalType("screen");
             alarmService.createAlarm(alarmRequestDto);
+
+            Alarm targetAlarm = alarmRepository.findByAlarmTypeAndJoinRequestId("Screen",joinRequests.getId());
+            alarmRepository.deleteById(targetAlarm.getId());
 
             return "참가신청 취소가 완료되었습니다";
         }
