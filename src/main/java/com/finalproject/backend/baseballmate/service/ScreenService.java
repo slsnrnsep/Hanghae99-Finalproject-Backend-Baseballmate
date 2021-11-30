@@ -391,7 +391,7 @@ public class ScreenService {
     }
 
 
-    public MsgResponseDto updateScreen(Long screenId, MultipartFile file, ScreenRequestDto requestDto, UserDetailsImpl userDetails) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+    public MsgResponseDto updateScreenlegacy(Long screenId, MultipartFile file, ScreenRequestDto requestDto, UserDetailsImpl userDetails) throws UnsupportedEncodingException, NoSuchAlgorithmException {
         // 유저 로그인 체크
         if (userDetails == null) {
             throw new IllegalArgumentException("로그인 하신 후 이용해주세요.");
@@ -446,6 +446,30 @@ public class ScreenService {
         }
     }
 
+    public MsgResponseDto updateScreen(Long screenId, ScreenRequestDto requestDto, UserDetailsImpl userDetails) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+        // 유저 로그인 체크
+        if (userDetails == null) {
+            throw new IllegalArgumentException("로그인 하신 후 이용해주세요.");
+        }
+
+        String loginedUserId = userDetails.getUser().getUserid();
+        String createdUserId = "";
+
+        Screen screen = screenRepository.findByScreenId(screenId);
+        if (screen != null) {
+            createdUserId = screen.getScreenCreatedUser().getUserid();
+
+            if (!loginedUserId.equals(createdUserId)) {
+                throw new IllegalArgumentException("수정 권한이 없습니다.");
+            }
+            screen.updateScreen(requestDto);
+            screenRepository.save(screen);
+            MsgResponseDto msgResponseDto = new MsgResponseDto("success", "수정 완료");
+            return msgResponseDto;
+        } else {
+            throw new NullPointerException("해당 게시글이 존재하지 않습니다.");
+        }
+    }
     public List<AllScreenResponseDto> getMywriteAllScreens(User userdetail) {
         List<Screen> screenList = screenRepository.findAllByScreenCreatedUser(userdetail);
         List<AllScreenResponseDto> allScreenResponseDtoList = new ArrayList<>();

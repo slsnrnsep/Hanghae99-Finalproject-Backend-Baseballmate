@@ -54,8 +54,8 @@ public class CommunityController {
     // 커뮤 수정
     @ApiOperation(value = "커뮤니티 수정", notes = "커뮤니티 게시글을 수정합니다.")
     @PutMapping("/community/{communityId}")
-    public MsgResponseDto updateCommunity(@PathVariable("communityId") Long communityId, @AuthenticationPrincipal UserDetailsImpl userDetails, @RequestPart(required = false, value = "file") MultipartFile file, CommunityRequestDto requestDto) throws UnsupportedEncodingException, NoSuchAlgorithmException {
-        return communityService.updateCommunity(communityId, userDetails,file, requestDto);
+    public MsgResponseDto updateCommunity(@PathVariable("communityId") Long communityId, @AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody CommunityRequestDto requestDto) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+        return communityService.updateCommunity(communityId, userDetails, requestDto);
     }
 
     //커뮤 삭제

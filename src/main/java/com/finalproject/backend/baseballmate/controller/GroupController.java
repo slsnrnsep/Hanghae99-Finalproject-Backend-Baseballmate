@@ -67,10 +67,16 @@ public class GroupController {
     }
 
     // 모임 수정하기 - 모임을 생성한 사람만 수정할 수 있게
+    @ApiOperation(value = "(Legacy)모임 게시글 수정", notes = "(Legacy)모임 게시글을 수정합니다.")
+    @RequestMapping(value = "/groups/{groupId}/legacy", method = RequestMethod.PATCH, consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public MsgResponseDto updateGrouplegacy(@PathVariable Long groupId, @RequestPart(required = false, value = "file") MultipartFile file, GroupRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+        return groupService.updateGrouplegacy(groupId, file, requestDto, userDetails);
+    }
+
     @ApiOperation(value = "모임 게시글 수정", notes = "모임 게시글을 수정합니다.")
-    @RequestMapping(value = "/groups/{groupId}", method = RequestMethod.PATCH, consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public MsgResponseDto updateGroup(@PathVariable Long groupId, @RequestPart(required = false, value = "file") MultipartFile file, GroupRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) throws UnsupportedEncodingException, NoSuchAlgorithmException {
-        return groupService.updateGroup(groupId, file, requestDto, userDetails);
+    @PutMapping(value = "/groups/{groupId}")
+    public MsgResponseDto updateGroup(@PathVariable Long groupId,@RequestBody GroupRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+        return groupService.updateGroup(groupId, requestDto, userDetails);
     }
 
     // 모임 삭제하기 - 모임을 생성한 사람만 삭제할 수 있게

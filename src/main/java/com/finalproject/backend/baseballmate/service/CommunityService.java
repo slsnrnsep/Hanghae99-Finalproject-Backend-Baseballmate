@@ -163,7 +163,7 @@ public class CommunityService {
     }
 
     @Transactional
-    public MsgResponseDto updateCommunity(Long communityId,  UserDetailsImpl userDetails, MultipartFile file,CommunityRequestDto requestDto) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+    public MsgResponseDto updateCommunity(Long communityId,  UserDetailsImpl userDetails,CommunityRequestDto requestDto) throws UnsupportedEncodingException, NoSuchAlgorithmException {
 
         if(userDetails == null)
         {
@@ -179,30 +179,6 @@ public class CommunityService {
             createdUserId = community.getCreatedUser().getUserid();
             if (!loginedUserId.equals(createdUserId)) {
                 throw new IllegalArgumentException("수정 권한이 없습니다");
-            }
-            if (file != null) {
-                String origFilename = file.getOriginalFilename();
-                String filename = new MD5Generator(origFilename).toString() + "jpg";
-
-                String savePath = System.getProperty("user.dir") + commonPath;
-
-                // 파일이 저장되는 폴더가 없을 경우 폴더 생성
-                if (!new java.io.File(savePath).exists()) {
-                    try {
-                        new java.io.File(savePath).mkdir();
-                    } catch (Exception e) {
-                        e.getStackTrace();
-                    }
-                }
-
-                // 이미지 파일 저장
-                String filePath = savePath + "/" + filename;
-                try{
-                    file.transferTo(new File(filePath));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                community.setFilePath(filename);
             }
             community.updateCommunity(requestDto);
             communityRepository.save(community);
