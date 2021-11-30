@@ -10,6 +10,7 @@ permissions:
     pattern: "**"
     owner: ubuntu
     group: ubuntu
+
 hooks:
   AfterInstall: # 파일이 도착 후 실행
     - location: execute-deploy.sh
