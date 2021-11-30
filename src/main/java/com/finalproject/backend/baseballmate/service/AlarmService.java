@@ -7,6 +7,7 @@ import com.finalproject.backend.baseballmate.model.User;
 import com.finalproject.backend.baseballmate.repository.AlarmRepository;
 import com.finalproject.backend.baseballmate.requestDto.AlarmRequestDto;
 import com.finalproject.backend.baseballmate.requestDto.AlarmSaveDto;
+import com.finalproject.backend.baseballmate.responseDto.MsgResponseDto;
 import com.finalproject.backend.baseballmate.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -55,7 +56,7 @@ public class AlarmService {
 
 
     // 알람 삭제
-    public void deleteAlarm(UserDetailsImpl userDetails, Long alarmId) {
+    public MsgResponseDto deleteAlarm(UserDetailsImpl userDetails, Long alarmId) {
         Alarm alarm = alarmRepository.findById(alarmId).orElseThrow(
                 () -> new IllegalArgumentException("해당 알람이 존재하지 않습니다")
         );
@@ -71,6 +72,9 @@ public class AlarmService {
                 throw new IllegalArgumentException("삭제권한이 없습니다");
             }
             alarmRepository.deleteById(alarmId);
+            MsgResponseDto msgResponseDto = new MsgResponseDto("success","삭제 성공");
+            return msgResponseDto;
+
         } else {
             throw new NullPointerException("해당 게시글이 존재하지 않습니다.");
         }

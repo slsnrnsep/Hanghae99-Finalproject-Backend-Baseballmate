@@ -6,6 +6,7 @@ import com.finalproject.backend.baseballmate.model.User;
 import com.finalproject.backend.baseballmate.repository.GoodsCommentRepository;
 import com.finalproject.backend.baseballmate.repository.GoodsRepository;
 import com.finalproject.backend.baseballmate.requestDto.GoodsCommentRequestDto;
+import com.finalproject.backend.baseballmate.responseDto.GoodsCommentResponseDto;
 import com.finalproject.backend.baseballmate.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,12 @@ public class GoodsCommentService {
     private final AlarmService alarmService;
 
     @Transactional // loginUsered , loginedUsername
-    public void createComment(User loginUser, GoodsCommentRequestDto requestDto, Long goodsid) {
+    public GoodsCommentResponseDto createComment(UserDetailsImpl userDetails, GoodsCommentRequestDto requestDto, Long goodsid) {
+        if(userDetails == null)
+        {
+            throw new IllegalArgumentException("로그인 사용자만 가능한 기능입니다");
+        }
+        User loginUser = userDetails.getUser();
 //        Goods goods = new Goods(username, requestDto);
 //        goodsRepository.save(goods);
         String loginUsered = loginUser.getUserid();
@@ -43,9 +49,15 @@ public class GoodsCommentService {
         GoodsComment goodsComment = new GoodsComment(loginedUsername,requestDto,goods,loginUsered,loginUserIndex,loginedUserPicture,usertype);
         goodsCommentRepository.save(goodsComment);
         alarmService.alarmMethod(goods.getCreatedUser(),loginedUsername,goods.getGoodsName(),"굿즈자랑","댓글을 남기셨습니다.",goodsid,"goods");
+        GoodsCommentResponseDto goodsCommentResponseDto = new GoodsCommentResponseDto("success", "등록완료");
+        return goodsCommentResponseDto;
     }
 
-    public void updateGoodsComment(UserDetailsImpl userDetails, Long id, GoodsCommentRequestDto requestDto) {
+    public GoodsCommentResponseDto updateGoodsComment(UserDetailsImpl userDetails, Long id, GoodsCommentRequestDto requestDto) {
+        if(userDetails == null){
+            throw new IllegalArgumentException("로그인 사용자만이 수정할 수 있습니다");
+        }
+
         String loginUser = userDetails.getUser().getUserid();
         String writer = "";
 
@@ -61,12 +73,18 @@ public class GoodsCommentService {
             }
             goodsComment.updateComment(requestDto);
             goodsCommentRepository.save(goodsComment);
+            GoodsCommentResponseDto goodsCommentResponseDto = new GoodsCommentResponseDto("success","변경완료");
+            return goodsCommentResponseDto;
         }else {
             throw new NullPointerException("해당 게시글이 존재하지 않습니다.");
         }
     }
 
-    public void deleteComment(Long id, UserDetailsImpl userDetails) {
+    public GoodsCommentResponseDto deleteComment(Long id, UserDetailsImpl userDetails) {
+        if(userDetails == null){
+            throw new IllegalArgumentException("로그인 사용자만이 삭제할 수 있습니다");
+        }
+
         String loginUser = userDetails.getUser().getUserid();
         String writer = "";
 
@@ -80,6 +98,8 @@ public class GoodsCommentService {
                 throw new IllegalArgumentException("삭제권한이 없습니다");
             }
             goodsCommentRepository.deleteById(id);
+            GoodsCommentResponseDto goodsCommentResponseDto = new GoodsCommentResponseDto("success","삭제완료");
+            return goodsCommentResponseDto;
         }else{
             throw new NullPointerException("해당 게시글이 존재하지 않습니다");
         }

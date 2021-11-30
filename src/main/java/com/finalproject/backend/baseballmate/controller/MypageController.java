@@ -10,6 +10,7 @@ import com.finalproject.backend.baseballmate.security.UserDetailsImpl;
 import com.finalproject.backend.baseballmate.service.GroupService;
 import com.finalproject.backend.baseballmate.service.ScreenService;
 import com.finalproject.backend.baseballmate.service.UserService;
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,14 +21,11 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
+@Api(tags = {"9-1. 마이페이지"}) // Swagger
 public class MypageController {
 
-    private final GroupRepository groupRepository;
-    private final UserRepository userRepository;
     private final GroupService groupService;
     private final UserService userService;
-
-    private final ScreenRepository screenRepository;
     private final ScreenService screenService;
 
 
@@ -95,12 +93,6 @@ public class MypageController {
             throw new IllegalArgumentException("로그인 한 사용자만 마이페이지 기능을 이용할 수 있습니다.");
         }
         List allMeetingList = new ArrayList();
-//        listToList(groupService.getMywriteAllGroups(userDetails.getUser()), allMeetingList);
-//        listToList(groupService.getMyapplicationAllGroups(userDetails.getUser()), allMeetingList);
-//        listToList(groupService.getMylikeAllGroups(userDetails.getUser()), allMeetingList);
-//        listToList(screenService.getMywriteAllScreens(userDetails.getUser()), allMeetingList);
-//        listToList(screenService.getMyapplicationAllScreens(userDetails.getUser()), allMeetingList);
-//        listToList(screenService.getMylikeAllScreens(userDetails.getUser()), allMeetingList);
         allMeetingList.add(groupService.getMywriteAllGroups(userDetails.getUser()));
         allMeetingList.add(groupService.getMyapplicationAllGroups(userDetails.getUser()));
         allMeetingList.add(groupService.getMylikeAllGroups(userDetails.getUser()));

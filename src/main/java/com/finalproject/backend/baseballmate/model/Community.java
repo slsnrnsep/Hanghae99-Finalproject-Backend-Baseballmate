@@ -1,6 +1,5 @@
 package com.finalproject.backend.baseballmate.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.finalproject.backend.baseballmate.requestDto.CommunityRequestDto;
 import lombok.Getter;
@@ -47,7 +46,6 @@ public class Community extends Timestamped{
 
     @Column
     private String usertype;
-
     //종아요
     @JsonManagedReference
     @OneToMany(mappedBy = "communitylikes", cascade = CascadeType.ALL)

@@ -6,6 +6,7 @@ import com.finalproject.backend.baseballmate.model.User;
 import com.finalproject.backend.baseballmate.repository.TimeLineRepository;
 import com.finalproject.backend.baseballmate.requestDto.TimeLineRequestDto;
 import com.finalproject.backend.baseballmate.responseDto.AllTimeLineResponseDto;
+import com.finalproject.backend.baseballmate.responseDto.MsgResponseDto;
 import com.finalproject.backend.baseballmate.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -72,9 +73,16 @@ public class TimeLineService {
     }
 
     @Transactional
-    public void createTimeLine(User loginedUser, TimeLineRequestDto requestDto) {
+    public MsgResponseDto createTimeLine(UserDetailsImpl userDetails, TimeLineRequestDto requestDto) {
+        if(userDetails == null)
+        {
+            throw new IllegalArgumentException("로그인 한 사용자만 사용 가능합니다");
+        }
+        User loginedUser = userDetails.getUser();
         TimeLine timeLine = new TimeLine(loginedUser,requestDto);
         timeLineRepository.save(timeLine);
+        MsgResponseDto timeLineResponseDto = new MsgResponseDto("success","작성 완료");
+        return timeLineResponseDto;
     }
 
     public String getDayBefore(TimeLine timeLine) throws ParseException {
@@ -121,7 +129,11 @@ public class TimeLineService {
     }
 
     @Transactional
-    public void deletetimeLine(Long id, UserDetailsImpl userDetails) {
+    public MsgResponseDto deletetimeLine(Long id, UserDetailsImpl userDetails) {
+        if (userDetails == null) {
+            throw new IllegalArgumentException("로그인 한 사용자만 사용 가능합니다");
+        }
+
         String loginedUsername = userDetails.getUser().getUserid();
         String commentUsername = "";
 
@@ -137,6 +149,9 @@ public class TimeLineService {
                 throw new IllegalArgumentException("수정 권한이 없습니다.");
             }
             timeLineRepository.deleteById(id);
+            MsgResponseDto timeLineResponseDto = new MsgResponseDto("success", "삭제 완료");
+            return timeLineResponseDto;
+
         }
         else {
             throw new NullPointerException("해당 댓글이 존재하지 않습니다.");

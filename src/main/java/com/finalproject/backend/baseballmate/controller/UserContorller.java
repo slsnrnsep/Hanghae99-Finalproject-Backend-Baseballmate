@@ -13,6 +13,7 @@ import com.finalproject.backend.baseballmate.security.UserDetailsImpl;
 import com.finalproject.backend.baseballmate.service.FileService;
 import com.finalproject.backend.baseballmate.responseDto.LoginResponseDto;
 import com.finalproject.backend.baseballmate.service.UserService;
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -28,6 +29,7 @@ import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
+@Api(tags = {"0. 유저"}) // Swagger
 public class UserContorller {
 
     private final UserService userService;
@@ -43,8 +45,7 @@ public class UserContorller {
     private final FileService fileService;
 
     @PostMapping("/user/signup")
-    public MsgResponseDto registerUser(@RequestBody UserRequestDto userRequestDto)
-    {
+    public MsgResponseDto registerUser(@RequestBody UserRequestDto userRequestDto) {
         try
         {
             userService.passwordCheck(userRequestDto.getPassword());

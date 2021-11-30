@@ -1,7 +1,6 @@
 package com.finalproject.backend.baseballmate.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.finalproject.backend.baseballmate.groupChat.AllChatInfo;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

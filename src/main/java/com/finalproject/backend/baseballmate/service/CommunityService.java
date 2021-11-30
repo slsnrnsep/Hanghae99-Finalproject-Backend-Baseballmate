@@ -7,8 +7,9 @@ import com.finalproject.backend.baseballmate.repository.CommunityRepository;
 import com.finalproject.backend.baseballmate.requestDto.AllCommunityDto;
 import com.finalproject.backend.baseballmate.requestDto.CommunityRequestDto;
 import com.finalproject.backend.baseballmate.responseDto.CommunityDetailResponseDto;
+import com.finalproject.backend.baseballmate.responseDto.MsgResponseDto;
 import com.finalproject.backend.baseballmate.security.UserDetailsImpl;
-import com.finalproject.backend.baseballmate.util.MD5Generator;
+import com.finalproject.backend.baseballmate.utils.MD5Generator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,6 +23,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
@@ -31,25 +33,60 @@ public class CommunityService {
     private String commonPath = "/images"; // 파일 저장할 기본 경로 변수 설정, 초기화
     private final CommunityCommentRepository communityCommentRepository;
     private final CommunityLikesRepository communityLikesRepository;
+    private final FileService fileService;
+
+    String[] picturelist = {"basic0.jpg","basic1.jpg","basic2.jpg","basic3.jpg","basic4.jpg","basic5.jpg","basic6.jpg","basic7.jpg","basic8.jpg","basic9.jpg"};
+    Random random = new Random();
 
     @Transactional
-    public Community createCommunity(User loginedUser, CommunityRequestDto requestDto) {
-        String communityUserPicture = loginedUser.getPicture();
-        String myTeam = loginedUser.getMyselectTeam();
+    public MsgResponseDto createCommunity(UserDetailsImpl userDetails, CommunityRequestDto requestDto,MultipartFile files) {
 
-        Long userId = loginedUser.getId();
-        String usertype = "";
-        if(loginedUser.getKakaoId() == null)
+        if(userDetails == null)
         {
-            usertype = "normal";
+            throw new IllegalArgumentException("로그인 한 사용자만 등록 가능합니다");
         }
-        else
-        {
-            usertype = "kakao";
+        try {
+            String filename = picturelist[random.nextInt(10) + 1];
+            if (files != null) {
+                String origFilename = files.getOriginalFilename();
+                filename = new MD5Generator(origFilename).toString() + ".jpg";
+                /* 실행되는 위치의 'files' 폴더에 파일이 저장됩니다. */
+
+                String savePath = System.getProperty("user.dir") + commonPath;
+                /* 파일이 저장되는 폴더가 없으면 폴더를 생성합니다. */
+                //files.part.getcontententtype() 해서 이미지가 아니면 false처리해야함.
+                if (!new File(savePath).exists()) {
+                    try {
+                        new File(savePath).mkdir();
+                    } catch (Exception e) {
+                        e.getStackTrace();
+                    }
+                }
+                String filePath = savePath + "/" + filename;// 이경로는 우분투랑 윈도우랑 다르니까 주의해야댐 우분투 : / 윈도우 \\ 인것같음.
+                files.transferTo(new File(filePath));
+            }
+            requestDto.setFilePath(filename);
+            User loginedUser = userDetails.getUser();
+            String communityUserPicture = loginedUser.getPicture();
+            String myTeam = loginedUser.getMyselectTeam();
+            Long userId = loginedUser.getId();
+            String usertype = "";
+            if(loginedUser.getKakaoId() == null)
+            {
+                usertype = "normal";
+            }
+            else
+            {
+                usertype = "kakao";
+            }
+            Community community = new Community(loginedUser, requestDto, communityUserPicture, myTeam,userId,usertype);
+            communityRepository.save(community);
+            MsgResponseDto msgResponseDto = new MsgResponseDto("success", "등록완료");
+            return msgResponseDto;
+        } catch (Exception e) {
+            MsgResponseDto msgResponseDto = new MsgResponseDto("fail", "등록실패");
+            return msgResponseDto;
         }
-        Community community = new Community(loginedUser, requestDto, communityUserPicture, myTeam,userId,usertype);
-        communityRepository.save(community);
-        return community;
     }
 
     @Transactional
@@ -95,14 +132,18 @@ public class CommunityService {
         Long userId = community.getUserId();
         String usertype = community.getUsertype();
 
-
         CommunityDetailResponseDto communityDetailResponseDto =
-                new CommunityDetailResponseDto(userName, content, communityUserPicture, filePath, myTeam, communityCommentList, userId,usertype);
+                new CommunityDetailResponseDto(userName, content, communityUserPicture, filePath, myTeam, communityCommentList,userId,usertype);
         return communityDetailResponseDto;
     }
 
     @Transactional
-    public void updateCommunity(Long communityId,  UserDetailsImpl userDetails, MultipartFile file,CommunityRequestDto requestDto) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+    public MsgResponseDto updateCommunity(Long communityId,  UserDetailsImpl userDetails, MultipartFile file,CommunityRequestDto requestDto) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+
+        if(userDetails == null)
+        {
+            throw new IllegalArgumentException("로그인 사용자만이 수정할 수 있습니다");
+        }
 
         String loginedUserId = userDetails.getUser().getUserid();
         String createdUserId = "";
@@ -140,14 +181,18 @@ public class CommunityService {
             }
             community.updateCommunity(requestDto);
             communityRepository.save(community);
+            MsgResponseDto msgResponseDto = new MsgResponseDto("success", "수정완료");
+            return msgResponseDto;
         } else {
             throw new NullPointerException("해당 게시글이 존재하지 않습니다.");
         }
-
-
     }
 
-    public void deleteCommunity(Long communityId, UserDetailsImpl userDetails) {
+    public MsgResponseDto deleteCommunity(Long communityId, UserDetailsImpl userDetails) {
+        if(userDetails == null)
+        {
+            throw new IllegalArgumentException("로그인 하신 후 이용해주세요.");
+        }
         String loginedUserId = userDetails.getUser().getUserid();
         String createdUserId = "";
 
@@ -159,6 +204,8 @@ public class CommunityService {
                 throw new IllegalArgumentException("삭제 권한이 없습니다");
             }
             communityRepository.deleteById(communityId);
+            MsgResponseDto msgResponseDto = new MsgResponseDto("success", "삭제완료");
+            return msgResponseDto;
         } else {
             throw new NullPointerException("해당 게시글이 존재하지 않습니다.");
         }
