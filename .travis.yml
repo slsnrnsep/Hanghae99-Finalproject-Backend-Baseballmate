@@ -42,7 +42,7 @@ deploy:
 
   - provider: codedeploy
     access_key_id: $AWS_ACCESS_KEY # Travis repo settings에 설정된 값
-      secret_access_key: $AWS_SECRET_KEY # Travis repo settings에 설정된 값
+    secret_access_key: $AWS_SECRET_KEY # Travis repo settings에 설정된 값
     bucket: baseballmate-s3 # S3 버킷
     key: baseballmate_deploy.zip # 빌드 파일을 압축해서 전달
     bundle_type: zip
