@@ -12,5 +12,4 @@ public class GroupRequestDto {
     private String groupDate;
     private String filePath;
     private String selectTeam;
-
 }

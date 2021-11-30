@@ -20,8 +20,14 @@ public class GroupCommentLikesService {
     private final AlarmService alarmService;
 
     @Transactional
-    public boolean groupCommentLikes(Long groupcommentId, LikesRequestDto reqeustDto, UserDetailsImpl userDetails)
+    public String groupCommentLikes(Long groupcommentId, LikesRequestDto reqeustDto, UserDetailsImpl userDetails)
     {
+        if(userDetails == null)
+        {
+            throw new IllegalArgumentException("로그인한 사용자만 가능한 기능입니다");
+        }
+
+
         User user = userRepository.findById(userDetails.getUser().getId()).orElseThrow(
                 () -> new IllegalArgumentException("로그인 정보를 찾을 수 없습니다.")
         );
@@ -37,11 +43,11 @@ public class GroupCommentLikesService {
             user.deleteGroupCommentLikes(likes);
             groupComment.deleteLikes(likes);
             groupCommentLikesRepository.delete(likes);
-            return false;
+            return "false";
         } else {
             if(groupCommentLikesRepository.findByGroupComment_GroupCommentIdAndUserId(groupComment.getGroupCommentId(), user.getId()).isPresent())
             {
-                return true;
+                return "true";
             }
 
             GroupCommentLikes likes = groupCommentLikesRepository.save(new GroupCommentLikes(groupComment, user));
@@ -51,8 +57,8 @@ public class GroupCommentLikesService {
             User alarmuser = userRepository.findById(groupComment.getCommentUserIndex()).orElseThrow(
                     () -> new IllegalArgumentException("로그인한 사용자 정보를 찾을 수 없습니다")
             );
-            alarmService.alarmMethod(alarmuser,user.getUsername(),groupComment.getComment(),"댓글","좋아요를 표시했습니다!",groupComment.getGroup().getGroupId());
-            return true;
+            alarmService.alarmMethod(alarmuser,user.getUsername(),groupComment.getComment(),"댓글","좋아요를 표시했습니다!",groupComment.getGroup().getGroupId(),"group");
+            return "true";
         }
     }
 }

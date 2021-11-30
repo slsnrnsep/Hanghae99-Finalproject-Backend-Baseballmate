@@ -6,6 +6,7 @@ import com.finalproject.backend.baseballmate.model.User;
 import com.finalproject.backend.baseballmate.repository.CommunityCommentRepository;
 import com.finalproject.backend.baseballmate.repository.CommunityRepository;
 import com.finalproject.backend.baseballmate.requestDto.CommunityCommentRequestDto;
+import com.finalproject.backend.baseballmate.responseDto.MsgResponseDto;
 import com.finalproject.backend.baseballmate.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.parameters.P;
@@ -22,7 +23,14 @@ public class CommunityCommentService {
     private final AlarmService alarmService;
 
     @Transactional
-    public void createComment(CommunityCommentRequestDto commentRequestDto, Long communityId, User loginedUser) {
+    public MsgResponseDto createComment(CommunityCommentRequestDto commentRequestDto, Long communityId, UserDetailsImpl userDetails) {
+
+        if(userDetails == null)
+        {
+            throw new IllegalArgumentException("로그인 하신 후 이용해주세요.");
+        }
+        User loginedUser = userDetails.getUser();
+
         // loginuser의 유저네임, 이메일 아이디 빼기
         String loginedUsername = loginedUser.getUsername();
         String loginedUserId = loginedUser.getUserid();
@@ -36,12 +44,20 @@ public class CommunityCommentService {
         communityCommentRepository.save(communityComment);
         community.getCommunityCommentList().add(communityComment);
 
-        alarmService.alarmMethod(community.getCreatedUser(),loginedUsername,community.getContent(),"커뮤니티","댓글을 남기셨습니다.",communityId);
+        alarmService.alarmMethod(community.getCreatedUser(),loginedUsername,community.getContent(),"커뮤니티","댓글을 남기셨습니다.",communityId,"community");
+
+        MsgResponseDto msgResponseDto = new MsgResponseDto("success", "댓글 등록 완료");
+        return msgResponseDto;
     }
 
 
     @Transactional
-    public void updateCommunityComment(Long communityId, Long commentId, CommunityCommentRequestDto commentRequestDto, UserDetailsImpl userDetails) {
+    public MsgResponseDto updateCommunityComment(Long communityId, Long commentId, CommunityCommentRequestDto commentRequestDto, UserDetailsImpl userDetails) {
+        if(userDetails == null)
+        {
+            throw new IllegalArgumentException("로그인 하신 후 이용해주세요.");
+        }
+
         String loginedUserId = userDetails.getUser().getUserid();
         String commentUserId = "";
 
@@ -54,13 +70,20 @@ public class CommunityCommentService {
             }
             communityComment.updateCommunityComment(commentRequestDto);
             communityCommentRepository.save(communityComment);
+            MsgResponseDto msgResponseDto = new MsgResponseDto("success", "수정 완료");
+            return msgResponseDto;
         }else {
             throw new NullPointerException("해당 댓글이 존재하지 않습니다.");
         }
     }
 
     @Transactional
-    public void deleteCommunityComment(Long commentId, UserDetailsImpl userDetails) {
+    public MsgResponseDto deleteCommunityComment(Long commentId, UserDetailsImpl userDetails) {
+        if(userDetails == null)
+        {
+            throw new IllegalArgumentException("로그인 하신 후 이용해주세요.");
+        }
+
         String loginedUserId = userDetails.getUser().getUserid();
         String commentUserId = "";
 
@@ -72,6 +95,8 @@ public class CommunityCommentService {
                 throw new IllegalArgumentException("삭제 권한이 없습니다.");
             }
             communityCommentRepository.deleteById(commentId);
+            MsgResponseDto msgResponseDto = new MsgResponseDto("success", "삭제 성공");
+            return msgResponseDto;
         }else {
             throw new NullPointerException("해당 댓글이 존재하지 않습니다.");
         }

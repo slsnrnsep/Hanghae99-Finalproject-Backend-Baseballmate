@@ -23,7 +23,12 @@ public class GoodsCommentLikesService {
     private final AlarmService alarmService;
 
     @Transactional
-    public boolean goodsCommentLikes(Long goodscommentId, GoodsLikesReqeustDto reqeustDto, UserDetailsImpl userDetails) {
+    public String goodsCommentLikes(Long goodscommentId, GoodsLikesReqeustDto reqeustDto, UserDetailsImpl userDetails) {
+        if(userDetails == null)
+        {
+            throw new IllegalArgumentException("로그인한 사용자만이 가능한 기능입니다");
+        }
+
         User user = userRepository.findById(userDetails.getUser().getId()).orElseThrow(
                 () -> new IllegalArgumentException("로그인한 사용자 정보를 찾을 수 없습니다")
         );
@@ -38,11 +43,11 @@ public class GoodsCommentLikesService {
             user.deleteGoodsCommentLikes(likes);
             goodsComment.deleteCommentLikes(likes);
             goodsCommentLikesRepository.delete(likes);
-            return false;
+            return "false";
         }else{
             if(goodsCommentLikesRepository.findByGoodsCommentIdAndUserId(goodsComment.getId(), user.getId()).isPresent())
             {
-                return true;
+                return "true";
             }
             GoodsCommentLikes likes = goodsCommentLikesRepository.save(new GoodsCommentLikes(goodsComment, user));
             user.addGoodsCommentLikes(likes);
@@ -51,8 +56,8 @@ public class GoodsCommentLikesService {
             User alarmuser = userRepository.findById(goodsComment.getCommentUserIndex()).orElseThrow(
                     () -> new IllegalArgumentException("로그인한 사용자 정보를 찾을 수 없습니다")
             );
-            alarmService.alarmMethod(alarmuser,user.getUsername(),goodsComment.getComment(),"댓글","좋아요를 표시했습니다!",goodsComment.getGoods().getId());
-            return true;
+            alarmService.alarmMethod(alarmuser,user.getUsername(),goodsComment.getComment(),"댓글","좋아요를 표시했습니다!",goodsComment.getGoods().getId(),"goods");
+            return "true";
         }
     }
 

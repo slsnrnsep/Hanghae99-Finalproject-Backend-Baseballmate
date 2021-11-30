@@ -26,7 +26,13 @@ public class TimeLineLikesService {
 
 
     @Transactional
-    public boolean liked(Long timeLineId, LikesRequestDto requestDto, UserDetailsImpl userDetails) {
+    public String liked(Long timeLineId, LikesRequestDto requestDto, UserDetailsImpl userDetails) {
+        if(userDetails == null)
+        {
+            throw new IllegalArgumentException("로그인 한 사용자만 사용 가능합니다");
+        }
+
+
         User user = userRepository.findById(userDetails.getUser().getId()).orElseThrow(
                 () -> new IllegalArgumentException("로그인 정보를 찾을 수 없습니다.")
         );
@@ -42,16 +48,16 @@ public class TimeLineLikesService {
             user.deleteLikes(likes);
             timeLine.deleteLikes(likes);
             timeLineLikesRepository.delete(likes);
-            return false;
+            return "false";
         } else {
             if(timeLineLikesRepository.findByTimeLineIdAndUserId(timeLine.getId(), user.getId()).isPresent())
             {
-                return true;
+                return "true";
             }
             TimeLineLikes likes = timeLineLikesRepository.save(new TimeLineLikes(timeLine, user));
             user.addLikes(likes);
             timeLine.addLikes(likes);
-            return true;
+            return "true";
         }
 
     }

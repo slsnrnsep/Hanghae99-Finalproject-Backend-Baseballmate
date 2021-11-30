@@ -19,8 +19,13 @@ public class GroupLikesService {
     private final AlarmService alarmService;
 
     @Transactional
-    public boolean groupLikes(Long groupId, LikesRequestDto reqeustDto, UserDetailsImpl userDetails)
+    public String groupLikes(Long groupId, LikesRequestDto reqeustDto, UserDetailsImpl userDetails)
     {
+        if(userDetails == null)
+        {
+            throw new IllegalArgumentException("로그인한 사용자만이 이용가능합니다");
+        }
+
         User user = userRepository.findById(userDetails.getUser().getId()).orElseThrow(
                 () -> new IllegalArgumentException("로그인 정보를 찾을 수 없습니다.")
         );
@@ -36,18 +41,18 @@ public class GroupLikesService {
             user.deleteGroupLikes(likes);
             group.deleteLikes(likes);
             groupLikesRepository.delete(likes);
-            return false;
+            return "false";
         } else {
             if(groupLikesRepository.findByGrouplikesGroupIdAndUserId(group.getGroupId(), user.getId()).isPresent())
 
             {
-                return true;
+                return "true";
             }
             GroupLikes likes = groupLikesRepository.save(new GroupLikes(group, user));
             user.addGroupLikes(likes);
             group.addLikes(likes);
-            alarmService.alarmMethod(group.getCreatedUser(), user.getUsername(), group.getTitle(),"모임","좋아요를 표시하셨습니다!",groupId);
-            return true;
+            alarmService.alarmMethod(group.getCreatedUser(), user.getUsername(), group.getTitle(),"모임","좋아요를 표시하셨습니다!",groupId,"group");
+            return "true";
         }
 
     }

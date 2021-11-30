@@ -23,8 +23,13 @@ public class CommunityLikesService {
     private final AlarmService alarmService;
 
     @Transactional
-    public boolean communityLiked(Long communityId, CommunityLikesRequestDto requestDto, UserDetailsImpl userDetails)
+    public String communityLiked(Long communityId, CommunityLikesRequestDto requestDto, UserDetailsImpl userDetails)
     {
+        if(userDetails == null)
+        {
+            throw new IllegalArgumentException("로그인한 사용자만 가능한 기능입니다");
+        }
+
         User user = userRepository.findById(userDetails.getUser().getId()).orElseThrow(
                 () -> new IllegalArgumentException("로그인 정보를 찾을 수 없습니다.")
         );
@@ -41,18 +46,18 @@ public class CommunityLikesService {
             user.deleteCommunityLikes(likes);
             community.deleteLikes(likes);
             communityLikesRepository.delete(likes);
-            return false;
+            return "false";
         }else {
             if(communityLikesRepository.findByCommunitylikesCommunityIdAndUserId(community.getCommunityId(), user.getId()).isPresent())
             {
-                return true;
+                return "true";
             }
             CommunityLikes likes = communityLikesRepository.save(new CommunityLikes(community, user));
             user.addCommunityLikes(likes);
             community.addLikes(likes);
 
-            alarmService.alarmMethod(community.getCreatedUser(),user.getUsername(),community.getContent(),"커뮤니티","좋아요를 표시하셨습니다!",communityId);
-            return true;
+            alarmService.alarmMethod(community.getCreatedUser(),user.getUsername(),community.getContent(),"커뮤니티","좋아요를 표시하셨습니다!",communityId,"community");
+            return "true";
         }
     }
 }

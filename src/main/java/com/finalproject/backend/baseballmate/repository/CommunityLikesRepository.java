@@ -9,4 +9,5 @@ import java.util.Optional;
 public interface CommunityLikesRepository extends JpaRepository<CommunityLikes, Long> {
     Optional<CommunityLikes> findByCommunitylikesCommunityIdAndUserId(Long communityId, Long userId);
 //    List<CommunityLikes> findAllByUserId(Long userId);
+    List<CommunityLikes> findAllByCommunitylikes_CommunityId(Long communityId);
 }

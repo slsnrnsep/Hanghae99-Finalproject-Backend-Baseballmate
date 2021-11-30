@@ -18,4 +18,6 @@ public class CommunityDetailResponseDto {
     private String filePath;
     private String myTeam;
     List<CommunityComment> communityCommentList;
+    Long userId;
+    String usertype;
 }

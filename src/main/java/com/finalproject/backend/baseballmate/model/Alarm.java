@@ -36,12 +36,19 @@ public class Alarm extends Timestamped_12H{
 
     private String alarmType;
 
+    private Long postId;
+
+    private String normalType;
+
     public Alarm(AlarmRequestDto alarmRequestDto){
         this.userId = alarmRequestDto.getUserId();
         this.contents = alarmRequestDto.getContents();
         this.alarmStatus = false;
         this.joinRequestId = alarmRequestDto.getJoinRequestId();
+        this.postId = alarmRequestDto.getPostId();
         this.alarmType = alarmRequestDto.getAlarmType();
+        this.normalType = alarmRequestDto.getNormalType();
+
     }
 
     public void updateAlarm(AlarmSaveDto alarmSaveDto) {

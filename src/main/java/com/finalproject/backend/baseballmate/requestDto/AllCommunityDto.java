@@ -1,6 +1,7 @@
 package com.finalproject.backend.baseballmate.requestDto;
 
 import com.finalproject.backend.baseballmate.model.CommunityComment;
+import com.finalproject.backend.baseballmate.model.CommunityLikes;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,5 +19,9 @@ public class AllCommunityDto {
     private String filePath;
     private String myTeam;
     private String dayBefore;
+    List<CommunityComment> communityCommentList;
+    List<CommunityLikes> communityLikesList;
 //    List<CommunityComment> communityCommentList;
+    Long userId;
+    String usertype;
 }

@@ -1,17 +1,15 @@
 package com.finalproject.backend.baseballmate.service;
 
-import com.finalproject.backend.baseballmate.groupChat.ChatRoom;
-import com.finalproject.backend.baseballmate.groupChat.ChatRoomRepository;
-import com.finalproject.backend.baseballmate.groupChat.ChatRoomService;
-import com.finalproject.backend.baseballmate.join.JoinRequests;
+import com.finalproject.backend.baseballmate.model.ChatRoom;
+import com.finalproject.backend.baseballmate.repository.ChatRoomRepository;
+import com.finalproject.backend.baseballmate.repository.JoinRequestQueryRepository;
+import com.finalproject.backend.baseballmate.model.JoinRequests;
 import com.finalproject.backend.baseballmate.model.*;
 import com.finalproject.backend.baseballmate.repository.*;
 import com.finalproject.backend.baseballmate.requestDto.ScreenRequestDto;
-import com.finalproject.backend.baseballmate.responseDto.AllScreenResponseDto;
-import com.finalproject.backend.baseballmate.responseDto.HotScreenResponseDto;
-import com.finalproject.backend.baseballmate.responseDto.ScreenDetailResponseDto;
+import com.finalproject.backend.baseballmate.responseDto.*;
 import com.finalproject.backend.baseballmate.security.UserDetailsImpl;
-import com.finalproject.backend.baseballmate.util.MD5Generator;
+import com.finalproject.backend.baseballmate.utils.MD5Generator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -39,16 +37,54 @@ public class ScreenService {
     private final UserRepository userRepository;
     private final CanceledScreenListRepository canceledScreenListRepository;
     private final ChatRoomService chatRoomService;
-    String[] picturelist = {"basic0.jpg","basic1.jpg","basic2.jpg","basic3.jpg","basic4.jpg","basic5.jpg","basic6.jpg","basic7.jpg","basic8.jpg","basic9.jpg"};
+    String[] picturelist = {"screen0.jpg","screen1.jpg","screen2.jpg","screen3.jpg","screen4.jpg","screen5.jpg","screen6.jpg","screen7.jpg","screen8.jpg","screen9.jpg"};
     Random random = new Random();
     private final ChatRoomRepository chatRoomRepository;
+    private final JoinRequestQueryRepository joinRequestQueryRepository;
+    private final AlarmRepository alarmRepository;
 
     @Transactional
-    public Screen createScreen(ScreenRequestDto requestDto, User loginedUser) {
-        Screen screen = new Screen(requestDto, loginedUser);
-        screenRepository.save(screen);
-        chatRoomService.createChatRoom2(screen.getScreenId(), loginedUser);
-        return screen;
+    public ScreenResponseDto createScreen(ScreenRequestDto requestDto, UserDetailsImpl userDetails,MultipartFile files) {
+        if(userDetails == null)
+        {
+            throw new IllegalArgumentException("로그인 이용자만 스크인 야구 모임생성이 가능합니다");
+        }
+        try {
+            String filename = picturelist[random.nextInt(10) + 1];
+            if (files != null) {
+                String origFilename = files.getOriginalFilename();
+                filename = new MD5Generator(origFilename).toString() + ".jpg";
+                /* 실행되는 위치의 'files' 폴더에 파일이 저장됩니다. */
+
+                String savePath = System.getProperty("user.dir") + commonPath;
+                /* 파일이 저장되는 폴더가 없으면 폴더를 생성합니다. */
+                //files.part.getcontententtype() 해서 이미지가 아니면 false처리해야함.
+                if (!new File(savePath).exists()) {
+                    try {
+                        new File(savePath).mkdir();
+                    } catch (Exception e) {
+                        e.getStackTrace();
+                    }
+                }
+                String filePath = savePath + "/" + filename;// 이경로는 우분투랑 윈도우랑 다르니까 주의해야댐 우분투 : / 윈도우 \\ 인것같음.
+                files.transferTo(new File(filePath));
+            }
+
+            requestDto.setFilePath(filename);
+
+            User loginedUser = userDetails.getUser();
+            String loginedUsername = userDetails.getUser().getUsername();
+            Screen screen = new Screen(requestDto, loginedUser);
+            screenRepository.save(screen);
+            chatRoomService.createScreenChatRoom(screen.getScreenId(), userDetails);
+            ScreenResponseDto screenResponseDto = new ScreenResponseDto("success", "등록 성공");
+            return screenResponseDto;
+        }
+        catch (Exception e)
+        {
+            ScreenResponseDto screenResponseDto = new ScreenResponseDto("failed", "모임 등록 실패");
+            return screenResponseDto;
+        }
     }
 
 
@@ -152,7 +188,7 @@ public class ScreenService {
         String groupDate = screen.getGroupDate();
         String filePath = screen.getFilePath();
         String placeInfomation = screen.getPlaceInfomation();
-        List<ScreenComment> screenCommentList = screenCommentRepository.findAllByScreenScreenIdOrderByModifiedAtDesc(id);
+        List<ScreenComment> screenCommentList = screenCommentRepository.findAllByScreenScreenIdOrderByCreatedAtAsc(id);
         List<Map<String, String>> appliedUserInfo = appliedUsers;
 
         // D - day 계산
@@ -170,7 +206,12 @@ public class ScreenService {
 
     // 스크린 야구 모임 삭제
     @Transactional
-    public void deleteScreen(Long screenId, UserDetailsImpl userDetails) {
+    public MsgResponseDto deleteScreen(Long screenId, UserDetailsImpl userDetails) {
+        if(userDetails == null)
+        {
+            throw new IllegalArgumentException("로그인을 해주세요");
+        }
+
         String loginedUserId = userDetails.getUser().getUserid();
         String createdUserId = "";
 
@@ -184,14 +225,24 @@ public class ScreenService {
             }
             chatRoomRepository.delete(chatRoom);
             screenRepository.deleteById(screenId);
+            joinRequestQueryRepository.findBydeletescreen(screenId);
+
+            Alarm targetAlarm = alarmRepository.findByAlarmTypeAndPostId("Screen",screenId);
+            if(targetAlarm!=null){
+                alarmRepository.deleteById(targetAlarm.getId());
+                MsgResponseDto msgResponseDto = new MsgResponseDto("success", "삭제 완료");
+                return msgResponseDto;
+            }
         } else {
             throw new IllegalArgumentException("해당 게시글이 존재하지 않습니다");
         }
+        MsgResponseDto msgResponseDto = new MsgResponseDto("success", "삭제 완료");
+        return msgResponseDto;
     }
 
     // 스크린 야구 모임 참여하기
     @Transactional
-    public void applyScreen(Long screenId, UserDetailsImpl userDetails) {
+    public MsgResponseDto applyScreen(Long screenId, UserDetailsImpl userDetails) {
 //        List<User> cancleUserList = appliedScreen.getCanceledUser();
         Screen appliedScreen = screenRepository.findByScreenId(screenId);
 
@@ -258,11 +309,16 @@ public class ScreenService {
                 throw new IllegalArgumentException("모임을 만들었거나 참가이력이 있습니다."); // 모임을 만든 사람이 요청하는 경우 or 참가 이력이 있는 경우
             }
         }
+        MsgResponseDto msgResponseDto = new MsgResponseDto("success", "모임 신청 완료");
+        return msgResponseDto;
     }
 
 
     @Transactional
-    public void cancleApplication(Long screenId, UserDetailsImpl userDetails) {
+    public MsgResponseDto cancleApplication(Long screenId, UserDetailsImpl userDetails) {
+        if (userDetails == null) {
+            throw new IllegalArgumentException("로그인 한 사용자만 신청할 수 있습니다.");
+        }
         Screen screen = screenRepository.findByScreenId(screenId);
         List<ScreenApplication> screenApplicationList = screenApplicationRepository.findAllByAppliedScreen(screen);
         User loginedUser = userDetails.getUser();
@@ -311,10 +367,12 @@ public class ScreenService {
 
                 }
         }
+        MsgResponseDto msgResponseDto = new MsgResponseDto("success", "모임 신청 취소 완료");
+        return msgResponseDto;
     }
 
 
-    public void updateScreen(Long screenId, MultipartFile file, ScreenRequestDto requestDto, UserDetailsImpl userDetails) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+    public MsgResponseDto updateScreen(Long screenId, MultipartFile file, ScreenRequestDto requestDto, UserDetailsImpl userDetails) throws UnsupportedEncodingException, NoSuchAlgorithmException {
         // 유저 로그인 체크
         if (userDetails == null) {
             throw new IllegalArgumentException("로그인 하신 후 이용해주세요.");
@@ -362,6 +420,8 @@ public class ScreenService {
             }
             screen.updateScreen(requestDto);
             screenRepository.save(screen);
+            MsgResponseDto msgResponseDto = new MsgResponseDto("success", "수정 완료");
+            return msgResponseDto;
         } else {
             throw new NullPointerException("해당 게시글이 존재하지 않습니다.");
         }
@@ -466,15 +526,19 @@ public class ScreenService {
 
 
     @Transactional
-    public String denyScreen(Long screenId, UserDetailsImpl userDetails) {
+    public MsgResponseDto denyScreen(Long screenId, UserDetailsImpl userDetails) {
         Screen screen = screenRepository.findByScreenId(screenId);
         if (screen.getScreenCreatedUser().getUserid().equals(userDetails.getUser().getUserid())) {
             if (screen.isAllowtype()) {
                 screen.setAllowtype(false);
-                return "모임 확정 완료. 이제부터 모집을 하지 못합니다.";
+                String msg =  "모임 확정 완료. 이제부터 모집을 하지 못합니다.";
+                MsgResponseDto msgResponseDto = new MsgResponseDto("success", msg);
+                return msgResponseDto;
             } else {
                 screen.setAllowtype(true);
-                return "모임 확정취소 완료. 이제부터 모집을 다시 할 수 있습니다.";
+                String msg = "모임 확정취소 완료. 이제부터 모집을 다시 할 수 있습니다.";
+                MsgResponseDto msgResponseDto = new MsgResponseDto("success", msg);
+                return msgResponseDto;
             }
         } else {
             throw new IllegalArgumentException("모임장만 확정이 가능합니다");
