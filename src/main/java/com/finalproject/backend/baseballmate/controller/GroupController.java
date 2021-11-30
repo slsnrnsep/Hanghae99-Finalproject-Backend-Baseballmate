@@ -29,13 +29,21 @@ public class GroupController {
     private final GroupService groupService;
 
     // 모임 생성
+    @ApiOperation(value = "(Legacy)모임 게시글 작성", notes = "(Legacy)모임 게시글을 작성합니다.")
+    @PostMapping("/groups/legacy")
+    public MsgResponseDto createGrouplegacy(@RequestParam(value = "file",required = false) MultipartFile file, GroupRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return groupService.createGrouplegacy(requestDto, userDetails,file);
+    }
+
+    // 모임 생성
     @ApiOperation(value = "모임 게시글 작성", notes = "모임 게시글을 작성합니다.")
     @PostMapping("/groups")
-    public MsgResponseDto createGroup(@RequestParam(value = "file",required = false) MultipartFile file, GroupRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return groupService.createGroup(requestDto, userDetails,file);
+    public MsgResponseDto createGroup(@RequestBody GroupRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return groupService.createGroup(requestDto, userDetails);
     }
 
     // 모임페이지 전체 조회
+
     @ApiOperation(value = "모임 게시글 전체 조회", notes = "모임 게시글을 전체 조회합니다.")
     @GetMapping("/groups")
     public List<AllGroupResponseDto> getAllGroups() {

@@ -82,6 +82,7 @@ public class ChatMessageService {
 //            redisTemplate.convertAndSend(channelTopic.getTopic(), chatMessageRequestDto);
 
         if (ChatMessage.MessageType.TALK.equals(chatMessageRequestDto.getType())) {
+            System.out.println("채팅 TALK 들어옴");
             redisTemplate.convertAndSend(channelTopic.getTopic(), chatMessageRequestDto);
         }
 

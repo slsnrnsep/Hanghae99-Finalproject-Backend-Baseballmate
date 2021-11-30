@@ -25,10 +25,16 @@ public class CommunityController {
 
     private final CommunityService communityService;
 
+    @PostMapping("/community/legacy")
+    @ApiOperation(value = "(Legacy)커뮤니티 작성", notes = "(Legacy)커뮤니티 게시글을 작성합니다.")
+    public MsgResponseDto postCommunitylegacy(@RequestPart(value = "file",required = false) MultipartFile files, CommunityRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return communityService.createCommunitylegacy(userDetails, requestDto,files);
+    }
+
     @PostMapping("/community")
     @ApiOperation(value = "커뮤니티 작성", notes = "커뮤니티 게시글을 작성합니다.")
-    public MsgResponseDto postCommunity(@RequestPart(value = "file",required = false) MultipartFile files, CommunityRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return communityService.createCommunity(userDetails, requestDto,files);
+    public MsgResponseDto postCommunity(@RequestBody CommunityRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return communityService.createCommunity(userDetails, requestDto);
     }
 
     // 커뮤 전체페이지 조회
