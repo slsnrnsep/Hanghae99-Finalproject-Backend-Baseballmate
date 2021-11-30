@@ -1,21 +1,21 @@
 language: java
 jdk:
-  - openjdk8
+  - openjdk8 # java8이면, openjdk8
 
 branches:
   only:
-    - main
+    - main # git default 브런치를 등록한다. (ex. master)
 
-# Travis CI 서버 홈
+# Travis CI 서버의 Home
 cache:
   directories:
     - '$HOME/.m2/repository'
-    - '$HOME/.gradle/'
+    - '$HOME/.gradle'
 
 script: "./gradlew clean build"
 
-# CI 실행 완료 시 메일 알람
+# CI 실행 완료 시 메일로 알림
 notifications:
   email:
     recipients:
-      - gkrwjaeoqkr1@gmail.com
+      - youngho110@naver.com
