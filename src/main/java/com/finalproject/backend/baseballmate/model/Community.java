@@ -82,6 +82,7 @@ public class Community extends Timestamped{
     }
 
     public void updateCommunity(CommunityRequestDto requestDto) {
+        this.filePath = requestDto.getFilePath();
         this.content = requestDto.getContent();
     }
 }

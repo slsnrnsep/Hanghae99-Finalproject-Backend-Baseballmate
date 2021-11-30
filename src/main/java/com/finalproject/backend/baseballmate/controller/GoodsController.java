@@ -51,6 +51,7 @@ public class GoodsController {
     }
 
     // 긋즈 수정
+    //굿즈 수정은 프론트에서 진행안한다고홤
     @ApiOperation(value = "굿즈 게시글 수정", notes = "굿즈 게시글을 수정합니다.")
     @PutMapping("/goods/{goodsId}")
     public GoodsResponseDto updateGoods(@PathVariable("goodsId") Long id, @AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody GoodsRequestDto requestDto) {

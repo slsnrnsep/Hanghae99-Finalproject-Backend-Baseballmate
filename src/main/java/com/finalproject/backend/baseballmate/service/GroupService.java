@@ -405,7 +405,7 @@ public class GroupService {
 
 
     // 모임 게시글 수정하기
-    public MsgResponseDto updateGroup(Long groupId, MultipartFile file, GroupRequestDto requestDto, UserDetailsImpl userDetails) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+    public MsgResponseDto updateGrouplegacy(Long groupId, MultipartFile file, GroupRequestDto requestDto, UserDetailsImpl userDetails) throws UnsupportedEncodingException, NoSuchAlgorithmException {
         // 유저 로그인 체크
         if(userDetails == null) {
             throw new IllegalArgumentException("로그인 하신 후 이용해주세요.");
@@ -451,6 +451,32 @@ public class GroupService {
                 String filename = picturelist[random.nextInt(10)+1];
                 group.setFilePath(filename);
 
+            }
+            group.updateGroup(requestDto);
+            groupRepository.save(group);
+            MsgResponseDto msgResponseDto = new MsgResponseDto("success", "수정 완료");
+            return msgResponseDto;
+        } else {
+            throw new NullPointerException("해당 게시글이 존재하지 않습니다.");
+        }
+    }
+
+    // 모임 게시글 수정하기
+    public MsgResponseDto updateGroup(Long groupId, GroupRequestDto requestDto, UserDetailsImpl userDetails) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+        // 유저 로그인 체크
+        if(userDetails == null) {
+            throw new IllegalArgumentException("로그인 하신 후 이용해주세요.");
+        }
+
+        String loginedUserId = userDetails.getUser().getUserid();
+        String createdUserId = "";
+
+        Group group = groupRepository.findByGroupId(groupId);
+        if(group != null) {
+            createdUserId = group.getCreatedUser().getUserid();
+
+            if(!loginedUserId.equals(createdUserId)) {
+                throw new IllegalArgumentException("수정 권한이 없습니다.");
             }
             group.updateGroup(requestDto);
             groupRepository.save(group);
