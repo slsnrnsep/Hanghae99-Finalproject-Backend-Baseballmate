@@ -21,7 +21,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@Api(tags = {"10. 마이페이지"}) // Swagger
+@Api(tags = {"9-1. 마이페이지"}) // Swagger
 public class MypageController {
 
     private final GroupService groupService;

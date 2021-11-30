@@ -22,4 +22,6 @@ public class AllCommunityDto {
     List<CommunityComment> communityCommentList;
     List<CommunityLikes> communityLikesList;
 //    List<CommunityComment> communityCommentList;
+    Long userId;
+    String usertype;
 }

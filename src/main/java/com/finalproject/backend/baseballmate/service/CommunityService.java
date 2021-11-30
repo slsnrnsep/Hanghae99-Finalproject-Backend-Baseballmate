@@ -69,7 +69,17 @@ public class CommunityService {
             User loginedUser = userDetails.getUser();
             String communityUserPicture = loginedUser.getPicture();
             String myTeam = loginedUser.getMyselectTeam();
-            Community community = new Community(loginedUser, requestDto, communityUserPicture, myTeam);
+            Long userId = loginedUser.getId();
+            String usertype = "";
+            if(loginedUser.getKakaoId() == null)
+            {
+                usertype = "normal";
+            }
+            else
+            {
+                usertype = "kakao";
+            }
+            Community community = new Community(loginedUser, requestDto, communityUserPicture, myTeam,userId,usertype);
             communityRepository.save(community);
             MsgResponseDto msgResponseDto = new MsgResponseDto("success", "등록완료");
             return msgResponseDto;
@@ -97,9 +107,10 @@ public class CommunityService {
             List<CommunityComment> communityCommentList = communityCommentRepository.findAllByCommunity_CommunityIdOrderByCreatedAtAsc(communityId);
             List<CommunityLikes> communityLikesList = communityLikesRepository.findAllByCommunitylikes_CommunityId(community.getCommunityId());
 //            List<CommunityComment> communityCommentList = communityCommentRepository.countAllByCommunityCommentId(communityId);
-
+            Long userId = community.getUserId();
+            String usertype = community.getUsertype();
             AllCommunityDto communityDto =
-                    new AllCommunityDto(communityId, userName, content, communityUserPicture, filePath, myTeam,dayBefore,communityCommentList,communityLikesList);
+                    new AllCommunityDto(communityId, userName, content, communityUserPicture, filePath, myTeam,dayBefore,communityCommentList,communityLikesList,userId,usertype);
             data.add(communityDto);
         }
         return data;
@@ -116,9 +127,10 @@ public class CommunityService {
         String filePath = community.getFilePath();
         String myTeam = community.getMyTeam();
         List<CommunityComment> communityCommentList = communityCommentRepository.findAllByCommunity_CommunityIdOrderByCreatedAtAsc(communityId);
-
+        Long userId = community.getUserId();
+        String usertype = community.getUsertype();
         CommunityDetailResponseDto communityDetailResponseDto =
-                new CommunityDetailResponseDto(userName, content, communityUserPicture, filePath, myTeam, communityCommentList);
+                new CommunityDetailResponseDto(userName, content, communityUserPicture, filePath, myTeam, communityCommentList,userId,usertype);
         return communityDetailResponseDto;
     }
 

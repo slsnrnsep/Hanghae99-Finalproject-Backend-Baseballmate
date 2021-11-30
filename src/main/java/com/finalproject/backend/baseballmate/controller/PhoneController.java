@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@Api(tags = {"11. 휴대폰인증"}) // Swagger
+@Api(tags = {"9-2. 휴대폰인증"}) // Swagger
 public class PhoneController {
 
     private final PhoneService phoneService;

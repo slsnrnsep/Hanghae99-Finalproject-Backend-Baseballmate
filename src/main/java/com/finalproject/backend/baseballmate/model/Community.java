@@ -42,6 +42,11 @@ public class Community extends Timestamped{
     @Column
     private String myTeam;
 
+    @Column
+    private Long userId;
+
+    @Column
+    private String usertype;
     //종아요
     @JsonManagedReference
     @OneToMany(mappedBy = "communitylikes", cascade = CascadeType.ALL)
@@ -62,17 +67,19 @@ public class Community extends Timestamped{
 
 
     //코멘트
-    @JsonBackReference
-    @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE)
+    @JsonManagedReference
+    @OneToMany(mappedBy = "community", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CommunityComment> communityCommentList = new ArrayList<>();
 
-    public Community(User loginedUser, CommunityRequestDto requestDto, String communityUserPicture, String myTeam){
+    public Community(User loginedUser, CommunityRequestDto requestDto, String communityUserPicture, String myTeam,Long userId, String usertype){
         this.createdUser = loginedUser;
         this.userName = loginedUser.getUsername();
         this.content = requestDto.getContent();
         this.filePath = requestDto.getFilePath();
         this.myTeam = myTeam;
         this.communityUserPicture = communityUserPicture;
+        this.userId = userId;
+        this.usertype = usertype;
     }
 
     public void updateCommunity(CommunityRequestDto requestDto) {
