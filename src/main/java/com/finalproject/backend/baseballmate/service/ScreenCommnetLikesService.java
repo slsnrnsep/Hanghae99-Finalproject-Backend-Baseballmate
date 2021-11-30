@@ -23,7 +23,12 @@ public class ScreenCommnetLikesService {
     private final AlarmService alarmService;
 
     @Transactional
-    public boolean screenCommentLikes(Long screencommentId, LikesRequestDto likesRequestDto, UserDetailsImpl userDetails) {
+    public String screenCommentLikes(Long screencommentId, LikesRequestDto likesRequestDto, UserDetailsImpl userDetails) {
+        if(userDetails == null)
+        {
+            throw new IllegalArgumentException("로그인한 사용자만 가능한 기능입니다");
+        }
+
         User user = userRepository.findById(userDetails.getUser().getId()).orElseThrow(
                 () -> new IllegalArgumentException("로그인 정보를 찾을 수 없습니다.")
         );
@@ -38,11 +43,11 @@ public class ScreenCommnetLikesService {
         user.deleteScreenCommentLikes(likes);
         screenComment.deleteLikes(likes);
         screenCommentLikesRepository.delete(likes);
-        return false;
+        return "false";
         }else{
             if(screenCommentLikesRepository.findByScreenComment_ScreenCommentIdAndUserId(screenComment.getScreenCommentId(), user.getId()).isPresent())
             {
-                return true;
+                return "true";
             }
             ScreenCommentLikes likes = screenCommentLikesRepository.save(new ScreenCommentLikes(screenComment,user));
             user.addScreenCommentLikes(likes);
@@ -51,7 +56,7 @@ public class ScreenCommnetLikesService {
                     () -> new IllegalArgumentException("로그인한 사용자 정보를 찾을 수 없습니다")
             );
             alarmService.alarmMethod(alarmuser,user.getUsername(),screenComment.getComment(),"댓글","좋아요를 표시했습니다!",screenComment.getScreen().getScreenId(),"screen");
-            return true;
+            return "true";
         }
     }
 }

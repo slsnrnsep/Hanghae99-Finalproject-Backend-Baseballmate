@@ -33,7 +33,7 @@ public class JoinRequestsService {
     private final AlarmRepository alarmRepository;
 
     //유저 신청정보 저장
-    public String requestJoin(UserDetailsImpl userDetails, Long postId) {
+    public String requestGroupJoin(UserDetailsImpl userDetails, Long postId) {
         Long userId = userDetails.getUser().getId();
         List<CanceledList> canceledLists = canceledListRepository.findAllByCanceledGroup_GroupId(postId);
 //        List<Long> canceledUserInxList = new ArrayList<>();
@@ -104,7 +104,7 @@ public class JoinRequestsService {
     }
 
     //유저 신청정보 불러오기
-    public List<UserInfoAndPostResponseDto> requestJoinList(UserDetailsImpl userDetails) {
+    public List<UserInfoAndPostResponseDto> requestGroupJoinList(UserDetailsImpl userDetails) {
         Long userId = userDetails.getUser().getId();
         List<JoinRequests> joinRequestsList = joinRequestQueryRepository.findtypebyUserId(userId,"group");
         List<UserInfoAndPostResponseDto> userInfoAndPostResponseDtoList = new ArrayList<>();
@@ -131,7 +131,7 @@ public class JoinRequestsService {
     }
 
     // 신청 승인 대기 리스트
-    public List<MyAwaitRequestJoinResponseDto> myAwaitRequestJoinList(UserDetailsImpl userDetails) {
+    public List<MyAwaitRequestJoinResponseDto> myAwaitRequestGroupJoinList(UserDetailsImpl userDetails) {
         Long userId = userDetails.getUser().getId();
         List<JoinRequests> joinRequestsList = joinRequestsRepository.findByUserId(userId);
         List<MyAwaitRequestJoinResponseDto> myAwaitRequestJoinResponseDtoList = new ArrayList<>();
@@ -155,7 +155,7 @@ public class JoinRequestsService {
 
     // 채팅방 참가 신청 승인/거절
     @Transactional
-    public String acceptJoinRequest(Long joinRequestId, boolean tOrF) {
+    public String acceptJoinGroupRequest(Long joinRequestId, boolean tOrF) {
         JoinRequests joinRequests = joinRequestsRepository.findById(joinRequestId).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 신청입니다.")
         );
@@ -212,7 +212,7 @@ public class JoinRequestsService {
 
     // 채팅방 입장 신청 취소
     @Transactional
-    public String requestJoinCancel(UserDetailsImpl userDetails, Long joinId) {
+    public String requestGroupJoinCancel(UserDetailsImpl userDetails, Long joinId) {
         User user = userDetails.getUser();
 
         JoinRequests joinRequests = joinRequestsRepository.findByUserIdAndPostId(user.getId(), joinId);
@@ -256,7 +256,7 @@ public class JoinRequestsService {
 
 
     //유저 신청정보 저장
-    public String requestJoin2(UserDetailsImpl userDetails, Long postId) {
+    public String requestScreenJoin(UserDetailsImpl userDetails, Long postId) {
         Long userId = userDetails.getUser().getId();
         List<CanceledScreenList> canceledLists = canceledScreenListRepository.findAllByCancledScreen_ScreenId(postId);
 //        List<Long> canceledUserInxList = new ArrayList<>();
@@ -327,7 +327,7 @@ public class JoinRequestsService {
     }
 
     //유저 신청정보 불러오기
-    public List<UserInfoAndPostResponseDto> requestJoinList2(UserDetailsImpl userDetails) {
+    public List<UserInfoAndPostResponseDto> requestScreenJoinList(UserDetailsImpl userDetails) {
         Long userId = userDetails.getUser().getId();
         List<JoinRequests> joinRequestsList = joinRequestQueryRepository.findtypebyUserId(userId,"screen");
         List<UserInfoAndPostResponseDto> userInfoAndPostResponseDtoList = new ArrayList<>();
@@ -354,7 +354,7 @@ public class JoinRequestsService {
     }
 
     // 신청 승인 대기 리스트
-    public List<MyAwaitRequestJoinResponseDto> myAwaitRequestJoinList2(UserDetailsImpl userDetails) {
+    public List<MyAwaitRequestJoinResponseDto> myAwaitRequestScreenJoinList(UserDetailsImpl userDetails) {
         Long userId = userDetails.getUser().getId();
         List<JoinRequests> joinRequestsList = joinRequestsRepository.findByUserId(userId);
         List<MyAwaitRequestJoinResponseDto> myAwaitRequestJoinResponseDtoList = new ArrayList<>();
@@ -377,7 +377,7 @@ public class JoinRequestsService {
 
     // 채팅방 참가 신청 승인/거절
     @Transactional
-    public String acceptJoinRequest2(Long joinRequestId, boolean tOrF) {
+    public String acceptScreenJoinRequest(Long joinRequestId, boolean tOrF) {
         JoinRequests joinRequests = joinRequestsRepository.findById(joinRequestId).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 신청입니다.")
         );
@@ -421,7 +421,7 @@ public class JoinRequestsService {
 
     // 채팅방 입장 신청 취소
     @Transactional
-    public String requestJoinCancel2(UserDetailsImpl userDetails, Long joinId) {
+    public String requestScreenJoinCancel(UserDetailsImpl userDetails, Long joinId) {
         User user = userDetails.getUser();
 
         JoinRequests joinRequests = joinRequestsRepository.findByUserIdAndPostId(user.getId(), joinId);

@@ -40,7 +40,8 @@ public class ChatRoomService {
 
     //채팅방생성
     @Transactional
-    public ChatRoomCreateResponseDto createChatRoom(Long groupId, User user) {
+    public ChatRoomCreateResponseDto createGroupChatRoom(Long groupId, UserDetailsImpl userDetails) {
+        User user = userDetails.getUser();
         String uuid = UUID.randomUUID().toString();
         Group group = groupRepository.findByGroupId(groupId);
         ChatRoom chatRoom = new ChatRoom(uuid, group, user);
@@ -53,7 +54,8 @@ public class ChatRoomService {
 
     //채팅방생성
     @Transactional
-    public ChatRoomCreateResponseDto createChatRoom2(Long groupId, User user) {
+    public ChatRoomCreateResponseDto createScreenChatRoom(Long groupId, UserDetailsImpl userDetails) {
+        User user = userDetails.getUser();
         String uuid = UUID.randomUUID().toString();
         Screen group = screenRepository.findByScreenId(groupId);
         ChatRoom chatRoom = new ChatRoom(uuid, group, user);
@@ -161,7 +163,7 @@ public class ChatRoomService {
 
     // 채팅방 나가기
     @Transactional
-    public void quitChat(Long groupId, UserDetailsImpl userDetails) {
+    public void quitGroupChat(Long groupId, UserDetailsImpl userDetails) {
         Group group = groupRepository.findByGroupId(groupId);
         if (group == null) {
             throw new IllegalArgumentException("존재하지 않는 게시글입니다.");
@@ -179,7 +181,7 @@ public class ChatRoomService {
 
     // 채팅방 나가기
     @Transactional
-    public void quitChat2(Long groupId, UserDetailsImpl userDetails) {
+    public void quitScreenChat(Long groupId, UserDetailsImpl userDetails) {
         Screen group = screenRepository.findByScreenId(groupId);
         if (group == null) {
             throw new IllegalArgumentException("존재하지 않는 게시글입니다.");

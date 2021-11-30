@@ -29,7 +29,6 @@ public class StompHandler implements ChannelInterceptor {
     private final ChatMessageService chatMessageService;
     private final UserRepository userRepository;
     private final AllChatInfoService allChatInfoService;
-    private final ChatRoomRepository chatRoomRepository;
 
     // 최초로 받은 클라이언트의 메시지를 인터셉트하여 처리
     @Override

@@ -10,6 +10,7 @@ import com.finalproject.backend.baseballmate.requestDto.GroupRequestDto;
 import com.finalproject.backend.baseballmate.responseDto.AllGroupResponseDto;
 import com.finalproject.backend.baseballmate.responseDto.GroupDetailResponseDto;
 import com.finalproject.backend.baseballmate.responseDto.HotGroupResponseDto;
+import com.finalproject.backend.baseballmate.responseDto.MsgResponseDto;
 import com.finalproject.backend.baseballmate.security.UserDetailsImpl;
 import com.finalproject.backend.baseballmate.utils.MD5Generator;
 import lombok.RequiredArgsConstructor;
@@ -282,11 +283,47 @@ public class GroupService {
 
     // 모임 생성
     @Transactional
-    public Group createGroup(GroupRequestDto requestDto, User loginedUser) {
-        Group Group = new Group(requestDto, loginedUser);
-        groupRepository.save(Group);
-        chatRoomService.createChatRoom(Group.getGroupId(), loginedUser);
-        return Group;
+    public MsgResponseDto createGroup(GroupRequestDto requestDto, UserDetailsImpl userDetails,MultipartFile file) {
+        if (userDetails == null)
+        {
+            throw new IllegalArgumentException("로그인 한 이용자만 모임을 생성할 수 있습니다.");
+        }
+        try {
+            String filename = picturelist[random.nextInt(10) + 1];
+            if (file != null) {
+                String origFilename = file.getOriginalFilename();
+                filename = new MD5Generator(origFilename).toString() + ".jpg";
+                /* 실행되는 위치의 'files' 폴더에 파일이 저장됩니다. */
+
+                String savePath = System.getProperty("user.dir") + commonPath;
+                /* 파일이 저장되는 폴더가 없으면 폴더를 생성합니다. */
+                //files.part.getcontenttype() 해서 이미지가 아니면 false처리해야함.
+                if (!new File(savePath).exists()) {
+                    try {
+                        new File(savePath).mkdir();
+                    } catch (Exception e) {
+                        e.getStackTrace();
+                    }
+                }
+                String filePath = savePath + "/" + filename;// 이경로는 우분투랑 윈도우랑 다르니까 주의해야댐 우분투 : / 윈도우 \\ 인것같음.
+                file.transferTo(new File(filePath));
+            }
+
+            requestDto.setFilePath(filename);
+
+            User loginedUser = userDetails.getUser();
+            String loginedUsername = userDetails.getUser().getUsername();
+            Group Group = new Group(requestDto, loginedUser);
+            groupRepository.save(Group);
+            chatRoomService.createGroupChatRoom(Group.getGroupId(), userDetails);
+            MsgResponseDto msgResponseDto = new MsgResponseDto("success", "모임 등록 성공");
+            return msgResponseDto;
+        }
+        catch (Exception e)
+        {
+            MsgResponseDto msgResponseDto = new MsgResponseDto("failed", "모임 등록 실패");
+            return msgResponseDto;
+        }
     }
 
     // 모임 상세 조회
@@ -346,7 +383,7 @@ public class GroupService {
 
 
     // 모임 게시글 수정하기
-    public void updateGroup(Long groupId, MultipartFile file, GroupRequestDto requestDto, UserDetailsImpl userDetails) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+    public MsgResponseDto updateGroup(Long groupId, MultipartFile file, GroupRequestDto requestDto, UserDetailsImpl userDetails) throws UnsupportedEncodingException, NoSuchAlgorithmException {
         // 유저 로그인 체크
         if(userDetails == null) {
             throw new IllegalArgumentException("로그인 하신 후 이용해주세요.");
@@ -395,6 +432,8 @@ public class GroupService {
             }
             group.updateGroup(requestDto);
             groupRepository.save(group);
+            MsgResponseDto msgResponseDto = new MsgResponseDto("success", "수정 완료");
+            return msgResponseDto;
         } else {
             throw new NullPointerException("해당 게시글이 존재하지 않습니다.");
         }
@@ -402,7 +441,11 @@ public class GroupService {
 
     //모임 게시글 삭제하기
     @Transactional
-    public void deleteGroup(Long groupId, UserDetailsImpl userDetails) {
+    public MsgResponseDto deleteGroup(Long groupId, UserDetailsImpl userDetails) {
+        if(userDetails == null)
+        {
+            throw new IllegalArgumentException("로그인 하신 후 이용해주세요.");
+        }
         String loginedUserId = userDetails.getUser().getUserid();
         String createdUserId = "";
 
@@ -418,17 +461,23 @@ public class GroupService {
             groupRepository.deleteById(groupId);
             joinRequestQueryRepository.findBydeletegroup(groupId);
             Alarm targetAlarm = alarmRepository.findByAlarmTypeAndPostId("Group",groupId);
-            alarmRepository.deleteById(targetAlarm.getId());
+            if(targetAlarm!=null){
+                alarmRepository.deleteById(targetAlarm.getId());
+                MsgResponseDto msgResponseDto = new MsgResponseDto("success", "삭제 성공");
+                return msgResponseDto;
+            }
+
         } else {
             throw new NullPointerException("해당 게시글이 존재하지 않습니다.");
         }
 
-
+        MsgResponseDto msgResponseDto = new MsgResponseDto("success", "삭제 성공");
+        return msgResponseDto;
     }
 
     // 모임 참여하기
     @Transactional
-    public void applyGroup(Long groupId, UserDetailsImpl userDetails) {
+    public MsgResponseDto applyGroup(Long groupId, UserDetailsImpl userDetails) {
         // 참여 신청 들어온 groupid에 해당하는 그룹을 찾기
         Group appliedGroup = groupRepository.findByGroupId(groupId);
 
@@ -527,7 +576,8 @@ public class GroupService {
                 throw new IllegalArgumentException("모임을 만들었거나 참가이력이 있습니다."); // 모임을 만든 사람이 요청하는 경우 or 참가 이력이 있는 경우
             }
         }
-
+        MsgResponseDto msgResponseDto = new MsgResponseDto("success", "모임 신청 완료");
+        return msgResponseDto;
     }
 
     // 모임 취소하기
@@ -537,7 +587,11 @@ public class GroupService {
     // 4. 그룹 내의 취소 리스트에 id값 추가하기
 
     @Transactional
-    public void cancelApplication(Long groupId, UserDetailsImpl userDetails) {
+    public MsgResponseDto cancelApplication(Long groupId, UserDetailsImpl userDetails) {
+        if (userDetails == null)
+        {
+            throw new IllegalArgumentException("로그인 한 사용자만 신청할 수 있습니다.");
+        }
         Group group = groupRepository.findByGroupId(groupId);
         // canceleduser에 넣을 리스트 생성
         List<User> addCanceledUserList = new ArrayList<>();
@@ -597,24 +651,30 @@ public class GroupService {
                 CanceledList canceledList = new CanceledList(loginedUser, group);
                 canceledListRepository.save(canceledList);
 
+
+
             }
         }
-
-
+        MsgResponseDto msgResponseDto = new MsgResponseDto("success", "모임 신청 취소 완료");
+        return msgResponseDto;
     }
 
     @Transactional
-    public String denyGroup(Long groupId, UserDetailsImpl userDetails) {
+    public MsgResponseDto denyGroup(Long groupId, UserDetailsImpl userDetails) {
         Group group = groupRepository.findByGroupId(groupId);
         if (group.getCreatedUser().getUserid().equals(userDetails.getUser().getUserid())) {
             if (group.isAllowtype()) {
                 group.setAllowtype(false);
                 // 확정되면 채팅방 형성되게
 //                chatRoomService.createChatRoom(userDetails.getUser());
-                return "모임 확정 완료. 이제부터 모집을 하지 못합니다.";
+                String msg = "모임 확정 완료. 이제부터 모집을 하지 못합니다.";
+                MsgResponseDto msgResponseDto = new MsgResponseDto("success", msg);
+                return msgResponseDto;
             } else {
                 group.setAllowtype(true);
-                return "모임 확정취소 완료. 이제부터 모집을 다시 할 수 있습니다.";
+                String msg =  "모임 확정취소 완료. 이제부터 모집을 다시 할 수 있습니다.";
+                MsgResponseDto msgResponseDto = new MsgResponseDto("success", msg);
+                return msgResponseDto;
             }
         } else {
             throw new IllegalArgumentException("모임장만 확정이 가능합니다");
