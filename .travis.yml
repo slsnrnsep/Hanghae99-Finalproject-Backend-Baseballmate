@@ -23,7 +23,7 @@ notifications:
       - youngho110@naver.com
 
 before_deploy:
-  - zip -r baseballmate_deploy \*
+  - zip -r baseballmate_deploy *
   - mkdir -p deploy
   - mv baseballmate_deploy.zip deploy/baseballmate_deploy.zip
 
