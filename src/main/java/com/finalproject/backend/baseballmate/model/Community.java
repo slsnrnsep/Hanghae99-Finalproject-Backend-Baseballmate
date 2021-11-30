@@ -1,6 +1,5 @@
 package com.finalproject.backend.baseballmate.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.finalproject.backend.baseballmate.requestDto.CommunityRequestDto;
 import lombok.Getter;
