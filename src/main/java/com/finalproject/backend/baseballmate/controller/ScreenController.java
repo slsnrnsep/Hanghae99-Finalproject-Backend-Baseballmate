@@ -29,12 +29,18 @@ public class ScreenController {
     private final ScreenService screenService;
 
     // 스크린모임 생성
-    @ApiOperation(value = "스크린모임 게시글 작성", notes = "스크린모임 게시글을 작성합니다.")
-    @PostMapping("/screen")
-    public ScreenResponseDto postScreen(@RequestParam(value = "file",required = false) MultipartFile files, ScreenRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
-        return screenService.createScreen(requestDto, userDetails,files);
+    @ApiOperation(value = "(Legacy)스크린모임 게시글 작성", notes = "(Legacy)스크린모임 게시글을 작성합니다.")
+    @PostMapping("/screen/legacy")
+    public ScreenResponseDto postScreenlegacy(@RequestParam(value = "file",required = false) MultipartFile files, ScreenRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        return screenService.createScreenlegacy(requestDto, userDetails,files);
     }
 
+    // 스크린모임 생성
+    @ApiOperation(value = "스크린모임 게시글 작성", notes = "스크린모임 게시글을 작성합니다.")
+    @PostMapping("/screen")
+    public ScreenResponseDto postScreen(@RequestBody ScreenRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        return screenService.createScreen(requestDto, userDetails);
+    }
     // 스크린야구 모임 전체 조회
     @GetMapping("/screen")
     @ApiOperation(value = "스크린모임 게시글 전체 조회", notes = "스크린모임 게시글을 전체 조회합니다.")

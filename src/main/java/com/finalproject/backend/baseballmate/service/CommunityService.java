@@ -34,12 +34,12 @@ public class CommunityService {
     private final CommunityCommentRepository communityCommentRepository;
     private final CommunityLikesRepository communityLikesRepository;
     private final FileService fileService;
-
-    String[] picturelist = {"basic0.jpg","basic1.jpg","basic2.jpg","basic3.jpg","basic4.jpg","basic5.jpg","basic6.jpg","basic7.jpg","basic8.jpg","basic9.jpg"};
+    String[] picturelist = {"basic0","basic1","basic2","basic3","basic4","basic5","basic6","basic7","basic8","basic9"};
+//    String[] picturelist = {"basic0.jpg","basic1.jpg","basic2.jpg","basic3.jpg","basic4.jpg","basic5.jpg","basic6.jpg","basic7.jpg","basic8.jpg","basic9.jpg"};
     Random random = new Random();
 
     @Transactional
-    public MsgResponseDto createCommunity(UserDetailsImpl userDetails, CommunityRequestDto requestDto,MultipartFile files) {
+    public MsgResponseDto createCommunitylegacy(UserDetailsImpl userDetails, CommunityRequestDto requestDto,MultipartFile files) {
 
         if(userDetails == null)
         {
@@ -87,6 +87,31 @@ public class CommunityService {
             MsgResponseDto msgResponseDto = new MsgResponseDto("fail", "등록실패");
             return msgResponseDto;
         }
+    }
+
+    @Transactional
+    public MsgResponseDto createCommunity(UserDetailsImpl userDetails, CommunityRequestDto requestDto) {
+        if (userDetails == null) {
+            throw new IllegalArgumentException("로그인 한 사용자만 등록 가능합니다");
+        }
+
+        User loginedUser = userDetails.getUser();
+        String communityUserPicture = loginedUser.getPicture();
+        String myTeam = loginedUser.getMyselectTeam();
+        Long userId = loginedUser.getId();
+        String usertype = "";
+        if (loginedUser.getKakaoId() == null) {
+            usertype = "normal";
+        } else {
+            usertype = "kakao";
+        }
+        if (requestDto.getFilePath() == "") {
+            requestDto.setFilePath(picturelist[random.nextInt(10) + 1]);
+        }
+        Community community = new Community(loginedUser, requestDto, communityUserPicture, myTeam, userId, usertype);
+        communityRepository.save(community);
+        MsgResponseDto msgResponseDto = new MsgResponseDto("success", "등록완료");
+        return msgResponseDto;
     }
 
     @Transactional

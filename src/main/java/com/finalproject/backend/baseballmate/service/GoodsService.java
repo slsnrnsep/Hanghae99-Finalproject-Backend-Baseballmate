@@ -36,11 +36,42 @@ public class GoodsService {
     private final GoodsLikesRepository goodsLikesRepository;
     private final UserRepository userRepository;
     private String commonPath = "/images";
-    String[] picturelist = {"basic0.jpg","basic1.jpg","basic2.jpg","basic3.jpg","basic4.jpg","basic5.jpg","basic6.jpg","basic7.jpg","basic8.jpg","basic9.jpg"};
+    String[] picturelist = {"basic0","basic1","basic2","basic3","basic4","basic5","basic6","basic7","basic8","basic9"};
+//    String[] picturelist = {"basic0.jpg","basic1.jpg","basic2.jpg","basic3.jpg","basic4.jpg","basic5.jpg","basic6.jpg","basic7.jpg","basic8.jpg","basic9.jpg"};
     Random random = new Random();
 
     @Transactional
-    public GoodsResponseDto createGoods(UserDetailsImpl userDetails, GoodsRequestDto requestDto, MultipartFile files) {
+    public GoodsResponseDto createGoods(UserDetailsImpl userDetails, GoodsRequestDto requestDto) {
+        if(userDetails == null)
+        {
+            throw new IllegalArgumentException("로그인 한 사용자만 등록 가능합니다");
+        }
+            User loginUser = userDetails.getUser();
+            String goodsUserPicture = loginUser.getPicture();
+            String myTeam = loginUser.getMyselectTeam();
+            String userAddress = loginUser.getAddress();
+
+            Long userId = loginUser.getId();
+            String usertype = "";
+            if (loginUser.getKakaoId() == null) {
+                usertype = "normal";
+            } else {
+                usertype = "kakao";
+            }
+
+            if(requestDto.getFilePath()=="")
+            {
+                requestDto.setFilePath(picturelist[random.nextInt(10) + 1]);
+            }
+            Goods goods = new Goods(loginUser, requestDto, goodsUserPicture, myTeam, userAddress, userId, usertype);
+            goodsRepository.save(goods);
+            GoodsResponseDto goodsResponseDto = new GoodsResponseDto("success", "등록완료");
+            return goodsResponseDto;
+        }
+
+
+    @Transactional
+    public GoodsResponseDto createGoodsLegacy(UserDetailsImpl userDetails, GoodsRequestDto requestDto, MultipartFile files) {
         if(userDetails == null)
         {
             throw new IllegalArgumentException("로그인 한 사용자만 등록 가능합니다");

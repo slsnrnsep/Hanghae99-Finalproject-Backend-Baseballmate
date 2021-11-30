@@ -37,14 +37,15 @@ public class ScreenService {
     private final UserRepository userRepository;
     private final CanceledScreenListRepository canceledScreenListRepository;
     private final ChatRoomService chatRoomService;
-    String[] picturelist = {"screen0.jpg","screen1.jpg","screen2.jpg","screen3.jpg","screen4.jpg","screen5.jpg","screen6.jpg","screen7.jpg","screen8.jpg","screen9.jpg"};
+    String[] picturelist = {"screen0","screen1","screen2","screen3","screen4","screen5","screen6","screen7","screen8","screen9"};
+//    String[] picturelist = {"screen0.jpg","screen1.jpg","screen2.jpg","screen3.jpg","screen4.jpg","screen5.jpg","screen6.jpg","screen7.jpg","screen8.jpg","screen9.jpg"};
     Random random = new Random();
     private final ChatRoomRepository chatRoomRepository;
     private final JoinRequestQueryRepository joinRequestQueryRepository;
     private final AlarmRepository alarmRepository;
 
     @Transactional
-    public ScreenResponseDto createScreen(ScreenRequestDto requestDto, UserDetailsImpl userDetails,MultipartFile files) {
+    public ScreenResponseDto createScreenlegacy(ScreenRequestDto requestDto, UserDetailsImpl userDetails,MultipartFile files) {
         if(userDetails == null)
         {
             throw new IllegalArgumentException("로그인 이용자만 스크인 야구 모임생성이 가능합니다");
@@ -86,6 +87,24 @@ public class ScreenService {
             return screenResponseDto;
         }
     }
+
+    @Transactional
+    public ScreenResponseDto createScreen(ScreenRequestDto requestDto, UserDetailsImpl userDetails) {
+        if(userDetails == null)
+        {
+            throw new IllegalArgumentException("로그인 이용자만 스크인 야구 모임생성이 가능합니다");
+        }
+        if (requestDto.getFilePath() == "") {
+            requestDto.setFilePath(picturelist[random.nextInt(10) + 1]);
+        }
+            User loginedUser = userDetails.getUser();
+            String loginedUsername = userDetails.getUser().getUsername();
+            Screen screen = new Screen(requestDto, loginedUser);
+            screenRepository.save(screen);
+            chatRoomService.createScreenChatRoom(screen.getScreenId(), userDetails);
+            ScreenResponseDto screenResponseDto = new ScreenResponseDto("success", "등록 성공");
+            return screenResponseDto;
+        }
 
 
     public List<AllScreenResponseDto> getAllScreens() {

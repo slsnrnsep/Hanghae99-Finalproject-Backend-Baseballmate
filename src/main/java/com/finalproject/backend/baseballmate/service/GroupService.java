@@ -40,11 +40,13 @@ public class GroupService {
     private final AlarmService alarmService;
     private final ChatRoomService chatRoomService;
     private final UserRepository userRepository;
-    String[] picturelist = {"basic0.jpg","basic1.jpg","basic2.jpg","basic3.jpg","basic4.jpg","basic5.jpg","basic6.jpg","basic7.jpg","basic8.jpg","basic9.jpg"};
+//    String[] picturelist = {"basic0.jpg","basic1.jpg","basic2.jpg","basic3.jpg","basic4.jpg","basic5.jpg","basic6.jpg","basic7.jpg","basic8.jpg","basic9.jpg"};
+    String[] picturelist = {"basic0","basic1","basic2","basic3","basic4","basic5","basic6","basic7","basic8","basic9"};
     Random random = new Random();
     private final ChatRoomRepository chatRoomRepository;
     private final JoinRequestQueryRepository joinRequestQueryRepository;
     private final AlarmRepository alarmRepository;
+    private final GroupQueryRepository groupQueryRepository;
 
     // 모임 전체 조회(등록 순)
     public List<AllGroupResponseDto> getAllGroups() {
@@ -283,7 +285,7 @@ public class GroupService {
 
     // 모임 생성
     @Transactional
-    public MsgResponseDto createGroup(GroupRequestDto requestDto, UserDetailsImpl userDetails,MultipartFile file) {
+    public MsgResponseDto createGrouplegacy(GroupRequestDto requestDto, UserDetailsImpl userDetails,MultipartFile file) {
         if (userDetails == null)
         {
             throw new IllegalArgumentException("로그인 한 이용자만 모임을 생성할 수 있습니다.");
@@ -326,10 +328,30 @@ public class GroupService {
         }
     }
 
+    @Transactional
+    public MsgResponseDto createGroup(GroupRequestDto requestDto, UserDetailsImpl userDetails) {
+        if (userDetails == null)
+        {
+            throw new IllegalArgumentException("로그인 한 이용자만 모임을 생성할 수 있습니다.");
+        }
+        if(requestDto.getFilePath()=="")
+        {
+            requestDto.setFilePath(picturelist[random.nextInt(10) + 1]);
+        }
+            User loginedUser = userDetails.getUser();
+            String loginedUsername = userDetails.getUser().getUsername();
+            Group Group = new Group(requestDto, loginedUser);
+            groupRepository.save(Group);
+            chatRoomService.createGroupChatRoom(Group.getGroupId(), userDetails);
+            MsgResponseDto msgResponseDto = new MsgResponseDto("success", "모임 등록 성공");
+            return msgResponseDto;
+        }
+
     // 모임 상세 조회
     public GroupDetailResponseDto getGroupDetail(Long id) {
         // 모임 entity에서 해당 모임에 대한 모든 정보 빼오기
         Group group = groupRepository.findByGroupId(id);
+//        Group group = groupQueryRepository.findAllGroups(id);
         List<Map<String, String>> appliedUsers = new ArrayList<>();
 
         if(group.getGroupApplications().size()!=0)
