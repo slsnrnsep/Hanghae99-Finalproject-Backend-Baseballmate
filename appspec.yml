@@ -13,7 +13,6 @@ files:
         group: ubuntu
 
     hooks:
-      ApplicationStart:
-        - location: deploy.sh
+      AfterInstall:
+        - location: execute-deploy.sh
           timeout: 60
-          runas: ubuntu
