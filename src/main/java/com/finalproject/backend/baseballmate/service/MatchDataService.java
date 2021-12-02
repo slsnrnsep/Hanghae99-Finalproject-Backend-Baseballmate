@@ -232,6 +232,9 @@ public class MatchDataService {
                 case "한화":
                     myteamMatch = matchInfomationList.get(i);
                     break;
+                case "양신팀":
+                    myteamMatch = matchInfomationList.get(i);
+                    break;
                 default:
                     throw new IllegalArgumentException("내가 선택한 구단의 경기를 찾을 수 없습니다");
             }
@@ -269,6 +272,9 @@ public class MatchDataService {
                     myteamMatch = matchInfomationList.get(i);
                     break;
                 case "한화":
+                    myteamMatch = matchInfomationList.get(i);
+                    break;
+                case "종범신팀":
                     myteamMatch = matchInfomationList.get(i);
                     break;
                 default:
