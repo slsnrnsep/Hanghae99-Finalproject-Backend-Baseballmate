@@ -133,7 +133,9 @@ public class AlarmService {
         createAlarm(alarmRequestDto);
     }
 
-    public void alarmMethod(User alarmuser,String target,String title,String type,String msg,Long postid,String normaltype){
+    public void alarmMethod(User alarmuser,
+                            String target,String title,String type,
+                            String msg,Long postid,String normaltype){
         AlarmRequestDto alarmRequestDto = new AlarmRequestDto();
         String signupAlarm = target+" 님께서  작성한 "+type +" : '" +title+"'에 "+msg;
         alarmRequestDto.setUserId(alarmuser.getId());

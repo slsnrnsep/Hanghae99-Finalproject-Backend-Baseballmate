@@ -154,7 +154,7 @@ public class UserService {
             String origFilename = file.getOriginalFilename();
             String filename = new MD5Generator(origFilename).toString() + "jpg";
 
-            String savePath = System.getProperty("user.dir") + commonPath;
+            String savePath = "/home/ubuntu/app/travis" + commonPath;
 
             // 파일이 저장되는 폴더가 없을 경우 폴더 생성
             if (!new File(savePath).exists()) {
