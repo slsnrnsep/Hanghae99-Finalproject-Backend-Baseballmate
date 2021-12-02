@@ -79,7 +79,7 @@ public class UserContorller {
 
 
     //patchmapping 일반화(구단 정보, 주소, 자기소개 등록 모두 가능)
-    @RequestMapping(value = "/users/{id}", method = RequestMethod.PATCH, consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    @RequestMapping(value = "/users/{id}/legacy", method = RequestMethod.PATCH, consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public List<Map<String, String>> updateUserInfo(
             @PathVariable("id") Long id,
             @RequestPart(required = false, value = "file") MultipartFile file,
@@ -94,7 +94,7 @@ public class UserContorller {
     }
 
     //patchmapping 일반화(구단 정보, 주소, 자기소개 등록 모두 가능)
-    @PutMapping("/users/{id}/renew")
+    @PutMapping("/users/{id}")
     public List<Map<String, String>> updateUserInfo2(
             @PathVariable("id") Long id, @RequestBody UserUpdateRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) throws UnsupportedEncodingException, NoSuchAlgorithmException {
 
