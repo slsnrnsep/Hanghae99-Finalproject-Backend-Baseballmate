@@ -99,9 +99,9 @@ public class UserService {
         }
     }
 
-    // user정보 부분 변경
+
     @Transactional
-    public List<Map<String, String>> partialUpdateUserInfo(long id, MultipartFile file, UserUpdateRequestDto requestDto, UserDetailsImpl userDetails) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+    public List<Map<String, String>> partialUpdateUserInfo(long id,MultipartFile file, UserUpdateRequestDto requestDto, UserDetailsImpl userDetails) throws UnsupportedEncodingException, NoSuchAlgorithmException {
 
         List<Map<String, String>> responseList = new ArrayList<>();
         Map<String,String> response = new HashMap<>();
@@ -144,7 +144,6 @@ public class UserService {
             responseList.add(0, response);
         }
 
-
         User updatedUser = userRepository.save(user);
 
         // 이미지 파일 확인하기
@@ -179,6 +178,61 @@ public class UserService {
 
         return responseList;
     }
+
+    @Transactional
+    public List<Map<String, String>> partialUpdateUserInfo2(long id, UserUpdateRequestDto requestDto, UserDetailsImpl userDetails) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+
+        List<Map<String, String>> responseList = new ArrayList<>();
+        Map<String,String> response = new HashMap<>();
+
+        // 로그인 유무 판별
+        if (userDetails == null) {
+            throw new IllegalArgumentException("로그인 한 이용자만 이용하실 수 있습니다.");
+        }
+
+        // userinx에 맞는 user 객체 가져오기
+        Optional<User> optionalUser = userRepository.findById(id);
+        User user = optionalUser.get();
+
+        // Dto로 온 정보를 유저 객체에 새롭게 저장
+        if (StringUtils.isNotBlank(requestDto.getUsername())) {
+            user.setUsername(requestDto.getUsername());
+            response.put("username", user.getUsername());
+            responseList.add(0, response);
+        }
+        if (StringUtils.isNotBlank(requestDto.getPassword())) {
+            user.setPassword(requestDto.getPassword());
+            response.put("password", user.getPassword());
+            responseList.add(0, response);
+        }
+
+        if (StringUtils.isNotBlank(requestDto.getMyteam())) {
+            user.setMyselectTeam(requestDto.getMyteam());
+            response.put("myteam", user.getMyselectTeam());
+            responseList.add(0, response);
+        }
+
+        if (StringUtils.isNotBlank(requestDto.getSelfIntroduction())){
+            user.setSelfIntroduction(requestDto.getSelfIntroduction());
+            response.put("selfIntroduction", user.getSelfIntroduction());
+            responseList.add(0, response);
+        }
+        if (StringUtils.isNotBlank(requestDto.getAddress())) {
+            user.setAddress(requestDto.getAddress());
+            response.put("address", user.getAddress());
+            responseList.add(0, response);
+        }
+        if (StringUtils.isNotBlank(requestDto.getFilePath())) {
+            user.setPicture(requestDto.getFilePath());
+            response.put("address", user.getPicture());
+            responseList.add(0, response);
+        }
+        userRepository.save(user);
+
+
+        return responseList;
+    }
+
 
 
     public HeaderDto kakaoLogin(String authorizedCode) {
