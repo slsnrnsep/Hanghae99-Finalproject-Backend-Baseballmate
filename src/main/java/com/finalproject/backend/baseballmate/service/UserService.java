@@ -224,7 +224,7 @@ public class UserService {
         }
         if (StringUtils.isNotBlank(requestDto.getFilePath())) {
             user.setPicture(requestDto.getFilePath());
-            response.put("address", user.getPicture());
+            response.put("picture", user.getPicture());
             responseList.add(0, response);
         }
         userRepository.save(user);
