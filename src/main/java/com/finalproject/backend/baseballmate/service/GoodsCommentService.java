@@ -48,7 +48,10 @@ public class GoodsCommentService {
 
         GoodsComment goodsComment = new GoodsComment(loginedUsername,requestDto,goods,loginUsered,loginUserIndex,loginedUserPicture,usertype);
         goodsCommentRepository.save(goodsComment);
-        alarmService.alarmMethod(goods.getCreatedUser(),loginedUsername,goods.getGoodsName(),"굿즈자랑","댓글을 남기셨습니다.",goodsid,"goods");
+        alarmService.alarmMethod(
+                goods.getCreatedUser(),loginedUsername,goods.getGoodsName(),
+                "굿즈자랑","댓글을 남기셨습니다.",goodsid,"goods");
+
         GoodsCommentResponseDto goodsCommentResponseDto = new GoodsCommentResponseDto("success", "등록완료");
         return goodsCommentResponseDto;
     }

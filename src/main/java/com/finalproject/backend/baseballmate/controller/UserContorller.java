@@ -93,6 +93,17 @@ public class UserContorller {
 
     }
 
+    //patchmapping 일반화(구단 정보, 주소, 자기소개 등록 모두 가능)
+    @PutMapping("/users/{id}/renew")
+    public List<Map<String, String>> updateUserInfo2(
+            @PathVariable("id") Long id, @RequestBody UserUpdateRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+
+        List<Map<String, String>> responseList = userService.partialUpdateUserInfo2(id, requestDto, userDetails);
+
+        return responseList;
+
+    }
+
     @PostMapping("/user/myteam")
     public MyteamRequestDto selectMyteam(@RequestBody MyteamRequestDto myteam, @AuthenticationPrincipal UserDetailsImpl userDetails)
     {

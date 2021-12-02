@@ -16,6 +16,9 @@ public interface GroupRepository extends JpaRepository<Group, Long>,GroupReposit
     List<Group> findAllByOrderByCreatedAtDesc();
     Group findByGroupId(Long groupId);
     List<Group> findTop5ByOrderByHotPercentDesc();
+
+    List<Group> findAllBySelectTeamOrderByHotPercentDesc(String selectTeam);
+
     // 페이지네이션, 모임 생성 시 선택한 구단
     List<Group> findAllBySelectTeamOrderByCreatedAtDesc(String selectTeam, Pageable pageable);
     List<Group> findAllByCreatedUser(User user);
