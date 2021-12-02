@@ -253,6 +253,7 @@ public class GroupService {
     // 핫한 내가 응원하는 모임 조회(hotPercent순) - 메인 페이지용
     public List<HotGroupResponseDto> getHotGroups(String team) {
         List<Group> hotGroupList = groupRepository.searchTeamHotgroup(team);
+//        List<Group> hotGroupList = groupRepository.findAllBySelectTeamOrderByHotPercentDesc(team);
         List<HotGroupResponseDto> hotGroupResponseDtoList = new ArrayList<>();
 
         for(int i=0; i< hotGroupList.size(); i++) {
