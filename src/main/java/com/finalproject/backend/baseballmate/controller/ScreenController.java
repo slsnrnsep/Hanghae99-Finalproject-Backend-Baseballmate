@@ -29,12 +29,18 @@ public class ScreenController {
     private final ScreenService screenService;
 
     // 스크린모임 생성
-    @ApiOperation(value = "스크린모임 게시글 작성", notes = "스크린모임 게시글을 작성합니다.")
-    @PostMapping("/screen")
-    public ScreenResponseDto postScreen(@RequestParam(value = "file",required = false) MultipartFile files, ScreenRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
-        return screenService.createScreen(requestDto, userDetails,files);
+    @ApiOperation(value = "(Legacy)스크린모임 게시글 작성", notes = "(Legacy)스크린모임 게시글을 작성합니다.")
+    @PostMapping("/screen/legacy")
+    public ScreenResponseDto postScreenlegacy(@RequestParam(value = "file",required = false) MultipartFile files, ScreenRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        return screenService.createScreenlegacy(requestDto, userDetails,files);
     }
 
+    // 스크린모임 생성
+    @ApiOperation(value = "스크린모임 게시글 작성", notes = "스크린모임 게시글을 작성합니다.")
+    @PostMapping("/screen")
+    public ScreenResponseDto postScreen(@RequestBody ScreenRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        return screenService.createScreen(requestDto, userDetails);
+    }
     // 스크린야구 모임 전체 조회
     @GetMapping("/screen")
     @ApiOperation(value = "스크린모임 게시글 전체 조회", notes = "스크린모임 게시글을 전체 조회합니다.")
@@ -75,10 +81,17 @@ public class ScreenController {
     }
 
     // 스크린모임 수정하기 - 모임을 생성한 사람만 수정할 수 있게
+    @ApiOperation(value = "(Legacy)스크린모임 게시글 수정", notes = "(Legacy)스크린모임 게시글을 수정합니다.")
+    @RequestMapping(value = "/screen/{screenId}/legacy", method = RequestMethod.PATCH, consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public MsgResponseDto updateGrouplegacy(@PathVariable Long screenId, @RequestPart(required = false, value = "file") MultipartFile file, ScreenRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+        return screenService.updateScreenlegacy(screenId, file, requestDto, userDetails);
+    }
+
+    // 스크린모임 수정하기 - 모임을 생성한 사람만 수정할 수 있게
     @ApiOperation(value = "스크린모임 게시글 수정", notes = "스크린모임 게시글을 수정합니다.")
-    @RequestMapping(value = "/screen/{screenId}", method = RequestMethod.PATCH, consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public MsgResponseDto updateGroup(@PathVariable Long screenId, @RequestPart(required = false, value = "file") MultipartFile file, ScreenRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) throws UnsupportedEncodingException, NoSuchAlgorithmException {
-        return screenService.updateScreen(screenId, file, requestDto, userDetails);
+    @PutMapping("/screen/{screenId}")
+    public MsgResponseDto updateGroup(@PathVariable Long screenId, @RequestBody ScreenRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+        return screenService.updateScreen(screenId, requestDto, userDetails);
     }
 
     // 스크린모임 삭제하기 - 모임을 생성한 사람만 삭제할 수 있게

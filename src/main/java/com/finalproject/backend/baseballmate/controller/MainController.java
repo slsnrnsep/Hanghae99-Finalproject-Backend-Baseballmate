@@ -100,7 +100,7 @@ public class MainController {
             @PathVariable("file") String file
     ) {
 
-        String path = System.getProperty("user.dir")+"/images/"+file; // 이경로는 우분투랑 윈도우랑 다르니까 주의해야댐 우분투 : / 윈도우 \\ 인것같음.
+        String path = "/home/ubuntu/app/travis"+"/images/"+file; // 이경로는 우분투랑 윈도우랑 다르니까 주의해야댐 우분투 : / 윈도우 \\ 인것같음.
         String folder = "";
         org.springframework.core.io.Resource resource = new FileSystemResource(path);
         if (!resource.exists())

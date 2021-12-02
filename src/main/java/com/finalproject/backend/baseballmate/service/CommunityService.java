@@ -34,12 +34,12 @@ public class CommunityService {
     private final CommunityCommentRepository communityCommentRepository;
     private final CommunityLikesRepository communityLikesRepository;
     private final FileService fileService;
-
-    String[] picturelist = {"basic0.jpg","basic1.jpg","basic2.jpg","basic3.jpg","basic4.jpg","basic5.jpg","basic6.jpg","basic7.jpg","basic8.jpg","basic9.jpg"};
+    String[] picturelist = {"basic0","basic1","basic2","basic3","basic4","basic5","basic6","basic7","basic8","basic9"};
+//    String[] picturelist = {"basic0.jpg","basic1.jpg","basic2.jpg","basic3.jpg","basic4.jpg","basic5.jpg","basic6.jpg","basic7.jpg","basic8.jpg","basic9.jpg"};
     Random random = new Random();
 
     @Transactional
-    public MsgResponseDto createCommunity(UserDetailsImpl userDetails, CommunityRequestDto requestDto,MultipartFile files) {
+    public MsgResponseDto createCommunitylegacy(UserDetailsImpl userDetails, CommunityRequestDto requestDto,MultipartFile files) {
 
         if(userDetails == null)
         {
@@ -87,6 +87,31 @@ public class CommunityService {
             MsgResponseDto msgResponseDto = new MsgResponseDto("fail", "등록실패");
             return msgResponseDto;
         }
+    }
+
+    @Transactional
+    public MsgResponseDto createCommunity(UserDetailsImpl userDetails, CommunityRequestDto requestDto) {
+        if (userDetails == null) {
+            throw new IllegalArgumentException("로그인 한 사용자만 등록 가능합니다");
+        }
+
+        User loginedUser = userDetails.getUser();
+        String communityUserPicture = loginedUser.getPicture();
+        String myTeam = loginedUser.getMyselectTeam();
+        Long userId = loginedUser.getId();
+        String usertype = "";
+        if (loginedUser.getKakaoId() == null) {
+            usertype = "normal";
+        } else {
+            usertype = "kakao";
+        }
+        if (requestDto.getFilePath() == "") {
+            requestDto.setFilePath(picturelist[random.nextInt(10) + 1]);
+        }
+        Community community = new Community(loginedUser, requestDto, communityUserPicture, myTeam, userId, usertype);
+        communityRepository.save(community);
+        MsgResponseDto msgResponseDto = new MsgResponseDto("success", "등록완료");
+        return msgResponseDto;
     }
 
     @Transactional
@@ -138,7 +163,7 @@ public class CommunityService {
     }
 
     @Transactional
-    public MsgResponseDto updateCommunity(Long communityId,  UserDetailsImpl userDetails, MultipartFile file,CommunityRequestDto requestDto) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+    public MsgResponseDto updateCommunity(Long communityId,  UserDetailsImpl userDetails,CommunityRequestDto requestDto) throws UnsupportedEncodingException, NoSuchAlgorithmException {
 
         if(userDetails == null)
         {
@@ -154,30 +179,6 @@ public class CommunityService {
             createdUserId = community.getCreatedUser().getUserid();
             if (!loginedUserId.equals(createdUserId)) {
                 throw new IllegalArgumentException("수정 권한이 없습니다");
-            }
-            if (file != null) {
-                String origFilename = file.getOriginalFilename();
-                String filename = new MD5Generator(origFilename).toString() + "jpg";
-
-                String savePath = System.getProperty("user.dir") + commonPath;
-
-                // 파일이 저장되는 폴더가 없을 경우 폴더 생성
-                if (!new java.io.File(savePath).exists()) {
-                    try {
-                        new java.io.File(savePath).mkdir();
-                    } catch (Exception e) {
-                        e.getStackTrace();
-                    }
-                }
-
-                // 이미지 파일 저장
-                String filePath = savePath + "/" + filename;
-                try{
-                    file.transferTo(new File(filePath));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                community.setFilePath(filename);
             }
             community.updateCommunity(requestDto);
             communityRepository.save(community);

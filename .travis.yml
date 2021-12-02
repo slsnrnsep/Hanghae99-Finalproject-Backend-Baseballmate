@@ -1,0 +1,57 @@
+language: java
+jdk:
+  - openjdk8 # java8이면, openjdk8
+
+branches:
+  only:
+    - main # git default 브런치를 등록한다. (ex. master)
+
+before_install:
+  - chmod +x gradlew
+# Travis CI 서버의 Home
+cache:
+  directories:
+    - '$HOME/.m2/repository'
+    - '$HOME/.gradle'
+
+script: "./gradlew clean build"
+
+# CI 실행 완료 시 메일로 알림
+notifications:
+  email:
+    recipients:
+      - youngho110@naver.com
+
+before_deploy:
+  - zip -r baseballmate_deploy *
+  - mkdir -p deploy
+  - mv baseballmate_deploy.zip deploy/baseballmate_deploy.zip
+
+deploy:
+  # S3로 파일업로드
+  - provider: s3
+    access_key_id: $AWS_ACCESS_KEY # Travis repo settings에 설정된 값
+    secret_access_key: $AWS_SECRET_KEY # Travis repos settings에 설정된 값
+    bucket: baseballmate-s3 # s3 버킷
+    region: ap-northeast-2
+    skip_cleanup: true
+    acl: private # zip 파일 접근을 private으로
+    local_dir: deploy # before_deploy에서 생성한 디렉토리
+    wait-until-deployed: true
+    on:
+      repo: slsnrnsep/Hanghae99-Finalproject-Backend-Baseballmate #Github 주소
+      branch: main
+
+  - provider: codedeploy
+    access_key_id: $AWS_ACCESS_KEY # Travis repo settings에 설정된 값
+    secret_access_key: $AWS_SECRET_KEY # Travis repo settings에 설정된 값
+    bucket: baseballmate-s3 # S3 버킷
+    key: baseballmate_deploy.zip # 빌드 파일을 압축해서 전달
+    bundle_type: zip
+    application: baseballmate-codedeploy # 웹 콘솔에서 등록한 CodeDeploy 어플리케이션
+    deployment_group: baseballmate-group # 웹 콘솔에서 등록한 CodeDeploy 배포 그룹
+    region: ap-northeast-2
+    wait-until-deployed: true
+    on:
+      repo: slsnrnsep/Hanghae99-Finalproject-Backend-Baseballmate
+      branch: main

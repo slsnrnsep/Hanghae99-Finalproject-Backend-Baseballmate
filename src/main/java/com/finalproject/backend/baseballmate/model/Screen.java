@@ -126,5 +126,6 @@ public class Screen extends Timestamped{
         this.nowAppliedNum = getNowAppliedNum();
         this.canApplyNum = (requestDto.getPeopleLimit() - getNowAppliedNum());
         this.groupDate = requestDto.getGroupDate();
+        this.filePath = requestDto.getFilePath();
     }
 }

@@ -24,10 +24,16 @@ public class GoodsController {
     private final GoodsService goodsService;
 
     // 굿즈 생성
+    @ApiOperation(value = "(Legacy)굿즈 게시글 작성", notes = "(Legacy)굿즈 게시글을 작성합니다.")
+    @PostMapping( "/goods/legacy")
+    public GoodsResponseDto postGoodsLegacy(@RequestPart(value = "file",required = false) MultipartFile files, GoodsRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        return goodsService.createGoodsLegacy(userDetails, requestDto,files);
+    }
+
     @ApiOperation(value = "굿즈 게시글 작성", notes = "굿즈 게시글을 작성합니다.")
     @PostMapping( "/goods")
-    public GoodsResponseDto postGoods(@RequestPart(value = "file",required = false) MultipartFile files, GoodsRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
-        return goodsService.createGoods(userDetails, requestDto,files);
+    public GoodsResponseDto postGoods(@RequestBody GoodsRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        return goodsService.createGoods(userDetails, requestDto);
     }
 
     // 굿즈 전체 조회
@@ -45,6 +51,7 @@ public class GoodsController {
     }
 
     // 긋즈 수정
+    //굿즈 수정은 프론트에서 진행안한다고홤
     @ApiOperation(value = "굿즈 게시글 수정", notes = "굿즈 게시글을 수정합니다.")
     @PutMapping("/goods/{goodsId}")
     public GoodsResponseDto updateGoods(@PathVariable("goodsId") Long id, @AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody GoodsRequestDto requestDto) {
