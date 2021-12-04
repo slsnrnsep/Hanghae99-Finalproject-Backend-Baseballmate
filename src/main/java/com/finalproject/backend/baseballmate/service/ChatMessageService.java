@@ -25,7 +25,6 @@ public class ChatMessageService {
     private final ChannelTopic channelTopic;
     private final RedisTemplate redisTemplate;
     private final UserRepository userRepository;
-//    private final BanUserListService banUserListService;
     private final ChatRoomService chatRoomService;
     private final ChatMessage chatMessage = new ChatMessage();
 

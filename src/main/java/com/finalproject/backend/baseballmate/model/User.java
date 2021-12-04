@@ -39,10 +39,6 @@ public class User {
     @Column
     private String phoneNumber;
 
-//    private test test;
-//    @OneToMany(mappedBy = "user")
-//    private List<Group> groupList = new ArrayList<Group>();
-
     // 참여 신청한 모임
 //    @JsonManagedReference
     @JsonIgnore
@@ -91,9 +87,6 @@ public class User {
     @Column(nullable = true, name = "PICTURE")
     private String picture;
 
-//    @Column(nullable = true, name = "EMAIL")
-//    private String email;
-//
     // 마이페이지에서 수정 가능한 정보
     @Column(nullable = true)
     private String selfIntroduction;

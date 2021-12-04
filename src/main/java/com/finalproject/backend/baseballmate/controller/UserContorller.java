@@ -10,10 +10,10 @@ import com.finalproject.backend.baseballmate.responseDto.LoginCheckResponseDto;
 import com.finalproject.backend.baseballmate.responseDto.MsgResponseDto;
 import com.finalproject.backend.baseballmate.security.JwtTokenProvider;
 import com.finalproject.backend.baseballmate.security.UserDetailsImpl;
-import com.finalproject.backend.baseballmate.service.FileService;
 import com.finalproject.backend.baseballmate.responseDto.LoginResponseDto;
 import com.finalproject.backend.baseballmate.service.UserService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -42,9 +42,9 @@ public class UserContorller {
     private final GroupCommentLikesRepository groupCommentLikesRepository;
     private final ScreenLikesRepository screenLikesRepository;
     private final ScreenCommentLikesRepository screenCommentLikesRepository;
-    private final FileService fileService;
 
     @PostMapping("/user/signup")
+    @ApiOperation(value = "일반유저 회원 가입", notes = "일반유저 회원 가입")
     public MsgResponseDto registerUser(@RequestBody UserRequestDto userRequestDto) {
         try
         {
@@ -63,6 +63,7 @@ public class UserContorller {
 
 
     @PostMapping("/user/login")
+    @ApiOperation(value = "일반유저 로그인", notes = "일반유저 로그인")
     public LoginResponseDto login(@RequestBody UserRequestDto userRequestDto)
     {
         User user = userRepository.findByUserid(userRequestDto.getUserid())
@@ -80,6 +81,7 @@ public class UserContorller {
 
     //patchmapping 일반화(구단 정보, 주소, 자기소개 등록 모두 가능)
     @RequestMapping(value = "/users/{id}/legacy", method = RequestMethod.PATCH, consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    @ApiOperation(value = "(legacy)유저 정보수정", notes = "(legacy)유저 정보수정")
     public List<Map<String, String>> updateUserInfo(
             @PathVariable("id") Long id,
             @RequestPart(required = false, value = "file") MultipartFile file,
@@ -90,11 +92,11 @@ public class UserContorller {
         List<Map<String, String>> responseList = userService.partialUpdateUserInfo(id, file, requestDto, userDetails);
 
         return responseList;
-
     }
 
     //patchmapping 일반화(구단 정보, 주소, 자기소개 등록 모두 가능)
     @PutMapping("/users/{id}")
+    @ApiOperation(value = "유저 정보수정", notes = "유저 정보수정")
     public List<Map<String, String>> updateUserInfo2(
             @PathVariable("id") Long id, @RequestBody UserUpdateRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) throws UnsupportedEncodingException, NoSuchAlgorithmException {
 
@@ -105,6 +107,7 @@ public class UserContorller {
     }
 
     @PostMapping("/user/myteam")
+    @ApiOperation(value = "유저 구단정보 수정", notes = "유저 구단정보 수정")
     public MyteamRequestDto selectMyteam(@RequestBody MyteamRequestDto myteam, @AuthenticationPrincipal UserDetailsImpl userDetails)
     {
         if(userDetails == null)
@@ -128,7 +131,9 @@ public class UserContorller {
         return myteamRequestDto;
     }
 
+    //프론트 요청
     @PostMapping("/user/logincheck")
+    @ApiOperation(value = "유저 로그인 체크", notes = "유저 로그인 체크")
     public LoginCheckResponseDto loginCheck(@AuthenticationPrincipal UserDetailsImpl userDetails)
     {
         String usertype = "";
@@ -148,8 +153,6 @@ public class UserContorller {
         {
             usertype = "kakao";
         }
-
-
 
         //프론트엔드 진식님 요청사항
         List<TimeLineLikes> TimeLineLikesList=timeLineLikesRepository.findAllByUserId(user.getId());
@@ -198,12 +201,12 @@ public class UserContorller {
 
     //카카오 로그인 api로 코드를 받아옴
     @GetMapping("/user/kakao/callback")
+    @ApiOperation(value = "카카오유저 로그인", notes = "카카오유저 로그인")
     @ResponseBody
     public HeaderDto kakaoLogin(@RequestParam(value = "code", required = false) String code)
     {
         return userService.kakaoLogin(code);
     }
 
-    //이거는 지워야합니다
 }
 

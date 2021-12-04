@@ -27,7 +27,6 @@ public class PhoneService {
         this.phoneService = phoneService;
     }
 
-//    public static final int ranNum = creatkey();
 
     private static int  creatkey(){
         int ranNum = (int)(Math.random() * (99999 - 10000 + 1)) + 10000;

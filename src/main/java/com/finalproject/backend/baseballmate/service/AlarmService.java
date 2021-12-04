@@ -24,13 +24,6 @@ import java.util.Map;
 public class AlarmService {
 
     private final AlarmRepository alarmRepository;
-//    private final UserService userService;
-
-//    public User findAlarmUser(Authentication authentication){
-//        return userService.findCurUser(authentication).orElseThrow(
-//                () -> new IllegalArgumentException("해당 회원이 존재하지 않습니다")
-//        );
-//    }
 
     // 알람조회
    @Transactional
@@ -146,7 +139,4 @@ public class AlarmService {
         createAlarm(alarmRequestDto);
     }
 
-//    public Map<String, Object> deleteAlarm(User user) {
-//       alarmRepository
-//    }
 }

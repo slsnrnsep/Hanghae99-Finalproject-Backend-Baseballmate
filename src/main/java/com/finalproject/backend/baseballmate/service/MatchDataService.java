@@ -28,24 +28,18 @@ public class MatchDataService {
     String savedate = "";
 
     @Transactional
-//    @PostConstruct
+//    @PostConstruct (서버가 켜질떄마다 실행)
     public void createKBODatas() throws IOException {
         List<MatchInfomation> matchInfomationList = new ArrayList<>();
 
         Document doc = Jsoup.connect(KBO_URL).get();
         Elements contents = doc.select("table tbody tr");
-        //test
-//        Elements contents2 = doc.select("span[class=td_date]");
-//
-//        System.out.println(contents2);
+
 
         for (Element content : contents) {
             Elements tdContents = content.select("td");
             //test
-//            System.out.println(tdContents.get(1).select("img").first());
-//            System.out.println("=======111111==========================");
-//            System.out.println(tdContents.get(1).select("img").attr("src"));
-//            System.out.println("===========222222======================");
+
             if (tdContents.select("a").text().contains("홈으로")) {
                 //마지막에 도달했다면 끝내주는 함수
                 break;
@@ -54,7 +48,6 @@ public class MatchDataService {
                 //프로 야구 경기가 없을때는 포문 탈출
                 continue;
             }
-//            if(!tdContents.select("a"))
             if (!tdContents.select("span[class=td_date]").isEmpty()) {
                 int count = tdContents.size();
                 String hometeam = tdContents.get(2).text().split(" ")[0];
@@ -100,18 +93,10 @@ public class MatchDataService {
 
         Document doc = Jsoup.connect(KBO_URL).get();
         Elements contents = doc.select("table tbody tr");
-        //test
-//        Elements contents2 = doc.select("span[class=td_date]");
-//
-//        System.out.println(contents2);
 
         for (Element content : contents) {
             Elements tdContents = content.select("td");
-            //test
-//            System.out.println(tdContents.get(1).select("img").first());
-//            System.out.println("=======111111==========================");
-//            System.out.println(tdContents.get(1).select("img").attr("src"));
-//            System.out.println("===========222222======================");
+
             if (tdContents.select("a").text().contains("홈으로")) {
                 //마지막에 도달했다면 끝내주는 함수
                 break;
@@ -120,7 +105,6 @@ public class MatchDataService {
                 //프로 야구 경기가 없을때는 포문 탈출
                 continue;
             }
-//            if(!tdContents.select("a"))
             if (!tdContents.select("span[class=td_date]").isEmpty()) {
                 int count = tdContents.size();
                 String hometeam = tdContents.get(2).text().split(" ")[0];
@@ -192,7 +176,6 @@ public class MatchDataService {
     @Transactional
     public List<MatchInfomation> myteamselect(String myteam) {
         List<MatchInfomation> myTeamMatchList = new ArrayList<>();
-//        List<MatchInfomation> myTeamawayMatchList = new ArrayList<>();
 
         List<MatchInfomation> matchInfomationList = getKBODatas();
         MatchInfomation myteamMatch;
@@ -284,14 +267,6 @@ public class MatchDataService {
             if (myteamMatch.getAwayteam().equals(myteam)) {
                 myTeamMatchList.add(myteamMatch);
             }
-
-//            KT 들어간 홈팀,어웨이든
-//             홈팀으로 KT드간 리스트 , 어웨이랑 KT드간 리스트
-
-//
-//        // 홈팀 어웨이 구분없이
-//        MyteamMatchResponseDto myteamMatchResponseDto = new MyteamMatchResponseDto(myTeamhomeMatchList,myTeamawayMatchList);
-//        return myteamMatchResponseDto;
 
         }
         return myTeamMatchList;

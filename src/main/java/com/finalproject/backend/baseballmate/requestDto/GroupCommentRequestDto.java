@@ -11,5 +11,4 @@ import lombok.Setter;
 @Setter
 public class GroupCommentRequestDto {
     private String comment;
-//    private Long groupId;
 }

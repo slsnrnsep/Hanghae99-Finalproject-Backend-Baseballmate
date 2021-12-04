@@ -9,7 +9,7 @@ import javax.annotation.PreDestroy;
 
 @Configuration
 //@Profile("local")
- @Profile("local")
+@Profile("3.34.46.135")
 public class EmbeddedRedisConfig {
     private RedisServer redisServer;
 
@@ -17,7 +17,7 @@ public class EmbeddedRedisConfig {
     public void start() {
         redisServer = RedisServer.builder()
                 .port(6379)
-                .setting("maxmemory 128M")
+                .setting("maxmemory 800M")
                 .build();
         redisServer.start();
     }

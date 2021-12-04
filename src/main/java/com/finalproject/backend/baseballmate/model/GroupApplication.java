@@ -35,16 +35,4 @@ public class GroupApplication {
         this.appliedGroup = group;
     }
 
-//    public void setUser(User user) {
-//        this.appliedUser = user;
-//    }
-//
-//    public void setGroup(Group group) {
-//        this.appliedGroup = group;
-//    }
-
-//    public void setApplication(User user, Group group) {
-//        this.appliedUser = user;
-//        this.appliedGroup = group;
-//    }
 }

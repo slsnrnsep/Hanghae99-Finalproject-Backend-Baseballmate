@@ -51,7 +51,6 @@ public class GoodsLikesService {
                 return "true";
             }
             GoodsLikes goodsLikes = goodsLikesRepository.save(new GoodsLikes(goods, user, userIdGoods));
-//            Long userIdGoods = goodsLikes.getGoods().getUserId();
             user.addGoodsLikes(goodsLikes);
             goods.addGoodsLikes(goodsLikes);
             alarmService.alarmMethod(goods.getCreatedUser(), user.getUsername(), goods.getGoodsName(),"굿즈자랑","좋아요를 표시하셨습니다!",goodsId,"goods");

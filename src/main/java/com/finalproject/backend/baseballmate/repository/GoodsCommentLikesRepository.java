@@ -8,6 +8,6 @@ import java.util.Optional;
 
 public interface GoodsCommentLikesRepository extends JpaRepository<GoodsCommentLikes, Long> {
     Optional<GoodsCommentLikes> findByGoodsCommentIdAndUserId(Long goodsId, Long UserId);
-    List<GoodsCommentLikes> findByUserId(Long UserId);
+
 
 }
