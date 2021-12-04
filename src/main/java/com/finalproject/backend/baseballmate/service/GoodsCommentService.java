@@ -27,8 +27,6 @@ public class GoodsCommentService {
             throw new IllegalArgumentException("로그인 사용자만 가능한 기능입니다");
         }
         User loginUser = userDetails.getUser();
-//        Goods goods = new Goods(username, requestDto);
-//        goodsRepository.save(goods);
         String loginUsered = loginUser.getUserid();
         String loginedUsername = loginUser.getUsername();
         Long loginUserIndex = loginUser.getId();

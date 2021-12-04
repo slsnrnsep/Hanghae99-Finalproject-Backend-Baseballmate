@@ -15,6 +15,5 @@ public interface GroupApplicationRepository extends JpaRepository<GroupApplicati
     List<GroupApplication> findAllByAppliedUser(User user);
     List<GroupApplication> findAllByAppliedGroup(Group group);
     GroupApplication findByAppliedGroupAndAppliedUser(Group group, User user);
-//    GroupApplication findByAppliedGroupGroupIdAAndAppliedUserId(Long appliedGroupId,Long userId);
     GroupApplication findByAppliedGroup_GroupIdAndAppliedUserId(Long appliedGroupId,Long userId);
 }

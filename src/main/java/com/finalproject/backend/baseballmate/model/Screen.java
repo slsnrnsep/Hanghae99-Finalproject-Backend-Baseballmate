@@ -50,9 +50,6 @@ public class Screen extends Timestamped{
     @OneToMany(mappedBy = "appliedScreen", cascade = CascadeType.ALL)
     private List<ScreenApplication> screenApplications = new ArrayList<>();
 
-//    @JsonManagedReference
-//    @OneToMany(mappedBy = "id")
-//    private List<User> canceledUser = new ArrayList<>();
 
     @Column
     private int nowAppliedNum; // 현재 참여신청한 인원 -> get으로 가져오기

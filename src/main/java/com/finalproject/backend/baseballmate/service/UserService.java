@@ -40,8 +40,6 @@ public class UserService {
     private String commonPath = "/images"; // 파일 저장할 기본 경로 변수 설정, 초기화
     private final AlarmService alarmService;
 
-//    @Value("${app.auth.tokenSecret}")
-//    private String secretKey;
 
     public void registerUser(UserRequestDto userRequestDto) {
         String username = userRequestDto.getUsername();
@@ -65,11 +63,9 @@ public class UserService {
         user.setAddress("전국");
         user.setPicture("sample.png");
 
-//        User user = new User(userid,username,password, userRequestDto.getPhonenumber());
 
         userRepository.save(user);
 
-//        User loginedUser = userDetails.getUser();
         AlarmRequestDto alarmRequestDto = new AlarmRequestDto();
         String signupAlarm = "안녕하세요 " + user.getUsername() + "님! 가입을 환영합니다";
         alarmRequestDto.setUserId(user.getId());
@@ -306,20 +302,3 @@ public class UserService {
         return userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("회원이 아닙니다."));
     }
 }
-
-// 클래스 묶는 중괄호 밖으로 빼놓음
-//    public void confirmNumChk(UserDetailsImpl userDetails, PhoneRequstDto requstDto) {
-//
-//       User user = userRepository.findByUserid(userDetails.getUser().getUserid()).orElseThrow(
-//                () -> new IllegalArgumentException("사용자 정보가 일치하지 않습니다")
-//        );
-//
-//        String ranNumChk = phoneService.sendMessage(requstDto);
-//        if(requstDto.getRanNum() == (ranNumChk)){
-//
-//            user.setRanNum(requstDto.getRanNum());
-//            userRepository.save(user);
-//        }else{
-//            throw new IllegalArgumentException("인증번호가 일치하지 않습니다");
-//        }
-//    }

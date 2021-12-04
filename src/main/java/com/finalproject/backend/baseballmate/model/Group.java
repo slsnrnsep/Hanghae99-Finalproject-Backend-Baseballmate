@@ -70,14 +70,8 @@ public class Group extends Timestamped{
 
     @Column
     private boolean allowtype; // false이면 확정된 모임
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "userIndex")
-//    private User userIndex; // user테이블의 id값
 
-//    @Column
-//    private String baseballTeam; // 구단 이름
-
-//     모임에 해당하는 채팅방
+//   모임에 해당하는 채팅방
     @OneToOne(mappedBy = "group", cascade = CascadeType.ALL, orphanRemoval = true)
     private ChatRoom chatRoom;
 

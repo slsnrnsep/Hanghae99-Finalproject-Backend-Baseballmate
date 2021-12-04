@@ -71,9 +71,4 @@ public class GroupComment extends Timestamped{
         this.comment = requestDto.getComment();
     }
 
-//    public GroupComment(GroupCommentRequestDto groupCommentRequestDto, String username) {
-//        this.commentUsername = username;
-//        this.comment = groupCommentRequestDto.getComment();
-//        this.groupId = groupCommentRequestDto.getGroupId();
-//    }
 }
