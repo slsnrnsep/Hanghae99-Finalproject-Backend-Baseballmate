@@ -9,7 +9,7 @@ Meetball은 **야구를 좋아하고 직관을 즐기는 사람들을 위한 모
 
 야구 경기 직관과 스크린 야구를 위한 모임 형성 서비스, 커뮤니티, 굿즈 게시판 등 야구를 좋아하는 사람들이 다양하게 이용할 수 있는 기능들을 제공합니다.
 
-사이트 URL : <p style='font-size:22px;'>🌐<a href='https://meetball.shop' target='_blank'>https://meetball.shop</a></p>
+사이트 URL <p style='font-size:22px;'>🌐<a href='https://meetball.shop' target='_blank'>https://meetball.shop</a></p>
 
 ---
 
@@ -21,7 +21,7 @@ Meetball은 **야구를 좋아하고 직관을 즐기는 사람들을 위한 모
     - Front-end(React) : <a href='https://github.com/lipton-web' style="text-decoration:none" target='_blank'>최진식</a>, <a href='https://github.com/jaeilnet' style="text-decoration:none" target='_blank'>주재일</a>, <a href='https://github.com/sinyubin' style="text-decoration:none" target='_blank'>신유빈</a>
     - Back-end(Spring) : <a href='https://github.com/slsnrnsep' style="text-decoration:none" target='_blank'>정영호</a>, <a href='https://github.com/codenamehee' style="text-decoration:none" target='_blank'>정희윤</a>, <a href='https://github.com/Woong5026' style="text-decoration:none" target='_blank'>김태웅</a>
 - <a href='' target='_blank' >Notion</a>
-- <a href='[https://youtu.be/cviKHk5Aqi8](https://youtu.be/cviKHk5Aqi8)'>시연 영상</a>
+- <a href='https://youtu.be/cviKHk5Aqi8'>시연 영상</a>
 - <a href='https://github.com/slsnrnsep/Hanghae99-Finalproject-Backend-Baseballmate' target='_blank'>Github</a>
 
 ---
