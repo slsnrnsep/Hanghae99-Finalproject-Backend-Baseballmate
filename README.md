@@ -18,8 +18,8 @@ Meetball은 **야구를 좋아하고 직관을 즐기는 사람들을 위한 모
 - 프로젝트 이름 : 미트볼(meetball)
 - 개발 기간 : 2021.10.24 ~ 2021.12.04
 - 팀원
-    - Front-end(React) : <a href='[https://github.com/lipton-web](https://github.com/lipton-web)' style="text-decoration:none" target='_blank'>최진식</a>, <a href='[https://github.com/jaeilnet](https://github.com/jaeilnet)' style="text-decoration:none" target='_blank'>주재일</a>, <a href='[https://github.com/sinyubin](https://github.com/sinyubin)' style="text-decoration:none" target='_blank'>신유빈</a>
-    - Back-end(Spring) : <a href='[https://github.com/slsnrnsep](https://github.com/slsnrnsep)' style="text-decoration:none" target='_blank'>정영호</a>, <a href='[https://github.com/codenamehee](https://github.com/codenamehee)' style="text-decoration:none" target='_blank'>정희윤</a>, <a href='[https://github.com/Woong5026](https://github.com/Woong5026)' style="text-decoration:none" target='_blank'>김태웅</a>
+    - Front-end(React) : <a href='https://github.com/lipton-web' style="text-decoration:none" target='_blank'>최진식</a>, <a href='https://github.com/jaeilnet' style="text-decoration:none" target='_blank'>주재일</a>, <a href='https://github.com/sinyubin' style="text-decoration:none" target='_blank'>신유빈</a>
+    - Back-end(Spring) : <a href='https://github.com/slsnrnsep' style="text-decoration:none" target='_blank'>정영호</a>, <a href='https://github.com/codenamehee' style="text-decoration:none" target='_blank'>정희윤</a>, <a href='https://github.com/Woong5026' style="text-decoration:none" target='_blank'>김태웅</a>
 - <a href='' target='_blank' >Notion</a>
 - <a href='[https://youtu.be/cviKHk5Aqi8](https://youtu.be/cviKHk5Aqi8)'>시연 영상</a>
 - <a href='https://github.com/slsnrnsep/Hanghae99-Finalproject-Backend-Baseballmate' target='_blank'>Github</a>
