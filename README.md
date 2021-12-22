@@ -20,7 +20,7 @@ Meetball은 **야구를 좋아하고 직관을 즐기는 사람들을 위한 모
 - 팀원
     - Front-end(React) : <a href='https://github.com/lipton-web' style="text-decoration:none" target='_blank'>최진식</a>, <a href='https://github.com/jaeilnet' style="text-decoration:none" target='_blank'>주재일</a>, <a href='https://github.com/sinyubin' style="text-decoration:none" target='_blank'>신유빈</a>
     - Back-end(Spring) : <a href='https://github.com/slsnrnsep' style="text-decoration:none" target='_blank'>정영호</a>, <a href='https://github.com/codenamehee' style="text-decoration:none" target='_blank'>정희윤</a>, <a href='https://github.com/Woong5026' style="text-decoration:none" target='_blank'>김태웅</a>
-- <a href='' target='_blank' >Notion</a>
+- <a href='https://fork-squash-9d5.notion.site/99-11-4c5e4442ffea452baaf6b130329cc42d'>팀 Notion 페이지</a>
 - <a href='https://youtu.be/cviKHk5Aqi8'>시연 영상</a>
 - <a href='https://github.com/slsnrnsep/Hanghae99-Finalproject-Backend-Baseballmate' target='_blank'>Github</a>
 
